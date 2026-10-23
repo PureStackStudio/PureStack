@@ -29,28 +29,32 @@ nav:
 <Grid columns="1" columnsSm="2" columnsLg="4" class="gap-4 mt-6 mb-6">
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" class="gap-2">
-      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Milestones</span><IconFrame name="lucide:flag" tone="accent" size="sm"/></Flex>
+      <Flex align="center" justify="between"
+        ><span class="text-eyebrow fs-xxxs fw-800 mb-0">Milestones</span><IconFrame name="lucide:flag" tone="accent" size="sm"/></Flex>
       <strong class="fs-h1">4 / 5</strong>
       <span class="text-subtle fs-xxs mb-0">One final review</span>
     </Flex>
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" class="gap-2">
-      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Decisions</span><IconFrame name="lucide:git-branch" tone="warning" size="sm"/></Flex>
+      <Flex align="center" justify="between"
+        ><span class="text-eyebrow fs-xxxs fw-800 mb-0">Decisions</span><IconFrame name="lucide:git-branch" tone="warning" size="sm"/></Flex>
       <strong class="fs-h1">2</strong>
       <span class="text-subtle fs-xxs mb-0">Both have owners</span>
     </Flex>
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" class="gap-2">
-      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Tasks ready</span><IconFrame name="lucide:circle-check" tone="success" size="sm"/></Flex>
+      <Flex align="center" justify="between"
+        ><span class="text-eyebrow fs-xxxs fw-800 mb-0">Tasks ready</span><IconFrame name="lucide:circle-check" tone="success" size="sm"/></Flex>
       <strong class="fs-h1">12</strong>
       <span class="text-subtle fs-xxs mb-0">Across three teams</span>
     </Flex>
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" class="gap-2">
-      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Next review</span><IconFrame name="lucide:calendar-days" tone="info" size="sm"/></Flex>
+      <Flex align="center" justify="between"
+        ><span class="text-eyebrow fs-xxxs fw-800 mb-0">Next review</span><IconFrame name="lucide:calendar-days" tone="info" size="sm"/></Flex>
       <strong class="fs-h1">Friday</strong>
       <span class="text-subtle fs-xxs mb-0">Weekly project check-in</span>
     </Flex>
@@ -62,7 +66,9 @@ nav:
 <Grid columns="1" columnsLg="2" class="gap-4 mb-6">
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <h3 class="m-0">Milestones completed</h3>
-    <p class="text-subtle fs-xxs mt-1 mb-4">Example values across the first six weeks of the launch project.</p>
+    <p class="text-subtle fs-xxs mt-1 mb-4">
+      Example values across the first six weeks of the launch project.
+    </p>
     <LineChart
       title="Milestone progress"
       description="Cumulative completed milestones rose from zero to four over six weeks."
@@ -75,7 +81,9 @@ nav:
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <h3 class="m-0">Work by team</h3>
-    <p class="text-subtle fs-xxs mt-1 mb-4">Tasks currently ready for delivery, grouped by owner team.</p>
+    <p class="text-subtle fs-xxs mt-1 mb-4">
+      Tasks currently ready for delivery, grouped by owner team.
+    </p>
     <BarChart
       title="Ready tasks by team"
       description="Product has five ready tasks, design four, and marketing three."
@@ -89,9 +97,19 @@ nav:
 
 ## What needs attention
 
-<Grid columns="1" columnsLg="minmax(0, 1.1fr) minmax(18rem, 0.9fr)" alignItems="start" class="gap-4 mb-6">
+<Grid
+  columns="1"
+  columnsLg="minmax(0, 1.1fr) minmax(18rem, 0.9fr)"
+  alignItems="start"
+  class="gap-4 mb-6"
+>
   <Flex direction="column" class="gap-3">
-    <AlertBox title="Decision due" tone="warning" variant="rail" badge="Owner assigned">
+    <AlertBox
+      title="Decision due"
+      tone="warning"
+      variant="rail"
+      badge="Owner assigned"
+    >
       Maya will confirm the release date after the accessibility review closes.
     </AlertBox>
     <ExpandablePanel
@@ -104,7 +122,10 @@ nav:
       summaryVariant="flat"
       open="true"
     >
-      <p class="text-subtle mb-0">The welcome flow and help center draft are complete. The next step is a final content review and a named owner for launch day support.</p>
+      <p class="text-subtle mb-0">
+        The welcome flow and help center draft are complete. The next step is a
+        final content review and a named owner for launch day support.
+      </p>
     </ExpandablePanel>
     <ExpandablePanel
       title="Launch communications"
@@ -115,28 +136,50 @@ nav:
       variant="flat"
       summaryVariant="flat"
     >
-      <p class="text-subtle mb-0">Marketing has a working draft. Product will confirm the release date before the final send schedule is set.</p>
+      <p class="text-subtle mb-0">
+        Marketing has a working draft. Product will confirm the release date
+        before the final send schedule is set.
+      </p>
     </ExpandablePanel>
   </Flex>
   <Panel tone="accent" variant="flat" class="theme--dark rounded-lg p-5">
     <span class="text-eyebrow tone-text fs-xxxs fw-800">Next team review</span>
     <h3 class="fs-h2 mt-2 mb-2">Friday, 10:00</h3>
-    <p class="opacity-75 mb-5">Review the remaining milestone, decide the release date, and agree on the customer update.</p>
-    <Flex><ModalTrigger target="review-agenda" label="View review agenda" tone="accent"/></Flex>
+    <p class="opacity-75 mb-5">
+      Review the remaining milestone, decide the release date, and agree on the
+      customer update.
+    </p>
+    <Flex
+      ><ModalTrigger
+        target="review-agenda"
+        label="View review agenda"
+        tone="accent"/></Flex>
   </Panel>
 </Grid>
 
-<Modal id="review-agenda" title="Friday review agenda" showClose="true" tone="neutral">
+<Modal
+  id="review-agenda"
+  title="Friday review agenda"
+  showClose="true"
+  tone="neutral"
+>
   <ol>
     <li>Confirm accessibility review outcome.</li>
     <li>Choose the release date and record the owner.</li>
     <li>Approve the customer communication plan.</li>
   </ol>
-  <p class="fs-sm">This dialog is an interaction example. It does not schedule a meeting.</p>
+  <p class="fs-sm">
+    This dialog is an interaction example. It does not schedule a meeting.
+  </p>
 </Modal>
 
 <Panel tone="accent" variant="spotlight" class="theme--dark rounded-lg p-6">
-  <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center" class="gap-5">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 1fr) auto"
+    alignItems="center"
+    class="gap-5"
+  >
     <SectionHeader
       eyebrow="Build your own view"
       title="Replace the example with your real project."
@@ -145,8 +188,19 @@ nav:
       titleClass="fs-h2"
       subtitleClass="tone-text-surface-alt opacity-75 mb-0"/>
     <Flex wrap="true" class="gap-3">
-      <BtnLink href="/guide/data/" tone="accent" icon="lucide:arrow-right" iconPosition="end" class="px-5 py-3 gap-4 fw-700 box-shadow-accent lift-1-hover">Read the data guide</BtnLink>
-      <BtnLink href="/guide/interactions/" variant="glass" icon="lucide:layers" class="px-5 py-3 gap-3 fw-700 lift-1-hover">Explore interactions</BtnLink>
+      <BtnLink
+        href="/guide/data/"
+        tone="accent"
+        icon="lucide:arrow-right"
+        iconPosition="end"
+        class="px-5 py-3 gap-4 fw-700 box-shadow-accent lift-1-hover"
+        >Read the data guide</BtnLink>
+      <BtnLink
+        href="/guide/interactions/"
+        variant="glass"
+        icon="lucide:layers"
+        class="px-5 py-3 gap-3 fw-700 lift-1-hover"
+        >Explore interactions</BtnLink>
     </Flex>
   </Grid>
 </Panel>

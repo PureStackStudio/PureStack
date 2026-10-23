@@ -24,17 +24,43 @@ export interface TabsOverflow {
 }
 
 const tabsOverflowTemplate = html`<Flex direction="column">
-  <FormSelectField id="tabs-overflow-width" label="Available container width" :model="width" :options="widths"/>
+  <FormSelectField
+    id="tabs-overflow-width"
+    label="Available container width"
+    :model="width"
+    :options="widths"/>
   <div :style="{ width, maxWidth: '100%' }">
-    <Tabs id="tabs-overflow-preview" group="tabs-overflow-topics" :selectedTab="selected" tone="neutral" variant="surface" tabVariant="outline" ariaLabel="Project sections">
-      <TabPane r-for="topic in topics" :id="topic.id" :label="topic.label" :disabled="topic.disabled" class="p-3">
-        <p class="text-eyebrow mt-0">{{ topic.eyebrow }}</p><h3 class="mt-0">{{ topic.title }}</h3>
+    <Tabs
+      id="tabs-overflow-preview"
+      group="tabs-overflow-topics"
+      :selectedTab="selected"
+      tone="neutral"
+      variant="surface"
+      tabVariant="outline"
+      ariaLabel="Project sections"
+    >
+      <TabPane
+        r-for="topic in topics"
+        :id="topic.id"
+        :label="topic.label"
+        :disabled="topic.disabled"
+        class="p-3"
+      >
+        <p class="text-eyebrow mt-0">{{ topic.eyebrow }}</p>
+        <h3 class="mt-0">{{ topic.title }}</h3>
         <p class="mb-0">{{ topic.description }}</p>
       </TabPane>
     </Tabs>
   </div>
-  <Flex wrap="true" align="center"><Badge variant="surface">{{ width }} container</Badge><span class="text-muted">Selected: <code id="overflow-selected">{{ selected }}</code></span></Flex>
-  <p class="text-muted m-0">On a desktop viewport, narrow the container and use More tabs. At 640px viewport width or below, the native selector replaces the row. Billing remains disabled in either control.</p>
+  <Flex wrap="true" align="center"
+    ><Badge variant="surface">{{ width }} container</Badge><span class="text-muted"
+      >Selected:
+      <code id="overflow-selected">{{ selected }}</code></span></Flex>
+  <p class="text-muted m-0">
+    On a desktop viewport, narrow the container and use More tabs. At 640px
+    viewport width or below, the native selector replaces the row. Billing
+    remains disabled in either control.
+  </p>
 </Flex>`
 
 const tabsOverflow = defineComponent<TabsOverflow>(tabsOverflowTemplate, {

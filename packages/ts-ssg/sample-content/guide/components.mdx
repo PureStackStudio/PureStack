@@ -22,12 +22,17 @@ The starter uses components as a small visual language. The [home page](/) intro
   <Panel tone="neutral" variant="surfaceAlt">
     <p class="text-eyebrow">Surface</p>
     <h3>Keep related information together</h3>
-    <p>Use a panel for a compact idea, such as a project summary or next action.</p>
+    <p>
+      Use a panel for a compact idea, such as a project summary or next action.
+    </p>
   </Panel>
   <Panel tone="neutral" variant="outline">
     <p class="text-eyebrow">Outline</p>
     <h3>Give a section a quieter boundary</h3>
-    <p>An outline can separate supporting information without competing with the primary action.</p>
+    <p>
+      An outline can separate supporting information without competing with the
+      primary action.
+    </p>
   </Panel>
 </Grid>
 
@@ -43,8 +48,10 @@ Tones work across badges, alerts, panels, and buttons. Keep `accent` for the pri
 </Flex>
 
 <Grid columns="1" columnsMd="2">
-  <AlertBox title="Helpful context" tone="info">A reader should know what to do with this information.</AlertBox>
-  <AlertBox title="Action required" tone="warning">Name the owner and the decision that is due.</AlertBox>
+  <AlertBox title="Helpful context" tone="info"
+    >A reader should know what to do with this information.</AlertBox>
+  <AlertBox title="Action required" tone="warning"
+    >Name the owner and the decision that is due.</AlertBox>
 </Grid>
 
 ## Make actions specific
@@ -52,8 +59,14 @@ Tones work across badges, alerts, panels, and buttons. Keep `accent` for the pri
 Use a link when the visitor goes to another page. The label should say what the visitor will see there.
 
 <Flex wrap="true" class="gap-2">
-  <BtnLink href="/workspace/" tone="accent" icon="lucide:arrow-right" iconPosition="end">Open workspace preview</BtnLink>
-  <BtnLink href="/guide/forms/" tone="neutral" variant="outline">See form patterns</BtnLink>
+  <BtnLink
+    href="/workspace/"
+    tone="accent"
+    icon="lucide:arrow-right"
+    iconPosition="end"
+    >Open workspace preview</BtnLink>
+  <BtnLink href="/guide/forms/" tone="neutral" variant="outline"
+    >See form patterns</BtnLink>
 </Flex>
 
 `BtnGroup` can keep related destinations together. The menu below is a compact route to the guide's most useful examples.
@@ -61,9 +74,12 @@ Use a link when the visitor goes to another page. The label should say what the 
 <BtnGroup>
   <BtnLink href="/guide/getting-started/" tone="accent">Get started</BtnLink>
   <BtnGroupDropDown label="More guides" tone="neutral" variant="outline">
-    <BtnLink href="/guide/data/" tone="neutral" variant="subtle">Data views</BtnLink>
-    <BtnLink href="/guide/interactions/" tone="neutral" variant="subtle">Interactions</BtnLink>
-    <BtnLink href="/guide/launch-checklist/" tone="neutral" variant="subtle">Launch checklist</BtnLink>
+    <BtnLink href="/guide/data/" tone="neutral" variant="subtle"
+      >Data views</BtnLink>
+    <BtnLink href="/guide/interactions/" tone="neutral" variant="subtle"
+      >Interactions</BtnLink>
+    <BtnLink href="/guide/launch-checklist/" tone="neutral" variant="subtle"
+      >Launch checklist</BtnLink>
   </BtnGroupDropDown>
 </BtnGroup>
 
@@ -90,7 +106,10 @@ nav:
 ```
 
   <template #result>
-    <p>A titled page in the navigation, with a description for previews and a table of contents for longer content.</p>
+    <p>
+      A titled page in the navigation, with a description for previews and a
+      table of contents for longer content.
+    </p>
   </template>
 </CodeShowcase>
 

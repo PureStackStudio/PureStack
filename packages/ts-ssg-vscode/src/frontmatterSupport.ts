@@ -475,7 +475,7 @@ function collectPreviousFrontmatterState(
     const parsedLine = parseFrontmatterPropertyLine(
       document.lineAt(lineIndex).text,
     )
-    if (!parsedLine || !parsedLine.startsObject) continue
+    if (!parsedLine?.startsObject) continue
 
     while (
       stack.length > 0 &&

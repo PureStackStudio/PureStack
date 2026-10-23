@@ -39,7 +39,8 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
         :variant="summaryVariant"
         variantMode="stateless"/>
       <Flex align="center" wrap="true" class="flex-1 gap-2">
-        <span class="fw-700 min-w-0 lh-0" r-if="title">{{ title }}</span>
+        <span class="fw-700 min-w-0 lh-0" r-if="title"
+          >{{ title }}</span>
         <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
         <span class="fs-sm w-full lh-0" r-if="description">
           {{ description }}

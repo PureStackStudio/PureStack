@@ -118,9 +118,7 @@ const dropFilesTemplate = html`<div class="drop-files">
   >
     <Icon class="drop-files__zone-icon" :name="resolvedUploadIcon"/>
     <span class="drop-files__zone-title">{{ emptyTitle || 'Add files' }}</span>
-    <span class="drop-files__zone-text">
-      {{ emptyText || 'Click, tap, paste, or drag files here.' }}
-    </span>
+    <span class="drop-files__zone-text"> {{ emptyText || 'Click, tap, paste, or drag files here.' }} </span>
     <span class="drop-files__hint" r-if="hint">{{ hint }}</span>
   </div>
   <ul class="drop-files__list" r-if="hasFiles" aria-label="Selected files">

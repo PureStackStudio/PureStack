@@ -76,37 +76,81 @@ const composerPlaygroundTemplate = html`<Flex direction="column">
     <Btn variant="outline" size="sm" @click="reply">Load support reply</Btn>
     <Btn variant="outline" size="sm" @click="clear">Empty draft</Btn>
   </Flex>
-  <Composer id="composer-playground-editor" :html="messageHtml" :text="messageText"
-    :label="editorLabel" :placeholder="editorPlaceholder" :disabled="disabled"
-    :tone="tone" :variant="variant" :minHeight="height"/>
+  <Composer
+    id="composer-playground-editor"
+    :html="messageHtml"
+    :text="messageText"
+    :label="editorLabel"
+    :placeholder="editorPlaceholder"
+    :disabled="disabled"
+    :tone="tone"
+    :variant="variant"
+    :minHeight="height"/>
   <Flex justify="between" wrap="true">
-    <span class="text-muted" id="composer-counts">{{ words }} words · {{ messageText.length }} text characters</span>
+    <span class="text-muted" id="composer-counts"
+      >{{ words }} words · {{ messageText.length }} text
+      characters</span>
     <span class="text-muted">Select text, then choose a toolbar action.</span>
   </Flex>
   <Grid columns="1" columnsMd="3">
-    <FormSelectField id="composer-tone" label="Tone" :model="tone" :options="tones"/>
-    <FormSelectField id="composer-variant" label="Variant" :model="variant" :options="variants"/>
-    <FormSelectField id="composer-height" label="Minimum height" :model="height" :options="heights"/>
+    <FormSelectField
+      id="composer-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="composer-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
+    <FormSelectField
+      id="composer-height"
+      label="Minimum height"
+      :model="height"
+      :options="heights"/>
   </Grid>
   <Grid columns="1" columnsMd="2">
-    <FormInputField id="composer-label" label="Editor label" :model="editorLabel"/>
-    <FormInputField id="composer-placeholder" label="Empty-state hint" :model="editorPlaceholder"/>
+    <FormInputField
+      id="composer-label"
+      label="Editor label"
+      :model="editorLabel"/>
+    <FormInputField
+      id="composer-placeholder"
+      label="Empty-state hint"
+      :model="editorPlaceholder"/>
   </Grid>
   <Flex justify="between" align="center" wrap="true">
-    <FormCheck id="composer-disabled" label="Disable editing and toolbar" :checked="disabled"/>
+    <FormCheck
+      id="composer-disabled"
+      label="Disable editing and toolbar"
+      :checked="disabled"/>
     <Btn variant="link" @click="reset">Reset playground</Btn>
   </Flex>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">Model inspector</p>
-    <Tabs group="composer-model" selectedTab="composer-model-text" ariaLabel="Live model values" tabVariant="underline">
+    <Tabs
+      group="composer-model"
+      selectedTab="composer-model-text"
+      ariaLabel="Live model values"
+      tabVariant="underline"
+    >
       <TabPane id="composer-model-text" label="Plain text">
-        <pre id="composer-text-output" class="max-h-inspector overflow-auto ws-pre-wrap m-0">{{ messageText || 'The draft is empty.' }}</pre>
+        <pre
+          id="composer-text-output"
+          class="max-h-inspector overflow-auto ws-pre-wrap m-0"
+        >
+{{ messageText || 'The draft is empty.' }}</pre>
       </TabPane>
       <TabPane id="composer-model-html" label="HTML">
-        <pre class="overflow-x-auto m-0"><code id="composer-html-output">{{ messageHtml || 'The draft is empty.' }}</code></pre>
+        <pre
+          class="overflow-x-auto m-0"
+        ><code id="composer-html-output">{{ messageHtml || 'The draft is empty.' }}</code></pre>
       </TabPane>
     </Tabs>
-    <p class="text-muted mb-0">These values update as you type. The HTML source button in the editor lets you edit the markup itself.</p>
+    <p class="text-muted mb-0">
+      These values update as you type. The HTML source button in the editor lets
+      you edit the markup itself.
+    </p>
   </Panel>
 </Flex>`
 

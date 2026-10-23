@@ -29,7 +29,7 @@ export interface TaskRow {
 }
 
 const taskRow = defineComponent<TaskRow>(
-  html`<FormCheck :id="'launch-' + task.id" :label="task.title" :checked="task.done" />`,
+  html`<FormCheck :id="'launch-' + task.id" :label="task.title" :checked="task.done"/>`,
   { props: ['task'] },
 )
 
@@ -50,12 +50,18 @@ const launchChecklistTemplate = html`<Panel tone="neutral" variant="surfaceAlt" 
         {{ completed }} of {{ tasks.length }} done
       </Badge>
     </Flex>
-    <TaskRow r-for="task in tasks" :task="task" />
+    <TaskRow r-for="task in tasks" :task="task"/>
     <Flex wrap="true">
-      <Btn tone="accent" icon="tabler:rocket" :disabled="!ready || launched" @click="launch">Launch</Btn>
+      <Btn
+        tone="accent"
+        icon="tabler:rocket"
+        :disabled="!ready || launched"
+        @click="launch"
+        >Launch</Btn>
       <Btn tone="neutral" variant="surface" @click="reset">Start over</Btn>
     </Flex>
-    <FormStatus r-if="launched" role="status">Launched. Every check passed.</FormStatus>
+    <FormStatus r-if="launched" role="status"
+      >Launched. Every check passed.</FormStatus>
   </Flex>
 </Panel>`
 
@@ -100,5 +106,5 @@ createApp(
       ...definePanelComponents(),
     },
   },
-  { selector: 'app#launch-checklist', template: html`<LaunchChecklist />` },
+  { selector: 'app#launch-checklist', template: html`<LaunchChecklist/>` },
 )

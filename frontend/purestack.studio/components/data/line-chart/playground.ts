@@ -88,25 +88,52 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
       label="Dataset"
       :model="preset"
       :options="presets"
-      @change="applyPreset"
-    />
-    <FormSelectField id="line-curve" label="Curve" :model="curve" :options="curves" />
-    <FormSelectField id="line-unit" label="Value suffix" :model="suffix" :options="units" />
+      @change="applyPreset"/>
+    <FormSelectField
+      id="line-curve"
+      label="Curve"
+      :model="curve"
+      :options="curves"/>
+    <FormSelectField
+      id="line-unit"
+      label="Value suffix"
+      :model="suffix"
+      :options="units"/>
   </Grid>
-  <ChartAppearanceControls prefix="line-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
+  <ChartAppearanceControls
+    prefix="line-chart-appearance"
+    :tone="chartTone"
+    :variant="chartVariant"
+    :variantMode="chartVariantMode"
+    :width="chartWidth"
+    :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · SERIES COMPARISON</p>
-      <Btn variant="outline" size="sm" :disabled="replayDisabled" @click="replay">Replay animation</Btn>
+      <Btn
+        variant="outline"
+        size="sm"
+        :disabled="replayDisabled"
+        @click="replay"
+        >Replay animation</Btn>
     </Flex>
     <Flex wrap="true" class="mt-3">
       <template r-for="entry in editorSeries">
-        <Badge r-if="entry.enabled" :tone="entry.tone" variant="surface">{{ entry.label }}</Badge>
+        <Badge r-if="entry.enabled" :tone="entry.tone" variant="surface"
+          >{{ entry.label }}</Badge>
       </template>
     </Flex>
-    <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable line chart preview">
+    <div
+      class="overflow-x-auto"
+      tabindex="0"
+      role="region"
+      aria-label="Scrollable line chart preview"
+    >
       <LineChart
-        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
+        :tone="chartTone"
+        :variant="chartVariant"
+        :variantMode="chartVariantMode"
+        :width="chartWidth"
         :series="chartSeries"
         title="Illustrative series comparison"
         description="Equally spaced observations. Exact values can be edited in each series below."
@@ -123,25 +150,55 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
         :showLabels="labelsVisible"
         :showAxis="axisVisible"
         :animated="motionEnabled"
-        style="min-width: 440px"
-      />
+        style="min-width: 440px"/>
     </div>
     <FormStatus>{{ summary }}</FormStatus>
   </Panel>
   <Flex wrap="true">
-    <FormCheck id="line-area" label="Area fill" :checked="areaVisible" />
-    <FormCheck id="line-points" label="Point markers" :checked="pointsVisible" />
-    <FormCheck id="line-values" label="Values" :checked="valuesVisible" />
-    <FormCheck id="line-labels" label="Category labels" :checked="labelsVisible" />
-    <FormCheck id="line-axis" label="Grid and zero line" :checked="axisVisible" />
-    <FormCheck id="line-motion" label="Entrance animation" :checked="motionEnabled" />
+    <FormCheck id="line-area" label="Area fill" :checked="areaVisible"/>
+    <FormCheck
+      id="line-points"
+      label="Point markers"
+      :checked="pointsVisible"/>
+    <FormCheck id="line-values" label="Values" :checked="valuesVisible"/>
+    <FormCheck
+      id="line-labels"
+      label="Category labels"
+      :checked="labelsVisible"/>
+    <FormCheck
+      id="line-axis"
+      label="Grid and zero line"
+      :checked="axisVisible"/>
+    <FormCheck
+      id="line-motion"
+      label="Entrance animation"
+      :checked="motionEnabled"/>
   </Flex>
   <Grid columns="1" columnsMd="3">
-    <FormInputField id="line-min" label="Minimum bound" type="number" placeholder="Automatic" :model="minimum" />
-    <FormInputField id="line-max" label="Maximum bound" type="number" placeholder="Automatic" :model="maximum" />
-    <FormInputField id="line-height" label="Chart height (px)" type="number" min="180" step="20" :model="height" />
+    <FormInputField
+      id="line-min"
+      label="Minimum bound"
+      type="number"
+      placeholder="Automatic"
+      :model="minimum"/>
+    <FormInputField
+      id="line-max"
+      label="Maximum bound"
+      type="number"
+      placeholder="Automatic"
+      :model="maximum"/>
+    <FormInputField
+      id="line-height"
+      label="Chart height (px)"
+      type="number"
+      min="180"
+      step="20"
+      :model="height"/>
   </Grid>
-  <p class="m-0 text-muted">Blank bounds use the data range. Bounds always expand to include zero and all visible points. Scroll the preview horizontally on narrow screens.</p>
+  <p class="m-0 text-muted">
+    Blank bounds use the data range. Bounds always expand to include zero and
+    all visible points. Scroll the preview horizontally on narrow screens.
+  </p>
   <Flex justify="between" align="center" wrap="true">
     <h3 class="m-0">Edit the series</h3>
     <Flex wrap="true">
@@ -149,11 +206,23 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
       <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
     </Flex>
   </Flex>
-  <Panel r-for="entry in editorSeries" tone="neutral" variant="surface" bodyClass="p-3 min-w-0" :aria-label="entry.label">
+  <Panel
+    r-for="entry in editorSeries"
+    tone="neutral"
+    variant="surface"
+    bodyClass="p-3 min-w-0"
+    :aria-label="entry.label"
+  >
     <Flex direction="column">
       <Flex justify="between" align="center" wrap="true">
-        <FormInputField :id="'line-name-' + entry.id" label="Series name" :model="entry.label" />
-        <FormCheck :id="'line-enabled-' + entry.id" label="Show series" :checked="entry.enabled" />
+        <FormInputField
+          :id="'line-name-' + entry.id"
+          label="Series name"
+          :model="entry.label"/>
+        <FormCheck
+          :id="'line-enabled-' + entry.id"
+          label="Show series"
+          :checked="entry.enabled"/>
       </Flex>
       <Grid columns="2" columnsSm="3" columnsLg="5">
         <FormInputField
@@ -162,8 +231,7 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
           :label="point.label"
           type="number"
           step="1"
-          :model="point.value"
-        />
+          :model="point.value"/>
       </Grid>
     </Flex>
   </Panel>
@@ -340,5 +408,5 @@ createApp(
       ...definePanelComponents(),
     },
   },
-  { selector: 'app#line-chart-demo', template: html`<LineChartPlayground />` },
+  { selector: 'app#line-chart-demo', template: html`<LineChartPlayground/>` },
 )

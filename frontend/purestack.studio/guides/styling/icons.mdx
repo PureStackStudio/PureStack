@@ -16,13 +16,22 @@ nav:
 PureStack includes about 11,000 SVG icons from four open-source sets. You refer to each icon by a string name, and the same name works in MDX, component props, navigation, and the site configuration. The build inlines the icon's SVG markup in the page, so icons need no icon font, sprite sheet, or extra request.
 
 <Flex wrap="true" align="center" class="fs-h3">
-  <Icon name="tabler:rocket" aria-hidden="true" />
-  <Icon name="lucide:search" aria-hidden="true" />
-  <Icon name="iconoir:code" aria-hidden="true" />
-  <Icon name="phosphor:acorn" aria-hidden="true" />
-  <Icon name="tabler:heart-filled" aria-hidden="true" class="tone--danger tone-text" />
-  <Icon name="tabler:shield-check" aria-hidden="true" class="tone--success tone-text" />
-  <Icon name="tabler:sparkles" aria-hidden="true" class="tone--accent tone-text" />
+  <Icon name="tabler:rocket" aria-hidden="true"/>
+  <Icon name="lucide:search" aria-hidden="true"/>
+  <Icon name="iconoir:code" aria-hidden="true"/>
+  <Icon name="phosphor:acorn" aria-hidden="true"/>
+  <Icon
+    name="tabler:heart-filled"
+    aria-hidden="true"
+    class="tone--danger tone-text"/>
+  <Icon
+    name="tabler:shield-check"
+    aria-hidden="true"
+    class="tone--success tone-text"/>
+  <Icon
+    name="tabler:sparkles"
+    aria-hidden="true"
+    class="tone--accent tone-text"/>
 </Flex>
 
 ## Name an icon
@@ -65,7 +74,7 @@ When a page uses a name that does not exist, the build continues. The icon is le
 `Icon` renders one icon as an inline element. You can use it anywhere in MDX:
 
 <Flex align="center">
-  <Icon name="lucide:check" aria-hidden="true" />
+  <Icon name="lucide:check" aria-hidden="true"/>
   <span>Checks passed</span>
 </Flex>
 
@@ -81,10 +90,10 @@ When a page uses a name that does not exist, the build continues. The icon is le
 An icon is 1.7 times the current font size and stays square. To resize it, change the font size of the icon or its container with a type class. You do not need to set a width:
 
 <Flex wrap="true" align="center">
-  <span class="fs-sm"><Icon name="tabler:bolt" aria-hidden="true" /></span>
-  <span class="fs-body"><Icon name="tabler:bolt" aria-hidden="true" /></span>
-  <span class="fs-h3"><Icon name="tabler:bolt" aria-hidden="true" /></span>
-  <span class="fs-h1"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+  <span class="fs-sm"><Icon name="tabler:bolt" aria-hidden="true"/></span>
+  <span class="fs-body"><Icon name="tabler:bolt" aria-hidden="true"/></span>
+  <span class="fs-h3"><Icon name="tabler:bolt" aria-hidden="true"/></span>
+  <span class="fs-h1"><Icon name="tabler:bolt" aria-hidden="true"/></span>
 </Flex>
 
 ```mdx
@@ -97,10 +106,19 @@ An icon is 1.7 times the current font size and stays square. To resize it, chang
 Icons are drawn in the current text color, so an icon matches the label beside it, including in dark mode. To give an icon its own color, choose a tone and apply `tone-text`. Use this to reinforce meaning, not to decorate:
 
 <Flex wrap="true" align="center" class="fs-h3">
-  <Icon name="tabler:circle-check" aria-hidden="true" class="tone--success tone-text" />
-  <Icon name="tabler:info-circle" aria-hidden="true" class="tone--info tone-text" />
-  <Icon name="tabler:alert-triangle" aria-hidden="true" class="tone--warning tone-text" />
-  <Icon name="tabler:lock" aria-hidden="true" class="tone--danger tone-text" />
+  <Icon
+    name="tabler:circle-check"
+    aria-hidden="true"
+    class="tone--success tone-text"/>
+  <Icon
+    name="tabler:info-circle"
+    aria-hidden="true"
+    class="tone--info tone-text"/>
+  <Icon
+    name="tabler:alert-triangle"
+    aria-hidden="true"
+    class="tone--warning tone-text"/>
+  <Icon name="tabler:lock" aria-hidden="true" class="tone--danger tone-text"/>
 </Flex>
 
 ```mdx
@@ -120,8 +138,12 @@ Every icon is hidden from assistive technology by default. Decide what a screen 
 
 A standalone icon with its meaning on the wrapper:
 
-<span role="img" aria-label="Verified publisher" class="fs-h3 tone--success tone-text">
-  <Icon name="tabler:shield-check" aria-hidden="true" />
+<span
+  role="img"
+  aria-label="Verified publisher"
+  class="fs-h3 tone--success tone-text"
+>
+  <Icon name="tabler:shield-check" aria-hidden="true"/>
 </span>
 
 ```mdx
@@ -135,10 +157,25 @@ A standalone icon with its meaning on the wrapper:
 `IconFrame` places an icon on a tone-colored tile. It works well as the lead symbol of a card, metric, or status summary. The tile takes `tone`, `variant`, and `size` (`sm`, `md`, or `lg`):
 
 <Flex wrap="true" align="center">
-  <IconFrame name="tabler:rocket" tone="accent" size="lg" aria-hidden="true" />
-  <IconFrame name="tabler:shield-check" tone="success" variant="surface" size="lg" aria-hidden="true" />
-  <IconFrame name="tabler:bell" tone="warning" variant="surface" size="lg" aria-hidden="true" />
-  <IconFrame name="tabler:sparkles" tone="feature" variant="flat" size="lg" aria-hidden="true" />
+  <IconFrame name="tabler:rocket" tone="accent" size="lg" aria-hidden="true"/>
+  <IconFrame
+    name="tabler:shield-check"
+    tone="success"
+    variant="surface"
+    size="lg"
+    aria-hidden="true"/>
+  <IconFrame
+    name="tabler:bell"
+    tone="warning"
+    variant="surface"
+    size="lg"
+    aria-hidden="true"/>
+  <IconFrame
+    name="tabler:sparkles"
+    tone="feature"
+    variant="flat"
+    size="lg"
+    aria-hidden="true"/>
 </Flex>
 
 ```mdx
@@ -158,8 +195,18 @@ Many components accept icon names as props and render them with `Icon`. You choo
 
 <Flex wrap="true" align="center">
   <Btn tone="accent" icon="tabler:plus">Create project</Btn>
-  <Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
-  <Btn tone="neutral" variant="surface" icon="tabler:settings" :iconOnly="true" ariaLabel="Open settings"/>
+  <Btn
+    tone="neutral"
+    variant="surface"
+    icon="tabler:arrow-right"
+    iconPosition="end"
+    >Continue</Btn>
+  <Btn
+    tone="neutral"
+    variant="surface"
+    icon="tabler:settings"
+    :iconOnly="true"
+    ariaLabel="Open settings"/>
 </Flex>
 
 ```mdx

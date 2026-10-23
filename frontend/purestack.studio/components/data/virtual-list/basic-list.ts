@@ -8,9 +8,18 @@ export interface SimpleListRow {
 
 const simpleListRowTemplate = html`<div
   class="px-3 bb-1 b-subtle ws-nowrap overflow-hidden text-ellipsis"
-  style="height: 100%; box-sizing: border-box; display: flex; align-items: center"
-  role="listitem" :aria-posinset="index + 1" aria-setsize="1000"
->{{ item }}</div>`
+  style="
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  "
+  role="listitem"
+  :aria-posinset="index + 1"
+  aria-setsize="1000"
+>
+  {{ item }}
+</div>`
 
 const simpleListRow = defineComponent<SimpleListRow>(simpleListRowTemplate, {
   props: ['item', 'index'],
@@ -29,8 +38,7 @@ const basicListTemplate = html`<VirtualList
   role="list"
   tabindex="0"
   aria-label="One thousand example records"
-  class="b-1 b-subtle rounded-md"
-/>`
+  class="b-1 b-subtle rounded-md"/>`
 
 const basicList = defineComponent<BasicListExample>(basicListTemplate, {
   context: () => ({
@@ -48,6 +56,6 @@ createApp(
   },
   {
     selector: 'app#virtual-list-basic-demo',
-    template: html`<BasicListExample />`,
+    template: html`<BasicListExample/>`,
   },
 )

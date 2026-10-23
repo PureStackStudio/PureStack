@@ -11,7 +11,14 @@ const startTemplate = html`<Panel variant="surface" class="footer-start p-0" bod
   </Flex>
   <h2>{{ title }}</h2>
   <p>Start with your message. The guide shows you where each piece lives.</p>
-  <BtnLink href="/guide/" tone="accent" variant="link" icon="lucide:arrow-up-right" iconPosition="end" class="footer-start-link">Open the guide</BtnLink>
+  <BtnLink
+    href="/guide/"
+    tone="accent"
+    variant="link"
+    icon="lucide:arrow-up-right"
+    iconPosition="end"
+    class="footer-start-link"
+    >Open the guide</BtnLink>
 </Panel>`
 
 export function defineFooterStartCardComponent() {

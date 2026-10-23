@@ -81,7 +81,9 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
       r-model="model"
       r-inherit
     >
-      <option value="" disabled r-if="hasPlaceholder">{{ placeholder }}</option>
+      <option value="" disabled r-if="hasPlaceholder">
+        {{ placeholder }}
+      </option>
       <option
         r-for="option in resolvedOptions"
         :value="option.value"
@@ -90,9 +92,7 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
         {{ option.label }}
       </option>
     </select>
-    <Icon
-      class="form-block__input-icon"
-      :name="resolvedIconEnd"/>
+    <Icon class="form-block__input-icon" :name="resolvedIconEnd"/>
   </div>
 </label>`
 

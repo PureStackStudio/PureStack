@@ -187,11 +187,7 @@ const multiAutoCompleteInputTemplate = html`<label
         >
           <Icon :name="resolvedRemoveIcon"/>
         </button>
-        <input
-          r-if="name"
-          type="hidden"
-          :name="name"
-          :value="row.item.value"/>
+        <input r-if="name" type="hidden" :name="name" :value="row.item.value"/>
       </span>
       <input
         :id="inputId"
@@ -217,10 +213,7 @@ const multiAutoCompleteInputTemplate = html`<label
       :name="resolvedIconEnd"
       r-if="resolvedIconEnd"/>
   </div>
-  <div
-    class="multi-auto-complete-input__popup"
-    r-if="shouldRenderPopup"
-  >
+  <div class="multi-auto-complete-input__popup" r-if="shouldRenderPopup">
     <div
       class="multi-auto-complete-input__message"
       r-if="showLoading"

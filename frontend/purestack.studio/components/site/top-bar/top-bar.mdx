@@ -13,7 +13,13 @@ nav:
 
 # Top<wbr/>Bar
 
-<ComponentHeader name="TopBar" kind="Site header" summary="The standard site header combines branding, search, theme switching and optional account access." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/topBar/topBar.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="TopBar"
+  kind="Site header"
+  summary="The standard site header combines branding, search, theme switching and optional account access."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/topBar/topBar.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## A complete header
 
@@ -28,13 +34,15 @@ This preview reads the same logo configuration as the site. Search is disabled i
   tabVariant="underline"
 >
   <TabPane id="top-bar-sample-1-preview" label="Preview">
-<ComponentExample label="TopBar in context" caption="Brand selection, search, navigation toggle, theme, and account access. Open the source tab to adapt the composition.">
-    <TopBarPreview/>
-
-</ComponentExample>
+    <ComponentExample
+      label="TopBar in context"
+      caption="Brand selection, search, navigation toggle, theme, and account access. Open the source tab to adapt the composition."
+    >
+      <TopBarPreview/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="top-bar-sample-1-source-1" label="preview.mdx">
-  <import-codeblock src="./preview.mdx"/>
+    <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -67,22 +75,37 @@ The direct prop overrides `site.logo.component`; when both are omitted, TopBar r
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="tone"><SiteAppearanceGallery component="TopBar" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="tone">
+    <SiteAppearanceGallery component="TopBar" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="variant"><SiteAppearanceGallery component="TopBar" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="variant">
+    <SiteAppearanceGallery component="TopBar" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Feature comparisons
 
-<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
-<div data-site-gallery="features"><SiteAppearanceGallery component="TopBar" axis="features"/></div>
+<ComponentExample
+  label="Every configuration in view"
+  caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples."
+>
+  <div data-site-gallery="features">
+    <SiteAppearanceGallery component="TopBar" axis="features"/>
+  </div>
 </ComponentExample>
 
 ## Configuration controls the header
@@ -178,8 +201,9 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   defaultValue="surfaceAlt"
 >
   <p>
-    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline,
-    subtle, subtleBtn, link, sheen, underline, rail, bracket or none.
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
   </p>
 </ApiProperty>
 
@@ -207,9 +231,7 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   valueType="RefOrValue&lt;boolean&gt;"
   defaultValue="site.auth.enabled"
 >
-  <p>
-    Overrides site.auth.enabled for the account control in this header.
-  </p>
+  <p>Overrides site.auth.enabled for the account control in this header.</p>
 </ApiProperty>
 
 <ApiProperty
@@ -218,12 +240,15 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   valueType="RefOrValue&lt;boolean&gt;"
   defaultValue="site.pagefind.enabled"
 >
-  <p>
-    Overrides site.pagefind.enabled for this instance.
-  </p>
+  <p>Overrides site.pagefind.enabled for this instance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-signInSignedIn" name="signInSignedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
+<ApiProperty
+  anchor="top-bar-prop-signInSignedIn"
+  name="signInSignedIn"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="runtime auth state"
+>
   <p>Forwards an explicit signed-in presentation to the account control.</p>
 </ApiProperty>
 
@@ -231,11 +256,11 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
 
 <div class="api-contract">
   <p>
-    Use the before-actions slot to add controls before the theme toggle, and
-    the actions slot to add links or controls after it.
-    Register defineTopBarComponents and the selected logo component,
-    SearchBox, ThemeToggle, SignIn, Flex and Icon families. Standard SSG
-    registration provides these dependencies.
+    Use the before-actions slot to add controls before the theme toggle, and the
+    actions slot to add links or controls after it. Register
+    defineTopBarComponents and the selected logo component, SearchBox,
+    ThemeToggle, SignIn, Flex and Icon families. Standard SSG registration
+    provides these dependencies.
   </p>
 </div>
 

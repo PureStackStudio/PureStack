@@ -9,7 +9,8 @@ export interface FooterBrand {
 const brandTemplate = html`<div class="footer-brand">
   <SiteLogo :config="logo"/>
   <p class="footer-description">{{ description }}</p>
-  <Flex align="center" class="footer-theme-row"><span>Find your light.</span><ThemeToggle/></Flex>
+  <Flex align="center" class="footer-theme-row"
+    ><span>Find your light.</span><ThemeToggle/></Flex>
 </div>`
 
 export function defineFooterBrandComponent(logo: SiteConfig['logo']) {

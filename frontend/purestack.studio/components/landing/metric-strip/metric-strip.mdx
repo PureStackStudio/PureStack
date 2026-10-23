@@ -13,39 +13,50 @@ nav:
 
 # Metric<wbr/>Strip
 
-<ComponentHeader name="MetricStrip" kind="Evidence at a glance" summary="Arrange related metrics in a responsive surface with a clear reading order." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="MetricStrip"
+  kind="Evidence at a glance"
+  summary="Arrange related metrics in a responsive surface with a clear reading order."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## A workspace snapshot
 
 These are illustrative values. Each metric includes enough context to interpret its number.
 
-<Tabs group="metric-strip-sample-1" selectedTab="metric-strip-sample-1-preview" ariaLabel="A workspace snapshot example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="metric-strip-sample-1"
+  selectedTab="metric-strip-sample-1-preview"
+  ariaLabel="A workspace snapshot example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="metric-strip-sample-1-preview" label="Preview">
-<ComponentExample label="MetricStrip in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <MetricStrip tone="neutral">
-      <MetricItem
-        label="Components"
-        value="12"
-        detail="In this example workspace"
-        tone="accent"
-      />
-      <MetricItem label="Pages" value="24" detail="Published documentation" />
-      <MetricItem
-        label="Build"
-        value="Passing"
-        detail="Latest local check"
-        tone="success"
-      />
-      <MetricItem
-        label="Review"
-        value="2"
-        detail="Changes awaiting review"
-        tone="warning"
-      />
-    </MetricStrip>
-
-</ComponentExample>
+    <ComponentExample
+      label="MetricStrip in context"
+      caption="Compare the composition, then open its source tab to adapt it."
+    >
+      <MetricStrip tone="neutral">
+        <MetricItem
+          label="Components"
+          value="12"
+          detail="In this example workspace"
+          tone="accent"/>
+        <MetricItem label="Pages" value="24" detail="Published documentation"/>
+        <MetricItem
+          label="Build"
+          value="Passing"
+          detail="Latest local check"
+          tone="success"/>
+        <MetricItem
+          label="Review"
+          value="2"
+          detail="Changes awaiting review"
+          tone="warning"/>
+      </MetricStrip>
+    </ComponentExample>
   </TabPane>
   <TabPane id="metric-strip-sample-1-source-0" label="workspace-snapshot.mdx">
 ```html
@@ -78,16 +89,28 @@ These are illustrative values. Each metric includes enough context to interpret 
 
 Override both responsive widths when the content only needs two tracks.
 
-<Tabs group="metric-strip-sample-2" selectedTab="metric-strip-sample-2-preview" ariaLabel="A two-metric summary example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="metric-strip-sample-2"
+  selectedTab="metric-strip-sample-2-preview"
+  ariaLabel="A two-metric summary example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="metric-strip-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
-      <MetricItem label="Completed" value="8 of 10" detail="Tasks in this example" />
-      <MetricItem label="Next step" value="Review" detail="Check the remaining changes" />
-    </MetricStrip>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
+        <MetricItem
+          label="Completed"
+          value="8 of 10"
+          detail="Tasks in this example"/>
+        <MetricItem
+          label="Next step"
+          value="Review"
+          detail="Check the remaining changes"/>
+      </MetricStrip>
+    </div>
+  </TabPane>
   <TabPane id="metric-strip-sample-2-source-0" label="compact-summary.mdx">
 ```html
 <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
@@ -102,26 +125,84 @@ Override both responsive widths when the content only needs two tracks.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="MetricStrip" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="MetricStrip" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="MetricStrip" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="MetricStrip" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Responsive density
 
-<ComponentExample label="Two, three, or four signals" caption="columns is the base count; columnsSm and columnsLg replace it at their breakpoints. Child MetricItem tones are explicit.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>2 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="2" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/></MetricStrip></div>
-<div class="component-appearance-cell"><code>3 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="3" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/><MetricItem label="Themes" value="2" icon="lucide:check" tone="info"/></MetricStrip></div>
-<div class="component-appearance-cell"><code>4 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="4" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/><MetricItem label="Themes" value="2" icon="lucide:check" tone="info"/><MetricItem label="Workspaces" value="6" icon="lucide:check" tone="info"/></MetricStrip></div>
-</div>
+<ComponentExample
+  label="Two, three, or four signals"
+  caption="columns is the base count; columnsSm and columnsLg replace it at their breakpoints. Child MetricItem tones are explicit."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>2 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="2" tone="info"
+        ><MetricItem
+          label="Components"
+          value="48"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Guides"
+          value="13"
+          icon="lucide:check"
+          tone="info"/></MetricStrip>
+    </div>
+    <div class="component-appearance-cell">
+      <code>3 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="3" tone="info"
+        ><MetricItem
+          label="Components"
+          value="48"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Guides"
+          value="13"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Themes"
+          value="2"
+          icon="lucide:check"
+          tone="info"/></MetricStrip>
+    </div>
+    <div class="component-appearance-cell">
+      <code>4 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="4" tone="info"
+        ><MetricItem
+          label="Components"
+          value="48"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Guides"
+          value="13"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Themes"
+          value="2"
+          icon="lucide:check"
+          tone="info"/><MetricItem
+          label="Workspaces"
+          value="6"
+          icon="lucide:check"
+          tone="info"/></MetricStrip>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -143,7 +224,11 @@ Use labels and details to communicate units, periods and provenance. MetricStrip
 
 <div class="api-overview">
   <p class="text-eyebrow">MetricStrip contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="MetricStrip properties">
@@ -154,30 +239,69 @@ Use labels and details to communicate units, periods and provenance. MetricStrip
   <a href="#metric-strip-prop-columnsLg">columnsLg</a>
 </nav>
 
-<ApiProperty anchor="metric-strip-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="metric-strip-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-strip-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="metric-strip-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-strip-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="1">
-  <p>Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto. Numeric counts are clamped.</p>
+<ApiProperty
+  anchor="metric-strip-prop-columns"
+  name="columns"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="1"
+>
+  <p>
+    Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto.
+    Numeric counts are clamped.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-strip-prop-columnsSm" name="columnsSm" valueType="RefOrValue&lt;number | string&gt;" defaultValue="2">
+<ApiProperty
+  anchor="metric-strip-prop-columnsSm"
+  name="columnsSm"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="2"
+>
   <p>Column count or CSS track list at the theme’s sm breakpoint and above.</p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-strip-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="4">
+<ApiProperty
+  anchor="metric-strip-prop-columnsLg"
+  name="columnsLg"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="4"
+>
   <p>Column count or CSS track list at the theme’s lg breakpoint and above.</p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> MetricItem elements or other grid items. Register defineMetricStripComponent with Panel and Grid; register MetricItem separately.</p>
+  <p>
+    <strong>Default slot:</strong> MetricItem elements or other grid items.
+    Register defineMetricStripComponent with Panel and Grid; register MetricItem
+    separately.
+  </p>
 </div>
 
 ## Related components

@@ -31,7 +31,8 @@ const alertBoxTemplate = html`<Panel
       <Flex r-if="title || eyebrow || badge" align="center" wrap="true">
         <span r-if="eyebrow">{{ eyebrow }}</span>
         <strong r-if="title">{{ title }}</strong>
-        <Badge :tone="tone || 'info'" r-if="badge">{{ badge }}</Badge>
+        <Badge :tone="tone || 'info'" r-if="badge"
+          >{{ badge }}</Badge>
       </Flex>
       <div><slot></slot></div>
       <Flex align="center" wrap="true">

@@ -13,14 +13,33 @@ nav:
 
 # BtnGroup
 
-<ComponentHeader name="BtnGroup" kind="Action layout" summary="Related actions, one coherent row. Control alignment and wrapping while every child keeps its own identity." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts"/>
+<ComponentHeader
+  name="BtnGroup"
+  kind="Action layout"
+  summary="Related actions, one coherent row. Control alignment and wrapping while every child keeps its own identity."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts"/>
 
 Use it for action rows, navigation choices, or a small set of formatting controls. Its two layout props work with [Btn](/components/actions/buttons/), [BtnLink](/components/actions/btn-link/), and other controls in the default slot.
 
 ## In context
 
-<ComponentExample label="A navigation toolbar" caption="The group supplies layout; its children supply navigation, tone, and emphasis.">
-<div class="component-recipe"><p class="text-eyebrow">YOUR WORKSPACE</p><h3>Everything within reach</h3><p>Keep related destinations together, with room to wrap on small screens.</p><BtnGroup align="end" :wrap="true" role="group" aria-label="Workspace guides"><BtnLink href="/components/forms/" variant="outline">Forms</BtnLink><BtnLink href="/components/layout/" variant="outline">Layout</BtnLink><BtnLink href="/guides/" tone="accent">Open guides</BtnLink></BtnGroup></div>
+<ComponentExample
+  label="A navigation toolbar"
+  caption="The group supplies layout; its children supply navigation, tone, and emphasis."
+>
+  <div class="component-recipe">
+    <p class="text-eyebrow">YOUR WORKSPACE</p>
+    <h3>Everything within reach</h3>
+    <p>
+      Keep related destinations together, with room to wrap on small screens.
+    </p>
+    <BtnGroup
+      align="end"
+      :wrap="true"
+      role="group"
+      aria-label="Workspace guides"
+      ><BtnLink href="/components/forms/" variant="outline">Forms</BtnLink><BtnLink href="/components/layout/" variant="outline">Layout</BtnLink><BtnLink href="/guides/" tone="accent">Open guides</BtnLink></BtnGroup>
+  </div>
 </ComponentExample>
 
 ```html
@@ -49,17 +68,17 @@ The preview gives the group the full available width; this makes alignment visib
   tabVariant="underline"
 >
   <TabPane id="group-playground-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="group-playground" src="./group-playground.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="group-playground" src="./group-playground.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="group-playground-mdx" label="group-playground.mdx">
 ```html
 <RegorApp id="group-playground" src="./group-playground.ts"/>
 ```
   </TabPane>
   <TabPane id="group-playground-ts" label="group-playground.ts">
-  <import-codeblock src="./group-playground.ts"/>
+    <import-codeblock src="./group-playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -76,32 +95,56 @@ Choose `start`, `center`, or `end`. BtnGroup is `inline-flex` and naturally fits
   tabVariant="underline"
 >
   <TabPane id="group-alignment-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex direction="column">
-      <div>
-        <p>Start</p>
-        <BtnGroup align="start" :wrap="true" class="w-full" role="group" aria-label="Start-aligned navigation">
-          <BtnLink href="/components/actions/buttons/" tone="accent">Buttons</BtnLink>
-          <BtnLink href="/components/actions/btn-link/" variant="surface">Links</BtnLink>
-        </BtnGroup>
-      </div>
-      <div>
-        <p>Center</p>
-        <BtnGroup align="center" :wrap="true" class="w-full" role="group" aria-label="Centered navigation">
-          <BtnLink href="/components/actions/buttons/" tone="accent">Buttons</BtnLink>
-          <BtnLink href="/components/actions/btn-link/" variant="surface">Links</BtnLink>
-        </BtnGroup>
-      </div>
-      <div>
-        <p>End</p>
-        <BtnGroup align="end" :wrap="true" class="w-full" role="group" aria-label="End-aligned navigation">
-          <BtnLink href="/components/actions/buttons/" tone="accent">Buttons</BtnLink>
-          <BtnLink href="/components/actions/btn-link/" variant="surface">Links</BtnLink>
-        </BtnGroup>
-      </div>
-    </Flex>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex direction="column">
+        <div>
+          <p>Start</p>
+          <BtnGroup
+            align="start"
+            :wrap="true"
+            class="w-full"
+            role="group"
+            aria-label="Start-aligned navigation"
+          >
+            <BtnLink href="/components/actions/buttons/" tone="accent"
+              >Buttons</BtnLink>
+            <BtnLink href="/components/actions/btn-link/" variant="surface"
+              >Links</BtnLink>
+          </BtnGroup>
+        </div>
+        <div>
+          <p>Center</p>
+          <BtnGroup
+            align="center"
+            :wrap="true"
+            class="w-full"
+            role="group"
+            aria-label="Centered navigation"
+          >
+            <BtnLink href="/components/actions/buttons/" tone="accent"
+              >Buttons</BtnLink>
+            <BtnLink href="/components/actions/btn-link/" variant="surface"
+              >Links</BtnLink>
+          </BtnGroup>
+        </div>
+        <div>
+          <p>End</p>
+          <BtnGroup
+            align="end"
+            :wrap="true"
+            class="w-full"
+            role="group"
+            aria-label="End-aligned navigation"
+          >
+            <BtnLink href="/components/actions/buttons/" tone="accent"
+              >Buttons</BtnLink>
+            <BtnLink href="/components/actions/btn-link/" variant="surface"
+              >Links</BtnLink>
+          </BtnGroup>
+        </div>
+      </Flex>
+    </div>
+  </TabPane>
   <TabPane id="group-alignment-mdx" label="group-alignment.mdx">
 ```html
 <Flex direction="column">
@@ -144,27 +187,47 @@ Enable `:wrap="true"` when a group needs to fit a narrow container or translated
   tabVariant="underline"
 >
   <TabPane id="group-wrapping-preview" label="Preview">
-<div class="component-preview-stage">
-    <Grid columns="1" columnsMd="2">
-      <div>
-        <p>Wrapping allowed</p>
-        <BtnGroup :wrap="true" class="w-full" role="group" aria-label="Wrapping documentation links">
-          <BtnLink href="/components/actions/buttons/" variant="surface">Button documentation</BtnLink>
-          <BtnLink href="/components/actions/btn-link/" variant="surface">Link documentation</BtnLink>
-          <BtnLink href="/components/actions/badge/" variant="surface">Badge documentation</BtnLink>
-        </BtnGroup>
-      </div>
-      <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable documentation links">
-        <p>Single row · scroll when needed</p>
-        <BtnGroup :wrap="false" role="group" aria-label="Single-row documentation links">
-          <BtnLink href="/components/actions/buttons/" variant="surface">Button documentation</BtnLink>
-          <BtnLink href="/components/actions/btn-link/" variant="surface">Link documentation</BtnLink>
-          <BtnLink href="/components/actions/badge/" variant="surface">Badge documentation</BtnLink>
-        </BtnGroup>
-      </div>
-    </Grid>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid columns="1" columnsMd="2">
+        <div>
+          <p>Wrapping allowed</p>
+          <BtnGroup
+            :wrap="true"
+            class="w-full"
+            role="group"
+            aria-label="Wrapping documentation links"
+          >
+            <BtnLink href="/components/actions/buttons/" variant="surface"
+              >Button documentation</BtnLink>
+            <BtnLink href="/components/actions/btn-link/" variant="surface"
+              >Link documentation</BtnLink>
+            <BtnLink href="/components/actions/badge/" variant="surface"
+              >Badge documentation</BtnLink>
+          </BtnGroup>
+        </div>
+        <div
+          class="overflow-x-auto"
+          tabindex="0"
+          role="region"
+          aria-label="Scrollable documentation links"
+        >
+          <p>Single row · scroll when needed</p>
+          <BtnGroup
+            :wrap="false"
+            role="group"
+            aria-label="Single-row documentation links"
+          >
+            <BtnLink href="/components/actions/buttons/" variant="surface"
+              >Button documentation</BtnLink>
+            <BtnLink href="/components/actions/btn-link/" variant="surface"
+              >Link documentation</BtnLink>
+            <BtnLink href="/components/actions/badge/" variant="surface"
+              >Badge documentation</BtnLink>
+          </BtnGroup>
+        </div>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="group-wrapping-mdx" label="group-wrapping.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -204,14 +267,22 @@ This compact navigation row uses a primary destination, a supporting destination
   tabVariant="underline"
 >
   <TabPane id="group-child-appearance-preview" label="Preview">
-<div class="component-preview-stage">
-    <BtnGroup :wrap="true" role="group" aria-label="Component resources">
-      <BtnLink href="/components/actions/buttons/" tone="accent" size="sm" icon="tabler:arrow-right" iconPosition="end">Start with buttons</BtnLink>
-      <BtnLink href="/components/actions/badge/" size="sm" variant="outline">Explore badges</BtnLink>
-      <BtnLink href="#api-reference" size="sm" variant="link">Group API</BtnLink>
-    </BtnGroup>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <BtnGroup :wrap="true" role="group" aria-label="Component resources">
+        <BtnLink
+          href="/components/actions/buttons/"
+          tone="accent"
+          size="sm"
+          icon="tabler:arrow-right"
+          iconPosition="end"
+          >Start with buttons</BtnLink>
+        <BtnLink href="/components/actions/badge/" size="sm" variant="outline"
+          >Explore badges</BtnLink>
+        <BtnLink href="#api-reference" size="sm" variant="link"
+          >Group API</BtnLink>
+      </BtnGroup>
+    </div>
+  </TabPane>
   <TabPane id="group-child-appearance-mdx" label="group-child-appearance.mdx">
 ```html
 <BtnGroup :wrap="true" role="group" aria-label="Component resources">
@@ -236,17 +307,17 @@ A complete stateful example: Bold and Italic change the text below, update their
   tabVariant="underline"
 >
   <TabPane id="formatting-controls-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="formatting-controls-mdx" label="formatting-controls.mdx">
 ```html
 <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
 ```
   </TabPane>
   <TabPane id="formatting-controls-ts" label="formatting-controls.ts">
-  <import-codeblock src="./formatting-controls.ts"/>
+    <import-codeblock src="./formatting-controls.ts"/>
   </TabPane>
 </Tabs>
 
@@ -265,17 +336,17 @@ The icon-only overflow trigger is [BtnGroupDropDown](/components/actions/btn-gro
   tabVariant="underline"
 >
   <TabPane id="selection-toolbar-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="selection-toolbar-mdx" label="selection-toolbar.mdx">
 ```html
 <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
 ```
   </TabPane>
   <TabPane id="selection-toolbar-ts" label="selection-toolbar.ts">
-  <import-codeblock src="./selection-toolbar.ts"/>
+    <import-codeblock src="./selection-toolbar.ts"/>
   </TabPane>
 </Tabs>
 
@@ -292,7 +363,11 @@ The icon-only overflow trigger is [BtnGroupDropDown](/components/actions/btn-gro
 
 <div class="api-overview">
   <code class="api-overview__signature">&lt;BtnGroup :wrap="true"&gt;</code>
-  <p>A native <code>&lt;div&gt;</code> with two layout props and one default slot. Alignment and wrapping use theme styles; a static group needs no application runtime.</p>
+  <p>
+    A native <code>&lt;div&gt;</code> with two layout props and one default
+    slot. Alignment and wrapping use theme styles; a static group needs no
+    application runtime.
+  </p>
   <nav class="api-index" aria-label="BtnGroup API groups">
     <a href="#layout">Layout <span>2 props</span></a>
     <a href="#slots-and-native-attributes">Slots and native attributes</a>
@@ -304,11 +379,28 @@ Both props accept values or Regor refs. Register `defineBtnGroupComponents()` in
 
 ### Layout
 
-<ApiProperty anchor="group-prop-align" name="align" valueType="BtnGroupAlign" defaultValue="start (base alignment)">
-  <p>Aligns the children within the group. The default stylesheet uses start alignment. A content-sized group has no extra space to distribute; give it width when using center or end alignment.</p>
-  <div class="api-values"><code>start</code><code>center</code><code>end</code></div>
+<ApiProperty
+  anchor="group-prop-align"
+  name="align"
+  valueType="BtnGroupAlign"
+  defaultValue="start (base alignment)"
+>
+  <p>
+    Aligns the children within the group. The default stylesheet uses start
+    alignment. A content-sized group has no extra space to distribute; give it
+    width when using center or end alignment.
+  </p>
+  <div class="api-values">
+    <code>start</code><code>center</code><code>end</code>
+  </div>
   <div class="api-demo">
-    <BtnGroup align="end" :wrap="true" class="w-full" role="group" aria-label="End-aligned API example">
+    <BtnGroup
+      align="end"
+      :wrap="true"
+      class="w-full"
+      role="group"
+      aria-label="End-aligned API example"
+    >
       <BtnLink href="#alignment" variant="surface">See alignment</BtnLink>
       <BtnLink href="#playground" tone="accent">Try it</BtnLink>
     </BtnGroup>
@@ -321,10 +413,24 @@ Both props accept values or Regor refs. Register `defineBtnGroupComponents()` in
 ```
 </ApiProperty>
 
-<ApiProperty anchor="group-prop-wrap" name="wrap" valueType="boolean" defaultValue="false">
-  <p>Allows children to flow onto another line when space is limited. Omission keeps a single row. Wrapping needs a constrained available width to become visible.</p>
-  <div class="api-values"><code>false · single row</code><code>true · multiple rows</code></div>
-  <p class="api-note">Use a boolean binding: <code>:wrap="false"</code>. An unbound string such as <code>wrap="false"</code> is not a boolean false.</p>
+<ApiProperty
+  anchor="group-prop-wrap"
+  name="wrap"
+  valueType="boolean"
+  defaultValue="false"
+>
+  <p>
+    Allows children to flow onto another line when space is limited. Omission
+    keeps a single row. Wrapping needs a constrained available width to become
+    visible.
+  </p>
+  <div class="api-values">
+    <code>false · single row</code><code>true · multiple rows</code>
+  </div>
+  <p class="api-note">
+    Use a boolean binding: <code>:wrap="false"</code>. An unbound string such as
+    <code>wrap="false"</code> is not a boolean false.
+  </p>
 ```html
 <BtnGroup :wrap="true" class="w-full">
   <BtnLink href="/components/actions/buttons/" variant="surface">Button documentation</BtnLink>
@@ -338,11 +444,24 @@ Both props accept values or Regor refs. Register `defineBtnGroupComponents()` in
 
 <div class="api-contract">
   <h4>Default slot</h4>
-  <p>Related controls rendered in source order. Each direct child is a flex item. Buttons and links keep their own props, accessible names, and native behavior.</p>
+  <p>
+    Related controls rendered in source order. Each direct child is a flex item.
+    Buttons and links keep their own props, accessible names, and native
+    behavior.
+  </p>
   <h4>Native attributes</h4>
-  <p><code>class</code>, <code>id</code>, <code>role</code>, and ARIA attributes reach the root <code>div</code>. Use <code>class="w-full"</code> for an action row that fills its container.</p>
+  <p>
+    <code>class</code>, <code>id</code>, <code>role</code>, and ARIA attributes
+    reach the root <code>div</code>. Use <code>class="w-full"</code> for an
+    action row that fills its container.
+  </p>
   <h4>Scope</h4>
-  <p>The two public props are <code>align</code> and <code>wrap</code>. Dropdown menus are provided by the separate <a href="/components/actions/btn-group-drop-down/">BtnGroupDropDown</a> component.</p>
+  <p>
+    The two public props are <code>align</code> and <code>wrap</code>. Dropdown
+    menus are provided by the separate
+    <a href="/components/actions/btn-group-drop-down/">BtnGroupDropDown</a>
+    component.
+  </p>
 </div>
 
 ```html

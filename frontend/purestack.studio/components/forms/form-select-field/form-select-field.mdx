@@ -13,26 +13,41 @@ nav:
 
 # Form<wbr/>Select<wbr/>Field
 
-<ComponentHeader name="FormSelectField" kind="Native selection" summary="Make a focused choice from a known set. Labelled options, typed values, and the browser’s familiar keyboard behavior." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formSelectField.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="FormSelectField"
+  kind="Native selection"
+  summary="Make a focused choice from a known set. Labelled options, typed values, and the browser’s familiar keyboard behavior."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formSelectField.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Choose a region
 
 Select a region and inspect its stored value. The unavailable option stays visible but cannot be selected.
 
-<Tabs group="form-select-field-sample-1" selectedTab="form-select-field-sample-1-preview" ariaLabel="Choose a region example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-select-field-sample-1"
+  selectedTab="form-select-field-sample-1-preview"
+  ariaLabel="Choose a region example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-select-field-sample-1-preview" label="Preview">
-<ComponentExample label="FormSelectField in context" caption="Choose a deployment region, then lock the selection. The unavailable option remains visible.">
-    <RegorApp id="form-select-field-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="FormSelectField in context"
+      caption="Choose a deployment region, then lock the selection. The unavailable option remains visible."
+    >
+      <RegorApp id="form-select-field-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="form-select-field-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-select-field-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="form-select-field-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,27 +55,31 @@ Select a region and inspect its stored value. The unavailable option stays visib
 
 A placeholder is a disabled empty option. Validation belongs to the owning form.
 
-<Tabs group="form-select-field-sample-2" selectedTab="form-select-field-sample-2-preview" ariaLabel="Required and disabled states example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-select-field-sample-2"
+  selectedTab="form-select-field-sample-2-preview"
+  ariaLabel="Required and disabled states example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-select-field-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <Grid columns="1" columnsSm="2">
-      <FormSelectField
-        id="select-required"
-        label="Required choice"
-        :required="true"
-        placeholder="Select one"
-        :options="[{ label: 'Stable', value: 'stable' }, { label: 'Preview', value: 'preview' }]"
-      />
-      <FormSelectField
-        id="select-disabled"
-        label="Unavailable selection"
-        :disabled="true"
-        :options="[{ label: 'Managed by policy', value: 'policy' }]"
-      />
-    </Grid>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid columns="1" columnsSm="2">
+        <FormSelectField
+          id="select-required"
+          label="Required choice"
+          :required="true"
+          placeholder="Select one"
+          :options="[{ label: 'Stable', value: 'stable' }, { label: 'Preview', value: 'preview' }]"/>
+        <FormSelectField
+          id="select-disabled"
+          label="Unavailable selection"
+          :disabled="true"
+          :options="[{ label: 'Managed by policy', value: 'policy' }]"/>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="form-select-field-sample-2-source-0" label="select-states.mdx">
 ```html
 <Grid columns="1" columnsSm="2">
@@ -86,50 +105,110 @@ A placeholder is a disabled empty option. Validation belongs to the owning form.
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-select-field-tone-gallery" data-form-gallery data-component="FormSelectField" data-axis="tone">
-<FormAppearanceGallery component="FormSelectField" axis="tone" prefix="forms-form-select-field-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-select-field-tone-gallery"
+    data-form-gallery
+    data-component="FormSelectField"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="FormSelectField"
+      axis="tone"
+      prefix="forms-form-select-field-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-select-field-variant-gallery" data-form-gallery data-component="FormSelectField" data-axis="variant">
-<FormAppearanceGallery component="FormSelectField" axis="variant" prefix="forms-form-select-field-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-select-field-variant-gallery"
+    data-form-gallery
+    data-component="FormSelectField"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="FormSelectField"
+      axis="variant"
+      prefix="forms-form-select-field-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Option data and field states
 
 Options may use string or numeric values, disabled flags, and a label fallback when value is omitted. The placeholder is a disabled empty option.
 
-<ComponentExample label="Option data and field states" caption="Compare all values together. Use the live examples for application state and event handling.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Placeholder</code>
-<FormSelectField id="forms-select-placeholder" label="Region" placeholder="Choose a region" :options="[{label:'Europe',value:'eu'},{label:'US East',value:'us'}]"/>
-</div>
-<div class="component-appearance-cell"><code>Disabled option</code>
-<FormSelectField id="forms-select-options" label="Region" :options="[{label:'Available',value:'ready'},{label:'Private · unavailable',value:'private',disabled:true}]"/>
-</div>
-<div class="component-appearance-cell"><code>Numeric values</code>
-<FormSelectField id="forms-select-numeric" label="Seats" :options="[{label:'One seat',value:1},{label:'Three seats',value:3}]"/>
-</div>
-<div class="component-appearance-cell"><code>Label fallback</code>
-<FormSelectField id="forms-select-fallback" label="Release channel" :options="[{label:'Stable'},{label:'Preview'}]"/>
-</div>
-<div class="component-appearance-cell"><code>Required</code>
-<FormSelectField id="forms-select-required" label="Required region" name="region" :required="true" placeholder="Choose a region" :options="[{label:'Europe',value:'eu'}]"/>
-</div>
-<div class="component-appearance-cell"><code>Disabled</code>
-<FormSelectField id="forms-select-disabled" label="Locked region" :disabled="true" :options="[{label:'Europe',value:'eu'}]"/>
-</div>
-<div class="component-appearance-cell"><code>Custom icons</code>
-<FormSelectField id="forms-select-icons" label="Deployment" icon="lucide:layers" iconEnd="lucide:check" :options="[{label:'Ready',value:'ready'}]"/>
-</div>
-</div>
+<ComponentExample
+  label="Option data and field states"
+  caption="Compare all values together. Use the live examples for application state and event handling."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Placeholder</code>
+      <FormSelectField
+        id="forms-select-placeholder"
+        label="Region"
+        placeholder="Choose a region"
+        :options="[{label:'Europe',value:'eu'},{label:'US East',value:'us'}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Disabled option</code>
+      <FormSelectField
+        id="forms-select-options"
+        label="Region"
+        :options="[{label:'Available',value:'ready'},{label:'Private · unavailable',value:'private',disabled:true}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Numeric values</code>
+      <FormSelectField
+        id="forms-select-numeric"
+        label="Seats"
+        :options="[{label:'One seat',value:1},{label:'Three seats',value:3}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Label fallback</code>
+      <FormSelectField
+        id="forms-select-fallback"
+        label="Release channel"
+        :options="[{label:'Stable'},{label:'Preview'}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Required</code>
+      <FormSelectField
+        id="forms-select-required"
+        label="Required region"
+        name="region"
+        :required="true"
+        placeholder="Choose a region"
+        :options="[{label:'Europe',value:'eu'}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Disabled</code>
+      <FormSelectField
+        id="forms-select-disabled"
+        label="Locked region"
+        :disabled="true"
+        :options="[{label:'Europe',value:'eu'}]"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom icons</code>
+      <FormSelectField
+        id="forms-select-icons"
+        label="Deployment"
+        icon="lucide:layers"
+        iconEnd="lucide:check"
+        :options="[{label:'Ready',value:'ready'}]"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Behavior and accessibility
@@ -140,7 +219,11 @@ The browser owns the popup and its keyboard interactions. Native attributes and 
 
 <div class="api-overview">
   <p class="text-eyebrow">FormSelectField contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="FormSelectField properties">
@@ -159,62 +242,160 @@ The browser owns the popup and its keyboard interactions. Native attributes and 
   <a href="#form-select-field-prop-options">options</a>
 </nav>
 
-<ApiProperty anchor="form-select-field-prop-id" name="id" valueType="string" defaultValue="generated">
-  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+<ApiProperty
+  anchor="form-select-field-prop-id"
+  name="id"
+  valueType="string"
+  defaultValue="generated"
+>
+  <p>
+    Unique control ID. Supply an explicit value when help text or another
+    element needs to reference this control.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="form-select-field-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="form-select-field-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="form-select-field-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-model" name="model" valueType="Ref&lt;FormSelectValue&gt;" defaultValue="ref('')">
-  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+<ApiProperty
+  anchor="form-select-field-prop-model"
+  name="model"
+  valueType="Ref&lt;FormSelectValue&gt;"
+  defaultValue="ref('')"
+>
+  <p>
+    Two-way value ref. Pass the ref itself with :model="fieldValue" so edits
+    update application state.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="form-select-field-prop-name"
+  name="name"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Native form field name used during FormData serialization.</p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+<ApiProperty
+  anchor="form-select-field-prop-required"
+  name="required"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Native required constraint. Validate the owning form before accepting its
+    data.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+<ApiProperty
+  anchor="form-select-field-prop-autocomplete"
+  name="autocomplete"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="off"
+>
   <p>Native browser autofill hint, such as name, email or current-password.</p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="form-select-field-prop-placeholder"
+  name="placeholder"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>A short input hint shown while empty. Keep a separate visible label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+<ApiProperty
+  anchor="form-select-field-prop-disabled"
+  name="disabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Disables interaction. Use a bound boolean, for example :disabled="isLocked".
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+<ApiProperty
+  anchor="form-select-field-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered SVG icon name. In browser apps, include the icon in the resolver
+    passed to defineIconComponents.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:chevron-down">
-  <p>Trailing registered icon. Include the default chevron in browser app icon registration.</p>
+<ApiProperty
+  anchor="form-select-field-prop-iconEnd"
+  name="iconEnd"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:chevron-down"
+>
+  <p>
+    Trailing registered icon. Include the default chevron in browser app icon
+    registration.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-select-field-prop-options" name="options" valueType="RefOrValue&lt;FormSelectOption[]&gt;" defaultValue="[]">
-  <p>Suggestion or select data. Each option has a label, an optional value and an optional disabled flag. Omitted values use the label.</p>
+<ApiProperty
+  anchor="form-select-field-prop-options"
+  name="options"
+  valueType="RefOrValue&lt;FormSelectOption[]&gt;"
+  defaultValue="[]"
+>
+  <p>
+    Suggestion or select data. Each option has a label, an optional value and an
+    optional disabled flag. Omitted values use the label.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineFormSelectField and defineIconComponents. Pass FormSelectOption[] with options and a Ref&lt;FormSelectValue&gt; with model.</p>
+  <p>
+    No slots. Register defineFormSelectField and defineIconComponents. Pass
+    FormSelectOption[] with options and a Ref&lt;FormSelectValue&gt; with model.
+  </p>
 </div>
 
 ### Option data

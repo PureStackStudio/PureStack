@@ -40,11 +40,17 @@ export class Dashboard {
   }
 }
 
-const dashboardTemplate = html`<Grid columns="1" columnsLg="28rem minmax(0, 1fr)" class="gap-5" alignItems="start">
+const dashboardTemplate = html`<Grid
+  columns="1"
+  columnsLg="28rem minmax(0, 1fr)"
+  class="gap-5"
+  alignItems="start"
+>
   <Navigation/>
   <Panel tone="neutral" variant="surface" class="forge-panel" bodyClass="p-5">
     <Flex direction="column" class="gap-5">
-      <FormStatus tone="danger" r-if="model.error">{{ model.error }}</FormStatus>
+      <FormStatus tone="danger" r-if="model.error"
+        >{{ model.error }}</FormStatus>
       <div :is="activeComponent"></div>
     </Flex>
   </Panel>

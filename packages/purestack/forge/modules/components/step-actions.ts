@@ -9,10 +9,14 @@ export interface StepActions {
   disabled?: RefOrValue<boolean>
 }
 
-const stepActionsTemplate = html`<Flex class="forge-actions mt-5 pt-4"
-  :justify="back ? (next ? 'between' : 'start') : 'end'" wrap="true">
+const stepActionsTemplate = html`<Flex
+  class="forge-actions mt-5 pt-4"
+  :justify="back ? (next ? 'between' : 'start') : 'end'"
+  wrap="true"
+>
   <Btn r-if="back" variant="outline" @click="navigate(back)">← Back</Btn>
-  <Btn r-if="next" tone="accent" :disabled="disabled" @click="navigate(next)">{{ nextLabel }} →</Btn>
+  <Btn r-if="next" tone="accent" :disabled="disabled" @click="navigate(next)"
+    >{{ nextLabel }} →</Btn>
 </Flex>`
 
 export function defineStepActionsComponent() {

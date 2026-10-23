@@ -181,7 +181,13 @@ export interface SiteAppearanceGallery {
 
 export function defineSiteAppearanceGallery(site: SiteConfig) {
   return defineComponent<SiteAppearanceGallery>(
-    html`<iframe class="site-guide-frame w-full" :title="title" :src="previewHref" style="height:400px;border:0;display:block" loading="lazy"></iframe>`,
+    html`<iframe
+  class="site-guide-frame w-full"
+  :title="title"
+  :src="previewHref"
+  style="height: 400px; border: 0; display: block"
+  loading="lazy"
+></iframe>`,
     {
       props: ['component', 'axis'],
       context: (head) => ({

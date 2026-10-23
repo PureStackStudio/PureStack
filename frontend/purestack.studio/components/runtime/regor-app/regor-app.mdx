@@ -13,18 +13,36 @@ nav:
 
 # Regor<wbr/>App
 
-<ComponentHeader name="RegorApp" kind="Independent app" summary="Mount an independent browser app from a TypeScript file colocated with its MDX page." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts" section="Browser entry points" sectionHref="/components/runtime/"/>
+<ComponentHeader
+  name="RegorApp"
+  kind="Independent app"
+  summary="Mount an independent browser app from a TypeScript file colocated with its MDX page."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts"
+  section="Browser entry points"
+  sectionHref="/components/runtime/"/>
 
 ## A focused browser app
 
 Complete and undo tasks, change the goal, add a note, and pause changes. The status and native progress bar update together. Reset restores this app’s initial state.
 
-<Tabs group="regor-app-sample-1" selectedTab="regor-app-sample-1-preview" ariaLabel="A focused browser app example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="regor-app-sample-1"
+  selectedTab="regor-app-sample-1-preview"
+  ariaLabel="A focused browser app example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="regor-app-sample-1-preview" label="Preview">
-<ComponentExample label="RegorApp in context" caption="An app mount, a module, and fresh reactive state. Change the controls and inspect the complete source.">
-    <RegorApp id="regor-app-demo" data-review-counter="Release review" src="./playground.ts"/>
-
-</ComponentExample>
+    <ComponentExample
+      label="RegorApp in context"
+      caption="An app mount, a module, and fresh reactive state. Change the controls and inspect the complete source."
+    >
+      <RegorApp
+        id="regor-app-demo"
+        data-review-counter="Release review"
+        src="./playground.ts"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="regor-app-sample-1-source-0" label="playground.mdx">
 ```html
@@ -32,7 +50,7 @@ Complete and undo tasks, change the goal, add a note, and pause changes. The sta
 ```
   </TabPane>
   <TabPane id="regor-app-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,8 +58,18 @@ Complete and undo tasks, change the goal, add a note, and pause changes. The sta
 
 Both mounts load the same module URL. Browser modules execute once per URL; the entry point explicitly creates an app for every matching mount. Each call gets fresh refs and unique field IDs. Completing a task in one review leaves the other unchanged.
 
-<ComponentExample label="Design review and content review" caption="Change either goal or note, pause one app, and reset it. The neighboring app keeps its own state.">
-<Grid columns="1" columnsMd="2"><RegorApp id="regor-app-design" data-review-counter="Design review" src="./playground.ts"/><RegorApp id="regor-app-content" data-review-counter="Content review" src="./playground.ts"/></Grid>
+<ComponentExample
+  label="Design review and content review"
+  caption="Change either goal or note, pause one app, and reset it. The neighboring app keeps its own state."
+>
+  <Grid columns="1" columnsMd="2"
+    ><RegorApp
+      id="regor-app-design"
+      data-review-counter="Design review"
+      src="./playground.ts"/><RegorApp
+      id="regor-app-content"
+      data-review-counter="Content review"
+      src="./playground.ts"/></Grid>
 </ComponentExample>
 
 ```html
@@ -55,8 +83,15 @@ Both mounts load the same module URL. Browser modules execute once per URL; the 
 
 Bind an explicit sourceRelPath to change the source directory used to resolve src. The colon binding overrides the source owner automatically attached by MDX compilation. Here the owner is the real PageScript guide, and its sibling-relative src resolves back to this guide’s playground. The emitted bundle is shared with the other mounts.
 
-<ComponentExample label="A mount with a different source owner" caption="The app is still mounted on this page. sourceRelPath affects build-time path resolution, not DOM selection.">
-<RegorApp id="regor-app-owned" data-review-counter="Shared source review" src="../regor-app/playground.ts" :sourceRelPath="'components/runtime/page-script/page-script.mdx'"/>
+<ComponentExample
+  label="A mount with a different source owner"
+  caption="The app is still mounted on this page. sourceRelPath affects build-time path resolution, not DOM selection."
+>
+  <RegorApp
+    id="regor-app-owned"
+    data-review-counter="Shared source review"
+    src="../regor-app/playground.ts"
+    :sourceRelPath="'components/runtime/page-script/page-script.mdx'"/>
 </ComponentExample>
 
 ```html
@@ -70,13 +105,40 @@ Bind an explicit sourceRelPath to change the source directory used to resolve sr
 
 ## From MDX to reactive UI
 
-<ComponentExample label="Four pieces with clear ownership" caption="RegorApp creates the mount and includes the module. Your entry point registers components and calls createApp.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>1 · Source</code><strong>playground.ts beside the guide</strong><p class="m-0">The SSG resolves the relative path, records the entry point, and emits its browser bundle.</p></div>
-<div class="component-appearance-cell"><code>2 · Mount</code><strong>One unique app ID</strong><p class="m-0">id and data-review-counter are native attributes on the app element. Each field ID derives from the mount ID.</p></div>
-<div class="component-appearance-cell"><code>3 · Registration</code><strong>Only the component families used here</strong><p class="m-0">Buttons, flex, panels, form fields, and statuses are explicitly registered in the browser app.</p></div>
-<div class="component-appearance-cell"><code>4 · Context</code><strong>Fresh refs and computed values</strong><p class="m-0">Task count, goal, note, and pause state belong to one mount. Progress and feedback derive from them.</p></div>
-</div>
+<ComponentExample
+  label="Four pieces with clear ownership"
+  caption="RegorApp creates the mount and includes the module. Your entry point registers components and calls createApp."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>1 · Source</code><strong>playground.ts beside the guide</strong>
+      <p class="m-0">
+        The SSG resolves the relative path, records the entry point, and emits
+        its browser bundle.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>2 · Mount</code><strong>One unique app ID</strong>
+      <p class="m-0">
+        id and data-review-counter are native attributes on the app element.
+        Each field ID derives from the mount ID.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>3 · Registration</code><strong>Only the component families used here</strong>
+      <p class="m-0">
+        Buttons, flex, panels, form fields, and statuses are explicitly
+        registered in the browser app.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>4 · Context</code><strong>Fresh refs and computed values</strong>
+      <p class="m-0">
+        Task count, goal, note, and pause state belong to one mount. Progress
+        and feedback derive from them.
+      </p>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -101,7 +163,10 @@ RegorApp renders an app mount element and a module entry script. Give the mount 
 
 <div class="api-overview">
   <p class="text-eyebrow">RegorApp contract</p>
-  <p>src and sourceRelPath are component props. id is a native attribute on the app mount. The TypeScript entry point calls createApp explicitly.</p>
+  <p>
+    src and sourceRelPath are component props. id is a native attribute on the
+    app mount. The TypeScript entry point calls createApp explicitly.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="RegorApp properties">
@@ -109,18 +174,38 @@ RegorApp renders an app mount element and a module entry script. Give the mount 
   <a href="#regor-app-prop-sourceRelPath">sourceRelPath</a>
 </nav>
 
-<ApiProperty anchor="regor-app-prop-src" name="src" valueType="string" defaultValue="required">
-  <p>Browser entry point. A relative path resolves from the current MDX page. SSG records and bundles local scripts.</p>
+<ApiProperty
+  anchor="regor-app-prop-src"
+  name="src"
+  valueType="string"
+  defaultValue="required"
+>
+  <p>
+    Browser entry point. A relative path resolves from the current MDX page. SSG
+    records and bundles local scripts.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="regor-app-prop-sourceRelPath" name="sourceRelPath" valueType="string" defaultValue="detected from the current page">
-  <p>Optional source-resolution override. Omit it for ordinary colocated MDX and TypeScript files.</p>
+<ApiProperty
+  anchor="regor-app-prop-sourceRelPath"
+  name="sourceRelPath"
+  valueType="string"
+  defaultValue="detected from the current page"
+>
+  <p>
+    Optional source-resolution override. Omit it for ordinary colocated MDX and
+    TypeScript files.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No content slot. RegorApp uses PageScript internally. Available in SSG’s standard component registration; browser code imports createApp, defineComponent and html from Regor.</p>
+  <p>
+    No content slot. RegorApp uses PageScript internally. Available in SSG’s
+    standard component registration; browser code imports createApp,
+    defineComponent and html from Regor.
+  </p>
 </div>
 
 ## Related components

@@ -338,89 +338,251 @@ function createFlexPlayground() {
 
 const template = html`<Flex direction="column">
   <Flex justify="between" align="center" wrap="true">
-    <div><p class="text-eyebrow m-0">Find your layout's rhythm</p><h3 class="mt-1 mb-0">Flex layout lab</h3></div>
+    <div>
+      <p class="text-eyebrow m-0">Find your layout's rhythm</p>
+      <h3 class="mt-1 mb-0">Flex layout lab</h3>
+    </div>
     <Badge tone="accent" variant="surface">Live playground</Badge>
   </Flex>
   <Flex wrap="true" aria-label="Flex presets">
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'distribute' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'distribute'" @click="loadPreset('distribute')">Distribute items</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'responsive' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'responsive'" @click="loadPreset('responsive')">Responsive stack</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'wrap' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'wrap'" @click="loadPreset('wrap')">Wrapping cards</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'baseline' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'baseline'" @click="loadPreset('baseline')">Shared baseline</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'grow' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'grow'" @click="loadPreset('grow')">Flexible first item</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'distribute' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'distribute'"
+      @click="loadPreset('distribute')"
+      >Distribute items</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'responsive' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'responsive'"
+      @click="loadPreset('responsive')"
+      >Responsive stack</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'wrap' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'wrap'"
+      @click="loadPreset('wrap')"
+      >Wrapping cards</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'baseline' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'baseline'"
+      @click="loadPreset('baseline')"
+      >Shared baseline</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'grow' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'grow'"
+      @click="loadPreset('grow')"
+      >Flexible first item</Btn>
   </Flex>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
-    <Flex justify="between" wrap="true" class="mb-3"><strong>Live layout</strong><span class="text-muted">{{ measuredWidth }}px wide</span></Flex>
+    <Flex justify="between" wrap="true" class="mb-3"
+      ><strong>Live layout</strong><span class="text-muted">{{ measuredWidth }}px wide</span></Flex>
     <div id="flex-lab-stage" class="overflow-auto">
       <div :class="widthClass">
         <div :class="frameClass">
-        <span r-if="inlineLayout" class="text-muted">Before inline Flex </span>
-        <Flex id="flex-lab-preview" :direction="layoutDirection" :align="itemAlignment" :justify="contentDistribution" :wrap="wrapping"
-          :directionSm="sm.direction" :directionMd="md.direction" :directionLg="lg.direction" :directionXl="xl.direction"
-          :alignSm="sm.align" :alignMd="md.align" :alignLg="lg.align" :alignXl="xl.align"
-          :justifySm="sm.justify" :justifyMd="md.justify" :justifyLg="lg.justify" :justifyXl="xl.justify"
-          :wrapSm="sm.wrap" :wrapMd="md.wrap" :wrapLg="lg.wrap" :wrapXl="xl.wrap"
-          :inline="inlineLayout" :container="element" :class="layoutClass + ' h-full'">
-          <Flex r-for="tile in tiles" :container="element === 'ul' ? 'li' : 'div'" direction="column" :class="itemClass(tile.index)">
-            <Panel :tone="tile.tone" variant="surface" class="flex-1 min-w-0" bodyClass="p-0">
-              <Flex direction="column" align="start" :class="'gap-1 ' + cardPadding(tile.index)">
-              <h3 :class="titleClass(tile.index)">{{ tile.title }}</h3>
-              <Badge :tone="tile.tone" variant="outline">{{ tile.label }}</Badge>
-              </Flex>
-            </Panel>
+          <span r-if="inlineLayout" class="text-muted"
+            >Before inline Flex
+          </span>
+          <Flex
+            id="flex-lab-preview"
+            :direction="layoutDirection"
+            :align="itemAlignment"
+            :justify="contentDistribution"
+            :wrap="wrapping"
+            :directionSm="sm.direction"
+            :directionMd="md.direction"
+            :directionLg="lg.direction"
+            :directionXl="xl.direction"
+            :alignSm="sm.align"
+            :alignMd="md.align"
+            :alignLg="lg.align"
+            :alignXl="xl.align"
+            :justifySm="sm.justify"
+            :justifyMd="md.justify"
+            :justifyLg="lg.justify"
+            :justifyXl="xl.justify"
+            :wrapSm="sm.wrap"
+            :wrapMd="md.wrap"
+            :wrapLg="lg.wrap"
+            :wrapXl="xl.wrap"
+            :inline="inlineLayout"
+            :container="element"
+            :class="layoutClass + ' h-full'"
+          >
+            <Flex
+              r-for="tile in tiles"
+              :container="element === 'ul' ? 'li' : 'div'"
+              direction="column"
+              :class="itemClass(tile.index)"
+            >
+              <Panel
+                :tone="tile.tone"
+                variant="surface"
+                class="flex-1 min-w-0"
+                bodyClass="p-0"
+              >
+                <Flex
+                  direction="column"
+                  align="start"
+                  :class="'gap-1 ' + cardPadding(tile.index)"
+                >
+                  <h3 :class="titleClass(tile.index)">
+                    {{ tile.title }}
+                  </h3>
+                  <Badge :tone="tile.tone" variant="outline"
+                    >{{ tile.label }}</Badge>
+                </Flex>
+              </Panel>
+            </Flex>
           </Flex>
-        </Flex>
-        <span r-if="inlineLayout" class="text-muted"> After inline Flex</span>
+          <span r-if="inlineLayout" class="text-muted"> After inline Flex</span>
         </div>
       </div>
     </div>
   </Panel>
-  <p class="text-muted m-0">{{ axes }}<br/>Browser: {{ browserWidth }}px / Breakpoint: <code>{{ active.breakpoint }}</code> / Active: <code>{{ active.direction }} / {{ active.align }} / {{ active.justify }} / {{ active.wrap }}</code></p>
-  <p r-if="overflowing" role="status" class="text-muted m-0">Items exceed the preview bounds. Scroll the preview, choose flex-auto, enable wrapping, or increase its dimensions.</p>
+  <p class="text-muted m-0">
+    {{ axes }}<br/>Browser: {{ browserWidth }}px /
+    Breakpoint: <code>{{ active.breakpoint }}</code> / Active:
+    <code
+      >{{ active.direction }} / {{ active.align }} /
+      {{ active.justify }} / {{ active.wrap }}</code>
+  </p>
+  <p r-if="overflowing" role="status" class="text-muted m-0">
+    Items exceed the preview bounds. Scroll the preview, choose flex-auto,
+    enable wrapping, or increase its dimensions.
+  </p>
   <fieldset class="b-0 p-0 m-0">
     <legend class="text-eyebrow mb-2">Direction &amp; alignment</legend>
     <Grid columns="1" columnsSm="2" columnsLg="3">
-      <FormSelectField id="flex-lab-direction" label="Direction" :model="layoutDirection" :options="directionOptions"/>
-      <FormSelectField id="flex-lab-align" label="Align items / cross axis" :model="itemAlignment" :options="alignOptions"/>
-      <FormSelectField id="flex-lab-justify" label="Justify content / main axis" :model="contentDistribution" :options="justifyOptions"/>
-      <FormSelectField id="flex-lab-wrap" label="Wrapping" :model="wrapping" :options="wrapOptions"/>
-      <FormSelectField id="flex-lab-container" label="Container element" :model="element" :options="containerOptions"/>
+      <FormSelectField
+        id="flex-lab-direction"
+        label="Direction"
+        :model="layoutDirection"
+        :options="directionOptions"/>
+      <FormSelectField
+        id="flex-lab-align"
+        label="Align items / cross axis"
+        :model="itemAlignment"
+        :options="alignOptions"/>
+      <FormSelectField
+        id="flex-lab-justify"
+        label="Justify content / main axis"
+        :model="contentDistribution"
+        :options="justifyOptions"/>
+      <FormSelectField
+        id="flex-lab-wrap"
+        label="Wrapping"
+        :model="wrapping"
+        :options="wrapOptions"/>
+      <FormSelectField
+        id="flex-lab-container"
+        label="Container element"
+        :model="element"
+        :options="containerOptions"/>
     </Grid>
   </fieldset>
   <details>
-    <summary class="text-eyebrow">Responsive overrides / sm / md / lg / xl</summary>
-    <p class="text-muted">Overrides follow the browser viewport. Empty values inherit the smaller breakpoint independently for each property.</p>
+    <summary class="text-eyebrow">
+      Responsive overrides / sm / md / lg / xl
+    </summary>
+    <p class="text-muted">
+      Overrides follow the browser viewport. Empty values inherit the smaller
+      breakpoint independently for each property.
+    </p>
     <fieldset r-for="tier in tiers" class="b-0 p-0 mx-0 mb-3">
       <legend class="text-eyebrow mb-2">{{ tier.label }}</legend>
       <Grid columns="1" columnsSm="2">
-        <FormSelectField :id="'flex-lab-direction-' + tier.name" label="Direction" :model="tier.direction" :options="responsiveDirectionOptions"/>
-        <FormSelectField :id="'flex-lab-align-' + tier.name" label="Align items" :model="tier.align" :options="responsiveAlignOptions"/>
-        <FormSelectField :id="'flex-lab-justify-' + tier.name" label="Justify content" :model="tier.justify" :options="responsiveJustifyOptions"/>
-        <FormSelectField :id="'flex-lab-wrap-' + tier.name" label="Wrapping" :model="tier.wrap" :options="responsiveWrapOptions"/>
+        <FormSelectField
+          :id="'flex-lab-direction-' + tier.name"
+          label="Direction"
+          :model="tier.direction"
+          :options="responsiveDirectionOptions"/>
+        <FormSelectField
+          :id="'flex-lab-align-' + tier.name"
+          label="Align items"
+          :model="tier.align"
+          :options="responsiveAlignOptions"/>
+        <FormSelectField
+          :id="'flex-lab-justify-' + tier.name"
+          label="Justify content"
+          :model="tier.justify"
+          :options="responsiveJustifyOptions"/>
+        <FormSelectField
+          :id="'flex-lab-wrap-' + tier.name"
+          label="Wrapping"
+          :model="tier.wrap"
+          :options="responsiveWrapOptions"/>
       </Grid>
     </fieldset>
-    <Btn size="sm" variant="outline" @click="clearOverrides">Clear responsive overrides</Btn>
+    <Btn size="sm" variant="outline" @click="clearOverrides"
+      >Clear responsive overrides</Btn>
   </details>
   <fieldset class="b-0 p-0 m-0">
     <legend class="text-eyebrow mb-2">Space &amp; item sizing</legend>
     <Grid columns="1" columnsSm="2" columnsLg="3">
-      <FormSelectField id="flex-lab-gap" label="Gap utility" :model="gap" :options="gapOptions"/>
-      <FormSelectField id="flex-lab-width" label="Preview width" :model="width" :options="widthOptions"/>
-      <FormSelectField id="flex-lab-height" label="Preview height" :model="height" :options="heightOptions"/>
-      <FormSelectField id="flex-lab-sizing" label="Item sizing utility" :model="sizing" :options="sizingOptions"/>
-      <FormSelectField id="flex-lab-count" label="Item count" :model="count" :options="countOptions"/>
+      <FormSelectField
+        id="flex-lab-gap"
+        label="Gap utility"
+        :model="gap"
+        :options="gapOptions"/>
+      <FormSelectField
+        id="flex-lab-width"
+        label="Preview width"
+        :model="width"
+        :options="widthOptions"/>
+      <FormSelectField
+        id="flex-lab-height"
+        label="Preview height"
+        :model="height"
+        :options="heightOptions"/>
+      <FormSelectField
+        id="flex-lab-sizing"
+        label="Item sizing utility"
+        :model="sizing"
+        :options="sizingOptions"/>
+      <FormSelectField
+        id="flex-lab-count"
+        label="Item count"
+        :model="count"
+        :options="countOptions"/>
     </Grid>
     <Flex wrap="true" class="mt-3">
-      <FormCheck id="flex-lab-varied" label="Vary padding &amp; typography" :checked="varied"/>
+      <FormCheck
+        id="flex-lab-varied"
+        label="Vary padding &amp; typography"
+        :checked="varied"/>
       <FormCheck id="flex-lab-grow" label="Grow first item" :checked="grow"/>
-      <FormCheck id="flex-lab-inline" label="Inline Flex" :checked="inlineLayout"/>
+      <FormCheck
+        id="flex-lab-inline"
+        label="Inline Flex"
+        :checked="inlineLayout"/>
     </Flex>
   </fieldset>
-  <p class="text-muted m-0">Justify distributes space along the main axis; align positions items across it. Growing items consume available space before justify applies. In Flex, justify="stretch" behaves like start; use item growth to fill space. Reverse directions and reverse wrapping change visual placement while source order stays 01, 02, 03.</p>
+  <p class="text-muted m-0">
+    Justify distributes space along the main axis; align positions items across
+    it. Growing items consume available space before justify applies. In Flex,
+    justify="stretch" behaves like start; use item growth to fill space. Reverse
+    directions and reverse wrapping change visual placement while source order
+    stays 01, 02, 03.
+  </p>
   <Flex justify="between" align="center" wrap="true">
     <strong>Copyable Flex markup</strong>
-    <Flex wrap="true"><Btn size="sm" variant="outline" @click="reset">Reset playground</Btn><Btn size="sm" @click="copy"><span aria-live="polite">{{ copyLabel }}</span></Btn></Flex>
+    <Flex wrap="true"
+      ><Btn size="sm" variant="outline" @click="reset">Reset playground</Btn><Btn size="sm" @click="copy"
+        ><span aria-live="polite">{{ copyLabel }}</span></Btn></Flex>
   </Flex>
-  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0"><pre class="overflow-auto max-h-inspector m-0"><code>{{ markup }}</code></pre></Panel>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <pre
+      class="overflow-auto max-h-inspector m-0"
+    ><code>{{ markup }}</code></pre>
+  </Panel>
 </Flex>`
 
 const component = defineComponent<ReturnType<typeof createFlexPlayground>>(

@@ -23,14 +23,11 @@ const sourceWorkbenchTemplate = html`<Panel
     tabVariant="none"
   >
     <TabPane id="content" label="index.mdx" icon="tabler:file-code"
-      ><slot name="content"></slot
-    ></TabPane>
+      ><slot name="content"></slot></TabPane>
     <TabPane id="interactive" label="counter.ts" icon="tabler:braces"
-      ><slot name="interactive"></slot
-    ></TabPane>
+      ><slot name="interactive"></slot></TabPane>
     <TabPane id="style" label="styles.ts" icon="tabler:palette"
-      ><slot name="style"></slot
-    ></TabPane>
+      ><slot name="style"></slot></TabPane>
   </Tabs>
   <Flex class="workbench-status" align="center" justify="between">
     <span><Icon name="tabler:check"/>Same source. Connected workflow.</span>

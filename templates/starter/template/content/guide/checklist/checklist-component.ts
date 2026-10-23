@@ -51,15 +51,34 @@ export class LaunchChecklist {
 const checklistTemplate = html`<section aria-label="Launch checklist">
   <div class="flex flex-wrap justify-between align-center gap-3 mb-4">
     <strong class="fs-h4">Your launch checklist</strong>
-    <span class="text-subtle fs-sm" role="status">{{ completed }} of {{ steps.length }} complete</span>
+    <span class="text-subtle fs-sm" role="status"
+      >{{ completed }} of {{ steps.length }} complete</span>
   </div>
-  <progress class="starter-checklist-progress" :value="completed" :max="steps.length" aria-label="Launch checklist progress"></progress>
+  <progress
+    class="starter-checklist-progress"
+    :value="completed"
+    :max="steps.length"
+    aria-label="Launch checklist progress"
+  ></progress>
   <label r-for="step in steps" :for="step.id" class="starter-checklist-row">
-    <input type="checkbox" :id="step.id" r-model="step.done" class="starter-checklist-input"/>
-    <span class="d-flex flex-column gap-1"><strong>{{ step.title }}</strong><span class="text-subtle fs-sm">{{ step.detail }}</span></span>
+    <input
+      type="checkbox"
+      :id="step.id"
+      r-model="step.done"
+      class="starter-checklist-input"/>
+    <span class="d-flex flex-column gap-1"
+      ><strong>{{ step.title }}</strong><span class="text-subtle fs-sm">{{ step.detail }}</span></span>
   </label>
-  <p class="text-subtle fs-sm mt-4 mb-3" aria-live="polite">{{ message }}</p>
-  <button type="button" @click="reset" class="px-3 py-2 rounded-md b-1 b-subtle tone-fill-surface text-subtle cursor-pointer fw-600">Reset checklist</button>
+  <p class="text-subtle fs-sm mt-4 mb-3" aria-live="polite">
+    {{ message }}
+  </p>
+  <button
+    type="button"
+    @click="reset"
+    class="px-3 py-2 rounded-md b-1 b-subtle tone-fill-surface text-subtle cursor-pointer fw-600"
+  >
+    Reset checklist
+  </button>
 </section>`
 
 export function defineLaunchChecklistComponent() {

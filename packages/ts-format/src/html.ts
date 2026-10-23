@@ -4,7 +4,7 @@ import prettier from 'prettier/standalone'
 
 const RAW_TEXT_TAG =
   'script|style|textarea|title|xmp|iframe|noembed|noframes|plaintext'
-const TAG_BODY = String.raw`(?:"[^"]*"|'[^']*'|[^"'>])*>`
+const TAG_BODY = `(?:"[^"]*"|'[^']*'|[^"'>])*>`
 
 /**
  * Skips comments, raw text and opening tags; captures closing tags broken before `>`.
@@ -14,7 +14,7 @@ const BROKEN_CLOSING_TAG = new RegExp(
   [
     String.raw`<!--[\s\S]*?-->`,
     String.raw`<(${RAW_TEXT_TAG})\b${TAG_BODY}[\s\S]*?</\1\s*>`,
-    String.raw`<[A-Za-z]${TAG_BODY}`,
+    `<[A-Za-z]${TAG_BODY}`,
     String.raw`(</[^\s>]+)\s*\n\s*>`,
   ].join('|'),
   'g',

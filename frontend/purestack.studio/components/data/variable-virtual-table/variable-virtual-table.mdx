@@ -13,26 +13,41 @@ nav:
 
 # Variable<wbr/>Virtual<wbr/>Table
 
-<ComponentHeader name="VariableVirtualTable" kind="Measured table" summary="Let table rows grow with their content. Wrapping descriptions and expandable details are measured inside a semantic, virtualized table." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/variableVirtualTable.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
+<ComponentHeader
+  name="VariableVirtualTable"
+  kind="Measured table"
+  summary="Let table rows grow with their content. Wrapping descriptions and expandable details are measured inside a semantic, virtualized table."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/variableVirtualTable.ts"
+  section="Charts &amp; large data"
+  sectionHref="/components/data/"/>
 
 ## Interactive playground
 
 Review a large queue with wrapping summaries and expandable notes. Change the summary width to see rows reflow, adjust the initial estimate and overscan, or sort and filter the dataset. Live counters inspect the mounted rows and their actual heights.
 
-<Tabs group="variable-virtual-table-playground" selectedTab="variable-virtual-table-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="variable-virtual-table-playground"
+  selectedTab="variable-virtual-table-playground-preview"
+  ariaLabel="Interactive playground"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="variable-virtual-table-playground-preview" label="Preview">
-<ComponentExample label="VariableVirtualTable in context" caption="Expand reviews, change their wrapping width, and watch the measured sizes and scroll extent update.">
-    <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="VariableVirtualTable in context"
+      caption="Expand reviews, change their wrapping width, and watch the measured sizes and scroll extent update."
+    >
+      <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="variable-virtual-table-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="variable-virtual-table-playground-source" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,29 +55,53 @@ Review a large queue with wrapping summaries and expandable notes. Change the su
 
 Constrain the description width and let the browser determine row height. This example registers all four table parts and renders 200 findings with different content lengths.
 
-<Tabs group="variable-virtual-table-basic" selectedTab="variable-virtual-table-basic-preview" ariaLabel="A table with wrapping descriptions" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="variable-virtual-table-basic"
+  selectedTab="variable-virtual-table-basic-preview"
+  ariaLabel="A table with wrapping descriptions"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="variable-virtual-table-basic-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="variable-virtual-table-basic-mdx" label="basic-table.mdx">
 ```html
 <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
 ```
   </TabPane>
   <TabPane id="variable-virtual-table-basic-source" label="basic-table.ts">
-  <import-codeblock src="./basic-table.ts"/>
+    <import-codeblock src="./basic-table.ts"/>
   </TabPane>
 </Tabs>
 
 ## How measurement works
 
 <Grid columns="1" columnsMd="3">
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">01 · ESTIMATE</p><h3 class="mt-0">Start with a guess</h3><p>estimateHeight supplies the initial size of unseen rows. It is a starting point for offsets, not a constraint on the content.</p></Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">02 · MEASURE</p><h3 class="mt-0">Read the real height</h3><p>ResizeObserver tracks mounted rows. Wrapping text and expanded content update their measured sizes.</p></Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">03 · REFINE</p><h3 class="mt-0">Update the offsets</h3><p>Measured rows keep their sizes. The running average of measurements supplies the estimate for rows that have not been measured.</p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">01 · ESTIMATE</p>
+    <h3 class="mt-0">Start with a guess</h3>
+    <p>
+      estimateHeight supplies the initial size of unseen rows. It is a starting
+      point for offsets, not a constraint on the content.
+    </p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">02 · MEASURE</p>
+    <h3 class="mt-0">Read the real height</h3>
+    <p>
+      ResizeObserver tracks mounted rows. Wrapping text and expanded content
+      update their measured sizes.
+    </p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">03 · REFINE</p>
+    <h3 class="mt-0">Update the offsets</h3>
+    <p>
+      Measured rows keep their sizes. The running average of measurements
+      supplies the estimate for rows that have not been measured.
+    </p></Panel>
 </Grid>
 
 The component finds the visible range from cumulative row offsets, then adds an overscan buffer. During scrolling, measurement changes are collected and applied after a short idle period (currently 120 ms). The estimated total and scrollbar thumb can change as new content is measured; this is not an exact, premeasured scroll map.
@@ -98,8 +137,26 @@ VariableVirtualTable uses a content-sized table with a minimum width of 100%. It
 
 The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
 
-<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
-<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by estimated and measured space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible table rows</strong><br/>Each rendered height is measured after content wraps or expands.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+<ComponentExample
+  label="One dataset, a small rendered window"
+  caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows."
+>
+  <div class="data-window-diagram">
+    <div class="data-window-diagram__spacer">
+      Earlier records · represented by estimated and measured space
+    </div>
+    <div class="data-window-diagram__rows">
+      <Badge tone="info">Overscan before</Badge>
+      <p>
+        <strong>Visible table rows</strong><br/>Each rendered height is
+        measured after content wraps or expands.
+      </p>
+      <Badge tone="info">Overscan after</Badge>
+    </div>
+    <div class="data-window-diagram__spacer">
+      Later records · remain in the source array
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -133,7 +190,11 @@ The measured components register estimateHeight, not itemHeight. VariableVirtual
 
 <div class="api-overview">
   <p class="text-eyebrow">VariableVirtualTable contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="VariableVirtualTable properties">
@@ -149,40 +210,117 @@ The measured components register estimateHeight, not itemHeight. VariableVirtual
 
 ### Data
 
-<ApiProperty anchor="variable-virtual-table-prop-items" name="items" valueType="RefOrValue&lt;unknown[]&gt;" defaultValue="[]">
-  <p>The complete source array. Only a window is mounted; all records remain in memory. Bind a ref or computed array to replace, filter or sort it. Non-array values resolve to an empty array. Measurements are cached by index; remount for a fresh cache when record order or identity changes.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-items"
+  name="items"
+  valueType="RefOrValue&lt;unknown[]&gt;"
+  defaultValue="[]"
+>
+  <p>
+    The complete source array. Only a window is mounted; all records remain in
+    memory. Bind a ref or computed array to replace, filter or sort it.
+    Non-array values resolve to an empty array. Measurements are cached by
+    index; remount for a fresh cache when record order or identity changes.
+  </p>
 </ApiProperty>
 
 ### Viewport and window
 
-<ApiProperty anchor="variable-virtual-table-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
-  <p>Viewport height in pixels. Positive numbers and numeric strings are accepted; invalid, non-finite and non-positive values fall back to 560. Use pixel values, not CSS units such as rem or %. This controls the viewport, not a row.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-height"
+  name="height"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="560"
+>
+  <p>
+    Viewport height in pixels. Positive numbers and numeric strings are
+    accepted; invalid, non-finite and non-positive values fall back to 560. Use
+    pixel values, not CSS units such as rem or %. This controls the viewport,
+    not a row.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="variable-virtual-table-prop-estimateHeight" name="estimateHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="56">
-  <p>Initial pixel estimate before rows are measured. Invalid or non-positive values fall back to 56. It does not constrain rendered height. Once measurements exist, their running average estimates unseen rows; changing this prop does not clear cached measurements.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-estimateHeight"
+  name="estimateHeight"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="56"
+>
+  <p>
+    Initial pixel estimate before rows are measured. Invalid or non-positive
+    values fall back to 56. It does not constrain rendered height. Once
+    measurements exist, their running average estimates unseen rows; changing
+    this prop does not clear cached measurements.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="variable-virtual-table-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
-  <p>Extra row buffer before and after the estimated visible range, clipped at array boundaries. More overscan mounts and measures more content. Use a positive integer; positive fractions truncate, while zero, negative and invalid values fall back to 6.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-overscan"
+  name="overscan"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="6"
+>
+  <p>
+    Extra row buffer before and after the estimated visible range, clipped at
+    array boundaries. More overscan mounts and measures more content. Use a
+    positive integer; positive fractions truncate, while zero, negative and
+    invalid values fall back to 6.
+  </p>
 </ApiProperty>
 
 ### Table component registration
 
-<ApiProperty anchor="variable-virtual-table-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered component name for each data row. It receives item and the absolute zero-based index in the current items array. Its root must be tr with valid cells. No automatic item formatting is provided.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-rowComponent"
+  name="rowComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered component name for each data row. It receives item and the
+    absolute zero-based index in the current items array. Its root must be tr
+    with valid cells. No automatic item formatting is provided.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="variable-virtual-table-prop-colGroupComponent" name="colGroupComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a colgroup root and col children. It receives no row props. Use it to describe column widths, together with an appropriate content layout.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-colGroupComponent"
+  name="colGroupComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a colgroup root and col children. It
+    receives no row props. Use it to describe column widths, together with an
+    appropriate content layout.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="variable-virtual-table-prop-headerComponent" name="headerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a thead root, tr rows and scoped th cells. It receives no row props. Theme styles make the header sticky; give header cells an opaque surface background.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-headerComponent"
+  name="headerComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a thead root, tr rows and scoped th
+    cells. It receives no row props. Theme styles make the header sticky; give
+    header cells an opaque surface background.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="variable-virtual-table-prop-footerComponent" name="footerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a tfoot root and valid rows and cells. Footer cells are sticky at the bottom under the theme styles. Supply your own content or application context; no automatic aggregates or row props are passed.</p>
+<ApiProperty
+  anchor="variable-virtual-table-prop-footerComponent"
+  name="footerComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a tfoot root and valid rows and cells.
+    Footer cells are sticky at the bottom under the theme styles. Supply your
+    own content or application context; no automatic aggregates or row props are
+    passed.
+  </p>
 </ApiProperty>
 
 ### Row contract
@@ -200,7 +338,14 @@ Replace YourRecord with your application type and declare item and index in the 
 
 ### Composition and public API
 
-<div class="api-contract"><p>No slots. Register defineVariableVirtualTableComponents and your named table sections. Controls, empty messages and durable state belong to your application. Native attributes and events are inherited by the scrollable root div.</p></div>
+<div class="api-contract">
+  <p>
+    No slots. Register defineVariableVirtualTableComponents and your named table
+    sections. Controls, empty messages and durable state belong to your
+    application. Native attributes and events are inherited by the scrollable
+    root div.
+  </p>
+</div>
 
 Only the registered props above are public template inputs. itemHeight is not registered for this component, and neither is tableLayout. Internal measurement refs and methods are implementation details; there is no public cache-reset or scrollToIndex API.
 

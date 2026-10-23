@@ -65,19 +65,58 @@ const linkPlaygroundTemplate = html`<Flex direction="column">
       :iconPosition="position"
       :iconOnly="resolvedIconOnly"
       :ariaLabel="linkLabel"
-    >{{ linkLabel }}</BtnLink>
+      >{{ linkLabel }}</BtnLink>
   </Flex>
-  <p role="status" class="m-0">Destination: <code>{{ href }}</code> · Target: <code>{{ target }}</code> · Rel: <code>{{ effectiveRel }}</code></p>
+  <p role="status" class="m-0">
+    Destination: <code>{{ href }}</code> · Target:
+    <code>{{ target }}</code> · Rel:
+    <code>{{ effectiveRel }}</code>
+  </p>
   <Grid columns="1" columnsSm="2" columnsLg="3">
-    <FormInputField id="link-label" label="Label / accessible name" :model="linkLabel"/>
-    <FormSelectField id="link-href" label="Destination" :model="href" :options="destinations"/>
-    <FormSelectField id="link-target" label="Target" :model="target" :options="targets"/>
-    <FormSelectField id="link-rel" label="Relationship" :model="rel" :options="relationships"/>
-    <FormSelectField id="link-tone" label="Tone" :model="tone" :options="tones"/>
-    <FormSelectField id="link-variant" label="Variant" :model="variant" :options="variants"/>
-    <FormSelectField id="link-size" label="Size" :model="size" :options="sizes"/>
-    <FormSelectField id="link-icon" label="Icon" :model="icon" :options="icons"/>
-    <FormSelectField id="link-position" label="Icon position" :model="position" :options="positions"/>
+    <FormInputField
+      id="link-label"
+      label="Label / accessible name"
+      :model="linkLabel"/>
+    <FormSelectField
+      id="link-href"
+      label="Destination"
+      :model="href"
+      :options="destinations"/>
+    <FormSelectField
+      id="link-target"
+      label="Target"
+      :model="target"
+      :options="targets"/>
+    <FormSelectField
+      id="link-rel"
+      label="Relationship"
+      :model="rel"
+      :options="relationships"/>
+    <FormSelectField
+      id="link-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="link-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
+    <FormSelectField
+      id="link-size"
+      label="Size"
+      :model="size"
+      :options="sizes"/>
+    <FormSelectField
+      id="link-icon"
+      label="Icon"
+      :model="icon"
+      :options="icons"/>
+    <FormSelectField
+      id="link-position"
+      label="Icon position"
+      :model="position"
+      :options="positions"/>
   </Grid>
   <Flex align="center" wrap="true">
     <FormCheck id="link-icon-only" label="Icon only" :checked="iconOnly"/>

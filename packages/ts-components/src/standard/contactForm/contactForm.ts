@@ -40,8 +40,7 @@ const contactFormTemplate = html`<section class="contact-form">
         name="name"
         :placeholder="namePlaceholder"
         required
-        autocomplete="name"
-      />
+        autocomplete="name"/>
     </label>
     <label class="contact-form__field">
       <span class="contact-form__label">{{ emailLabel }}</span>
@@ -51,8 +50,7 @@ const contactFormTemplate = html`<section class="contact-form">
         name="email"
         :placeholder="emailPlaceholder"
         required
-        autocomplete="email"
-      />
+        autocomplete="email"/>
     </label>
     <label class="contact-form__field">
       <span class="contact-form__label">{{ topicLabel }}</span>
@@ -73,9 +71,7 @@ const contactFormTemplate = html`<section class="contact-form">
       ></textarea>
     </label>
     <div class="contact-form__actions">
-      <Btn type="submit">
-        {{ submitLabel }}
-      </Btn>
+      <Btn type="submit"> {{ submitLabel }} </Btn>
     </div>
   </form>
 </section>`

@@ -13,26 +13,41 @@ nav:
 
 # Virtual<wbr/>Table
 
-<ComponentHeader name="VirtualTable" kind="Fixed-height table" summary="Keep a large table responsive without losing native table structure. Compose columns, sticky sections, and a small window of fixed-height rows." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualTable.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
+<ComponentHeader
+  name="VirtualTable"
+  kind="Fixed-height table"
+  summary="Keep a large table responsive without losing native table structure. Compose columns, sticky sections, and a small window of fixed-height rows."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualTable.ts"
+  section="Charts &amp; large data"
+  sectionHref="/components/data/"/>
 
 ## Interactive playground
 
 Explore up to 50,000 release records with search, status filtering, sorting and position jumps. Change the viewport, row height and overscan, compare auto and fixed layout, and toggle the registered table sections. The mounted count includes data rows only.
 
-<Tabs group="virtual-table-playground" selectedTab="virtual-table-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="virtual-table-playground"
+  selectedTab="virtual-table-playground-preview"
+  ariaLabel="Interactive playground"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="virtual-table-playground-preview" label="Preview">
-<ComponentExample label="VirtualTable in context" caption="Filter and sort the dataset, switch column layout, and compare headers, footers, widths, and mounted positions.">
-    <RegorApp id="virtual-table-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="VirtualTable in context"
+      caption="Filter and sort the dataset, switch column layout, and compare headers, footers, widths, and mounted positions."
+    >
+      <RegorApp id="virtual-table-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="virtual-table-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="virtual-table-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="virtual-table-playground-source" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,20 +55,26 @@ Explore up to 50,000 release records with search, status filtering, sorting and 
 
 A small, copyable implementation with a typed row, semantic header, column group and sticky footer. The table can scroll horizontally on narrow screens while every data row stays 48 pixels tall.
 
-<Tabs group="virtual-table-basic" selectedTab="virtual-table-basic-preview" ariaLabel="A complete table composition" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="virtual-table-basic"
+  selectedTab="virtual-table-basic-preview"
+  ariaLabel="A complete table composition"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="virtual-table-basic-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="virtual-table-basic-demo" src="./basic-table.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="virtual-table-basic-demo" src="./basic-table.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="virtual-table-basic-mdx" label="basic-table.mdx">
 ```html
 <RegorApp id="virtual-table-basic-demo" src="./basic-table.ts"/>
 ```
   </TabPane>
   <TabPane id="virtual-table-basic-source" label="basic-table.ts">
-  <import-codeblock src="./basic-table.ts"/>
+    <import-codeblock src="./basic-table.ts"/>
   </TabPane>
 </Tabs>
 
@@ -62,9 +83,27 @@ A small, copyable implementation with a typed row, semantic header, column group
 The component renders a real table. Spacer rows before and after the mounted data rows preserve the scroll distance; the header, footer and column group remain outside the virtualized data window.
 
 <Grid columns="1" columnsMd="3">
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">DATA</p><h3 class="mt-0">10,000 records</h3><p>The whole source array remains in memory. Filtering and sorting are application operations performed before passing items.</p></Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">WINDOW</p><h3 class="mt-0">16 data rows</h3><p>At a 360-pixel viewport, 48-pixel rows and overscan 4, the window budget is ceil(360 / 48) + 8. Fewer rows remain near the end.</p></Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">GEOMETRY</p><h3 class="mt-0">48 pixels each</h3><p>Data-row offsets come from itemHeight. Header and footer sections also occupy space in the native table.</p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">DATA</p>
+    <h3 class="mt-0">10,000 records</h3>
+    <p>
+      The whole source array remains in memory. Filtering and sorting are
+      application operations performed before passing items.
+    </p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">WINDOW</p>
+    <h3 class="mt-0">16 data rows</h3>
+    <p>
+      At a 360-pixel viewport, 48-pixel rows and overscan 4, the window budget
+      is ceil(360 / 48) + 8. Fewer rows remain near the end.
+    </p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"
+    ><p class="text-eyebrow">GEOMETRY</p>
+    <h3 class="mt-0">48 pixels each</h3>
+    <p>
+      Data-row offsets come from itemHeight. Header and footer sections also
+      occupy space in the native table.
+    </p></Panel>
 </Grid>
 
 The start index is <code>max(0, floor(scrollTop / itemHeight) - overscan)</code>. The budget is <code>ceil(height / itemHeight) + 2 × overscan</code>, limited by the remaining items. It uses the viewport height, not the area left after sticky sections, so mounted and actually visible counts differ.
@@ -100,8 +139,26 @@ Auto layout sizes the table from content and uses a minimum width of 100%; width
 
 The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
 
-<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
-<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by calculated space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible table rows</strong><br/>Each row occupies the configured itemHeight.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+<ComponentExample
+  label="One dataset, a small rendered window"
+  caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows."
+>
+  <div class="data-window-diagram">
+    <div class="data-window-diagram__spacer">
+      Earlier records · represented by calculated space
+    </div>
+    <div class="data-window-diagram__rows">
+      <Badge tone="info">Overscan before</Badge>
+      <p>
+        <strong>Visible table rows</strong><br/>Each row occupies the
+        configured itemHeight.
+      </p>
+      <Badge tone="info">Overscan after</Badge>
+    </div>
+    <div class="data-window-diagram__spacer">
+      Later records · remain in the source array
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -133,7 +190,11 @@ The source array stays in memory; only nearby records become DOM rows. These com
 
 <div class="api-overview">
   <p class="text-eyebrow">VirtualTable contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="VirtualTable properties">
@@ -150,46 +211,130 @@ The source array stays in memory; only nearby records become DOM rows. These com
 
 ### Data
 
-<ApiProperty anchor="virtual-table-prop-items" name="items" valueType="RefOrValue&lt;unknown[]&gt;" defaultValue="[]">
-  <p>The complete source array. Only a window is mounted; all records remain in memory. Bind a ref or computed array to replace, filter or sort it. Non-array values resolve to an empty array.</p>
+<ApiProperty
+  anchor="virtual-table-prop-items"
+  name="items"
+  valueType="RefOrValue&lt;unknown[]&gt;"
+  defaultValue="[]"
+>
+  <p>
+    The complete source array. Only a window is mounted; all records remain in
+    memory. Bind a ref or computed array to replace, filter or sort it.
+    Non-array values resolve to an empty array.
+  </p>
 </ApiProperty>
 
 ### Viewport and window
 
-<ApiProperty anchor="virtual-table-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
-  <p>Viewport height in pixels. Positive numbers and numeric strings are accepted; invalid, non-finite and non-positive values fall back to 560. Use pixel values, not CSS units such as rem or %. This controls the viewport, not a row.</p>
+<ApiProperty
+  anchor="virtual-table-prop-height"
+  name="height"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="560"
+>
+  <p>
+    Viewport height in pixels. Positive numbers and numeric strings are
+    accepted; invalid, non-finite and non-positive values fall back to 560. Use
+    pixel values, not CSS units such as rem or %. This controls the viewport,
+    not a row.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="virtual-table-prop-itemHeight" name="itemHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="44">
-  <p>Height used for every data-row offset and spacer calculation, in pixels. Defaults to 44 when invalid or non-positive. Native table content can force rows taller: keep cell content, padding and borders within this height. It does not measure rows.</p>
+<ApiProperty
+  anchor="virtual-table-prop-itemHeight"
+  name="itemHeight"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="44"
+>
+  <p>
+    Height used for every data-row offset and spacer calculation, in pixels.
+    Defaults to 44 when invalid or non-positive. Native table content can force
+    rows taller: keep cell content, padding and borders within this height. It
+    does not measure rows.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="virtual-table-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
-  <p>Buffer subtracted from the visible start and added twice to the total window budget. Larger values mount more data rows. Use a positive integer; positive fractions truncate, while zero, negative and invalid values fall back to 6.</p>
+<ApiProperty
+  anchor="virtual-table-prop-overscan"
+  name="overscan"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="6"
+>
+  <p>
+    Buffer subtracted from the visible start and added twice to the total window
+    budget. Larger values mount more data rows. Use a positive integer; positive
+    fractions truncate, while zero, negative and invalid values fall back to 6.
+  </p>
 </ApiProperty>
 
 ### Table component registration
 
-<ApiProperty anchor="virtual-table-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered component name for each data row. It receives item and the absolute zero-based index in the current items array. Its root must be tr with valid cells. No automatic item formatting is provided.</p>
+<ApiProperty
+  anchor="virtual-table-prop-rowComponent"
+  name="rowComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered component name for each data row. It receives item and the
+    absolute zero-based index in the current items array. Its root must be tr
+    with valid cells. No automatic item formatting is provided.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="virtual-table-prop-colGroupComponent" name="colGroupComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a colgroup root and col children. It receives no row props. Use it to describe column widths, together with an appropriate content layout.</p>
+<ApiProperty
+  anchor="virtual-table-prop-colGroupComponent"
+  name="colGroupComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a colgroup root and col children. It
+    receives no row props. Use it to describe column widths, together with an
+    appropriate content layout.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="virtual-table-prop-headerComponent" name="headerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a thead root, tr rows and scoped th cells. It receives no row props. Theme styles make the header sticky; give header cells an opaque surface background.</p>
+<ApiProperty
+  anchor="virtual-table-prop-headerComponent"
+  name="headerComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a thead root, tr rows and scoped th
+    cells. It receives no row props. Theme styles make the header sticky; give
+    header cells an opaque surface background.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="virtual-table-prop-footerComponent" name="footerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Optional registered component with a tfoot root and valid rows and cells. Footer cells are sticky at the bottom under the theme styles. Supply your own content or application context; no automatic aggregates or row props are passed.</p>
+<ApiProperty
+  anchor="virtual-table-prop-footerComponent"
+  name="footerComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Optional registered component with a tfoot root and valid rows and cells.
+    Footer cells are sticky at the bottom under the theme styles. Supply your
+    own content or application context; no automatic aggregates or row props are
+    passed.
+  </p>
 </ApiProperty>
 
 ### Column layout
 
-<ApiProperty anchor="virtual-table-prop-tableLayout" name="tableLayout" valueType="RefOrValue&lt;'auto' | 'fixed'&gt;" defaultValue="auto">
-  <p>auto creates a content-sized table with min-width: 100%; fixed uses a 100%-wide table and fixed column layout. Use a column group for explicit widths. This changes column sizing, not virtual row-height calculation.</p>
+<ApiProperty
+  anchor="virtual-table-prop-tableLayout"
+  name="tableLayout"
+  valueType="RefOrValue&lt;'auto' | 'fixed'&gt;"
+  defaultValue="auto"
+>
+  <p>
+    auto creates a content-sized table with min-width: 100%; fixed uses a
+    100%-wide table and fixed column layout. Use a column group for explicit
+    widths. This changes column sizing, not virtual row-height calculation.
+  </p>
 </ApiProperty>
 
 ### Row contract
@@ -207,7 +352,14 @@ Replace YourRecord with your application type and declare item and index in the 
 
 ### Composition and public API
 
-<div class="api-contract"><p>No slots. Register defineVirtualTableComponents and your named table sections. Controls, empty messages and durable state belong to your application. Native attributes and events are inherited by the scrollable root div.</p></div>
+<div class="api-contract">
+  <p>
+    No slots. Register defineVirtualTableComponents and your named table
+    sections. Controls, empty messages and durable state belong to your
+    application. Native attributes and events are inherited by the scrollable
+    root div.
+  </p>
+</div>
 
 Internal computed fields and scrollTop in the exported interface are implementation details, not additional public props. The template API is the nine registered inputs above.
 

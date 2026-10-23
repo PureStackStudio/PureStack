@@ -54,8 +54,7 @@ const releaseTableRowTemplate = html`<tr :data-row="index">
   </td>
   <td class="px-3 py-0 bb-1 b-subtle ws-nowrap">
     <Badge :tone="item.tone" variant="surface"
-      >{{ item.state }}</Badge
-    >
+      >{{ item.state }}</Badge>
   </td>
 </tr>`
 const releaseTableHeaderTemplate = html`<thead>
@@ -156,8 +155,7 @@ const virtualTablePlaygroundTemplate = html`<Flex direction="column">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · RELEASE TABLE</p>
       <Badge tone="accent" variant="surface"
-        >{{ filtered.length }} matching records</Badge
-      >
+        >{{ filtered.length }} matching records</Badge>
     </Flex>
     <Grid columns="1" columnsSm="3" class="my-3">
       <div>
@@ -189,8 +187,7 @@ const virtualTablePlaygroundTemplate = html`<Flex direction="column">
       aria-label="Scrollable release table"
       class="b-1 b-subtle rounded-md"/>
     <FormStatus r-if="!filtered.length" role="status"
-      >{{ records.length ? 'No releases match. Clear the search or change the status.' : 'The table is empty. Reload a dataset to continue.' }}</FormStatus
-    >
+      >{{ records.length ? 'No releases match. Clear the search or change the status.' : 'The table is empty. Reload a dataset to continue.' }}</FormStatus>
     <p class="mb-0 text-muted">
       The header and footer stay visible while data rows scroll. Focus the
       region for keyboard scrolling; wide content scrolls horizontally inside
@@ -238,21 +235,13 @@ const virtualTablePlaygroundTemplate = html`<Flex direction="column">
       :model="target"/>
     <Flex wrap="true"
       ><Btn tone="accent" :disabled="!filtered.length" @click="jump"
-        >Jump to row</Btn
-      ><Btn variant="outline" :disabled="!filtered.length" @click="first"
-        >First</Btn
-      ><Btn variant="outline" :disabled="!filtered.length" @click="last"
-        >Last</Btn
-      ></Flex
-    >
+        >Jump to row</Btn><Btn variant="outline" :disabled="!filtered.length" @click="first"
+        >First</Btn><Btn variant="outline" :disabled="!filtered.length" @click="last"
+        >Last</Btn></Flex>
   </Grid>
   <Flex wrap="true"
-    ><Btn variant="outline" @click="load">Reload dataset</Btn
-    ><Btn variant="outline" @click="clear">Empty table</Btn
-    ><Btn tone="accent" variant="surface" @click="reset"
-      >Reset playground</Btn
-    ></Flex
-  >
+    ><Btn variant="outline" @click="load">Reload dataset</Btn><Btn variant="outline" @click="clear">Empty table</Btn><Btn tone="accent" variant="surface" @click="reset"
+      >Reset playground</Btn></Flex>
 </Flex>`
 
 function createReleases(count: number): ReleaseRecord[] {

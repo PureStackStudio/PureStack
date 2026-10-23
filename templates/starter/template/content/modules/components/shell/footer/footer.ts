@@ -19,8 +19,12 @@ export class StarterFooter {
   ]
 }
 
-const footerTemplate = html`<Grid columns="1" columnsLg="minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.1fr)"
-  alignItems="start" class="footer-layout">
+const footerTemplate = html`<Grid
+  columns="1"
+  columnsLg="minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.1fr)"
+  alignItems="start"
+  class="footer-layout"
+>
   <FooterBrand/>
   <FooterNavigation/>
   <FooterStartCard/>

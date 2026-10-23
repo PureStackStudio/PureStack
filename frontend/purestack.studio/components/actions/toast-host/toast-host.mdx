@@ -13,12 +13,28 @@ nav:
 
 # Toast<wbr/>Host
 
-<ComponentHeader name="ToastHost" kind="Transient feedback" summary="Acknowledge the moment without interrupting the flow. Dismissible notifications with predictable lifetimes." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/toast/toastHost.ts"/>
+<ComponentHeader
+  name="ToastHost"
+  kind="Transient feedback"
+  summary="Acknowledge the moment without interrupting the flow. Dismissible notifications with predictable lifetimes."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/toast/toastHost.ts"/>
 
 ## In context
 
-<ComponentExample label="Notification anatomy" caption="An inline illustration of the host’s surface treatment. Use the live example below to trigger and dismiss actual viewport notifications.">
-<div class="component-recipe"><p class="text-eyebrow">AFTER AN ACTION</p><Panel tone="success" variant="surface"><Flex align="center" justify="between" wrap="true"><span>Local draft saved.</span><Badge tone="success">5 seconds</Badge></Flex></Panel><p>Keep a toast brief. Put persistent instructions next to the task in an AlertBox.</p></div>
+<ComponentExample
+  label="Notification anatomy"
+  caption="An inline illustration of the host’s surface treatment. Use the live example below to trigger and dismiss actual viewport notifications."
+>
+  <div class="component-recipe">
+    <p class="text-eyebrow">AFTER AN ACTION</p>
+    <Panel tone="success" variant="surface"
+      ><Flex align="center" justify="between" wrap="true"
+        ><span>Local draft saved.</span><Badge tone="success">5 seconds</Badge></Flex></Panel>
+    <p>
+      Keep a toast brief. Put persistent instructions next to the task in an
+      AlertBox.
+    </p>
+  </div>
 </ComponentExample>
 
 ```html
@@ -36,19 +52,26 @@ nav:
 
 Success disappears after five seconds; warning after ten. The error stays until dismissed. Notifications appear at the top of the viewport.
 
-<Tabs group="toast-host-sample-1" selectedTab="toast-host-sample-1-preview" ariaLabel="Timed and persistent feedback example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="toast-host-sample-1"
+  selectedTab="toast-host-sample-1-preview"
+  ariaLabel="Timed and persistent feedback example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="toast-host-sample-1-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="toast-host-demo" src="./playground.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="toast-host-demo" src="./playground.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="toast-host-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="toast-host-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="toast-host-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -56,19 +79,62 @@ Success disappears after five seconds; warning after ten. The error stays until 
 
 ToastHost always uses the surface variant and has no variant prop. All ten supported ToastStore tones appear below as inline illustrations.
 
-<ComponentExample label="All notification tones" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>neutral</code><Panel tone="neutral" variant="surface"><Flex align="center" justify="between" wrap="true"><span>neutral notification</span><Badge tone="neutral">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>accent</code><Panel tone="accent" variant="surface"><Flex align="center" justify="between" wrap="true"><span>accent notification</span><Badge tone="accent">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>feature</code><Panel tone="feature" variant="surface"><Flex align="center" justify="between" wrap="true"><span>feature notification</span><Badge tone="feature">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>secondary</code><Panel tone="secondary" variant="surface"><Flex align="center" justify="between" wrap="true"><span>secondary notification</span><Badge tone="secondary">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>custom</code><Panel tone="custom" variant="surface"><Flex align="center" justify="between" wrap="true"><span>custom notification</span><Badge tone="custom">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>ghost</code><Panel tone="ghost" variant="surface"><Flex align="center" justify="between" wrap="true"><span>ghost notification</span><Badge tone="ghost">Until dismissed</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>info</code><Panel tone="info" variant="surface"><Flex align="center" justify="between" wrap="true"><span>info notification</span><Badge tone="info">5 seconds</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>success</code><Panel tone="success" variant="surface"><Flex align="center" justify="between" wrap="true"><span>success notification</span><Badge tone="success">5 seconds</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>warning</code><Panel tone="warning" variant="surface"><Flex align="center" justify="between" wrap="true"><span>warning notification</span><Badge tone="warning">10 seconds</Badge></Flex></Panel></div>
-<div class="component-appearance-cell"><code>danger</code><Panel tone="danger" variant="surface"><Flex align="center" justify="between" wrap="true"><span>danger notification</span><Badge tone="danger">Until dismissed</Badge></Flex></Panel></div>
-</div>
+<ComponentExample
+  label="All notification tones"
+  caption="All values are shown together. Switch the site theme to compare light and dark rendering."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>neutral</code><Panel tone="neutral" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>neutral notification</span><Badge tone="neutral">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>accent</code><Panel tone="accent" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>accent notification</span><Badge tone="accent">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>feature</code><Panel tone="feature" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>feature notification</span><Badge tone="feature">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>secondary</code><Panel tone="secondary" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>secondary notification</span><Badge tone="secondary">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>custom</code><Panel tone="custom" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>custom notification</span><Badge tone="custom">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>ghost</code><Panel tone="ghost" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>ghost notification</span><Badge tone="ghost">Until dismissed</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>info</code><Panel tone="info" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>info notification</span><Badge tone="info">5 seconds</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>success</code><Panel tone="success" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>success notification</span><Badge tone="success">5 seconds</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>warning</code><Panel tone="warning" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>warning notification</span><Badge tone="warning">10 seconds</Badge></Flex></Panel>
+    </div>
+    <div class="component-appearance-cell">
+      <code>danger</code><Panel tone="danger" variant="surface"
+        ><Flex align="center" justify="between" wrap="true"
+          ><span>danger notification</span><Badge tone="danger">Until dismissed</Badge></Flex></Panel>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Notification lifecycle
@@ -91,7 +157,11 @@ Mount one host per store. ToastHost positions notices over the page and provides
 
 <div class="api-overview">
   <p class="text-eyebrow">ToastHost contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ToastHost properties">
@@ -99,18 +169,36 @@ Mount one host per store. ToastHost positions notices over the page and provides
   <a href="#toast-host-prop-dismiss">dismiss</a>
 </nav>
 
-<ApiProperty anchor="toast-host-prop-items" name="items" valueType="SRef&lt;ToastItem[]&gt;" defaultValue="required">
-  <p>ToastStore.items: a shallow ref of ToastItem[] with id, message and SemanticTone.</p>
+<ApiProperty
+  anchor="toast-host-prop-items"
+  name="items"
+  valueType="SRef&lt;ToastItem[]&gt;"
+  defaultValue="required"
+>
+  <p>
+    ToastStore.items: a shallow ref of ToastItem[] with id, message and
+    SemanticTone.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="toast-host-prop-dismiss" name="dismiss" valueType="ToastStore['dismiss']" defaultValue="required">
-  <p>ToastStore.dismiss callback. Receives the ID of the notification to remove.</p>
+<ApiProperty
+  anchor="toast-host-prop-dismiss"
+  name="dismiss"
+  valueType="ToastStore['dismiss']"
+  defaultValue="required"
+>
+  <p>
+    ToastStore.dismiss callback. Receives the ID of the notification to remove.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineToastComponents with Flex, Panel, Btn and Icon dependencies. Include iconoir:xmark in the icon resolver.</p>
+  <p>
+    No slots. Register defineToastComponents with Flex, Panel, Btn and Icon
+    dependencies. Include iconoir:xmark in the icon resolver.
+  </p>
 </div>
 
 ### ToastStore

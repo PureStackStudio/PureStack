@@ -21,7 +21,10 @@ For files and directories:
 ```ts
 import { formatFiles } from '@purestack/ts-format/files'
 
-const result = await formatFiles(['content'], { cwd: process.cwd(), write: true })
+const result = await formatFiles(['content'], {
+  cwd: process.cwd(),
+  write: true,
+})
 // result.checked, result.changed, result.errors
 ```
 

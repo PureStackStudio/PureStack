@@ -17,8 +17,8 @@ const LANDING_BAND_INLINE_PADDING = '1em'
 
 export function defineLandingBandComponent() {
   const landingBandTemplate = html`<section :class="classes" :style="bandStyle">
-    <slot></slot>
-  </section>`
+  <slot></slot>
+</section>`
 
   return {
     landingBand: defineComponent<LandingBand>(landingBandTemplate, {

@@ -15,8 +15,7 @@ const copyButtonTemplate = html`<Btn
   tone="neutral"
   variant="subtle"
   icon="tabler:copy"
-  >Copy</Btn
->`
+  >Copy</Btn>`
 
 export function defineCopyButtonComponent() {
   return defineComponent<CopyButton>(copyButtonTemplate, {

@@ -161,7 +161,13 @@ const navMenuPlaygroundTemplate = html`<Flex direction="column">
     :class="stageClass"
     @click="followLink"
   >
-    <div style="max-width: 18rem; margin-inline: auto; --ps-doc-layout-active-shell-padding-inline-start: 0px">
+    <div
+      style="
+        max-width: 18rem;
+        margin-inline: auto;
+        --ps-doc-layout-active-shell-padding-inline-start: 0px;
+      "
+    >
       <NavMenu
         :items="items"
         :currentUrl="currentUrl"
@@ -174,15 +180,42 @@ const navMenuPlaygroundTemplate = html`<Flex direction="column">
     Links stay in the playground: choose one to make it the current page.
   </p>
   <Grid columns="1" columnsSm="2" columnsLg="3">
-    <FormSelectField id="nav-menu-tree" label="Navigation" :model="treeName" :options="trees"/>
-    <FormSelectField id="nav-menu-current" label="Current page" :model="currentUrl" :options="pages"/>
-    <FormSelectField id="nav-menu-backdrop" label="Backdrop" :model="backdrop" :options="backdrops"/>
-    <FormSelectField id="nav-menu-tone" label="Tone" :model="tone" :options="tones"/>
-    <FormSelectField id="nav-menu-variant" label="Variant" :model="variant" :options="variants"/>
-    <FormSelectField id="nav-menu-mode" label="Variant mode" :model="variantMode" :options="modes"/>
+    <FormSelectField
+      id="nav-menu-tree"
+      label="Navigation"
+      :model="treeName"
+      :options="trees"/>
+    <FormSelectField
+      id="nav-menu-current"
+      label="Current page"
+      :model="currentUrl"
+      :options="pages"/>
+    <FormSelectField
+      id="nav-menu-backdrop"
+      label="Backdrop"
+      :model="backdrop"
+      :options="backdrops"/>
+    <FormSelectField
+      id="nav-menu-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="nav-menu-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
+    <FormSelectField
+      id="nav-menu-mode"
+      label="Variant mode"
+      :model="variantMode"
+      :options="modes"/>
   </Grid>
   <Flex wrap="true" align="center">
-    <FormCheck id="nav-menu-icons" label="Show item icons" :checked="showIcons"/>
+    <FormCheck
+      id="nav-menu-icons"
+      label="Show item icons"
+      :checked="showIcons"/>
     <Btn variant="link" @click="reset">Reset playground</Btn>
   </Flex>
 </Flex>`

@@ -44,26 +44,103 @@ const inputTypes = [
   'week',
 ]
 
-const template = html`<div class="component-appearance-grid forms-appearance-grid" :class="{ 'forms-appearance-grid--composer': component === 'Composer' }">
+const template = html`<div
+  class="component-appearance-grid forms-appearance-grid"
+  :class="{ 'forms-appearance-grid--composer': component === 'Composer' }"
+>
   <div class="component-appearance-cell" r-for="sample in samples">
     <code>{{ sample.label }}</code>
-    <AppForm r-if="component === 'AppForm'" class="p-3" :tone="sample.tone" :variant="sample.variant" @submit.prevent="sample.submit($event)">
-      <FormInputField :id="sample.id" label="Project name" name="project" :model="sample.model" :required="true"/>
+    <AppForm
+      r-if="component === 'AppForm'"
+      class="p-3"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      @submit.prevent="sample.submit($event)"
+    >
+      <FormInputField
+        :id="sample.id"
+        label="Project name"
+        name="project"
+        :model="sample.model"
+        :required="true"/>
       <FormSubmit label="Preview save" :tone="sample.tone"/>
-      <FormStatus :hidden="!sample.receipt">{{ sample.receipt }}</FormStatus>
+      <FormStatus :hidden="!sample.receipt"
+        >{{ sample.receipt }}</FormStatus>
     </AppForm>
-    <FormInputField r-if="component === 'FormInputField'" :id="sample.id" :label="axis === 'type' ? sample.label : 'Project name'" :type="axis === 'type' ? sample.label : 'text'" :model="sample.model" :tone="sample.tone" :variant="sample.variant" placeholder="Your next idea"/>
-    <FormSelectField r-if="component === 'FormSelectField'" :id="sample.id" label="Region" :model="sample.model" :options="options" :tone="sample.tone" :variant="sample.variant"/>
-    <FormCheck r-if="component === 'FormCheck'" :id="sample.id" label="Release updates" :checked="sample.checked" :tone="sample.tone"/>
-    <form r-if="component === 'FormSubmit'" @submit.prevent="sample.submit($event)">
-      <FormSubmit :label="sample.label" :tone="sample.tone" :variant="sample.variant"/>
-      <FormStatus :hidden="!sample.receipt">{{ sample.receipt }}</FormStatus>
+    <FormInputField
+      r-if="component === 'FormInputField'"
+      :id="sample.id"
+      :label="axis === 'type' ? sample.label : 'Project name'"
+      :type="axis === 'type' ? sample.label : 'text'"
+      :model="sample.model"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      placeholder="Your next idea"/>
+    <FormSelectField
+      r-if="component === 'FormSelectField'"
+      :id="sample.id"
+      label="Region"
+      :model="sample.model"
+      :options="options"
+      :tone="sample.tone"
+      :variant="sample.variant"/>
+    <FormCheck
+      r-if="component === 'FormCheck'"
+      :id="sample.id"
+      label="Release updates"
+      :checked="sample.checked"
+      :tone="sample.tone"/>
+    <form
+      r-if="component === 'FormSubmit'"
+      @submit.prevent="sample.submit($event)"
+    >
+      <FormSubmit
+        :label="sample.label"
+        :tone="sample.tone"
+        :variant="sample.variant"/>
+      <FormStatus :hidden="!sample.receipt"
+        >{{ sample.receipt }}</FormStatus>
     </form>
-    <FormStatus r-if="component === 'FormStatus'" :tone="sample.tone" :variant="sample.variant">Your draft is ready for review.</FormStatus>
-    <AutoCompleteInput r-if="component === 'AutoCompleteInput'" :id="sample.id" label="Region" :model="sample.query" :selectedValue="sample.selected" :options="options" :tone="sample.tone" :variant="sample.variant" placeholder="Search a region"/>
-    <MultiAutoCompleteInput r-if="component === 'MultiAutoCompleteInput'" :id="sample.id" label="Release tags" :items="sample.items" :model="sample.query" :options="tags" :tone="sample.tone" :variant="sample.variant" placeholder="Add a tag" :allowCustomValues="true"/>
-    <Composer r-if="component === 'Composer'" :html="sample.content" :label="sample.label + ' editor'" :tone="sample.tone" :variant="sample.variant" minHeight="8rem"/>
-    <DropFiles r-if="component === 'DropFiles'" :files="sample.files" label="Attachments" hint="Choose files, drop, or paste." :tone="sample.tone" :variant="sample.variant"/>
+    <FormStatus
+      r-if="component === 'FormStatus'"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      >Your draft is ready for review.</FormStatus>
+    <AutoCompleteInput
+      r-if="component === 'AutoCompleteInput'"
+      :id="sample.id"
+      label="Region"
+      :model="sample.query"
+      :selectedValue="sample.selected"
+      :options="options"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      placeholder="Search a region"/>
+    <MultiAutoCompleteInput
+      r-if="component === 'MultiAutoCompleteInput'"
+      :id="sample.id"
+      label="Release tags"
+      :items="sample.items"
+      :model="sample.query"
+      :options="tags"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      placeholder="Add a tag"
+      :allowCustomValues="true"/>
+    <Composer
+      r-if="component === 'Composer'"
+      :html="sample.content"
+      :label="sample.label + ' editor'"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      minHeight="8rem"/>
+    <DropFiles
+      r-if="component === 'DropFiles'"
+      :files="sample.files"
+      label="Attachments"
+      hint="Choose files, drop, or paste."
+      :tone="sample.tone"
+      :variant="sample.variant"/>
   </div>
 </div>`
 

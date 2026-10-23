@@ -39,18 +39,41 @@ const publishActionsTemplate = html`<Panel tone="neutral" variant="surfaceAlt" c
   <Flex direction="column" align="start" class="gap-3">
     <div>
       <div class="fs-h2 fw-700">Release notes</div>
-      <p class="tone-text-muted mb-0">Keep the main action close to its publishing choices.</p>
+      <p class="tone-text-muted mb-0">
+        Keep the main action close to its publishing choices.
+      </p>
     </div>
     <Flex wrap="true" align="center" role="status">
       <Badge :tone="releaseTone">{{ releaseState }}</Badge>
       <span>{{ feedback }}</span>
     </Flex>
     <BtnGroup :wrap="true" role="group" aria-label="Publishing actions">
-      <Btn tone="accent" icon="iconoir:send" :disabled="isPublished" @click="publish">Publish now</Btn>
-      <BtnGroupDropDown label="More" tone="accent" menuTone="neutral" align="start">
-        <Btn variant="subtle" icon="iconoir:calendar" :disabled="isPublished" @click="choose('Scheduled', $event)">Schedule for tomorrow</Btn>
-        <Btn variant="subtle" icon="iconoir:check" :disabled="isPublished" @click="choose('Ready', $event)">Mark ready</Btn>
-        <Btn variant="subtle" @click="choose('Draft', $event)">Return to draft</Btn>
+      <Btn
+        tone="accent"
+        icon="iconoir:send"
+        :disabled="isPublished"
+        @click="publish"
+        >Publish now</Btn>
+      <BtnGroupDropDown
+        label="More"
+        tone="accent"
+        menuTone="neutral"
+        align="start"
+      >
+        <Btn
+          variant="subtle"
+          icon="iconoir:calendar"
+          :disabled="isPublished"
+          @click="choose('Scheduled', $event)"
+          >Schedule for tomorrow</Btn>
+        <Btn
+          variant="subtle"
+          icon="iconoir:check"
+          :disabled="isPublished"
+          @click="choose('Ready', $event)"
+          >Mark ready</Btn>
+        <Btn variant="subtle" @click="choose('Draft', $event)"
+          >Return to draft</Btn>
       </BtnGroupDropDown>
     </BtnGroup>
     <Btn variant="link" @click="reset">Reset release</Btn>

@@ -13,14 +13,28 @@ nav:
 
 # Badge
 
-<ComponentHeader name="Badge" kind="Inline metadata" summary="A little context, right where it matters. Status, counts, and versions that make an interface easier to scan." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/badge/badge.ts"/>
+<ComponentHeader
+  name="Badge"
+  kind="Inline metadata"
+  summary="A little context, right where it matters. Status, counts, and versions that make an interface easier to scan."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/badge/badge.ts"/>
 
 Badge renders an inline `span` with two appearance props and a default slot. Its content describes something; use [Btn](/components/actions/buttons/) or [BtnLink](/components/actions/btn-link/) when the reader should take an action.
 
 ## In context
 
-<ComponentExample label="Release metadata" caption="Badges describe the surrounding content. Pair explicit labels with color so status remains understandable.">
-<div class="component-recipe"><Flex align="center" justify="between" wrap="true"><h3>Design system</h3><Badge tone="success" variant="solid">Stable</Badge></Flex><p>A small set of labels tells the release story at a glance.</p><Flex wrap="true"><Badge tone="neutral">v1.0</Badge><Badge tone="info">12 components</Badge><Badge tone="feature" variant="outline">Theme aware</Badge><Badge tone="warning">Review pending</Badge></Flex></div>
+<ComponentExample
+  label="Release metadata"
+  caption="Badges describe the surrounding content. Pair explicit labels with color so status remains understandable."
+>
+  <div class="component-recipe">
+    <Flex align="center" justify="between" wrap="true"
+      ><h3>Design system</h3>
+      <Badge tone="success" variant="solid">Stable</Badge></Flex>
+    <p>A small set of labels tells the release story at a glance.</p>
+    <Flex wrap="true"
+      ><Badge tone="neutral">v1.0</Badge><Badge tone="info">12 components</Badge><Badge tone="feature" variant="outline">Theme aware</Badge><Badge tone="warning">Review pending</Badge></Flex>
+  </div>
 </ComponentExample>
 
 ```html
@@ -50,17 +64,17 @@ Edit the label and explore every tone and variant. The default surface treatment
   tabVariant="underline"
 >
   <TabPane id="badge-playground-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="badge-playground" src="./badge-playground.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="badge-playground" src="./badge-playground.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="badge-playground-mdx" label="badge-playground.mdx">
 ```html
 <RegorApp id="badge-playground" src="./badge-playground.ts"/>
 ```
   </TabPane>
   <TabPane id="badge-playground-ts" label="badge-playground.ts">
-  <import-codeblock src="./badge-playground.ts"/>
+    <import-codeblock src="./badge-playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -77,21 +91,21 @@ Use tone to reinforce the meaning already expressed by the label. “Passing”,
   tabVariant="underline"
 >
   <TabPane id="badge-tones-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex wrap="true" align="center">
-      <Badge tone="neutral">neutral</Badge>
-      <Badge tone="accent">accent</Badge>
-      <Badge tone="feature">feature</Badge>
-      <Badge tone="secondary">secondary</Badge>
-      <Badge tone="custom">custom</Badge>
-      <Badge tone="ghost">ghost</Badge>
-      <Badge tone="info">info</Badge>
-      <Badge tone="success">success</Badge>
-      <Badge tone="warning">warning</Badge>
-      <Badge tone="danger">danger</Badge>
-    </Flex>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex wrap="true" align="center">
+        <Badge tone="neutral">neutral</Badge>
+        <Badge tone="accent">accent</Badge>
+        <Badge tone="feature">feature</Badge>
+        <Badge tone="secondary">secondary</Badge>
+        <Badge tone="custom">custom</Badge>
+        <Badge tone="ghost">ghost</Badge>
+        <Badge tone="info">info</Badge>
+        <Badge tone="success">success</Badge>
+        <Badge tone="warning">warning</Badge>
+        <Badge tone="danger">danger</Badge>
+      </Flex>
+    </div>
+  </TabPane>
   <TabPane id="badge-tones-mdx" label="badge-tones.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -123,29 +137,29 @@ Badge accepts every shared variant and defaults to `surface`. Its variants use s
   tabVariant="underline"
 >
   <TabPane id="badge-variants-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex wrap="true" align="center">
-      <Badge tone="accent" variant="solid">solid</Badge>
-      <Badge tone="accent" variant="surface">surface</Badge>
-      <Badge tone="accent" variant="surfaceAlt">surfaceAlt</Badge>
-      <Badge tone="accent" variant="spotlight">spotlight</Badge>
-      <Badge tone="accent" variant="glass">glass</Badge>
-      <Badge tone="accent" variant="flat">flat</Badge>
-      <Badge tone="accent" variant="flatAlt">flatAlt</Badge>
-      <Badge tone="accent" variant="flatSolid">flatSolid</Badge>
-      <Badge tone="accent" variant="outlineFill">outlineFill</Badge>
-      <Badge tone="accent" variant="outline">outline</Badge>
-      <Badge tone="accent" variant="subtle">subtle</Badge>
-      <Badge tone="accent" variant="subtleBtn">subtleBtn</Badge>
-      <Badge tone="accent" variant="link">link</Badge>
-      <Badge tone="accent" variant="sheen">sheen</Badge>
-      <Badge tone="accent" variant="underline">underline</Badge>
-      <Badge tone="accent" variant="rail">rail</Badge>
-      <Badge tone="accent" variant="bracket">bracket</Badge>
-      <Badge tone="accent" variant="none">none</Badge>
-    </Flex>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex wrap="true" align="center">
+        <Badge tone="accent" variant="solid">solid</Badge>
+        <Badge tone="accent" variant="surface">surface</Badge>
+        <Badge tone="accent" variant="surfaceAlt">surfaceAlt</Badge>
+        <Badge tone="accent" variant="spotlight">spotlight</Badge>
+        <Badge tone="accent" variant="glass">glass</Badge>
+        <Badge tone="accent" variant="flat">flat</Badge>
+        <Badge tone="accent" variant="flatAlt">flatAlt</Badge>
+        <Badge tone="accent" variant="flatSolid">flatSolid</Badge>
+        <Badge tone="accent" variant="outlineFill">outlineFill</Badge>
+        <Badge tone="accent" variant="outline">outline</Badge>
+        <Badge tone="accent" variant="subtle">subtle</Badge>
+        <Badge tone="accent" variant="subtleBtn">subtleBtn</Badge>
+        <Badge tone="accent" variant="link">link</Badge>
+        <Badge tone="accent" variant="sheen">sheen</Badge>
+        <Badge tone="accent" variant="underline">underline</Badge>
+        <Badge tone="accent" variant="rail">rail</Badge>
+        <Badge tone="accent" variant="bracket">bracket</Badge>
+        <Badge tone="accent" variant="none">none</Badge>
+      </Flex>
+    </div>
+  </TabPane>
   <TabPane id="badge-variants-mdx" label="badge-variants.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -185,22 +199,27 @@ The default slot accepts text and inline components. Put a badge beside a headin
   tabVariant="underline"
 >
   <TabPane id="badge-inline-composition-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex direction="column" align="start">
-      <Flex wrap="true" align="center">
-        <strong>Public API</strong>
-        <Badge tone="success">Stable</Badge>
-        <Badge variant="outline">v1.0</Badge>
+    <div class="component-preview-stage">
+      <Flex direction="column" align="start">
+        <Flex wrap="true" align="center">
+          <strong>Public API</strong>
+          <Badge tone="success">Stable</Badge>
+          <Badge variant="outline">v1.0</Badge>
+        </Flex>
+        <p class="m-0">
+          Open reviews <Badge tone="info" aria-label="3 open reviews">3</Badge>
+        </p>
+        <Badge tone="success" variant="outline">
+          <Icon name="tabler:check"/>
+          All checks passed
+        </Badge>
       </Flex>
-      <p class="m-0">Open reviews <Badge tone="info" aria-label="3 open reviews">3</Badge></p>
-      <Badge tone="success" variant="outline">
-        <Icon name="tabler:check"/>
-        All checks passed
-      </Badge>
-    </Flex>
-  </div>
-</TabPane>
-  <TabPane id="badge-inline-composition-mdx" label="badge-inline-composition.mdx">
+    </div>
+  </TabPane>
+  <TabPane
+    id="badge-inline-composition-mdx"
+    label="badge-inline-composition.mdx"
+  >
 ```html
 <Flex direction="column" align="start">
   <Flex wrap="true" align="center">
@@ -233,17 +252,17 @@ This example runs entirely in your browser. It models a release workflow without
   tabVariant="underline"
 >
   <TabPane id="release-checklist-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="release-checklist" src="./release-checklist.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="release-checklist" src="./release-checklist.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="release-checklist-mdx" label="release-checklist.mdx">
 ```html
 <RegorApp id="release-checklist" src="./release-checklist.ts"/>
 ```
   </TabPane>
   <TabPane id="release-checklist-ts" label="release-checklist.ts">
-  <import-codeblock src="./release-checklist.ts"/>
+    <import-codeblock src="./release-checklist.ts"/>
   </TabPane>
 </Tabs>
 
@@ -259,8 +278,13 @@ This example runs entirely in your browser. It models a release workflow without
 ## API reference
 
 <div class="api-overview">
-  <code class="api-overview__signature">&lt;Badge tone="success"&gt;Stable&lt;/Badge&gt;</code>
-  <p>A native <code>&lt;span&gt;</code> with two appearance props and one default slot. The default variant is <code>surface</code>. Static badges need no browser application.</p>
+  <code class="api-overview__signature"
+    >&lt;Badge tone="success"&gt;Stable&lt;/Badge&gt;</code>
+  <p>
+    A native <code>&lt;span&gt;</code> with two appearance props and one default
+    slot. The default variant is <code>surface</code>. Static badges need no
+    browser application.
+  </p>
   <nav class="api-index" aria-label="Badge API groups">
     <a href="#appearance">Appearance <span>2 props</span></a>
     <a href="#slots-and-native-attributes">Slots and native attributes</a>
@@ -272,10 +296,23 @@ Both props accept values or Regor refs. Register `defineBadgeComponents()` when 
 
 ### Appearance
 
-<ApiProperty anchor="badge-prop-tone" name="tone" valueType="SemanticTone" defaultValue="inherited">
-  <p>Selects a semantic palette. When omitted, Badge inherits the surrounding tone, which is neutral at the theme root. The label should explain the meaning even when colors cannot be distinguished.</p>
-  <div class="api-values"><code>neutral</code><code>accent</code><code>feature</code><code>secondary</code><code>custom</code><code>ghost</code><code>info</code><code>success</code><code>warning</code><code>danger</code></div>
-  <div class="api-demo"><Badge tone="success">Passing</Badge><Badge tone="warning">Review needed</Badge><Badge tone="danger">Failed</Badge><Badge tone="info">Queued</Badge></div>
+<ApiProperty
+  anchor="badge-prop-tone"
+  name="tone"
+  valueType="SemanticTone"
+  defaultValue="inherited"
+>
+  <p>
+    Selects a semantic palette. When omitted, Badge inherits the surrounding
+    tone, which is neutral at the theme root. The label should explain the
+    meaning even when colors cannot be distinguished.
+  </p>
+  <div class="api-values">
+    <code>neutral</code><code>accent</code><code>feature</code><code>secondary</code><code>custom</code><code>ghost</code><code>info</code><code>success</code><code>warning</code><code>danger</code>
+  </div>
+  <div class="api-demo">
+    <Badge tone="success">Passing</Badge><Badge tone="warning">Review needed</Badge><Badge tone="danger">Failed</Badge><Badge tone="info">Queued</Badge>
+  </div>
 ```html
 <Badge tone="success">Passing</Badge>
 <Badge tone="warning">Review needed</Badge>
@@ -284,27 +321,54 @@ Both props accept values or Regor refs. Register `defineBadgeComponents()` when 
 ```
 </ApiProperty>
 
-<ApiProperty anchor="badge-prop-variant" name="variant" valueType="ComponentVariant" defaultValue="surface">
-  <p>Sets the visual treatment using the stateless form of the shared variants. A variant changes appearance; it never turns the badge into a link or a button.</p>
-  <div class="api-values"><code>solid</code><code>surface</code><code>surfaceAlt</code><code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code></div>
-  <div class="api-demo"><Badge tone="accent" variant="solid">Solid</Badge><Badge tone="accent">Surface</Badge><Badge tone="accent" variant="outline">Outline</Badge><Badge tone="accent" variant="subtle">Subtle</Badge></div>
+<ApiProperty
+  anchor="badge-prop-variant"
+  name="variant"
+  valueType="ComponentVariant"
+  defaultValue="surface"
+>
+  <p>
+    Sets the visual treatment using the stateless form of the shared variants. A
+    variant changes appearance; it never turns the badge into a link or a
+    button.
+  </p>
+  <div class="api-values">
+    <code>solid</code><code>surface</code><code>surfaceAlt</code><code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code>
+  </div>
+  <div class="api-demo">
+    <Badge tone="accent" variant="solid">Solid</Badge><Badge tone="accent">Surface</Badge><Badge tone="accent" variant="outline">Outline</Badge><Badge tone="accent" variant="subtle">Subtle</Badge>
+  </div>
 ```html
 <Badge tone="accent" variant="solid">Featured</Badge>
 <Badge tone="success">Stable</Badge>
 <Badge variant="outline">v1.0</Badge>
 ```
-  <p class="api-note">Badge always uses stateless variant styling. It does not expose a <code>variantMode</code> prop.</p>
+  <p class="api-note">
+    Badge always uses stateless variant styling. It does not expose a
+    <code>variantMode</code> prop.
+  </p>
 </ApiProperty>
 
 ### Slots and native attributes
 
 <div class="api-contract">
   <h4>Default slot</h4>
-  <p>The badge's inline content: a label, a count, or text with an icon. The slot can contain reactive interpolation inside a Regor app.</p>
+  <p>
+    The badge's inline content: a label, a count, or text with an icon. The slot
+    can contain reactive interpolation inside a Regor app.
+  </p>
   <h4>Native attributes</h4>
-  <p><code>id</code>, <code>class</code>, <code>title</code>, and ARIA attributes reach the root <code>span</code>. Use ordinary attributes such as <code>aria-label</code>; Badge has no dedicated <code>ariaLabel</code> prop.</p>
+  <p>
+    <code>id</code>, <code>class</code>, <code>title</code>, and ARIA attributes
+    reach the root <code>span</code>. Use ordinary attributes such as
+    <code>aria-label</code>; Badge has no dedicated <code>ariaLabel</code> prop.
+  </p>
   <h4>Events</h4>
-  <p>Badge defines no custom events or interaction behavior. A clickable filter, removable tag, or navigation control should use an appropriate interactive component.</p>
+  <p>
+    Badge defines no custom events or interaction behavior. A clickable filter,
+    removable tag, or navigation control should use an appropriate interactive
+    component.
+  </p>
 </div>
 
 ```html

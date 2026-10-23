@@ -48,7 +48,8 @@ const formCheckTemplate = html`<label class="form-block__check" :class="classes"
     r-model="checked"
     r-inherit/>
   <span class="form-block__check-control" aria-hidden="true"></span>
-  <span class="form-block__check-label" r-if="hasLabel">{{ label }}</span>
+  <span class="form-block__check-label" r-if="hasLabel"
+    >{{ label }}</span>
 </label>`
 
 export function defineFormCheckComponent() {

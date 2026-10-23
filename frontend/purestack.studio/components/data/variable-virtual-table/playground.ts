@@ -59,8 +59,7 @@ const reviewRowTemplate = html`<tr :data-row="index">
           :aria-expanded="item.expanded"
           :aria-controls="'review-notes-' + item.id"
           @click="item.expanded = !item.expanded"
-          >{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn
-        >
+          >{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn>
       </Flex>
       <p class="mb-0">{{ item.summary }}</p>
       <div r-if="item.expanded" :id="'review-notes-' + item.id" class="mt-3">
@@ -151,8 +150,7 @@ const variableTablePlaygroundTemplate = html`<Flex direction="column">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · REVIEW TABLE</p>
       <Badge tone="accent" variant="surface"
-        >{{ filtered.length }} matching records</Badge
-      >
+        >{{ filtered.length }} matching records</Badge>
     </Flex>
     <Grid columns="2" columnsMd="4" class="my-3">
       <div>
@@ -190,8 +188,7 @@ const variableTablePlaygroundTemplate = html`<Flex direction="column">
         class="b-1 b-subtle rounded-md"/>
     </div>
     <FormStatus r-if="!filtered.length" role="status"
-      >{{ records.length ? 'No matching reviews. Clear the search to see the table.' : 'The table is empty. Reload the dataset to continue.' }}</FormStatus
-    >
+      >{{ records.length ? 'No matching reviews. Clear the search to see the table.' : 'The table is empty. Reload the dataset to continue.' }}</FormStatus>
     <p class="mb-0 text-muted">
       Expand a review or change the summary width. Each row is measured after
       its text wraps. The header and footer stay visible; wide columns scroll
@@ -239,18 +236,15 @@ const variableTablePlaygroundTemplate = html`<Flex direction="column">
   </Flex>
   <Flex wrap="true">
     <Btn variant="outline" :disabled="!filtered.length" @click="first"
-      >Back to top</Btn
-    >
+      >Back to top</Btn>
     <Btn variant="outline" :disabled="!filtered.length" @click="previous"
-      >Previous screen</Btn
-    >
+      >Previous screen</Btn>
     <Btn
       tone="accent"
       variant="surface"
       :disabled="!filtered.length"
       @click="next"
-      >Next screen</Btn
-    >
+      >Next screen</Btn>
   </Flex>
   <p class="m-0 text-muted">
     The counters inspect mounted rows. Scroll height includes estimates for
@@ -382,7 +376,7 @@ function createVariableTablePlayground(): VariableTablePlayground {
     rowRange,
     measuredRange,
     scrollExtent,
-    widths: [18, 28, 40].map((n) => ({ label: n + 'rem', value: String(n) })),
+    widths: [18, 28, 40].map((n) => ({ label: `${n}rem`, value: String(n) })),
     sorts: [
       { label: 'Oldest first', value: 'asc' },
       { label: 'Newest first', value: 'desc' },

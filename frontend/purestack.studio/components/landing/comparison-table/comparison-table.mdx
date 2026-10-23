@@ -13,48 +13,65 @@ nav:
 
 # Comparison<wbr/>Table
 
-<ComponentHeader name="ComparisonTable" kind="Side-by-side choices" summary="Compare approaches in responsive columns, each with its own heading, summary and feature list." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="ComparisonTable"
+  kind="Side-by-side choices"
+  summary="Compare approaches in responsive columns, each with its own heading, summary and feature list."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## Compare two workflows
 
 A visual comparison uses cards, not a semantic HTML table. Use parallel headings and concrete statements.
 
-<Tabs group="comparison-table-sample-1" selectedTab="comparison-table-sample-1-preview" ariaLabel="Compare two workflows example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-table-sample-1"
+  selectedTab="comparison-table-sample-1-preview"
+  ariaLabel="Compare two workflows example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-table-sample-1-preview" label="Preview">
-<ComponentExample label="ComparisonTable in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <ComparisonTable
-      eyebrow="CHOOSE YOUR STARTING POINT"
-      title="Two ways to compose"
-      subtitle="Use the approach that fits the interaction."
-      columnsLg="2"
+    <ComponentExample
+      label="ComparisonTable in context"
+      caption="Compare the composition, then open its source tab to adapt it."
     >
-      <ComparisonColumn
-        title="Content page"
-        summary="Mostly static information."
-        tone="neutral"
+      <ComparisonTable
+        eyebrow="CHOOSE YOUR STARTING POINT"
+        title="Two ways to compose"
+        subtitle="Use the approach that fits the interaction."
+        columnsLg="2"
       >
-        <ul class="pl-0">
-          <ComparisonFeature>MDX authoring</ComparisonFeature>
-          <ComparisonFeature>Server-rendered components</ComparisonFeature>
-        </ul>
-      </ComparisonColumn>
-      <ComparisonColumn
-        title="Interactive view"
-        summary="Local application state."
-        badge="Reactive"
-        tone="accent"
-      >
-        <ul class="pl-0">
-          <ComparisonFeature>Regor refs</ComparisonFeature>
-          <ComparisonFeature>Focused browser entry point</ComparisonFeature>
-        </ul>
-      </ComparisonColumn>
-    </ComparisonTable>
-
-</ComponentExample>
+        <ComparisonColumn
+          title="Content page"
+          summary="Mostly static information."
+          tone="neutral"
+        >
+          <ul class="pl-0">
+            <ComparisonFeature>MDX authoring</ComparisonFeature>
+            <ComparisonFeature>Server-rendered components</ComparisonFeature>
+          </ul>
+        </ComparisonColumn>
+        <ComparisonColumn
+          title="Interactive view"
+          summary="Local application state."
+          badge="Reactive"
+          tone="accent"
+        >
+          <ul class="pl-0">
+            <ComparisonFeature>Regor refs</ComparisonFeature>
+            <ComparisonFeature>Focused browser entry point</ComparisonFeature>
+          </ul>
+        </ComparisonColumn>
+      </ComparisonTable>
+    </ComponentExample>
   </TabPane>
-  <TabPane id="comparison-table-sample-1-source-0" label="workflow-comparison.mdx">
+  <TabPane
+    id="comparison-table-sample-1-source-0"
+    label="workflow-comparison.mdx"
+  >
 ```html
 <ComparisonTable
   eyebrow="CHOOSE YOUR STARTING POINT"
@@ -92,21 +109,29 @@ A visual comparison uses cards, not a semantic HTML table. Use parallel headings
 
 Use the same composition for a small pair of options.
 
-<Tabs group="comparison-table-sample-2" selectedTab="comparison-table-sample-2-preview" ariaLabel="A compact comparison example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-table-sample-2"
+  selectedTab="comparison-table-sample-2-preview"
+  ariaLabel="A compact comparison example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-table-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <ComparisonTable columns="1" columnsLg="2" variant="outline">
-      <ComparisonColumn title="Fixed layout" summary="Known dimensions." />
-      <ComparisonColumn
-        title="Responsive layout"
-        summary="Adapts to available space."
-        tone="info"
-      />
-    </ComparisonTable>
-
-</div>  </TabPane>
-  <TabPane id="comparison-table-sample-2-source-0" label="compact-comparison.mdx">
+    <div class="component-preview-stage">
+      <ComparisonTable columns="1" columnsLg="2" variant="outline">
+        <ComparisonColumn title="Fixed layout" summary="Known dimensions."/>
+        <ComparisonColumn
+          title="Responsive layout"
+          summary="Adapts to available space."
+          tone="info"/>
+      </ComparisonTable>
+    </div>
+  </TabPane>
+  <TabPane
+    id="comparison-table-sample-2-source-0"
+    label="compact-comparison.mdx"
+  >
 ```html
 <ComparisonTable columns="1" columnsLg="2" variant="outline">
   <ComparisonColumn title="Fixed layout" summary="Known dimensions." />
@@ -124,23 +149,85 @@ Use the same composition for a small pair of options.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="ComparisonTable" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="ComparisonTable" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="ComparisonTable" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="ComparisonTable" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Choose the comparison width
 
-<ComponentExample label="Two or three alternatives" caption="Despite its name, this is a responsive card grid, not a native data table. Use a table when values must be associated across rows.">
-<ComparisonTable title="2 useful alternatives" eyebrow="WORKFLOW" subtitle="Choose by the work you need to do." columns="1" columnsLg="2" tone="neutral"><ComparisonColumn title="Explore" summary="Find a starting point." tone="neutral" badge=""><ul class="m-0 p-0"><ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature></ul></ComparisonColumn><ComparisonColumn title="Compose" summary="Combine proven parts." tone="accent" badge="Recommended"><ul class="m-0 p-0"><ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature></ul></ComparisonColumn></ComparisonTable>
-<ComparisonTable title="3 useful alternatives" eyebrow="WORKFLOW" subtitle="Choose by the work you need to do." columns="1" columnsLg="3" tone="neutral"><ComparisonColumn title="Explore" summary="Find a starting point." tone="neutral" badge=""><ul class="m-0 p-0"><ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature></ul></ComparisonColumn><ComparisonColumn title="Compose" summary="Combine proven parts." tone="accent" badge="Recommended"><ul class="m-0 p-0"><ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature></ul></ComparisonColumn><ComparisonColumn title="Customize" summary="Own the final details." tone="neutral" badge=""><ul class="m-0 p-0"><ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature></ul></ComparisonColumn></ComparisonTable>
+<ComponentExample
+  label="Two or three alternatives"
+  caption="Despite its name, this is a responsive card grid, not a native data table. Use a table when values must be associated across rows."
+>
+  <ComparisonTable
+    title="2 useful alternatives"
+    eyebrow="WORKFLOW"
+    subtitle="Choose by the work you need to do."
+    columns="1"
+    columnsLg="2"
+    tone="neutral"
+    ><ComparisonColumn
+      title="Explore"
+      summary="Find a starting point."
+      tone="neutral"
+      badge=""
+      ><ul class="m-0 p-0">
+        <ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature>
+      </ul></ComparisonColumn><ComparisonColumn
+      title="Compose"
+      summary="Combine proven parts."
+      tone="accent"
+      badge="Recommended"
+      ><ul class="m-0 p-0">
+        <ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature>
+      </ul></ComparisonColumn></ComparisonTable>
+  <ComparisonTable
+    title="3 useful alternatives"
+    eyebrow="WORKFLOW"
+    subtitle="Choose by the work you need to do."
+    columns="1"
+    columnsLg="3"
+    tone="neutral"
+    ><ComparisonColumn
+      title="Explore"
+      summary="Find a starting point."
+      tone="neutral"
+      badge=""
+      ><ul class="m-0 p-0">
+        <ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature>
+      </ul></ComparisonColumn><ComparisonColumn
+      title="Compose"
+      summary="Combine proven parts."
+      tone="accent"
+      badge="Recommended"
+      ><ul class="m-0 p-0">
+        <ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature>
+      </ul></ComparisonColumn><ComparisonColumn
+      title="Customize"
+      summary="Own the final details."
+      tone="neutral"
+      badge=""
+      ><ul class="m-0 p-0">
+        <ComparisonFeature>Shared design language</ComparisonFeature><ComparisonFeature>Readable source</ComparisonFeature>
+      </ul></ComparisonColumn></ComparisonTable>
 </ComponentExample>
 
 ## Feature map
@@ -163,7 +250,11 @@ The component renders a section with a grid. If readers need row-by-row relation
 
 <div class="api-overview">
   <p class="text-eyebrow">ComparisonTable contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ComparisonTable properties">
@@ -176,38 +267,89 @@ The component renders a section with a grid. If readers need row-by-row relation
   <a href="#comparison-table-prop-columnsLg">columnsLg</a>
 </nav>
 
-<ApiProperty anchor="comparison-table-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="comparison-table-prop-eyebrow"
+  name="eyebrow"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Short context above the heading, such as a category or release label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="comparison-table-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="comparison-table-prop-subtitle"
+  name="subtitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting text beneath the title.</p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="comparison-table-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="comparison-table-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="1">
-  <p>Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto. Numeric counts are clamped.</p>
+<ApiProperty
+  anchor="comparison-table-prop-columns"
+  name="columns"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="1"
+>
+  <p>
+    Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto.
+    Numeric counts are clamped.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-table-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="3">
+<ApiProperty
+  anchor="comparison-table-prop-columnsLg"
+  name="columnsLg"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="3"
+>
   <p>Column count or CSS track list at the theme’s lg breakpoint and above.</p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> ComparisonColumn elements. Register defineComparisonTableComponent with Panel, Flex, Grid and SectionHeader, plus the column and feature components you use.</p>
+  <p>
+    <strong>Default slot:</strong> ComparisonColumn elements. Register
+    defineComparisonTableComponent with Panel, Flex, Grid and SectionHeader,
+    plus the column and feature components you use.
+  </p>
 </div>
 
 ## Related components

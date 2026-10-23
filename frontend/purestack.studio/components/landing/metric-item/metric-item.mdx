@@ -13,25 +13,38 @@ nav:
 
 # Metric<wbr/>Item
 
-<ComponentHeader name="MetricItem" kind="One useful number" summary="A compact value with a label, explanation and optional semantic icon." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="MetricItem"
+  kind="One useful number"
+  summary="A compact value with a label, explanation and optional semantic icon."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## A value with context
 
 Make the unit and time period part of the content.
 
-<Tabs group="metric-item-sample-1" selectedTab="metric-item-sample-1-preview" ariaLabel="A value with context example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="metric-item-sample-1"
+  selectedTab="metric-item-sample-1-preview"
+  ariaLabel="A value with context example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="metric-item-sample-1-preview" label="Preview">
-<ComponentExample label="MetricItem in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <MetricItem
-      label="Example build time"
-      value="1.8 s"
-      detail="Local preview, illustrative measurement"
-      icon="lucide:check"
-      tone="success"
-    />
-
-</ComponentExample>
+    <ComponentExample
+      label="MetricItem in context"
+      caption="Compare the composition, then open its source tab to adapt it."
+    >
+      <MetricItem
+        label="Example build time"
+        value="1.8 s"
+        detail="Local preview, illustrative measurement"
+        icon="lucide:check"
+        tone="success"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="metric-item-sample-1-source-0" label="contextual-value.mdx">
 ```html
@@ -50,19 +63,26 @@ Make the unit and time period part of the content.
 
 Use the default slot for a qualifier or destination after the metric.
 
-<Tabs group="metric-item-sample-2" selectedTab="metric-item-sample-2-preview" ariaLabel="Supporting content example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="metric-item-sample-2"
+  selectedTab="metric-item-sample-2-preview"
+  ariaLabel="Supporting content example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="metric-item-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <MetricItem
-      label="Documentation"
-      value="Ready"
-      detail="Review the components before release"
-    >
-      <BtnLink href="/components/" variant="link">Browse component guides</BtnLink>
-    </MetricItem>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <MetricItem
+        label="Documentation"
+        value="Ready"
+        detail="Review the components before release"
+      >
+        <BtnLink href="/components/" variant="link"
+          >Browse component guides</BtnLink>
+      </MetricItem>
+    </div>
+  </TabPane>
   <TabPane id="metric-item-sample-2-source-0" label="metric-detail.mdx">
 ```html
 <MetricItem
@@ -80,19 +100,45 @@ Use the default slot for a qualifier or destination after the metric.
 
 Every tone is visible on the icon frame. The row text keeps the surrounding text color.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="MetricItem" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="MetricItem" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## A number with the right context
 
-<ComponentExample label="Display text, optional decoration, and supporting content" caption="value is display text; formatting, units, data fetching, and change calculations belong to your application.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Minimal</code><MetricItem value="48"/></div>
-<div class="component-appearance-cell"><code>Label and detail</code><MetricItem label="Guides" value="13" detail="Updated this week"/></div>
-<div class="component-appearance-cell"><code>Formatted value</code><MetricItem label="Availability" value="99.9%" icon="lucide:check" tone="success"/></div>
-<div class="component-appearance-cell"><code>Rich default slot</code><MetricItem label="Release health" value="Ready" icon="lucide:check" tone="info"><Badge tone="success">All checks complete</Badge><p class="m-0">Last reviewed today.</p></MetricItem></div>
-</div>
+<ComponentExample
+  label="Display text, optional decoration, and supporting content"
+  caption="value is display text; formatting, units, data fetching, and change calculations belong to your application."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Minimal</code><MetricItem value="48"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Label and detail</code><MetricItem label="Guides" value="13" detail="Updated this week"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Formatted value</code><MetricItem
+        label="Availability"
+        value="99.9%"
+        icon="lucide:check"
+        tone="success"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Rich default slot</code><MetricItem
+        label="Release health"
+        value="Ready"
+        icon="lucide:check"
+        tone="info"
+        ><Badge tone="success">All checks complete</Badge>
+        <p class="m-0">Last reviewed today.</p></MetricItem>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -115,7 +161,11 @@ The value is text, so units and formatted numbers remain under your control. Ton
 
 <div class="api-overview">
   <p class="text-eyebrow">MetricItem contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="MetricItem properties">
@@ -126,30 +176,67 @@ The value is text, so units and formatted numbers remain under your control. Ton
   <a href="#metric-item-prop-tone">tone</a>
 </nav>
 
-<ApiProperty anchor="metric-item-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="metric-item-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-item-prop-value" name="value" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="metric-item-prop-value"
+  name="value"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Displayed value as text, including any unit or formatting.</p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-item-prop-detail" name="detail" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="metric-item-prop-detail"
+  name="detail"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting explanation below the value.</p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-item-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+<ApiProperty
+  anchor="metric-item-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered SVG icon name. In browser apps, include the icon in the resolver
+    passed to defineIconComponents.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="metric-item-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="metric-item-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> content after the detail. Register defineMetricItemComponent with Flex and Icon dependencies.</p>
+  <p>
+    <strong>Default slot:</strong> content after the detail. Register
+    defineMetricItemComponent with Flex and Icon dependencies.
+  </p>
 </div>
 
 ## Related components

@@ -62,35 +62,59 @@ const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
     :minLength="minimum"
     :maxResults="limit"
     :openOnFocus="focusOpens"
-    separators=",;"
-  />
+    separators=",;"/>
   <Flex wrap="true">
-    <FormInputField id="multi-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
-    <FormInputField id="multi-limit" label="Maximum results" type="number" min="1" :model="limit" />
+    <FormInputField
+      id="multi-minimum"
+      label="Minimum query length"
+      type="number"
+      min="0"
+      :model="minimum"/>
+    <FormInputField
+      id="multi-limit"
+      label="Maximum results"
+      type="number"
+      min="1"
+      :model="limit"/>
   </Flex>
   <Flex wrap="true">
-    <FormCheck id="multi-focus" label="Open on focus" :checked="focusOpens" />
-    <FormCheck id="multi-custom" label="Allow new tags" :checked="customAllowed" />
+    <FormCheck id="multi-focus" label="Open on focus" :checked="focusOpens"/>
+    <FormCheck
+      id="multi-custom"
+      label="Allow new tags"
+      :checked="customAllowed"/>
     <FormCheck
       id="multi-duplicates"
       label="Allow duplicates"
-      :checked="duplicatesAllowed"
-    />
-    <FormCheck id="multi-loading" label="Loading state" :checked="pending" />
-    <FormCheck id="multi-disabled" label="Disabled" :checked="locked" />
+      :checked="duplicatesAllowed"/>
+    <FormCheck id="multi-loading" label="Loading state" :checked="pending"/>
+    <FormCheck id="multi-disabled" label="Disabled" :checked="locked"/>
   </Flex>
   <Btn variant="link" @click="clear">Clear editable tags</Btn>
   <FormStatus>
     {{ selectedTags.length }} tags selected. Query: {{ tagQuery || 'Empty' }}
   </FormStatus>
   <ul>
-    <li r-for="tag in selectedTags">{{ tag.label }} · {{ tag.value }}</li>
+    <li r-for="tag in selectedTags">
+      {{ tag.label }} · {{ tag.value }}
+    </li>
   </ul>
   <h3>Callback transforms and a custom row</h3>
-  <p>Choose a suggestion to give it a success tone. New tags use lowercase values and a feature tone. Paste tags separated by commas, semicolons, pipes, or newlines.</p>
-  <MultiAutoCompleteInput id="multi-customized" label="Normalized tags" :items="customItems"
-    :options="tagOptions" rowComponent="TagSuggestion" :onCreateItem="createTag"
-    :onOptionToItem="mapTag" :onSplitInput="splitTags" :onItemsChange="itemsChanged"
+  <p>
+    Choose a suggestion to give it a success tone. New tags use lowercase values
+    and a feature tone. Paste tags separated by commas, semicolons, pipes, or
+    newlines.
+  </p>
+  <MultiAutoCompleteInput
+    id="multi-customized"
+    label="Normalized tags"
+    :items="customItems"
+    :options="tagOptions"
+    rowComponent="TagSuggestion"
+    :onCreateItem="createTag"
+    :onOptionToItem="mapTag"
+    :onSplitInput="splitTags"
+    :onItemsChange="itemsChanged"
     placeholder="Try Design | Research"/>
   <FormStatus>{{ activity }}</FormStatus>
 </Flex>`
@@ -156,7 +180,10 @@ export interface TagSuggestion {
 }
 
 const tagSuggestion = defineComponent<TagSuggestion>(
-  html`<Flex direction="column" r-if="option"><strong>{{ option.label }}</strong><span class="text-muted">{{ option.value }} · {{ active ? 'Active suggestion' : 'Available suggestion' }}{{ query ? ' · query: ' + query : '' }}</span></Flex>`,
+  html`<Flex direction="column" r-if="option"
+  ><strong>{{ option.label }}</strong><span class="text-muted"
+    >{{ option.value }} ·
+    {{ active ? 'Active suggestion' : 'Available suggestion' }}{{ query ? ' · query: ' + query : '' }}</span></Flex>`,
   {
     props: ['option', 'active', 'query'],
   },
@@ -183,7 +210,7 @@ createApp(
   },
   {
     selector: 'app#multi-auto-complete-input-demo',
-    template: html`<MultiAutoCompleteInputExample />`,
+    template: html`<MultiAutoCompleteInputExample/>`,
   },
 )
 

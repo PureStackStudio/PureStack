@@ -76,11 +76,29 @@ export interface ChartAppearanceControls {
 export function defineChartAppearanceControls() {
   return defineComponent<ChartAppearanceControls>(
     html`<Grid columns="1" columnsMd="3">
-    <FormSelectField :id="prefix + '-tone'" label="Chart tone" :model="tone" :options="tones"/>
-    <FormSelectField :id="prefix + '-variant'" label="Chart variant" :model="variant" :options="variants"/>
-    <FormSelectField :id="prefix + '-mode'" label="Variant mode" :model="variantMode" :options="modes"/>
-    <FormInputField r-if="showWidth" :id="prefix + '-width'" label="SVG width (px; blank is responsive)" type="number" min="240" :model="width"/>
-  </Grid>`,
+  <FormSelectField
+    :id="prefix + '-tone'"
+    label="Chart tone"
+    :model="tone"
+    :options="tones"/>
+  <FormSelectField
+    :id="prefix + '-variant'"
+    label="Chart variant"
+    :model="variant"
+    :options="variants"/>
+  <FormSelectField
+    :id="prefix + '-mode'"
+    label="Variant mode"
+    :model="variantMode"
+    :options="modes"/>
+  <FormInputField
+    r-if="showWidth"
+    :id="prefix + '-width'"
+    label="SVG width (px; blank is responsive)"
+    type="number"
+    min="240"
+    :model="width"/>
+</Grid>`,
     {
       props: ['tone', 'variant', 'variantMode', 'width', 'showWidth', 'prefix'],
       context: (head) => ({
@@ -104,13 +122,43 @@ export interface ChartAppearanceGallery {
 export function defineChartAppearanceGallery() {
   return defineComponent<ChartAppearanceGallery>(
     html`<div class="component-appearance-grid data-chart-gallery">
-    <div class="component-appearance-cell" r-for="sample in samples">
-      <code>{{ sample.label }}</code>
-      <BarChart r-if="component === 'BarChart'" :items="sample.items" :tone="sample.tone" :variant="sample.variant" :variantMode="sample.mode" width="100%" height="160" :animated="false" :ariaLabel="sample.label + ': Monday 24, Tuesday 38, Wednesday -12'"/>
-      <LineChart r-if="component === 'LineChart'" :series="sample.series" :tone="sample.tone" :variant="sample.variant" :variantMode="sample.mode" width="100%" height="160" :showArea="true" :showPoints="true" :animated="false" :ariaLabel="sample.label + ': requests 18, 32, 25, 48'"/>
-      <DoughnutChart r-if="component === 'DoughnutChart'" :segments="sample.segments" :tone="sample.tone" :variant="sample.variant" :variantMode="sample.mode" size="160" centerLabel="Tasks" centerValue="30" :animated="false" :ariaLabel="sample.label + ': complete 18, review 7, planned 5'"/>
-    </div>
-  </div>`,
+  <div class="component-appearance-cell" r-for="sample in samples">
+    <code>{{ sample.label }}</code>
+    <BarChart
+      r-if="component === 'BarChart'"
+      :items="sample.items"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      :variantMode="sample.mode"
+      width="100%"
+      height="160"
+      :animated="false"
+      :ariaLabel="sample.label + ': Monday 24, Tuesday 38, Wednesday -12'"/>
+    <LineChart
+      r-if="component === 'LineChart'"
+      :series="sample.series"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      :variantMode="sample.mode"
+      width="100%"
+      height="160"
+      :showArea="true"
+      :showPoints="true"
+      :animated="false"
+      :ariaLabel="sample.label + ': requests 18, 32, 25, 48'"/>
+    <DoughnutChart
+      r-if="component === 'DoughnutChart'"
+      :segments="sample.segments"
+      :tone="sample.tone"
+      :variant="sample.variant"
+      :variantMode="sample.mode"
+      size="160"
+      centerLabel="Tasks"
+      centerValue="30"
+      :animated="false"
+      :ariaLabel="sample.label + ': complete 18, review 7, planned 5'"/>
+  </div>
+</div>`,
     {
       props: ['component', 'axis'],
       context: (head) => {

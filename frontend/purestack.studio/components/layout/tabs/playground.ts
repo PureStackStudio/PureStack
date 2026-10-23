@@ -54,55 +54,142 @@ const tabsPlaygroundTemplate = html`<Flex direction="column">
     <p class="text-eyebrow m-0">One component, three styling surfaces</p>
     <Badge tone="accent" variant="surface">Live playground</Badge>
   </Flex>
-  <Tabs id="tabs-playground-preview" group="tabs-playground-views" :selectedTab="selected"
-    :tone="tone" :variant="shell" :tabVariant="controls" :variantMode="mode" :mobileSelect="mobileSelect" ariaLabel="Project workspace">
+  <Tabs
+    id="tabs-playground-preview"
+    group="tabs-playground-views"
+    :selectedTab="selected"
+    :tone="tone"
+    :variant="shell"
+    :tabVariant="controls"
+    :variantMode="mode"
+    :mobileSelect="mobileSelect"
+    ariaLabel="Project workspace"
+  >
     <template #header>
-      <Flex r-if="header" class="tabs__header" justify="between" align="center" wrap="true">
-        <div><p class="text-eyebrow m-0">PureStack</p><h3 class="mt-1 mb-0">Project workspace</h3></div>
+      <Flex
+        r-if="header"
+        class="tabs__header"
+        justify="between"
+        align="center"
+        wrap="true"
+      >
+        <div>
+          <p class="text-eyebrow m-0">PureStack</p>
+          <h3 class="mt-1 mb-0">Project workspace</h3>
+        </div>
         <Badge tone="success" variant="surface">Preview ready</Badge>
       </Flex>
     </template>
-    <TabPane id="tabs-lab-overview" label="Overview" :icon="icons ? 'tabler:layout-grid' : ''" :variant="panel" class="p-4">
-      <p class="text-eyebrow mt-0">Release overview</p><h3 class="mt-0">Everything your next release needs.</h3>
+    <TabPane
+      id="tabs-lab-overview"
+      label="Overview"
+      :icon="icons ? 'tabler:layout-grid' : ''"
+      :variant="panel"
+      class="p-4"
+    >
+      <p class="text-eyebrow mt-0">Release overview</p>
+      <h3 class="mt-0">Everything your next release needs.</h3>
       <p>Content, components and a shared theme, ready to publish together.</p>
       <Grid columns="1" columnsSm="3">
-        <Panel variant="outline" bodyClass="p-3"><strong>12 pages</strong><p class="text-muted mb-0">Ready to publish</p></Panel>
-        <Panel variant="outline" bodyClass="p-3"><strong>2 themes</strong><p class="text-muted mb-0">Light and dark</p></Panel>
-        <Panel variant="outline" bodyClass="p-3"><strong>0 warnings</strong><p class="text-muted mb-0">Content checks</p></Panel>
+        <Panel variant="outline" bodyClass="p-3"
+          ><strong>12 pages</strong>
+          <p class="text-muted mb-0">Ready to publish</p></Panel>
+        <Panel variant="outline" bodyClass="p-3"
+          ><strong>2 themes</strong>
+          <p class="text-muted mb-0">Light and dark</p></Panel>
+        <Panel variant="outline" bodyClass="p-3"
+          ><strong>0 warnings</strong>
+          <p class="text-muted mb-0">Content checks</p></Panel>
       </Grid>
     </TabPane>
-    <TabPane id="tabs-lab-source" label="Build" :icon="icons ? 'tabler:code' : ''" :variant="panel" class="p-4">
-      <p class="text-eyebrow mt-0">Build pipeline</p><h3 class="mt-0">From typed source to a static site.</h3>
-      <ol class="mb-0"><li>Resolve content and shared configuration.</li><li>Render pages, components and theme styles.</li><li>Bundle browser apps and generate the search index.</li></ol>
+    <TabPane
+      id="tabs-lab-source"
+      label="Build"
+      :icon="icons ? 'tabler:code' : ''"
+      :variant="panel"
+      class="p-4"
+    >
+      <p class="text-eyebrow mt-0">Build pipeline</p>
+      <h3 class="mt-0">From typed source to a static site.</h3>
+      <ol class="mb-0">
+        <li>Resolve content and shared configuration.</li>
+        <li>Render pages, components and theme styles.</li>
+        <li>Bundle browser apps and generate the search index.</li>
+      </ol>
     </TabPane>
-    <TabPane id="tabs-lab-team" label="Team" :icon="icons ? 'tabler:users' : ''" :disabled="teamDisabled" :variant="panel" class="p-4">
-      <p class="text-eyebrow mt-0">Project access</p><h3 class="mt-0">A shared place to build.</h3>
-      <p class="mb-0">Designers review the preview. Developers own the components. Editors keep the content current.</p>
+    <TabPane
+      id="tabs-lab-team"
+      label="Team"
+      :icon="icons ? 'tabler:users' : ''"
+      :disabled="teamDisabled"
+      :variant="panel"
+      class="p-4"
+    >
+      <p class="text-eyebrow mt-0">Project access</p>
+      <h3 class="mt-0">A shared place to build.</h3>
+      <p class="mb-0">
+        Designers review the preview. Developers own the components. Editors
+        keep the content current.
+      </p>
     </TabPane>
   </Tabs>
   <div @change="refresh">
     <Grid columns="1" columnsMd="3">
-      <FormSelectField id="tabs-tone" label="Tone" :model="tone" :options="tones"/>
-      <FormSelectField id="tabs-shell" label="Container variant" :model="shell" :options="variants"/>
-      <FormSelectField id="tabs-controls" label="Tab control variant" :model="controls" :options="variants"/>
-      <FormSelectField id="tabs-panel" label="Panel variant" :model="panel" :options="variants"/>
-      <FormSelectField id="tabs-mode" label="Container / panel mode" :model="mode" :options="modes"/>
-      <FormSelectField id="tabs-selection" label="Selected pane" :model="selected" :options="selectionOptions"/>
+      <FormSelectField
+        id="tabs-tone"
+        label="Tone"
+        :model="tone"
+        :options="tones"/>
+      <FormSelectField
+        id="tabs-shell"
+        label="Container variant"
+        :model="shell"
+        :options="variants"/>
+      <FormSelectField
+        id="tabs-controls"
+        label="Tab control variant"
+        :model="controls"
+        :options="variants"/>
+      <FormSelectField
+        id="tabs-panel"
+        label="Panel variant"
+        :model="panel"
+        :options="variants"/>
+      <FormSelectField
+        id="tabs-mode"
+        label="Container / panel mode"
+        :model="mode"
+        :options="modes"/>
+      <FormSelectField
+        id="tabs-selection"
+        label="Selected pane"
+        :model="selected"
+        :options="selectionOptions"/>
     </Grid>
     <Flex wrap="true" class="mt-3">
       <FormCheck id="tabs-icons" label="Show icons" :checked="icons"/>
       <FormCheck id="tabs-header" label="Show header slot" :checked="header"/>
-      <FormCheck id="tabs-disabled" label="Disable Team" :checked="teamDisabled"/>
+      <FormCheck
+        id="tabs-disabled"
+        label="Disable Team"
+        :checked="teamDisabled"/>
     </Flex>
   </div>
-  <FormCheck id="tabs-mobile-select" label="Use a select on mobile" :checked="mobileSelect"/>
+  <FormCheck
+    id="tabs-mobile-select"
+    label="Use a select on mobile"
+    :checked="mobileSelect"/>
   <Flex justify="between" align="center" wrap="true">
-    <p class="text-muted m-0" role="status">Selected: <code id="tabs-selected">{{ selected }}</code></p>
+    <p class="text-muted m-0" role="status">
+      Selected: <code id="tabs-selected">{{ selected }}</code>
+    </p>
     <Btn variant="outline" size="sm" @click="reset">Reset playground</Btn>
   </Flex>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">Current settings</p>
-    <pre class="overflow-auto max-h-inspector m-0"><code id="tabs-configuration">{{ configuration }}</code></pre>
+    <pre
+      class="overflow-auto max-h-inspector m-0"
+    ><code id="tabs-configuration">{{ configuration }}</code></pre>
   </Panel>
 </Flex>`
 

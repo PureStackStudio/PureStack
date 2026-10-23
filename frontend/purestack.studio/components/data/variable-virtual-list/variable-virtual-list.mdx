@@ -13,7 +13,13 @@ nav:
 
 # Variable<wbr/>Virtual<wbr/>List
 
-<ComponentHeader name="VariableVirtualList" kind="Measured collection" summary="Give every record the room it needs. Measured rows support wrapping text and expansion while keeping the mounted window small." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualList.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
+<ComponentHeader
+  name="VariableVirtualList"
+  kind="Measured collection"
+  summary="Give every record the room it needs. Measured rows support wrapping text and expansion while keeping the mounted window small."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualList.ts"
+  section="Charts &amp; large data"
+  sectionHref="/components/data/"/>
 
 ## Interactive playground
 
@@ -28,18 +34,20 @@ Browse a measured activity feed with short notes, wrapping paragraphs and expand
   tabVariant="underline"
 >
   <TabPane id="variable-virtual-list-playground-preview" label="Preview">
-<ComponentExample label="VariableVirtualList in context" caption="Expand a record, scroll it away and return. Change the estimate or viewport and inspect the measured row heights.">
-    <RegorApp id="variable-virtual-list-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="VariableVirtualList in context"
+      caption="Expand a record, scroll it away and return. Change the estimate or viewport and inspect the measured row heights."
+    >
+      <RegorApp id="variable-virtual-list-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="variable-virtual-list-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="variable-virtual-list-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="variable-virtual-list-playground-source" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -56,18 +64,17 @@ Let the row content determine its height. This complete example renders 200 note
   tabVariant="underline"
 >
   <TabPane id="variable-virtual-list-basic-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="variable-list-basic-demo" src="./basic-list.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="variable-list-basic-demo" src="./basic-list.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="variable-virtual-list-basic-mdx" label="basic-list.mdx">
 ```html
 <RegorApp id="variable-list-basic-demo" src="./basic-list.ts"/>
 ```
   </TabPane>
   <TabPane id="variable-virtual-list-basic-source" label="basic-list.ts">
-  <import-codeblock src="./basic-list.ts"/>
+    <import-codeblock src="./basic-list.ts"/>
   </TabPane>
 </Tabs>
 
@@ -80,24 +87,21 @@ Let the row content determine its height. This complete example renders 200 note
     <p>
       estimateHeight supplies the initial size of unseen rows. It is a starting
       point for offsets, not a constraint on the content.
-    </p></Panel
-  >
+    </p></Panel>
   <Panel variant="surface" bodyClass="p-3 min-w-0"
     ><p class="text-eyebrow">02 · MEASURE</p>
     <h3 class="mt-0">Read the real height</h3>
     <p>
       ResizeObserver tracks mounted rows. Wrapping text and expanded content
       update their measured sizes.
-    </p></Panel
-  >
+    </p></Panel>
   <Panel variant="surface" bodyClass="p-3 min-w-0"
     ><p class="text-eyebrow">03 · REFINE</p>
     <h3 class="mt-0">Update the offsets</h3>
     <p>
       Measured rows keep their sizes. The running average of measurements
       supplies the estimate for rows that have not been measured.
-    </p></Panel
-  >
+    </p></Panel>
 </Grid>
 
 The component finds the visible range from cumulative row offsets, then adds an overscan buffer. During scrolling, measurement changes are collected and applied after a short idle period (currently 120 ms). The estimated total and scrollbar thumb can change as new content is measured; this is not an exact, premeasured scroll map.
@@ -118,8 +122,26 @@ Width changes remeasure mounted content, but cached heights for off-screen rows 
 
 The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
 
-<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
-<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by estimated and measured space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible records</strong><br/>Each rendered height is measured after content wraps or expands.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+<ComponentExample
+  label="One dataset, a small rendered window"
+  caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows."
+>
+  <div class="data-window-diagram">
+    <div class="data-window-diagram__spacer">
+      Earlier records · represented by estimated and measured space
+    </div>
+    <div class="data-window-diagram__rows">
+      <Badge tone="info">Overscan before</Badge>
+      <p>
+        <strong>Visible records</strong><br/>Each rendered height is measured
+        after content wraps or expands.
+      </p>
+      <Badge tone="info">Overscan after</Badge>
+    </div>
+    <div class="data-window-diagram__spacer">
+      Later records · remain in the source array
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map

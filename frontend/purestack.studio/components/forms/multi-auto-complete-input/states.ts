@@ -14,8 +14,7 @@ const multiAutoCompleteInputStatesTemplate = html`<MultiAutoCompleteInput
   id="multi-token-states"
   label="Example recipients"
   :items="recipients"
-  placeholder="Add a recipient"
-/>`
+  placeholder="Add a recipient"/>`
 
 function createMultiAutoCompleteInputStates(): MultiAutoCompleteInputStates {
   return {
@@ -53,6 +52,6 @@ createApp(
   },
   {
     selector: 'app#multi-auto-complete-input-states-demo',
-    template: html`<MultiAutoCompleteInputStates />`,
+    template: html`<MultiAutoCompleteInputStates/>`,
   },
 )

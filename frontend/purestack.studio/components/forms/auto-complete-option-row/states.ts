@@ -12,8 +12,7 @@ const autoCompleteOptionRowStatesTemplate = html`<AutoCompleteInput
   id="default-option-owner"
   label="Region"
   :options="[{label:'Europe Central',value:'eu'},{label:'US East',value:'us'}]"
-  rowComponent="AutoCompleteOptionRow"
-/>`
+  rowComponent="AutoCompleteOptionRow"/>`
 
 function createAutoCompleteOptionRowStates(): AutoCompleteOptionRowStates {
   return {}
@@ -42,6 +41,6 @@ createApp(
   },
   {
     selector: 'app#auto-complete-option-row-states-demo',
-    template: html`<AutoCompleteOptionRowStates />`,
+    template: html`<AutoCompleteOptionRowStates/>`,
   },
 )

@@ -126,8 +126,12 @@ const modalStoreTemplate = html`<template r-for="modal in modals">
     :showClose="modal.showClose"
     @close="removeModal(modal.id)"
   >
-    <p class="modal-store__body" r-if="modal.body">{{ modal.body }}</p>
-    <p class="modal-store__note" r-if="modal.note">{{ modal.note }}</p>
+    <p class="modal-store__body" r-if="modal.body">
+      {{ modal.body }}
+    </p>
+    <p class="modal-store__note" r-if="modal.note">
+      {{ modal.note }}
+    </p>
     <template name="footer">
       <Flex r-if="modal.actions.length > 0">
         <Btn

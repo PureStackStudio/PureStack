@@ -37,8 +37,7 @@ const formInputFieldExampleTemplate = html`<Flex direction="column">
       icon="lucide:mail"
       placeholder="you@example.com"
       :model="contactEmail"
-      :disabled="locked"
-    />
+      :disabled="locked"/>
     <FormInputField
       id="input-seats"
       label="Seats"
@@ -46,10 +45,9 @@ const formInputFieldExampleTemplate = html`<Flex direction="column">
       min="1"
       step="1"
       :model="seats"
-      :disabled="locked"
-    />
+      :disabled="locked"/>
   </Grid>
-  <FormCheck id="input-lock" label="Lock fields" :checked="locked" />
+  <FormCheck id="input-lock" label="Lock fields" :checked="locked"/>
   <FormStatus>{{ summary }}</FormStatus>
 </Flex>`
 
@@ -91,7 +89,7 @@ createApp(
   },
   {
     selector: 'app#form-input-field-demo',
-    template: html`<FormInputFieldExample />`,
+    template: html`<FormInputFieldExample/>`,
   },
 )
 

@@ -13,26 +13,41 @@ nav:
 
 # Form<wbr/>Check
 
-<ComponentHeader name="FormCheck" kind="Boolean choice" summary="A small control for a clear decision. Native checkbox behavior with a visible label and a reactive boolean." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formCheck.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="FormCheck"
+  kind="Boolean choice"
+  summary="A small control for a clear decision. Native checkbox behavior with a visible label and a reactive boolean."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formCheck.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Notification preferences
 
 Toggle each independent preference. The required security setting demonstrates a checked, disabled state.
 
-<Tabs group="form-check-sample-1" selectedTab="form-check-sample-1-preview" ariaLabel="Notification preferences example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-check-sample-1"
+  selectedTab="form-check-sample-1-preview"
+  ariaLabel="Notification preferences example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-check-sample-1-preview" label="Preview">
-<ComponentExample label="FormCheck in context" caption="Toggle the preferences and lock the controls to compare available and disabled states.">
-    <RegorApp id="form-check-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="FormCheck in context"
+      caption="Toggle the preferences and lock the controls to compare available and disabled states."
+    >
+      <RegorApp id="form-check-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="form-check-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-check-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="form-check-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,16 +55,25 @@ Toggle each independent preference. The required security setting demonstrates a
 
 A checkbox without visible label text still needs an accessible name.
 
-<Tabs group="form-check-sample-2" selectedTab="form-check-sample-2-preview" ariaLabel="A compact labelled checkbox example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-check-sample-2"
+  selectedTab="form-check-sample-2-preview"
+  ariaLabel="A compact labelled checkbox example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-check-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex align="center">
-      <FormCheck id="check-compact" aria-label="Select this example row" tone="accent" />
-      <span>Example row</span>
-    </Flex>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex align="center">
+        <FormCheck
+          id="check-compact"
+          aria-label="Select this example row"
+          tone="accent"/>
+        <span>Example row</span>
+      </Flex>
+    </div>
+  </TabPane>
   <TabPane id="form-check-sample-2-source-0" label="compact-checkbox.mdx">
 ```html
 <Flex align="center">
@@ -64,34 +88,75 @@ A checkbox without visible label text still needs an accessible name.
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-check-tone-gallery" data-form-gallery data-component="FormCheck" data-axis="tone">
-<FormAppearanceGallery component="FormCheck" axis="tone" prefix="forms-form-check-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-check-tone-gallery"
+    data-form-gallery
+    data-component="FormCheck"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="FormCheck"
+      axis="tone"
+      prefix="forms-form-check-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Every checkbox state
 
 FormCheck has a tone prop and a fixed checkbox treatment; it has no variant prop. Native name and value contribute to form data when checked.
 
-<ComponentExample label="Every checkbox state" caption="Compare all values together. Use the live examples for application state and event handling.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Unchecked</code>
-<FormCheck id="forms-check-unchecked" label="Send release updates" name="updates" value="yes" :checked="false"/>
-</div>
-<div class="component-appearance-cell"><code>Checked</code>
-<FormCheck id="forms-check-checked" label="Send release updates" name="updates" value="yes" :checked="true"/>
-</div>
-<div class="component-appearance-cell"><code>Disabled unchecked</code>
-<FormCheck id="forms-check-disabled-off" label="Updates unavailable" :disabled="true" :checked="false"/>
-</div>
-<div class="component-appearance-cell"><code>Disabled checked</code>
-<FormCheck id="forms-check-disabled-on" label="Required reviewer" :disabled="true" :checked="true"/>
-</div>
-<div class="component-appearance-cell"><code>Accessible compact control</code>
-<FormCheck id="forms-check-compact" aria-label="Select this project" :checked="true" rootClass="m-0"/>
-</div>
-</div>
+<ComponentExample
+  label="Every checkbox state"
+  caption="Compare all values together. Use the live examples for application state and event handling."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Unchecked</code>
+      <FormCheck
+        id="forms-check-unchecked"
+        label="Send release updates"
+        name="updates"
+        value="yes"
+        :checked="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Checked</code>
+      <FormCheck
+        id="forms-check-checked"
+        label="Send release updates"
+        name="updates"
+        value="yes"
+        :checked="true"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Disabled unchecked</code>
+      <FormCheck
+        id="forms-check-disabled-off"
+        label="Updates unavailable"
+        :disabled="true"
+        :checked="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Disabled checked</code>
+      <FormCheck
+        id="forms-check-disabled-on"
+        label="Required reviewer"
+        :disabled="true"
+        :checked="true"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Accessible compact control</code>
+      <FormCheck
+        id="forms-check-compact"
+        aria-label="Select this project"
+        :checked="true"
+        rootClass="m-0"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Behavior and accessibility
@@ -102,7 +167,11 @@ Press Space while focused to toggle. Group related choices in fieldset with a le
 
 <div class="api-overview">
   <p class="text-eyebrow">FormCheck contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="FormCheck properties">
@@ -116,42 +185,104 @@ Press Space while focused to toggle. Group related choices in fieldset with a le
   <a href="#form-check-prop-rootClass">rootClass</a>
 </nav>
 
-<ApiProperty anchor="form-check-prop-id" name="id" valueType="string" defaultValue="generated">
-  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+<ApiProperty
+  anchor="form-check-prop-id"
+  name="id"
+  valueType="string"
+  defaultValue="generated"
+>
+  <p>
+    Unique control ID. Supply an explicit value when help text or another
+    element needs to reference this control.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="form-check-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="form-check-prop-name"
+  name="name"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Native form field name used during FormData serialization.</p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-value" name="value" valueType="RefOrValue&lt;string&gt;" defaultValue="browser default: on">
-  <p>Submitted value when checked. This is independent of the checked boolean.</p>
+<ApiProperty
+  anchor="form-check-prop-value"
+  name="value"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="browser default: on"
+>
+  <p>
+    Submitted value when checked. This is independent of the checked boolean.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-checked" name="checked" valueType="Ref&lt;boolean&gt;" defaultValue="ref(false)">
-  <p>Writable boolean ref. Literal initial values are normalized into an internal ref.</p>
+<ApiProperty
+  anchor="form-check-prop-checked"
+  name="checked"
+  valueType="Ref&lt;boolean&gt;"
+  defaultValue="ref(false)"
+>
+  <p>
+    Writable boolean ref. Literal initial values are normalized into an internal
+    ref.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+<ApiProperty
+  anchor="form-check-prop-disabled"
+  name="disabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Disables interaction. Use a bound boolean, for example :disabled="isLocked".
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="form-check-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-check-prop-rootClass" name="rootClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Additional classes for the outer label, while inherited native attributes target the checkbox input.</p>
+<ApiProperty
+  anchor="form-check-prop-rootClass"
+  name="rootClass"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Additional classes for the outer label, while inherited native attributes
+    target the checkbox input.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. label provides visible text. Register defineFormComponents or register FormCheck with defineFormCheckComponent.</p>
+  <p>
+    No slots. label provides visible text. Register defineFormComponents or
+    register FormCheck with defineFormCheckComponent.
+  </p>
 </div>
 
 ## Related components

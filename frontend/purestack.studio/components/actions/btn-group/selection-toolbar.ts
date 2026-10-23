@@ -43,14 +43,48 @@ const selectionToolbarTemplate = html`<Panel tone="neutral" variant="surfaceAlt"
     <Flex justify="between" align="center" wrap="true" class="gap-3">
       <div>
         <div class="fw-700">{{ selectionLabel }}</div>
-        <p class="fs-xs tone-text-muted mb-0">Inbox preview <Badge>{{ readState }}</Badge></p>
+        <p class="fs-xs tone-text-muted mb-0">
+          Inbox preview <Badge>{{ readState }}</Badge>
+        </p>
       </div>
-      <BtnGroup align="end" :wrap="true" role="group" aria-label="Selected message actions">
-        <Btn variant="outline" icon="iconoir:archive" :disabled="selectionEmpty" @click="archive">Archive</Btn>
-        <Btn variant="outline" icon="iconoir:mail-open" :disabled="selectionEmpty" @click="markRead">Mark read</Btn>
-        <BtnGroupDropDown icon="iconoir:more-horiz" :iconOnly="true" ariaLabel="More message actions" variant="outline" menuTone="neutral">
-          <Btn variant="subtle" icon="iconoir:mail" :disabled="selectionEmpty" @click="markUnread">Mark unread</Btn>
-          <Btn tone="danger" variant="subtle" icon="iconoir:trash" :disabled="selectionEmpty" @click="trash">Move to trash</Btn>
+      <BtnGroup
+        align="end"
+        :wrap="true"
+        role="group"
+        aria-label="Selected message actions"
+      >
+        <Btn
+          variant="outline"
+          icon="iconoir:archive"
+          :disabled="selectionEmpty"
+          @click="archive"
+          >Archive</Btn>
+        <Btn
+          variant="outline"
+          icon="iconoir:mail-open"
+          :disabled="selectionEmpty"
+          @click="markRead"
+          >Mark read</Btn>
+        <BtnGroupDropDown
+          icon="iconoir:more-horiz"
+          :iconOnly="true"
+          ariaLabel="More message actions"
+          variant="outline"
+          menuTone="neutral"
+        >
+          <Btn
+            variant="subtle"
+            icon="iconoir:mail"
+            :disabled="selectionEmpty"
+            @click="markUnread"
+            >Mark unread</Btn>
+          <Btn
+            tone="danger"
+            variant="subtle"
+            icon="iconoir:trash"
+            :disabled="selectionEmpty"
+            @click="trash"
+            >Move to trash</Btn>
         </BtnGroupDropDown>
       </BtnGroup>
     </Flex>

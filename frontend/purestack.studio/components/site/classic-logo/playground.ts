@@ -41,22 +41,48 @@ export interface ClassicLogoPlayground {
 const classicLogoPlaygroundTemplate = html`<Flex direction="column">
   <Panel variant="surfaceAlt" bodyClass="p-4 min-w-0 overflow-auto">
     <p class="text-eyebrow mt-0">Original PureStack identity</p>
-    <div id="classic-preview" class="py-4"><div :is="component" :config="config"></div></div>
-    <p class="text-muted mb-0">The original container, letter spacing, icon and responsive sizes. Switch the site theme to compare both skins.</p>
+    <div id="classic-preview" class="py-4">
+      <div :is="component" :config="config"></div>
+    </div>
+    <p class="text-muted mb-0">
+      The original container, letter spacing, icon and responsive sizes. Switch
+      the site theme to compare both skins.
+    </p>
   </Panel>
   <Grid columns="1" columnsMd="2">
-    <FormSelectField id="classic-component" label="Logo component" :model="component" :options="componentOptions"/>
+    <FormSelectField
+      id="classic-component"
+      label="Logo component"
+      :model="component"
+      :options="componentOptions"/>
     <FormInputField id="classic-brand" label="Brand" :model="brand"/>
     <FormInputField id="classic-subtitle" label="Subtitle" :model="subtitle"/>
-    <FormInputField id="classic-colors" label="Brand color map" :model="letterColors" :disabled="component !== 'ClassicLogo'"/>
-    <FormInputField id="classic-subtitle-colors" label="Subtitle color map" :model="subtitleLetterColors" :disabled="component !== 'ClassicLogo'"/>
-    <FormInputField id="classic-accent" label="Palette color 2" :model="accent" :disabled="component !== 'ClassicLogo'"/>
+    <FormInputField
+      id="classic-colors"
+      label="Brand color map"
+      :model="letterColors"
+      :disabled="component !== 'ClassicLogo'"/>
+    <FormInputField
+      id="classic-subtitle-colors"
+      label="Subtitle color map"
+      :model="subtitleLetterColors"
+      :disabled="component !== 'ClassicLogo'"/>
+    <FormInputField
+      id="classic-accent"
+      label="Palette color 2"
+      :model="accent"
+      :disabled="component !== 'ClassicLogo'"/>
   </Grid>
-  <p class="text-muted m-0">Palette: 0 = subtle text, 1 = normal text, 2 = accent, 3 = white. Each digit colors one non-space character; the final digit repeats.</p>
+  <p class="text-muted m-0">
+    Palette: 0 = subtle text, 1 = normal text, 2 = accent, 3 = white. Each digit
+    colors one non-space character; the final digit repeats.
+  </p>
   <Flex><Btn variant="outline" @click="reset">Restore original</Btn></Flex>
   <Panel variant="outline" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">siteConfig.json · logo</p>
-    <pre class="overflow-auto max-h-inspector m-0"><code id="classic-config">{{ source }}</code></pre>
+    <pre
+      class="overflow-auto max-h-inspector m-0"
+    ><code id="classic-config">{{ source }}</code></pre>
   </Panel>
 </Flex>`
 

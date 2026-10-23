@@ -87,18 +87,40 @@ export interface DoughnutChartPlayground extends ChartAppearanceState {
 
 const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
   <Grid columns="1" columnsMd="2">
-    <FormSelectField id="ring-preset" label="Distribution" :model="preset" :options="presets" @change="applyPreset" />
-    <FormSelectField id="ring-unit" label="Value suffix" :model="suffix" :options="units" />
+    <FormSelectField
+      id="ring-preset"
+      label="Distribution"
+      :model="preset"
+      :options="presets"
+      @change="applyPreset"/>
+    <FormSelectField
+      id="ring-unit"
+      label="Value suffix"
+      :model="suffix"
+      :options="units"/>
   </Grid>
-  <ChartAppearanceControls prefix="doughnut-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="false"/>
+  <ChartAppearanceControls
+    prefix="doughnut-chart-appearance"
+    :tone="chartTone"
+    :variant="chartVariant"
+    :variantMode="chartVariantMode"
+    :width="chartWidth"
+    :showWidth="false"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · PARTS OF A WHOLE</p>
-      <Btn variant="outline" size="sm" :disabled="replayDisabled" @click="replay">Replay animation</Btn>
+      <Btn
+        variant="outline"
+        size="sm"
+        :disabled="replayDisabled"
+        @click="replay"
+        >Replay animation</Btn>
     </Flex>
     <Grid columns="1" columnsMd="2" alignItems="center" class="my-3">
       <DoughnutChart
-        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode"
+        :tone="chartTone"
+        :variant="chartVariant"
+        :variantMode="chartVariantMode"
         :segments="chartSegments"
         title="Illustrative distribution"
         description="Positive values form the ring. The adjacent legend lists exact values and shares."
@@ -115,17 +137,27 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
         :size="size"
         :animated="animated"
         class="mx-auto"
-        style="max-width: 100%; height: auto"
-      />
+        style="max-width: 100%; height: auto"/>
       <Flex direction="column" aria-label="Segment values and shares">
-        <Flex r-for="entry in legend" justify="between" align="center" wrap="true">
+        <Flex
+          r-for="entry in legend"
+          justify="between"
+          align="center"
+          wrap="true"
+        >
           <Flex align="center">
-            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" :fill="entry.color" /></svg>
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <circle cx="6" cy="6" r="5" :fill="entry.color"/>
+            </svg>
             <span>{{ entry.label }}</span>
           </Flex>
-          <strong>{{ entry.value }}{{ suffix }} · {{ entry.share }}%</strong>
+          <strong
+            >{{ entry.value }}{{ suffix }} ·
+            {{ entry.share }}%</strong>
         </Flex>
-        <p r-if="!total" class="m-0 text-muted">Enable a positive segment or choose another distribution.</p>
+        <p r-if="!total" class="m-0 text-muted">
+          Enable a positive segment or choose another distribution.
+        </p>
         <FormStatus>{{ summary }}</FormStatus>
       </Flex>
     </Grid>
@@ -137,34 +169,104 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
       <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
     </Flex>
   </Flex>
-  <Panel r-for="entry in editorSegments" tone="neutral" variant="surface" bodyClass="p-3 min-w-0">
+  <Panel
+    r-for="entry in editorSegments"
+    tone="neutral"
+    variant="surface"
+    bodyClass="p-3 min-w-0"
+  >
     <Grid columns="1" columnsMd="3" alignItems="center">
-      <FormInputField :id="'ring-name-' + entry.id" label="Segment name" :model="entry.label" />
-      <FormInputField :id="'ring-value-' + entry.id" label="Value" type="number" step="0.1" :model="entry.value" />
-      <FormCheck :id="'ring-enabled-' + entry.id" label="Include segment" :checked="entry.enabled" />
+      <FormInputField
+        :id="'ring-name-' + entry.id"
+        label="Segment name"
+        :model="entry.label"/>
+      <FormInputField
+        :id="'ring-value-' + entry.id"
+        label="Value"
+        type="number"
+        step="0.1"
+        :model="entry.value"/>
+      <FormCheck
+        :id="'ring-enabled-' + entry.id"
+        label="Include segment"
+        :checked="entry.enabled"/>
     </Grid>
   </Panel>
-  <p class="m-0 text-muted">Only finite, positive values contribute. Hide a segment to recalculate the total and shares; its color stays attached when restored.</p>
+  <p class="m-0 text-muted">
+    Only finite, positive values contribute. Hide a segment to recalculate the
+    total and shares; its color stays attached when restored.
+  </p>
   <h3 class="m-0">Ring geometry</h3>
   <Grid columns="2" columnsMd="4">
-    <FormInputField id="ring-thickness" label="Thickness (2–40)" type="number" min="2" :model="thickness" />
-    <FormInputField id="ring-gap" label="Gap (0–24)" type="number" min="0" :model="gap" />
-    <FormInputField id="ring-angle" label="Start angle (°)" type="number" step="15" :model="angle" />
-    <FormInputField id="ring-size" label="Size (px)" type="number" min="100" step="20" :model="size" />
+    <FormInputField
+      id="ring-thickness"
+      label="Thickness (2–40)"
+      type="number"
+      min="2"
+      :model="thickness"/>
+    <FormInputField
+      id="ring-gap"
+      label="Gap (0–24)"
+      type="number"
+      min="0"
+      :model="gap"/>
+    <FormInputField
+      id="ring-angle"
+      label="Start angle (°)"
+      type="number"
+      step="15"
+      :model="angle"/>
+    <FormInputField
+      id="ring-size"
+      label="Size (px)"
+      type="number"
+      min="100"
+      step="20"
+      :model="size"/>
   </Grid>
-  <p class="m-0 text-muted">Thickness and gap use the 100-unit SVG canvas and are clamped to the ranges above. Gaps shrink around tiny slices. Size fits the available preview width.</p>
+  <p class="m-0 text-muted">
+    Thickness and gap use the 100-unit SVG canvas and are clamped to the ranges
+    above. Gaps shrink around tiny slices. Size fits the available preview
+    width.
+  </p>
   <h3 class="m-0">Center content</h3>
   <Grid columns="1" columnsMd="2">
-    <FormSelectField id="ring-center" label="Center value" :model="centerMode" :options="centerModes" />
-    <FormInputField r-if="centerMode === 'custom'" id="ring-custom" label="Custom value" :model="customValue" />
-    <FormInputField r-if="centerMode !== 'largest'" id="ring-caption" label="Center label" :model="caption" />
+    <FormSelectField
+      id="ring-center"
+      label="Center value"
+      :model="centerMode"
+      :options="centerModes"/>
+    <FormInputField
+      r-if="centerMode === 'custom'"
+      id="ring-custom"
+      label="Custom value"
+      :model="customValue"/>
+    <FormInputField
+      r-if="centerMode !== 'largest'"
+      id="ring-caption"
+      label="Center label"
+      :model="caption"/>
   </Grid>
   <Grid columns="2">
-    <FormInputField id="ring-value-size" label="Value font size" type="number" min="1" :model="valueSize" />
-    <FormInputField id="ring-label-size" label="Label font size" type="number" min="1" :model="labelSize" />
+    <FormInputField
+      id="ring-value-size"
+      label="Value font size"
+      type="number"
+      min="1"
+      :model="valueSize"/>
+    <FormInputField
+      id="ring-label-size"
+      label="Label font size"
+      type="number"
+      min="1"
+      :model="labelSize"/>
   </Grid>
-  <p class="m-0 text-muted">Largest share is calculated from the visible values. Custom copy changes only the text. Font sizes scale with the SVG; thick rings and long labels need smaller type. This demo clears center copy when the total is zero.</p>
-  <FormCheck id="ring-motion" label="Entrance animation" :checked="animated" />
+  <p class="m-0 text-muted">
+    Largest share is calculated from the visible values. Custom copy changes
+    only the text. Font sizes scale with the SVG; thick rings and long labels
+    need smaller type. This demo clears center copy when the total is zero.
+  </p>
+  <FormCheck id="ring-motion" label="Entrance animation" :checked="animated"/>
 </Flex>`
 
 const presetValues: Record<DoughnutPreset, number[]> = {
@@ -348,6 +450,6 @@ createApp(
   },
   {
     selector: 'app#doughnut-chart-demo',
-    template: html`<DoughnutChartPlayground />`,
+    template: html`<DoughnutChartPlayground/>`,
   },
 )

@@ -24,16 +24,20 @@ export function defineComponentGuideComponents() {
   return {
     ComponentHeader: defineComponent<ComponentHeader>(
       html`<header class="component-header">
-      <div class="component-header__top">
-        <div class="component-header__identity"><code>{{ name }}</code><span>{{ kind }}</span></div>
-        <nav class="component-header__links" aria-label="Component resources">
-          <a href="#api-reference">API <span aria-hidden="true">↗</span></a>
-          <a :href="source" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a>
-        </nav>
-      </div>
-      <p class="component-header__summary">{{ summary }}</p>
-      <a class="component-header__back" :href="sectionHref">{{ section }} <span aria-hidden="true">↗</span></a>
-    </header>`,
+  <div class="component-header__top">
+    <div class="component-header__identity">
+      <code>{{ name }}</code><span>{{ kind }}</span>
+    </div>
+    <nav class="component-header__links" aria-label="Component resources">
+      <a href="#api-reference">API <span aria-hidden="true">↗</span></a>
+      <a :href="source" target="_blank" rel="noopener"
+        >Source <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+  <p class="component-header__summary">{{ summary }}</p>
+  <a class="component-header__back" :href="sectionHref"
+    >{{ section }} <span aria-hidden="true">↗</span></a>
+</header>`,
       {
         props: ['name', 'summary', 'source', 'kind', 'section', 'sectionHref'],
         context: (head) => ({
@@ -45,10 +49,12 @@ export function defineComponentGuideComponents() {
     ),
     ComponentExample: defineComponent<ComponentExample>(
       html`<section class="component-example" :aria-label="label">
-      <header class="component-example__heading"><span class="component-example__dot" aria-hidden="true"></span><strong>{{ label }}</strong><span class="component-example__tag">COMPOSITION</span></header>
-      <div class="component-example__stage"><slot></slot></div>
-      <p class="component-example__caption">{{ caption }}</p>
-    </section>`,
+  <header class="component-example__heading">
+    <span class="component-example__dot" aria-hidden="true"></span><strong>{{ label }}</strong><span class="component-example__tag">COMPOSITION</span>
+  </header>
+  <div class="component-example__stage"><slot></slot></div>
+  <p class="component-example__caption">{{ caption }}</p>
+</section>`,
       { props: ['label', 'caption'] },
     ),
   }

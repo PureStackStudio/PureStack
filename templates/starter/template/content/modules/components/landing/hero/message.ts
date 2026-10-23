@@ -8,7 +8,10 @@ export interface LandingCanvasMessage {
 
 const messageTemplate = html`<div class="landing-canvas-message">
   <IconFrame name="lucide:sparkles" tone="accent" variant="surface"/>
-  <h2 class="landing-canvas-title"><span>{{ canvas.firstLine }}</span> <span>{{ canvas.secondLine }}</span></h2>
+  <h2 class="landing-canvas-title">
+    <span>{{ canvas.firstLine }}</span>
+    <span>{{ canvas.secondLine }}</span>
+  </h2>
   <p class="landing-body">{{ canvas.description }}</p>
 </div>`
 

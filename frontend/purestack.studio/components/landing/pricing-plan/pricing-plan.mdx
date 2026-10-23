@@ -13,33 +13,47 @@ nav:
 
 # Pricing<wbr/>Plan
 
-<ComponentHeader name="PricingPlan" kind="Complete offer" summary="A complete plan card with a price, billing period, feature list and navigation action." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pricing/pricing.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="PricingPlan"
+  kind="Complete offer"
+  summary="A complete plan card with a price, billing period, feature list and navigation action."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pricing/pricing.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## A plan with all its context
 
 The price and period are display text, so the application owns currency formatting and billing logic.
 
-<Tabs group="pricing-plan-sample-1" selectedTab="pricing-plan-sample-1-preview" ariaLabel="A plan with all its context example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="pricing-plan-sample-1"
+  selectedTab="pricing-plan-sample-1-preview"
+  ariaLabel="A plan with all its context example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="pricing-plan-sample-1-preview" label="Preview">
-<ComponentExample label="PricingPlan in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <PricingPlan
-      title="Team workspace"
-      summary="An illustrative plan for a small team."
-      price="$24"
-      period="per month, billed monthly"
-      badge="Example"
-      note="Demo pricing only. No purchase is available."
-      icon="lucide:check"
-      ctaLabel="Explore the components"
-      ctaLink="/components/"
-      tone="accent"
+    <ComponentExample
+      label="PricingPlan in context"
+      caption="Compare the composition, then open its source tab to adapt it."
     >
-      <PricingFeature>Shared component library</PricingFeature>
-      <PricingFeature>Theme-aware documentation</PricingFeature>
-    </PricingPlan>
-
-</ComponentExample>
+      <PricingPlan
+        title="Team workspace"
+        summary="An illustrative plan for a small team."
+        price="$24"
+        period="per month, billed monthly"
+        badge="Example"
+        note="Demo pricing only. No purchase is available."
+        icon="lucide:check"
+        ctaLabel="Explore the components"
+        ctaLink="/components/"
+        tone="accent"
+      >
+        <PricingFeature>Shared component library</PricingFeature>
+        <PricingFeature>Theme-aware documentation</PricingFeature>
+      </PricingPlan>
+    </ComponentExample>
   </TabPane>
   <TabPane id="pricing-plan-sample-1-source-0" label="complete-plan.mdx">
 ```html
@@ -66,21 +80,27 @@ The price and period are display text, so the application owns currency formatti
 
 Omit either CTA prop to leave out the link. A note can explain how to proceed.
 
-<Tabs group="pricing-plan-sample-2" selectedTab="pricing-plan-sample-2-preview" ariaLabel="A quiet plan without an action example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="pricing-plan-sample-2"
+  selectedTab="pricing-plan-sample-2-preview"
+  ariaLabel="A quiet plan without an action example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="pricing-plan-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <PricingPlan
-      title="Custom workspace"
-      summary="A configuration you define."
-      price="Custom"
-      note="Use this layout with your own plan data."
-      variant="outline"
-    >
-      <PricingFeature>Flexible composition</PricingFeature>
-    </PricingPlan>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <PricingPlan
+        title="Custom workspace"
+        summary="A configuration you define."
+        price="Custom"
+        note="Use this layout with your own plan data."
+        variant="outline"
+      >
+        <PricingFeature>Flexible composition</PricingFeature>
+      </PricingPlan>
+    </div>
+  </TabPane>
   <TabPane id="pricing-plan-sample-2-source-0" label="custom-plan.mdx">
 ```html
 <PricingPlan
@@ -100,35 +120,97 @@ Omit either CTA prop to leave out the link. A note can explain how to proceed.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="PricingPlan" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="PricingPlan" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="PricingPlan" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="PricingPlan" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
 
-<ComponentExample label="Both variant modes" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="mode"><LandingAppearanceGallery component="PricingPlan" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="mode">
+    <LandingAppearanceGallery component="PricingPlan" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Price, decoration, and action conditions
 
-<ComponentExample label="Make every part of the offer clear" caption="The component formats no money and performs no checkout. Each CTA requires both ctaLabel and ctaLink; features are native list items.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Free plan</code><PricingPlan title="Solo" summary="A personal starting point." price="$0" period="forever" note="No billing setup in this demo." ctaLabel="Explore" ctaLink="/components/" tone="success"><PricingFeature tone="success">Shared themes</PricingFeature></PricingPlan></div>
-<div class="component-appearance-cell"><code>Custom price</code><PricingPlan title="Custom" price="Let’s talk" badge="Flexible" variant="outline"><PricingFeature>Define your own scope</PricingFeature></PricingPlan></div>
-<div class="component-appearance-cell"><code>No price or CTA</code><PricingPlan title="Included capabilities" icon="lucide:check" summary="A feature summary can stand alone." note="Price and period are optional." tone="info"><PricingFeature tone="info">Readable source</PricingFeature></PricingPlan></div>
-<div class="component-appearance-cell"><code>Rich feature content</code><PricingPlan title="Team" price="$24" period="per workspace / month" badge="Popular" icon="lucide:check" note="Illustrative pricing; explain taxes and limits in your application." tone="feature" ctaLabel="Explore plans" ctaLink="/components/landing/pricing-table/"><PricingFeature tone="feature"><span><strong>Shared components</strong><br/>A consistent starting point across your workspace.</span></PricingFeature><PricingFeature tone="warning">Review your own deployment requirements</PricingFeature></PricingPlan></div>
-</div>
+<ComponentExample
+  label="Make every part of the offer clear"
+  caption="The component formats no money and performs no checkout. Each CTA requires both ctaLabel and ctaLink; features are native list items."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Free plan</code><PricingPlan
+        title="Solo"
+        summary="A personal starting point."
+        price="$0"
+        period="forever"
+        note="No billing setup in this demo."
+        ctaLabel="Explore"
+        ctaLink="/components/"
+        tone="success"
+        ><PricingFeature tone="success"
+          >Shared themes</PricingFeature></PricingPlan>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom price</code><PricingPlan
+        title="Custom"
+        price="Let’s talk"
+        badge="Flexible"
+        variant="outline"
+        ><PricingFeature>Define your own scope</PricingFeature></PricingPlan>
+    </div>
+    <div class="component-appearance-cell">
+      <code>No price or CTA</code><PricingPlan
+        title="Included capabilities"
+        icon="lucide:check"
+        summary="A feature summary can stand alone."
+        note="Price and period are optional."
+        tone="info"
+        ><PricingFeature tone="info"
+          >Readable source</PricingFeature></PricingPlan>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Rich feature content</code><PricingPlan
+        title="Team"
+        price="$24"
+        period="per workspace / month"
+        badge="Popular"
+        icon="lucide:check"
+        note="Illustrative pricing; explain taxes and limits in your application."
+        tone="feature"
+        ctaLabel="Explore plans"
+        ctaLink="/components/landing/pricing-table/"
+        ><PricingFeature tone="feature"
+          ><span
+            ><strong>Shared components</strong><br/>A consistent starting point
+            across your workspace.</span></PricingFeature><PricingFeature tone="warning"
+          >Review your own deployment requirements</PricingFeature></PricingPlan>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -152,7 +234,11 @@ Use clear billing text and disclose relevant limits alongside the price. A CTA i
 
 <div class="api-overview">
   <p class="text-eyebrow">PricingPlan contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="PricingPlan properties">
@@ -170,58 +256,137 @@ Use clear billing text and disclose relevant limits alongside the price. A CTA i
   <a href="#pricing-plan-prop-tone">tone</a>
 </nav>
 
-<ApiProperty anchor="pricing-plan-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="pricing-plan-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-summary" name="summary" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-summary"
+  name="summary"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>A concise explanation beneath the heading.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-price" name="price" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-price"
+  name="price"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Display price. May include currency or non-numeric text.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-period" name="period" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-period"
+  name="period"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Billing period displayed with the price.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-badge" name="badge" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-badge"
+  name="badge"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Optional compact label rendered with Badge.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-note" name="note" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-note"
+  name="note"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting note after the features and action.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="pricing-plan-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="pricing-plan-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+<ApiProperty
+  anchor="pricing-plan-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered SVG icon name. In browser apps, include the icon in the resolver
+    passed to defineIconComponents.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-ctaLabel" name="ctaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-ctaLabel"
+  name="ctaLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>CTA link text. Requires ctaLink.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-ctaLink" name="ctaLink" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="pricing-plan-prop-ctaLink"
+  name="ctaLink"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>CTA destination. Requires ctaLabel.</p>
 </ApiProperty>
 
-<ApiProperty anchor="pricing-plan-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="pricing-plan-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> PricingFeature list items inside the generated ul. Register definePricingComponents and its layout, text, button and icon dependencies.</p>
+  <p>
+    <strong>Default slot:</strong> PricingFeature list items inside the
+    generated ul. Register definePricingComponents and its layout, text, button
+    and icon dependencies.
+  </p>
 </div>
 
 ## Related components

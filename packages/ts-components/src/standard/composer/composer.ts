@@ -66,8 +66,7 @@ export interface Composer {
 
 const composerTemplate = html`<div class="composer-field">
   <span class="composer-field__label" r-if="label"
-    >{{ label }}</span
-  >
+    >{{ label }}</span>
   <div class="composer" :class="classes">
     <div class="composer__toolbar" role="toolbar" aria-label="Composer tools">
       <button

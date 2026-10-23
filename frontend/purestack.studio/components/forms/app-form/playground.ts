@@ -23,10 +23,9 @@ const appFormExampleTemplate = html`<Panel bodyClass="p-4">
       label="Project name"
       :model="projectName"
       :required="true"
-      minlength="3"
-    />
+      minlength="3"/>
     <FormMeta>
-      <FormSubmit label="Save project" tone="accent" />
+      <FormSubmit label="Save project" tone="accent"/>
       <Btn type="reset" variant="outline">Reset</Btn>
     </FormMeta>
     <FormStatus tone="success" :hidden="!savedProject">
@@ -69,7 +68,7 @@ createApp(
       ...defineFormInputField(),
     },
   },
-  { selector: 'app#app-form-demo', template: html`<AppFormExample />` },
+  { selector: 'app#app-form-demo', template: html`<AppFormExample/>` },
 )
 
 mountFormAppearanceGalleries()

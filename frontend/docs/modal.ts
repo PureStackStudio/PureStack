@@ -26,16 +26,14 @@ const modalApiTemplate = html`<Flex direction="column" align="start">
   >
     <p>This dialog was opened by a Regor event handler.</p>
     <template #footer
-      ><Btn tone="accent" @click="close">Close with the API</Btn></template
-    >
+      ><Btn tone="accent" @click="close">Close with the API</Btn></template>
   </Modal>
 </Flex>`
 
 const modalStoreTemplate = html`<Flex direction="column" align="start">
   <ModalStore/>
   <Btn tone="accent" variant="surface" @click="review"
-    >Review a saved draft</Btn
-  >
+    >Review a saved draft</Btn>
   <p role="status">{{ result }}</p>
 </Flex>`
 

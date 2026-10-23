@@ -56,21 +56,60 @@ export interface SemanticToneGallery {
 export function defineSemanticToneGallery() {
   return defineComponent<SemanticToneGallery>(
     html`<div class="component-appearance-grid tone-guide-gallery">
-      <article class="component-appearance-cell" r-for="sample in samples" :data-tone-sample="sample.label">
-        <code>{{ sample.label }}</code>
-        <div r-if="axis === 'tones'" :class="sample.classes + ' rounded-md p-3'">
-          <strong>{{ sample.description }}</strong><p class="fs-sm mb-2">One palette. Several useful roles.</p>
-          <div class="tone-fill-surface-alt tone-text-surface-alt tone-border-surface-alt b-1 rounded-md p-2 mb-2">Alternate surface</div>
-          <span class="d-inline-block tone-fill-button tone-text-button tone-border-button b-1 rounded-md p-2">Button role</span>
-        </div>
-        <div r-if="axis === 'fills'" :class="sample.classes + ' tone-guide-swatch rounded-md'"></div>
-        <span r-if="axis === 'fills'" class="fs-sm">{{ sample.description }}</span>
-        <div r-if="axis === 'insets' || axis === 'sizes'" :class="sample.classes + ' tone-guide-swatch rounded-md p-3'">Inset accent</div>
-        <div r-if="axis === 'origins'" :class="sample.classes + ' rounded-md p-3 tone-guide-swatch'"><strong>Shared light</strong><div class="tone-fill-glass tone-border-surface-alt b-1 rounded-md p-3 mt-2">Glass follows the same origin</div></div>
-        <div r-if="axis === 'states' || axis === 'variants'" class="tone--accent"><button type="button" :class="sample.classes + ' tone-guide-state p-3 w-full'" :disabled="sample.disabled" :style="sample.style">{{ sample.description }}</button></div>
-        <p r-if="sample.note" class="fs-sm m-0">{{ sample.note }}</p>
-      </article>
-    </div>`,
+  <article
+    class="component-appearance-cell"
+    r-for="sample in samples"
+    :data-tone-sample="sample.label"
+  >
+    <code>{{ sample.label }}</code>
+    <div r-if="axis === 'tones'" :class="sample.classes + ' rounded-md p-3'">
+      <strong>{{ sample.description }}</strong>
+      <p class="fs-sm mb-2">One palette. Several useful roles.</p>
+      <div
+        class="tone-fill-surface-alt tone-text-surface-alt tone-border-surface-alt b-1 rounded-md p-2 mb-2"
+      >
+        Alternate surface
+      </div>
+      <span
+        class="d-inline-block tone-fill-button tone-text-button tone-border-button b-1 rounded-md p-2"
+        >Button role</span>
+    </div>
+    <div
+      r-if="axis === 'fills'"
+      :class="sample.classes + ' tone-guide-swatch rounded-md'"
+    ></div>
+    <span r-if="axis === 'fills'" class="fs-sm"
+      >{{ sample.description }}</span>
+    <div
+      r-if="axis === 'insets' || axis === 'sizes'"
+      :class="sample.classes + ' tone-guide-swatch rounded-md p-3'"
+    >
+      Inset accent
+    </div>
+    <div
+      r-if="axis === 'origins'"
+      :class="sample.classes + ' rounded-md p-3 tone-guide-swatch'"
+    >
+      <strong>Shared light</strong>
+      <div
+        class="tone-fill-glass tone-border-surface-alt b-1 rounded-md p-3 mt-2"
+      >
+        Glass follows the same origin
+      </div>
+    </div>
+    <div r-if="axis === 'states' || axis === 'variants'" class="tone--accent">
+      <button
+        type="button"
+        :class="sample.classes + ' tone-guide-state p-3 w-full'"
+        :disabled="sample.disabled"
+        :style="sample.style"
+      >
+        {{ sample.description }}
+      </button>
+    </div>
+    <p r-if="sample.note" class="fs-sm m-0">{{ sample.note }}</p>
+  </article>
+</div>`,
     {
       props: ['axis'],
       context: (head) => {

@@ -1,9 +1,13 @@
-<Panel :context="pageContext.pageInfo" tone="accent" variant="surface" bodyClass="p-3" class="mb-4">
+<Panel
+  :context="pageContext.pageInfo"
+  tone="accent"
+  variant="surface"
+  bodyClass="p-3"
+  class="mb-4"
+>
   <p class="text-eyebrow mt-0">From this page's frontmatter</p>
   <strong>{{ frontmatter.title }}</strong>
   <ul class="mb-0">
-    <li r-for="item in frontmatter.highlights">
-      {{ item }}
-    </li>
+    <li r-for="item in frontmatter.highlights">{{ item }}</li>
   </ul>
 </Panel>

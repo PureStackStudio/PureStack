@@ -13,7 +13,13 @@ nav:
 
 # Form<wbr/>Input<wbr/>Field
 
-<ComponentHeader name="FormInputField" kind="Native input" summary="A useful label, a familiar control, and a value you can work with. Explore every native input type and appearance." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formInputField.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="FormInputField"
+  kind="Native input"
+  summary="A useful label, a familiar control, and a value you can work with. Explore every native input type and appearance."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formInputField.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Edit workspace details
 
@@ -28,18 +34,20 @@ Type an email, adjust the seat count and lock the fields. The summary reads the 
   tabVariant="underline"
 >
   <TabPane id="form-input-field-sample-1-preview" label="Preview">
-<ComponentExample label="FormInputField in context" caption="Edit the email, step the seat count, and lock the fields. The feedback follows the reactive values.">
-    <RegorApp id="form-input-field-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="FormInputField in context"
+      caption="Edit the email, step the seat count, and lock the fields. The feedback follows the reactive values."
+    >
+      <RegorApp id="form-input-field-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="form-input-field-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-input-field-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="form-input-field-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -56,19 +64,18 @@ Use browser-native controls for dates, passwords and other structured input.
   tabVariant="underline"
 >
   <TabPane id="form-input-field-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <Grid columns="1" columnsSm="2">
-      <FormInputField id="input-date" label="Review date" type="date"/>
-      <FormInputField
-        id="input-password"
-        label="New password"
-        type="password"
-        autocomplete="new-password"
-        placeholder="Enter a password"/>
-    </Grid>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid columns="1" columnsSm="2">
+        <FormInputField id="input-date" label="Review date" type="date"/>
+        <FormInputField
+          id="input-password"
+          label="New password"
+          type="password"
+          autocomplete="new-password"
+          placeholder="Enter a password"/>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="form-input-field-sample-2-source-0" label="native-types.mdx">
 ```html
 <Grid columns="1" columnsSm="2">
@@ -89,54 +96,120 @@ Use browser-native controls for dates, passwords and other structured input.
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-input-field-tone-gallery" data-form-gallery data-component="FormInputField" data-axis="tone">
-<FormAppearanceGallery component="FormInputField" axis="tone" prefix="forms-form-input-field-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-input-field-tone-gallery"
+    data-form-gallery
+    data-component="FormInputField"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="FormInputField"
+      axis="tone"
+      prefix="forms-form-input-field-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-input-field-variant-gallery" data-form-gallery data-component="FormInputField" data-axis="variant">
-<FormAppearanceGallery component="FormInputField" axis="variant" prefix="forms-form-input-field-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-input-field-variant-gallery"
+    data-form-gallery
+    data-component="FormInputField"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="FormInputField"
+      axis="variant"
+      prefix="forms-form-input-field-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Every native input type
 
 All thirteen supported types are visible. Browser presentation differs by platform; numeric step buttons run in the mounted sample.
 
-<ComponentExample label="All thirteen input types" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-input-field-type-gallery" data-form-gallery data-component="FormInputField" data-axis="type">
-<FormAppearanceGallery component="FormInputField" axis="type" prefix="forms-form-input-field-type-gallery"/>
-</div>
+<ComponentExample
+  label="All thirteen input types"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-input-field-type-gallery"
+    data-form-gallery
+    data-component="FormInputField"
+    data-axis="type"
+  >
+    <FormAppearanceGallery
+      component="FormInputField"
+      axis="type"
+      prefix="forms-form-input-field-type-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Labels, icons, and availability
 
 Combine a visible label with useful input hints. `required` and `disabled` are booleans; icons may appear at either edge.
 
-<ComponentExample label="Labels, icons, and availability" caption="Compare all values together. Use the live examples for application state and event handling.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Required</code>
-<FormInputField id="forms-required-example" label="Project name" name="project" :required="true" placeholder="Required field" autocomplete="off"/>
-</div>
-<div class="component-appearance-cell"><code>Disabled</code>
-<FormInputField id="forms-disabled-example" label="Locked field" :disabled="true" placeholder="Unavailable during review"/>
-</div>
-<div class="component-appearance-cell"><code>Start icon</code>
-<FormInputField id="forms-start-icon-example" label="Contact email" type="email" icon="lucide:mail" placeholder="you@example.com"/>
-</div>
-<div class="component-appearance-cell"><code>End icon</code>
-<FormInputField id="forms-end-icon-example" label="Search" type="search" iconEnd="lucide:search" placeholder="Find a component"/>
-</div>
-<div class="component-appearance-cell"><code>Both edges</code>
-<FormInputField id="forms-both-icons-example" label="Verified email" type="email" icon="lucide:mail" iconEnd="lucide:check"/>
-</div>
-</div>
+<ComponentExample
+  label="Labels, icons, and availability"
+  caption="Compare all values together. Use the live examples for application state and event handling."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Required</code>
+      <FormInputField
+        id="forms-required-example"
+        label="Project name"
+        name="project"
+        :required="true"
+        placeholder="Required field"
+        autocomplete="off"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Disabled</code>
+      <FormInputField
+        id="forms-disabled-example"
+        label="Locked field"
+        :disabled="true"
+        placeholder="Unavailable during review"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Start icon</code>
+      <FormInputField
+        id="forms-start-icon-example"
+        label="Contact email"
+        type="email"
+        icon="lucide:mail"
+        placeholder="you@example.com"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>End icon</code>
+      <FormInputField
+        id="forms-end-icon-example"
+        label="Search"
+        type="search"
+        iconEnd="lucide:search"
+        placeholder="Find a component"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Both edges</code>
+      <FormInputField
+        id="forms-both-icons-example"
+        label="Verified email"
+        type="email"
+        icon="lucide:mail"
+        iconEnd="lucide:check"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Value and numeric controls
@@ -227,8 +300,9 @@ Visible labels are associated with generated or explicit IDs. Extra native attri
   defaultValue="surfaceAlt"
 >
   <p>
-    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline,
-    subtle, subtleBtn, link, sheen, underline, rail, bracket or none.
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
   </p>
 </ApiProperty>
 

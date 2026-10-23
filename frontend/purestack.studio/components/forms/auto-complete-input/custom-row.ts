@@ -47,8 +47,7 @@ const customSuggestionsTemplate = html`<AutoCompleteInput
   rowComponent="ServiceSuggestion"
   :minLength="1"
   :maxResults="3"
-  placeholder="Type API or mail"
-/>`
+  placeholder="Type API or mail"/>`
 
 function createCustomSuggestions(): CustomSuggestions {
   return {
@@ -88,6 +87,6 @@ createApp(
   },
   {
     selector: 'app#auto-custom-row-demo',
-    template: html`<CustomSuggestions />`,
+    template: html`<CustomSuggestions/>`,
   },
 )
