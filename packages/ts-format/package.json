@@ -38,7 +38,7 @@
     "LICENSE"
   ],
   "dependencies": {
-    "prettier": "^3.8.1",
+    "prettier": "^3.9.10",
     "typescript-parser": "npm:typescript@6.0.3"
   },
   "scripts": {
