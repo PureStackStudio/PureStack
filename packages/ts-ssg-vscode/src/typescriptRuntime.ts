@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module'
 import * as path from 'node:path'
-import bundledTs from 'typescript'
 import type * as TypeScript from 'typescript'
+import bundledTs from 'typescript-parser'
 
 type TypeScriptRuntime = typeof TypeScript
 

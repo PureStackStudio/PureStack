@@ -1,0 +1,49 @@
+{
+  "name": "@purestack/ts-format",
+  "version": "1.1.23",
+  "packageManager": "yarn@4.18.1",
+  "module": "./dist/ts-format.mjs",
+  "types": "./dist/ts-format.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git",
+    "directory": "packages/ts-format"
+  },
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/ts-format.d.mts",
+      "import": "./dist/ts-format.mjs"
+    },
+    "./files": {
+      "types": "./dist/files.d.mts",
+      "import": "./dist/files.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/*.mjs",
+    "dist/*.mjs.map",
+    "dist/*.d.mts",
+    "dist/*.d.mts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "prettier": "^3.8.1",
+    "typescript-parser": "npm:typescript@6.0.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false --write",
+    "test": "vitest"
+  }
+}

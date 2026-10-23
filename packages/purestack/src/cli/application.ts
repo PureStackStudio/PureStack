@@ -16,6 +16,7 @@ const help = `PureStack
   purestack serve --content <directory>  Preview with live reload
   purestack build --content <directory>  Build static files
   purestack publish --content <dir>      Prepare a local release artifact
+  purestack format [paths] --write       Format PureStack markup and templates
   purestack skills update                Refresh this site's AI agent skill
   purestack --version                    Print the installed version
 
@@ -31,8 +32,16 @@ export async function runApplication(
       return 0
     }
     if (!args.length || ['--help', '-h', 'help'].includes(args[0])) {
-      console.log(args[0] === 'help' && args[1] === 'init' ? initHelp : help)
+      if (args[0] === 'help' && args[1] === 'format') {
+        const { formatHelp } = await import('./format')
+        console.log(formatHelp)
+      } else
+        console.log(args[0] === 'help' && args[1] === 'init' ? initHelp : help)
       return 0
+    }
+    if (args[0] === 'format') {
+      const { runFormatCli } = await import('./format')
+      return await runFormatCli(args.slice(1), environment.cwd)
     }
     if (args[0] === 'skills') {
       if (args[1] !== 'update' || args.length > 2)

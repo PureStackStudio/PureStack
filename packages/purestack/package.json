@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@purestack/ts-components": "workspace:^",
+    "@purestack/ts-format": "workspace:^",
     "@purestack/ts-ssg": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-svg-icons": "workspace:^",

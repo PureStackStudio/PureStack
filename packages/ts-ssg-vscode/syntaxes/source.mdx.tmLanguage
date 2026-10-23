@@ -1994,8 +1994,10 @@
             <string>#markdown-text</string>
           </dict>
         </array>
-        <key>while</key>
-        <string>(?:^|\G)(?:[ ]{4}|\t)</string>
+        <!-- An end rule lets nested multiline tags finish before the paragraph closes.
+             An indentation-based while rule discards their state on dedent. -->
+        <key>end</key>
+        <string>$</string>
       </dict>
       <key>commonmark-thematic-break</key>
       <dict>

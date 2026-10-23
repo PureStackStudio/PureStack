@@ -39,7 +39,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "prettier": "^3.8.1"
+    "@purestack/ts-format": "workspace:^",
+    "typescript-parser": "npm:typescript@6.0.3"
   },
   "contributes": {
     "commands": [
