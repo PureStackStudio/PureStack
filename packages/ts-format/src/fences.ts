@@ -324,15 +324,15 @@ function splitInlineMdxFenceDelimiters(source: string) {
 function splitLineBeforeInlineMdxFenceOpener(line: string) {
   if (parseMdxFenceDelimiter(line.trim())) return undefined
 
-  const match = /^(.+?)[\t ]*((?:`{3,}|~{3,}).*)$/.exec(line)
+  const match = /`{3}|~{3}/.exec(line)
   if (!match) return undefined
 
-  const before = match[1].trimEnd()
+  const before = line.slice(0, match.index).trimEnd()
   if (before.trim().length === 0) return undefined
 
   return {
     before,
-    fenceLine: match[2],
+    fenceLine: line.slice(match.index),
   }
 }
 
@@ -361,21 +361,18 @@ function splitLineBeforeInlineMdxFenceCloser(
   line: string,
   activeFence: MdxFence,
 ) {
-  const pattern = new RegExp(
-    `^(.*?)[\\t ]*(${escapeRegExp(activeFence.marker.repeat(activeFence.length))}${escapeRegExp(activeFence.marker)}*)[\\t ]*$`,
-  )
-  const match = pattern.exec(line)
-  if (!match || match[1].trim().length === 0) return undefined
+  let end = line.length
+  while (end > 0 && (line[end - 1] === '\t' || line[end - 1] === ' ')) end--
+  let start = end
+  while (start > 0 && line[start - 1] === activeFence.marker) start--
+  if (end - start < activeFence.length) return undefined
 
-  const closingDelimiter = parseMdxFenceDelimiter(match[2].trim())
-  if (!closingDelimiter) return undefined
-  if (!isMdxFenceClosingDelimiter(closingDelimiter, activeFence)) {
-    return undefined
-  }
+  const before = line.slice(0, start).trimEnd()
+  if (before.trim().length === 0) return undefined
 
   return {
-    before: match[1].trimEnd(),
-    fenceLine: match[2],
+    before,
+    fenceLine: line.slice(start, end),
   }
 }
 

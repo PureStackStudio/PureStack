@@ -56,5 +56,8 @@ export function getLineIndent(line: string) {
 }
 
 export function normalizeSelfClosingTagSpacing(formatted: string) {
-  return formatted.replace(/\s+\/>/g, '/>')
+  // Match each whitespace run once, even when no /> follows it.
+  return formatted.replace(/\s+/g, (whitespace, offset: number) =>
+    formatted.startsWith('/>', offset + whitespace.length) ? '' : whitespace,
+  )
 }

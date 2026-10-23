@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeClosingTagSpacing } from './html'
+import {
+  normalizeClosingTagSpacing,
+  normalizeSelfClosingTagSpacing,
+} from './html'
 import { formatSource } from './index'
 
 describe('closing tag formatting', () => {
@@ -43,6 +46,33 @@ describe('closing tag formatting', () => {
       '<Title><a>Link</a\n  ></Title\n><Style><em>Note</em\n></Style><title></a\n></title>'
     expect(normalizeClosingTagSpacing(source)).toBe(
       '<Title><a>Link</a></Title><Style><em>Note</em></Style><title></a\n></title>',
+    )
+  })
+})
+
+describe('self-closing tag spacing', () => {
+  it.each([' ', '\t', '\n', '\r\n', '\u00a0', '\u2028', '\u2029', '\ufeff'])(
+    'removes whitespace before /> and preserves other whitespace (%j)',
+    (whitespace) => {
+      const source = `before${whitespace}<Panel${whitespace}/>${whitespace}after`
+      expect(normalizeSelfClosingTagSpacing(source)).toBe(
+        `before${whitespace}<Panel/>${whitespace}after`,
+      )
+    },
+  )
+
+  it('normalizes multiple tags and mixed whitespace without consuming a bare slash', () => {
+    const source = '<Panel \t\r\n/><img/><Icon  /> / > <Other \t/>'
+    const formatted = '<Panel/><img/><Icon/> / > <Other/>'
+    expect(normalizeSelfClosingTagSpacing(source)).toBe(formatted)
+    expect(normalizeSelfClosingTagSpacing(formatted)).toBe(formatted)
+  })
+
+  it('handles long whitespace runs with and without a following self-closing delimiter', () => {
+    const whitespace = ' \t'.repeat(50_000)
+    const source = `${whitespace}text${whitespace}/x${whitespace}/>`
+    expect(normalizeSelfClosingTagSpacing(source)).toBe(
+      `${whitespace}text${whitespace}/x/>`,
     )
   })
 })
