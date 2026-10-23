@@ -13,27 +13,41 @@ nav:
 
 # Multi<wbr/>Auto<wbr/>Complete<wbr/>Option<wbr/>Row
 
-<ComponentHeader name="MultiAutoCompleteOptionRow" kind="Suggestion presentation" summary="A focused label inside a multi-value picker. The parent supplies availability, active styling, and selection behavior." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="MultiAutoCompleteOptionRow"
+  kind="Suggestion presentation"
+  summary="A focused label inside a multi-value picker. The parent supplies availability, active styling, and selection behavior."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## The default presentation
 
 The parent supplies active and disabled styling around this label.
 
-<Tabs group="multi-auto-complete-option-row-sample-1" selectedTab="multi-auto-complete-option-row-sample-1-preview" ariaLabel="The default presentation example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="multi-auto-complete-option-row-sample-1"
+  selectedTab="multi-auto-complete-option-row-sample-1-preview"
+  ariaLabel="The default presentation example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="multi-auto-complete-option-row-sample-1-preview" label="Preview">
-<ComponentExample label="MultiAutoCompleteOptionRow in context" caption="The row supplies the label. The owning picker supplies the interactive option wrapper.">
-    <Panel bodyClass="p-3">
-      <MultiAutoCompleteOptionRow
-        :option="{label:'Accessibility',value:'a11y',keywords:[]}"
-      />
-      <MultiAutoCompleteOptionRow
-        :option="{label:'Performance',value:'perf',keywords:[]}"
-      />
-    </Panel>
-
-</ComponentExample>
-</TabPane>
-  <TabPane id="multi-auto-complete-option-row-sample-1-source-0" label="default-rows.mdx">
+    <ComponentExample
+      label="MultiAutoCompleteOptionRow in context"
+      caption="The row supplies the label. The owning picker supplies the interactive option wrapper."
+    >
+      <Panel bodyClass="p-3">
+        <MultiAutoCompleteOptionRow :option="{label:'Accessibility',value:'a11y',keywords:[]}"/>
+        <MultiAutoCompleteOptionRow :option="{label:'Performance',value:'perf',keywords:[]}"/>
+      </Panel>
+    </ComponentExample>
+  </TabPane>
+  <TabPane
+    id="multi-auto-complete-option-row-sample-1-source-0"
+    label="default-rows.mdx"
+  >
 ```html
 <Panel bodyClass="p-3">
   <MultiAutoCompleteOptionRow
@@ -51,20 +65,34 @@ The parent supplies active and disabled styling around this label.
 
 Select more than one option to see the owning component manage state.
 
-<Tabs group="multi-auto-complete-option-row-sample-2" selectedTab="multi-auto-complete-option-row-sample-2-preview" ariaLabel="Inside a token picker example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="multi-auto-complete-option-row-sample-2"
+  selectedTab="multi-auto-complete-option-row-sample-2-preview"
+  ariaLabel="Inside a token picker example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="multi-auto-complete-option-row-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
-
-</div>
-</TabPane>
-  <TabPane id="multi-auto-complete-option-row-sample-2-source-0" label="states.mdx">
+    <div class="component-preview-stage">
+      <RegorApp
+        id="multi-auto-complete-option-row-states-demo"
+        src="./states.ts"/>
+    </div>
+  </TabPane>
+  <TabPane
+    id="multi-auto-complete-option-row-sample-2-source-0"
+    label="states.mdx"
+  >
 ```html
 <RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
 ```
   </TabPane>
-  <TabPane id="multi-auto-complete-option-row-sample-2-source-1" label="states.ts">
-  <import-codeblock src="./states.ts"/>
+  <TabPane
+    id="multi-auto-complete-option-row-sample-2-source-1"
+    label="states.ts"
+  >
+    <import-codeblock src="./states.ts"/>
   </TabPane>
 </Tabs>
 
@@ -72,18 +100,28 @@ Select more than one option to see the owning component manage state.
 
 option supplies the resolved label and value. active and query are available to custom rows; the default row does not highlight matches or supply selection behavior.
 
-<ComponentExample label="The row contract" caption="Compare all values together. Use the live examples for application state and event handling.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Default label</code>
-<MultiAutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:[]}"/>
-</div>
-<div class="component-appearance-cell"><code>Active query</code>
-<MultiAutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:['Frankfurt']}" :active="true" query="Europe"/>
-</div>
-<div class="component-appearance-cell"><code>Missing option</code>
-<p>No label below because option is null.</p><MultiAutoCompleteOptionRow :option="null"/>
-</div>
-</div>
+<ComponentExample
+  label="The row contract"
+  caption="Compare all values together. Use the live examples for application state and event handling."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Default label</code>
+      <MultiAutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:[]}"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Active query</code>
+      <MultiAutoCompleteOptionRow
+        :option="{label:'Europe Central',value:'eu',keywords:['Frankfurt']}"
+        :active="true"
+        query="Europe"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Missing option</code>
+      <p>No label below because option is null.</p>
+      <MultiAutoCompleteOptionRow :option="null"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Behavior and accessibility
@@ -94,7 +132,11 @@ This component displays option.label. It does not own selection, filtering, focu
 
 <div class="api-overview">
   <p class="text-eyebrow">MultiAutoCompleteOptionRow contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="MultiAutoCompleteOptionRow properties">
@@ -104,26 +146,56 @@ This component displays option.label. It does not own selection, filtering, focu
   <a href="#multi-auto-complete-option-row-prop-query">query</a>
 </nav>
 
-<ApiProperty anchor="multi-auto-complete-option-row-prop-option" name="option" valueType="RefOrValue&lt;ResolvedAutoCompleteOption | null&gt;" defaultValue="required">
+<ApiProperty
+  anchor="multi-auto-complete-option-row-prop-option"
+  name="option"
+  valueType="RefOrValue&lt;ResolvedAutoCompleteOption | null&gt;"
+  defaultValue="required"
+>
   <p>Resolved option object. Null displays no label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="multi-auto-complete-option-row-prop-active" name="active" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+<ApiProperty
+  anchor="multi-auto-complete-option-row-prop-active"
+  name="active"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
   <p>Accepted by the default row contract but not used in its template.</p>
 </ApiProperty>
 
-<ApiProperty anchor="multi-auto-complete-option-row-prop-selected" name="selected" valueType="string" defaultValue="not set">
-  <p>Registered pass-through prop; the default row does not render a selected marker.</p>
+<ApiProperty
+  anchor="multi-auto-complete-option-row-prop-selected"
+  name="selected"
+  valueType="string"
+  defaultValue="not set"
+>
+  <p>
+    Registered pass-through prop; the default row does not render a selected
+    marker.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="multi-auto-complete-option-row-prop-query" name="query" valueType="string" defaultValue="not set">
-  <p>Registered pass-through prop; the default row does not highlight query text.</p>
+<ApiProperty
+  anchor="multi-auto-complete-option-row-prop-query"
+  name="query"
+  valueType="string"
+  defaultValue="not set"
+>
+  <p>
+    Registered pass-through prop; the default row does not highlight query text.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Registered by defineMultiAutoCompleteInputComponents. Its exported presentation interface is MultiAutoCompleteDefaultOptionRow; MultiAutoCompleteOptionRow is also the name of the internal resolved row-data type.</p>
+  <p>
+    No slots. Registered by defineMultiAutoCompleteInputComponents. Its exported
+    presentation interface is MultiAutoCompleteDefaultOptionRow;
+    MultiAutoCompleteOptionRow is also the name of the internal resolved
+    row-data type.
+  </p>
 </div>
 
 ## Related components

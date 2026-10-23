@@ -18,10 +18,10 @@ const contactFormExampleTemplate = html`<Flex direction="column">
       title="Tell us about your project"
       description="This preview keeps your message in this page."
       action="#"
-      submitLabel="Preview message"
-    />
+      submitLabel="Preview message"/>
   </div>
-  <FormStatus tone="success" :hidden="!receipt">{{ receipt }}</FormStatus>
+  <FormStatus tone="success" :hidden="!receipt"
+    >{{ receipt }}</FormStatus>
 </Flex>`
 
 function createContactFormExample(): ContactFormExample {
@@ -57,5 +57,5 @@ createApp(
       ...defineFormComponents(),
     },
   },
-  { selector: 'app#contact-form-demo', template: html`<ContactFormExample />` },
+  { selector: 'app#contact-form-demo', template: html`<ContactFormExample/>` },
 )

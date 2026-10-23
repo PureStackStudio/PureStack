@@ -17,12 +17,33 @@ nav:
   titleTag="h1"
   titleClass="fs-display"/>
 
-<Grid columns="1" columnsLg="minmax(0, 1.15fr) minmax(18rem, 0.85fr)" alignItems="start">
+<Grid
+  columns="1"
+  columnsLg="minmax(0, 1.15fr) minmax(18rem, 0.85fr)"
+  alignItems="start"
+>
   <Panel tone="neutral" variant="surfaceAlt">
-    <AppForm class="contact-form-demo" action="/contact/" method="post" tone="accent">
+    <AppForm
+      class="contact-form-demo"
+      action="/contact/"
+      method="post"
+      tone="accent"
+    >
       <Grid columns="1" columnsMd="2">
-        <FormInputField label="Name" name="name" type="text" autocomplete="name" placeholder="Your name" required="true"/>
-        <FormInputField label="Work email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required="true"/>
+        <FormInputField
+          label="Name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          placeholder="Your name"
+          required="true"/>
+        <FormInputField
+          label="Work email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          required="true"/>
       </Grid>
       <FormSelectField
         label="What would you like to discuss?"
@@ -34,28 +55,46 @@ nav:
           { label: 'Implementation help', value: 'implementation' },
           { label: 'Something else', value: 'other' }
         ]"/>
-      <FormInputField label="Message" name="message" type="text" placeholder="A few details will help us respond" required="true"/>
-      <FormCheck label="I understand this starter does not send my message" name="demoAcknowledged" value="yes" required="true"/>
+      <FormInputField
+        label="Message"
+        name="message"
+        type="text"
+        placeholder="A few details will help us respond"
+        required="true"/>
+      <FormCheck
+        label="I understand this starter does not send my message"
+        name="demoAcknowledged"
+        value="yes"
+        required="true"/>
       <FormSubmit label="Preview submission" tone="accent"/>
       <FormStatus class="contact-demo-status" tone="info" hidden="true">
-        Form preview complete. No message was sent or stored. Connect this form to your own endpoint before publishing it.
+        Form preview complete. No message was sent or stored. Connect this form
+        to your own endpoint before publishing it.
       </FormStatus>
     </AppForm>
   </Panel>
   <Flex direction="column" class="gap-3">
     <AlertBox title="This is a front-end example" tone="info">
-      The submit button validates the fields and shows a local confirmation. No data leaves your browser.
+      The submit button validates the fields and shows a local confirmation. No
+      data leaves your browser.
     </AlertBox>
     <Panel tone="neutral" variant="surface">
       <h3>Before you publish</h3>
       <ol>
         <li>Connect a secure form endpoint.</li>
         <li>Explain how you handle submitted data.</li>
-        <li>Replace this demo confirmation with real success and error states.</li>
+        <li>
+          Replace this demo confirmation with real success and error states.
+        </li>
       </ol>
-      <BtnLink href="/guide/forms/" tone="ghost" icon="lucide:arrow-right" iconPosition="end">Read the form guide</BtnLink>
+      <BtnLink
+        href="/guide/forms/"
+        tone="ghost"
+        icon="lucide:arrow-right"
+        iconPosition="end"
+        >Read the form guide</BtnLink>
     </Panel>
   </Flex>
 </Grid>
 
-<PageScript src="./contact-demo.ts" />
+<PageScript src="./contact-demo.ts"/>

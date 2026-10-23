@@ -28,8 +28,16 @@ const badgePlaygroundTemplate = html`<Flex direction="column">
   </Flex>
   <Grid columns="1" columnsSm="2" columnsLg="3">
     <FormInputField id="badge-label" label="Label" :model="badgeLabel"/>
-    <FormSelectField id="badge-tone" label="Tone" :model="tone" :options="tones"/>
-    <FormSelectField id="badge-variant" label="Variant" :model="variant" :options="variants"/>
+    <FormSelectField
+      id="badge-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="badge-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
   </Grid>
   <Btn variant="link" @click="reset">Reset playground</Btn>
 </Flex>`

@@ -23,12 +23,23 @@ const findingRowTemplate = html`<tr :aria-rowindex="index + 2">
     </div>
   </td>
 </tr>`
-const findingHeaderTemplate = html`<thead><tr>
-  <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
-  <th scope="col" class="px-3 py-2 tone-fill-surface">Finding</th>
-</tr></thead>`
-const findingColumnsTemplate = html`<colgroup><col style="width: 5rem"/><col/></colgroup>`
-const findingFooterTemplate = html`<tfoot><tr><td colspan="2" class="px-3 py-2 tone-fill-surface">200 illustrative review findings</td></tr></tfoot>`
+const findingHeaderTemplate = html`<thead>
+  <tr>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">Finding</th>
+  </tr>
+</thead>`
+const findingColumnsTemplate = html`<colgroup>
+  <col style="width: 5rem"/>
+  <col/>
+</colgroup>`
+const findingFooterTemplate = html`<tfoot>
+  <tr>
+    <td colspan="2" class="px-3 py-2 tone-fill-surface">
+      200 illustrative review findings
+    </td>
+  </tr>
+</tfoot>`
 
 const findingRow = defineComponent<FindingRow>(findingRowTemplate, {
   props: ['item', 'index'],
@@ -41,12 +52,18 @@ export interface FindingsExample {
   findings: Finding[]
 }
 const findingsTemplate = html`<VariableVirtualTable
-  :items="findings" height="320" estimateHeight="110" overscan="3"
-  rowComponent="FindingRow" headerComponent="FindingHeader"
-  colGroupComponent="FindingColumns" footerComponent="FindingFooter"
-  tabindex="0" role="region" aria-label="Review findings table"
-  class="b-1 b-subtle rounded-md"
-/>`
+  :items="findings"
+  height="320"
+  estimateHeight="110"
+  overscan="3"
+  rowComponent="FindingRow"
+  headerComponent="FindingHeader"
+  colGroupComponent="FindingColumns"
+  footerComponent="FindingFooter"
+  tabindex="0"
+  role="region"
+  aria-label="Review findings table"
+  class="b-1 b-subtle rounded-md"/>`
 const findingsExample = defineComponent<FindingsExample>(findingsTemplate, {
   context: () => ({
     findings: Array.from({ length: 200 }, (_, index) => ({
@@ -72,6 +89,6 @@ createApp(
   },
   {
     selector: 'app#variable-table-basic-demo',
-    template: html`<FindingsExample />`,
+    template: html`<FindingsExample/>`,
   },
 )

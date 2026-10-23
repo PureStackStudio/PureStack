@@ -20,6 +20,7 @@
     "types": ["node"],
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
+      "@purestack/ts-format/files": ["./packages/ts-format/src/files.ts"],
       "@purestack/*": ["./packages/*/src"]
     }
   },

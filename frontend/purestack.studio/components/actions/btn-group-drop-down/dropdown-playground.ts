@@ -64,28 +64,82 @@ const dropdownPlaygroundTemplate = html`<Flex direction="column">
       :menuVariantMode="panelMode"
       :align="panelAlign"
     >
-      <div class="p-2 fs-xs tone-text-muted">Component guides <Badge>3</Badge></div>
-      <BtnLink href="/components/actions/buttons/" variant="subtle">Buttons</BtnLink>
-      <BtnLink href="/components/actions/btn-link/" variant="subtle">BtnLink</BtnLink>
-      <BtnLink href="/components/actions/badge/" variant="subtle">Badge</BtnLink>
+      <div class="p-2 fs-xs tone-text-muted">
+        Component guides <Badge>3</Badge>
+      </div>
+      <BtnLink href="/components/actions/buttons/" variant="subtle"
+        >Buttons</BtnLink>
+      <BtnLink href="/components/actions/btn-link/" variant="subtle"
+        >BtnLink</BtnLink>
+      <BtnLink href="/components/actions/badge/" variant="subtle"
+        >Badge</BtnLink>
     </BtnGroupDropDown>
   </Flex>
   <Grid columns="1" columnsSm="2" columnsLg="3">
-    <FormInputField id="dropdown-label" label="Trigger label" :model="triggerLabel"/>
-    <FormInputField id="dropdown-aria-label" label="Accessible name" :model="triggerAriaLabel"/>
-    <FormSelectField id="dropdown-icon" label="Icon" :model="triggerIcon" :options="icons"/>
-    <FormSelectField id="dropdown-position" label="Icon position" :model="triggerPosition" :options="positions"/>
-    <FormSelectField id="dropdown-tone" label="Trigger tone" :model="triggerTone" :options="tones"/>
-    <FormSelectField id="dropdown-size" label="Trigger size" :model="triggerSize" :options="sizes"/>
-    <FormSelectField id="dropdown-variant" label="Trigger variant" :model="triggerVariant" :options="variants"/>
-    <FormSelectField id="dropdown-mode" label="Trigger variant mode" :model="triggerMode" :options="modes"/>
-    <FormSelectField id="dropdown-menu-tone" label="Menu tone" :model="panelTone" :options="tones"/>
-    <FormSelectField id="dropdown-menu-variant" label="Menu variant" :model="panelVariant" :options="variants"/>
-    <FormSelectField id="dropdown-menu-mode" label="Menu variant mode" :model="panelMode" :options="modes"/>
-    <FormSelectField id="dropdown-align" label="Menu alignment" :model="panelAlign" :options="alignments"/>
+    <FormInputField
+      id="dropdown-label"
+      label="Trigger label"
+      :model="triggerLabel"/>
+    <FormInputField
+      id="dropdown-aria-label"
+      label="Accessible name"
+      :model="triggerAriaLabel"/>
+    <FormSelectField
+      id="dropdown-icon"
+      label="Icon"
+      :model="triggerIcon"
+      :options="icons"/>
+    <FormSelectField
+      id="dropdown-position"
+      label="Icon position"
+      :model="triggerPosition"
+      :options="positions"/>
+    <FormSelectField
+      id="dropdown-tone"
+      label="Trigger tone"
+      :model="triggerTone"
+      :options="tones"/>
+    <FormSelectField
+      id="dropdown-size"
+      label="Trigger size"
+      :model="triggerSize"
+      :options="sizes"/>
+    <FormSelectField
+      id="dropdown-variant"
+      label="Trigger variant"
+      :model="triggerVariant"
+      :options="variants"/>
+    <FormSelectField
+      id="dropdown-mode"
+      label="Trigger variant mode"
+      :model="triggerMode"
+      :options="modes"/>
+    <FormSelectField
+      id="dropdown-menu-tone"
+      label="Menu tone"
+      :model="panelTone"
+      :options="tones"/>
+    <FormSelectField
+      id="dropdown-menu-variant"
+      label="Menu variant"
+      :model="panelVariant"
+      :options="variants"/>
+    <FormSelectField
+      id="dropdown-menu-mode"
+      label="Menu variant mode"
+      :model="panelMode"
+      :options="modes"/>
+    <FormSelectField
+      id="dropdown-align"
+      label="Menu alignment"
+      :model="panelAlign"
+      :options="alignments"/>
   </Grid>
   <Flex wrap="true" align="center">
-    <FormCheck id="dropdown-icon-only" label="Icon-only trigger" :checked="triggerIconOnly"/>
+    <FormCheck
+      id="dropdown-icon-only"
+      label="Icon-only trigger"
+      :checked="triggerIconOnly"/>
     <Btn variant="link" @click="reset">Reset playground</Btn>
   </Flex>
 </Flex>`

@@ -48,25 +48,41 @@ const composerDraftWorkflowTemplate = html`<Flex direction="column">
   <Flex justify="between" align="center" wrap="true">
     <div>
       <p class="text-eyebrow m-0">Draft workspace</p>
-      <p class="mb-0">Open the editor, make a change, then save or restore the draft.</p>
+      <p class="mb-0">
+        Open the editor, make a change, then save or restore the draft.
+      </p>
     </div>
-    <Badge :tone="dirty ? 'warning' : 'success'" variant="surface">{{ dirty ? 'Unsaved changes' : 'Saved snapshot' }}</Badge>
+    <Badge :tone="dirty ? 'warning' : 'success'" variant="surface"
+      >{{ dirty ? 'Unsaved changes' : 'Saved snapshot' }}</Badge>
   </Flex>
-  <Btn r-if="!editing" tone="accent" variant="surface" @click="open">Open draft editor</Btn>
-  <Composer r-if="editing" id="composer-draft-editor" label="Team update"
-    placeholder="Write a team update" :html="messageHtml" :text="messageText"
-    :focusOnMount="true" minHeight="14rem"/>
+  <Btn r-if="!editing" tone="accent" variant="surface" @click="open"
+    >Open draft editor</Btn>
+  <Composer
+    r-if="editing"
+    id="composer-draft-editor"
+    label="Team update"
+    placeholder="Write a team update"
+    :html="messageHtml"
+    :text="messageText"
+    :focusOnMount="true"
+    minHeight="14rem"/>
   <Flex r-if="editing" wrap="true">
-    <Btn tone="accent" :disabled="!dirty || !messageText.trim()" @click="save">Save snapshot</Btn>
-    <Btn variant="outline" :disabled="!dirty" @click="restore">Restore snapshot</Btn>
+    <Btn tone="accent" :disabled="!dirty || !messageText.trim()" @click="save"
+      >Save snapshot</Btn>
+    <Btn variant="outline" :disabled="!dirty" @click="restore"
+      >Restore snapshot</Btn>
     <Btn variant="link" @click="editing = false">Close editor</Btn>
   </Flex>
   <FormStatus role="status">{{ status }}</FormStatus>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">Saved plain-text copy</p>
-    <p id="composer-saved-text" class="ws-pre-wrap mb-0">{{ savedText }}</p>
+    <p id="composer-saved-text" class="ws-pre-wrap mb-0">
+      {{ savedText }}
+    </p>
   </Panel>
-  <p class="text-muted m-0">The snapshot stays in this example's memory. Reloading the page resets it.</p>
+  <p class="text-muted m-0">
+    The snapshot stays in this example's memory. Reloading the page resets it.
+  </p>
 </Flex>`
 
 function createComposerDraftWorkflow(): ComposerDraftWorkflow {

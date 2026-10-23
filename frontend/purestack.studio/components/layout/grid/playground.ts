@@ -330,71 +330,205 @@ export type GridPlayground = ReturnType<typeof createGridPlayground>
 
 const template = html`<Flex direction="column">
   <Flex justify="between" align="center" wrap="true">
-    <div><p class="text-eyebrow m-0">Make space for your content</p><h3 class="mt-1 mb-0">Grid layout lab</h3></div>
+    <div>
+      <p class="text-eyebrow m-0">Make space for your content</p>
+      <h3 class="mt-1 mb-0">Grid layout lab</h3>
+    </div>
     <Badge tone="accent" variant="surface">Live playground</Badge>
   </Flex>
   <Flex wrap="true" aria-label="Grid presets">
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'cards' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'cards'" @click="loadPreset('cards')">Responsive cards</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'tracks' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'tracks'" @click="loadPreset('tracks')">Asymmetric tracks</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'auto' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'auto'" @click="loadPreset('auto')">Auto-fit cards</Btn>
-    <Btn size="sm" tone="accent" :variant="selectedPreset === 'dense' ? 'solid' : 'outline'" :aria-pressed="selectedPreset === 'dense'" @click="loadPreset('dense')">Dense board</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'cards' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'cards'"
+      @click="loadPreset('cards')"
+      >Responsive cards</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'tracks' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'tracks'"
+      @click="loadPreset('tracks')"
+      >Asymmetric tracks</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'auto' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'auto'"
+      @click="loadPreset('auto')"
+      >Auto-fit cards</Btn>
+    <Btn
+      size="sm"
+      tone="accent"
+      :variant="selectedPreset === 'dense' ? 'solid' : 'outline'"
+      :aria-pressed="selectedPreset === 'dense'"
+      @click="loadPreset('dense')"
+      >Dense board</Btn>
   </Flex>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" wrap="true" class="mb-3">
-      <strong>Live layout</strong><span class="text-muted">{{ measuredColumns }} tracks · {{ measuredWidth }}px available</span>
+      <strong>Live layout</strong><span class="text-muted"
+        >{{ measuredColumns }} tracks · {{ measuredWidth }}px
+        available</span>
     </Flex>
     <div id="grid-lab-stage" :class="widthClass">
-      <Grid id="grid-lab-preview" :container="element" :columns="columns" :columnsSm="sm" :columnsMd="md" :columnsLg="lg" :columnsXl="xl"
-        :alignItems="itemAlignment" :justifyItems="itemJustification" :dense="dense" :class="gridClass">
-        <Flex r-for="tile in tiles" :container="element === 'ul' ? 'li' : 'div'" direction="column" :class="itemClass(tile.index)">
-          <Panel :tone="tile.tone" variant="surface" class="flex-1 min-w-0" bodyClass="p-0">
-            <Flex direction="column" align="start" :class="'gap-1 ' + cardBodyClass(tile.index)">
-              <Badge :tone="tile.tone" variant="outline">{{ tile.label }}</Badge>
-              <h3 class="fs-h6 mt-2 mb-1 wrap-anywhere">{{ tile.title }}</h3>
-              <p r-if="descriptions" class="text-muted mb-0 wrap-anywhere">{{ tile.description }}</p>
+      <Grid
+        id="grid-lab-preview"
+        :container="element"
+        :columns="columns"
+        :columnsSm="sm"
+        :columnsMd="md"
+        :columnsLg="lg"
+        :columnsXl="xl"
+        :alignItems="itemAlignment"
+        :justifyItems="itemJustification"
+        :dense="dense"
+        :class="gridClass"
+      >
+        <Flex
+          r-for="tile in tiles"
+          :container="element === 'ul' ? 'li' : 'div'"
+          direction="column"
+          :class="itemClass(tile.index)"
+        >
+          <Panel
+            :tone="tile.tone"
+            variant="surface"
+            class="flex-1 min-w-0"
+            bodyClass="p-0"
+          >
+            <Flex
+              direction="column"
+              align="start"
+              :class="'gap-1 ' + cardBodyClass(tile.index)"
+            >
+              <Badge :tone="tile.tone" variant="outline"
+                >{{ tile.label }}</Badge>
+              <h3 class="fs-h6 mt-2 mb-1 wrap-anywhere">
+                {{ tile.title }}
+              </h3>
+              <p r-if="descriptions" class="text-muted mb-0 wrap-anywhere">
+                {{ tile.description }}
+              </p>
             </Flex>
           </Panel>
         </Flex>
       </Grid>
     </div>
   </Panel>
-  <p class="text-muted m-0">Browser: {{ browserWidth }}px · Active breakpoint: <code>{{ activeBreakpoint }}</code> · Columns: <code>{{ activeColumns }}</code></p>
+  <p class="text-muted m-0">
+    Browser: {{ browserWidth }}px · Active breakpoint:
+    <code>{{ activeBreakpoint }}</code> · Columns:
+    <code>{{ activeColumns }}</code>
+  </p>
   <fieldset class="b-0 p-0 m-0">
     <legend class="text-eyebrow mb-2">Columns &amp; breakpoints</legend>
     <Grid columns="1" columnsSm="2" columnsLg="3">
-      <FormSelectField id="grid-lab-base" label="Base columns" :model="base" :options="baseOptions"/>
-      <FormSelectField id="grid-lab-sm" label="sm · 640px and up" :model="sm" :options="responsiveOptions"/>
-      <FormSelectField id="grid-lab-md" label="md · 768px and up" :model="md" :options="responsiveOptions"/>
-      <FormSelectField id="grid-lab-lg" label="lg · 1024px and up" :model="lg" :options="responsiveOptions"/>
-      <FormSelectField id="grid-lab-xl" label="xl · 1280px and up" :model="xl" :options="responsiveOptions"/>
-      <FormSelectField id="grid-lab-container" label="Container element" :model="element" :options="containerOptions"/>
+      <FormSelectField
+        id="grid-lab-base"
+        label="Base columns"
+        :model="base"
+        :options="baseOptions"/>
+      <FormSelectField
+        id="grid-lab-sm"
+        label="sm · 640px and up"
+        :model="sm"
+        :options="responsiveOptions"/>
+      <FormSelectField
+        id="grid-lab-md"
+        label="md · 768px and up"
+        :model="md"
+        :options="responsiveOptions"/>
+      <FormSelectField
+        id="grid-lab-lg"
+        label="lg · 1024px and up"
+        :model="lg"
+        :options="responsiveOptions"/>
+      <FormSelectField
+        id="grid-lab-xl"
+        label="xl · 1280px and up"
+        :model="xl"
+        :options="responsiveOptions"/>
+      <FormSelectField
+        id="grid-lab-container"
+        label="Container element"
+        :model="element"
+        :options="containerOptions"/>
     </Grid>
-    <FormInputField r-if="base === 'custom'" id="grid-lab-custom" class="mt-3" label="CSS track list" :model="customTracks" placeholder="minmax(0, 2fr) minmax(0, 1fr)"/>
-    <p r-if="trackError" role="alert" class="text-muted mb-0">{{ trackError }}</p>
+    <FormInputField
+      r-if="base === 'custom'"
+      id="grid-lab-custom"
+      class="mt-3"
+      label="CSS track list"
+      :model="customTracks"
+      placeholder="minmax(0, 2fr) minmax(0, 1fr)"/>
+    <p r-if="trackError" role="alert" class="text-muted mb-0">
+      {{ trackError }}
+    </p>
   </fieldset>
   <fieldset class="b-0 p-0 m-0">
     <legend class="text-eyebrow mb-2">Spacing &amp; alignment</legend>
     <Grid columns="1" columnsSm="2" columnsLg="3">
-      <FormSelectField id="grid-lab-align" label="Vertical alignment" :model="itemAlignment" :options="alignmentOptions"/>
-      <FormSelectField id="grid-lab-justify" label="Horizontal alignment" :model="itemJustification" :options="alignmentOptions"/>
-      <FormSelectField id="grid-lab-gap" label="Gap" :model="gap" :options="gapOptions"/>
-      <FormSelectField id="grid-lab-items" label="Item count" :model="itemCount" :options="itemOptions"/>
-      <FormSelectField id="grid-lab-width" label="Preview width" :model="previewWidth" :options="widthOptions"/>
+      <FormSelectField
+        id="grid-lab-align"
+        label="Vertical alignment"
+        :model="itemAlignment"
+        :options="alignmentOptions"/>
+      <FormSelectField
+        id="grid-lab-justify"
+        label="Horizontal alignment"
+        :model="itemJustification"
+        :options="alignmentOptions"/>
+      <FormSelectField
+        id="grid-lab-gap"
+        label="Gap"
+        :model="gap"
+        :options="gapOptions"/>
+      <FormSelectField
+        id="grid-lab-items"
+        label="Item count"
+        :model="itemCount"
+        :options="itemOptions"/>
+      <FormSelectField
+        id="grid-lab-width"
+        label="Preview width"
+        :model="previewWidth"
+        :options="widthOptions"/>
     </Grid>
     <Flex wrap="true" class="mt-3">
       <FormCheck id="grid-lab-dense" label="Dense packing" :checked="dense"/>
-      <FormCheck id="grid-lab-wide" label="Wide first two items" :checked="wideItems" :disabled="!canSpan"/>
-      <FormCheck id="grid-lab-heights" label="Vary card padding" :checked="variedHeights"/>
-      <FormCheck id="grid-lab-descriptions" label="Show descriptions" :checked="descriptions"/>
+      <FormCheck
+        id="grid-lab-wide"
+        label="Wide first two items"
+        :checked="wideItems"
+        :disabled="!canSpan"/>
+      <FormCheck
+        id="grid-lab-heights"
+        label="Vary card padding"
+        :checked="variedHeights"/>
+      <FormCheck
+        id="grid-lab-descriptions"
+        label="Show descriptions"
+        :checked="descriptions"/>
     </Flex>
   </fieldset>
-  <p class="text-muted m-0">Breakpoints follow the browser width. Auto-fit follows the available preview width. Wide cards use the guide's layout-featured-card class from sm onward and require numeric counts of two or more at every breakpoint; dense packing may change their visual order.</p>
+  <p class="text-muted m-0">
+    Breakpoints follow the browser width. Auto-fit follows the available preview
+    width. Wide cards use the guide's layout-featured-card class from sm onward
+    and require numeric counts of two or more at every breakpoint; dense packing
+    may change their visual order.
+  </p>
   <Flex justify="between" align="center" wrap="true">
     <strong>Copyable Grid markup</strong>
-    <Flex wrap="true"><Btn size="sm" variant="outline" @click="reset">Reset playground</Btn><Btn size="sm" @click="copy"><span aria-live="polite">{{ copyLabel }}</span></Btn></Flex>
+    <Flex wrap="true"
+      ><Btn size="sm" variant="outline" @click="reset">Reset playground</Btn><Btn size="sm" @click="copy"
+        ><span aria-live="polite">{{ copyLabel }}</span></Btn></Flex>
   </Flex>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
-    <pre class="overflow-auto max-h-inspector m-0"><code>{{ markup }}</code></pre>
+    <pre
+      class="overflow-auto max-h-inspector m-0"
+    ><code>{{ markup }}</code></pre>
   </Panel>
 </Flex>`
 

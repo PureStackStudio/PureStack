@@ -13,26 +13,41 @@ nav:
 
 # Bar<wbr/>Chart
 
-<ComponentHeader name="BarChart" kind="Categorical comparison" summary="Compare gains, losses, and categorical values. A responsive SVG with clear labels, explicit scales, and theme-aware presentation." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/barChart/barChart.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
+<ComponentHeader
+  name="BarChart"
+  kind="Categorical comparison"
+  summary="Compare gains, losses, and categorical values. A responsive SVG with clear labels, explicit scales, and theme-aware presentation."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/barChart/barChart.ts"
+  section="Charts &amp; large data"
+  sectionHref="/components/data/"/>
 
 ## Playground
 
 Change the dataset, edit each daily value, and see the chart update immediately. Try an all-negative balance, set scale bounds, switch colors and units, or remove the data entirely. Reset restores every control.
 
-<Tabs group="bar-chart-sample-1" selectedTab="bar-chart-sample-1-preview" ariaLabel="Interactive BarChart playground" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="bar-chart-sample-1"
+  selectedTab="bar-chart-sample-1-preview"
+  ariaLabel="Interactive BarChart playground"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="bar-chart-sample-1-preview" label="Preview">
-<ComponentExample label="BarChart in context" caption="Edit the values, change the scale, or compare datasets. The summary keeps the exact values beside the chart.">
-    <RegorApp id="bar-chart-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="BarChart in context"
+      caption="Edit the values, change the scale, or compare datasets. The summary keeps the exact values beside the chart."
+    >
+      <RegorApp id="bar-chart-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="bar-chart-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="bar-chart-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="bar-chart-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,22 +55,27 @@ Change the dataset, edit each daily value, and see the chart update immediately.
 
 Use explicit bounds to compare values against a stable range. Here, both categories use a zero-to-100 scale. Bounds expand when needed to include the data; they do not clip outlying values.
 
-<Tabs group="bar-chart-sample-2" selectedTab="bar-chart-sample-2-preview" ariaLabel="A fixed comparison scale example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="bar-chart-sample-2"
+  selectedTab="bar-chart-sample-2-preview"
+  ariaLabel="A fixed comparison scale example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="bar-chart-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <BarChart
-      title="Example completion"
-      ariaLabel="Completion: content 80 percent, review 55 percent"
-      :items="[{label:'Content',value:80},{label:'Review',value:55}]"
-      minValue="0"
-      maxValue="100"
-      height="280"
-      valueSuffix="%"
-      :animated="false"
-    />
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <BarChart
+        title="Example completion"
+        ariaLabel="Completion: content 80 percent, review 55 percent"
+        :items="[{label:'Content',value:80},{label:'Review',value:55}]"
+        minValue="0"
+        maxValue="100"
+        height="280"
+        valueSuffix="%"
+        :animated="false"/>
+    </div>
+  </TabPane>
   <TabPane id="bar-chart-sample-2-source-0" label="fixed-domain.mdx">
 ```html
 <BarChart
@@ -76,22 +96,27 @@ Use explicit bounds to compare values against a stable range. Here, both categor
 
 Every bar starts at zero. Losses extend downward, with their values below the bar and category names in a separate row. A symmetric scale makes the direction and magnitude easy to compare.
 
-<Tabs group="bar-chart-signed" selectedTab="bar-chart-signed-preview" ariaLabel="Signed values example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="bar-chart-signed"
+  selectedTab="bar-chart-signed-preview"
+  ariaLabel="Signed values example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="bar-chart-signed-preview" label="Preview">
-<div class="component-preview-stage">
-    <BarChart
-      title="Change since the previous release"
-      ariaLabel="Change: API plus 24 percent, jobs minus 32 percent, sync plus 18 percent, cache minus 8 percent"
-      :items="[{label:'API',value:24},{label:'Jobs',value:-32},{label:'Sync',value:18},{label:'Cache',value:-8}]"
-      minValue="-40"
-      maxValue="40"
-      height="280"
-      valueSuffix="%"
-      :animated="false"
-    />
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <BarChart
+        title="Change since the previous release"
+        ariaLabel="Change: API plus 24 percent, jobs minus 32 percent, sync plus 18 percent, cache minus 8 percent"
+        :items="[{label:'API',value:24},{label:'Jobs',value:-32},{label:'Sync',value:18},{label:'Cache',value:-8}]"
+        minValue="-40"
+        maxValue="40"
+        height="280"
+        valueSuffix="%"
+        :animated="false"/>
+    </div>
+  </TabPane>
   <TabPane id="bar-chart-signed-source" label="signed-values.mdx">
 ```html
 <BarChart
@@ -112,25 +137,30 @@ Every bar starts at zero. Losses extend downward, with their values below the ba
 
 Hide the grid and numeric labels when the shape is the useful signal. Keep an accessible description with the exact values. The same component fits a small dashboard card.
 
-<Tabs group="bar-chart-compact" selectedTab="bar-chart-compact-preview" ariaLabel="Compact chart example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="bar-chart-compact"
+  selectedTab="bar-chart-compact-preview"
+  ariaLabel="Compact chart example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="bar-chart-compact-preview" label="Preview">
-<div class="component-preview-stage">
-    <Panel tone="accent" variant="surface" bodyClass="p-3">
-      <h3 class="mt-0">76 deployments this week</h3>
-      <p>Daily activity across the release pipeline.</p>
-      <BarChart
-        title="Daily deployments"
-        ariaLabel="Deployments: Monday 8, Tuesday 13, Wednesday 11, Thursday 19, Friday 16, Saturday 6, Sunday 3"
-        :items="[{label:'Mon',value:8},{label:'Tue',value:13},{label:'Wed',value:11},{label:'Thu',value:19},{label:'Fri',value:16},{label:'Sat',value:6},{label:'Sun',value:3}]"
-        height="180"
-        :showAxis="false"
-        :showValues="false"
-        :animated="false"
-      />
-    </Panel>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Panel tone="accent" variant="surface" bodyClass="p-3">
+        <h3 class="mt-0">76 deployments this week</h3>
+        <p>Daily activity across the release pipeline.</p>
+        <BarChart
+          title="Daily deployments"
+          ariaLabel="Deployments: Monday 8, Tuesday 13, Wednesday 11, Thursday 19, Friday 16, Saturday 6, Sunday 3"
+          :items="[{label:'Mon',value:8},{label:'Tue',value:13},{label:'Wed',value:11},{label:'Thu',value:19},{label:'Fri',value:16},{label:'Sat',value:6},{label:'Sun',value:3}]"
+          height="180"
+          :showAxis="false"
+          :showValues="false"
+          :animated="false"/>
+      </Panel>
+    </div>
+  </TabPane>
   <TabPane id="bar-chart-compact-source" label="compact-trend.mdx">
 ```html
 <Panel tone="accent" variant="surface" bodyClass="p-3">
@@ -154,51 +184,103 @@ Hide the grid and numeric labels when the shape is the useful signal. Keep an ac
 
 Compare all ten tones together. These examples use tone-aware plot colors; custom data colors and the chart’s tone remain independent.
 
-<ComponentExample label="All ten semantic tones" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="tone"><ChartAppearanceGallery component="BarChart" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="tone">
+    <ChartAppearanceGallery component="BarChart" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported treatment is visible in accent, including none. The default chart variant is none; the live editor lets you combine any tone and treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="variant"><ChartAppearanceGallery component="BarChart" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="variant">
+    <ChartAppearanceGallery component="BarChart" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Stateless keeps the resting appearance. Stateful adds the treatment’s hover and active classes; hover the outlineFill examples to compare them. Charts default to stateless and retain their native plot hover feedback in either mode.
 
-<ComponentExample label="Both variant modes" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="mode"><ChartAppearanceGallery component="BarChart" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="mode">
+    <ChartAppearanceGallery component="BarChart" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Values, labels, and axes
 
 Compare all display switches together. Empty data has its own message; signed and zero datasets are also available in the live editor.
 
-<ComponentExample label="Choose the information density" caption="Titles and descriptions are SVG accessibility content. Visible summaries and the source editor provide the exact values.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>All annotations</code>
-<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Monday 24, Tuesday 38, Wednesday -12" height="180" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>No values</code>
-<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Values hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showValues="false" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>No category labels</code>
-<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Categories hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showLabels="false" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>No axes</code>
-<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Axes hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showAxis="false" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>All zero</code>
-<BarChart :items="[{label:'Mon',value:0},{label:'Tue',value:0}]" ariaLabel="Monday and Tuesday zero" height="180" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Empty</code>
-<BarChart :items="[]" emptyLabel="No observations yet" ariaLabel="No observations yet" height="180" :animated="false"/>
-</div>
-</div>
+<ComponentExample
+  label="Choose the information density"
+  caption="Titles and descriptions are SVG accessibility content. Visible summaries and the source editor provide the exact values."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>All annotations</code>
+      <BarChart
+        :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]"
+        ariaLabel="Monday 24, Tuesday 38, Wednesday -12"
+        height="180"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>No values</code>
+      <BarChart
+        :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]"
+        ariaLabel="Values hidden: Monday 24, Tuesday 38, Wednesday -12"
+        height="180"
+        :showValues="false"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>No category labels</code>
+      <BarChart
+        :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]"
+        ariaLabel="Categories hidden: Monday 24, Tuesday 38, Wednesday -12"
+        height="180"
+        :showLabels="false"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>No axes</code>
+      <BarChart
+        :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]"
+        ariaLabel="Axes hidden: Monday 24, Tuesday 38, Wednesday -12"
+        height="180"
+        :showAxis="false"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>All zero</code>
+      <BarChart
+        :items="[{label:'Mon',value:0},{label:'Tue',value:0}]"
+        ariaLabel="Monday and Tuesday zero"
+        height="180"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Empty</code>
+      <BarChart
+        :items="[]"
+        emptyLabel="No observations yet"
+        ariaLabel="No observations yet"
+        height="180"
+        :animated="false"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -222,7 +304,11 @@ Each valid item is a category. Non-finite values are removed; negative values ex
 
 <div class="api-overview">
   <p class="text-eyebrow">BarChart contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="BarChart properties">
@@ -245,78 +331,195 @@ Each valid item is a category. Non-finite values are removed; negative values ex
   <a href="#bar-chart-prop-variantMode">variantMode</a>
 </nav>
 
-<ApiProperty anchor="bar-chart-prop-items" name="items" valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;BarChartItem&gt;&gt;&gt;" defaultValue="[]">
-  <p>Array of BarChartItem objects with optional label, numeric value (or numeric string), and CSS color. Missing labels become Item 1, Item 2 and so on.</p>
+<ApiProperty
+  anchor="bar-chart-prop-items"
+  name="items"
+  valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;BarChartItem&gt;&gt;&gt;"
+  defaultValue="[]"
+>
+  <p>
+    Array of BarChartItem objects with optional label, numeric value (or numeric
+    string), and CSS color. Missing labels become Item 1, Item 2 and so on.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="bar-chart-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>SVG title text; not a separate visible heading.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="bar-chart-prop-description"
+  name="description"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>SVG desc text explaining the data or takeaway.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="title, then Bar chart">
+<ApiProperty
+  anchor="bar-chart-prop-ariaLabel"
+  name="ariaLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="title, then Bar chart"
+>
   <p>Accessible name on the SVG image.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-emptyLabel" name="emptyLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="No data">
+<ApiProperty
+  anchor="bar-chart-prop-emptyLabel"
+  name="emptyLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="No data"
+>
   <p>Visible fallback when no usable data remains.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-valueSuffix" name="valueSuffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="bar-chart-prop-valueSuffix"
+  name="valueSuffix"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Unit appended to formatted values, such as ms or %.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-width" name="width" valueType="RefOrValue&lt;number | string&gt;" defaultValue="100%">
-  <p>CSS width. Numeric values become pixel lengths; strings can use CSS units.</p>
+<ApiProperty
+  anchor="bar-chart-prop-width"
+  name="width"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="100%"
+>
+  <p>
+    CSS width. Numeric values become pixel lengths; strings can use CSS units.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>CSS chart height; omitted height preserves the SVG’s intrinsic aspect ratio.</p>
+<ApiProperty
+  anchor="bar-chart-prop-height"
+  name="height"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="automatic"
+>
+  <p>
+    CSS chart height; omitted height preserves the SVG’s intrinsic aspect ratio.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-minValue" name="minValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Requested lower domain bound. The resolved minimum also includes zero and the smallest data value. Omit it to use the data range automatically.</p>
+<ApiProperty
+  anchor="bar-chart-prop-minValue"
+  name="minValue"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="automatic"
+>
+  <p>
+    Requested lower domain bound. The resolved minimum also includes zero and
+    the smallest data value. Omit it to use the data range automatically.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-maxValue" name="maxValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Requested upper domain bound. The resolved maximum also includes zero and the largest data value, so bars are never clipped by a tighter bound.</p>
+<ApiProperty
+  anchor="bar-chart-prop-maxValue"
+  name="maxValue"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="automatic"
+>
+  <p>
+    Requested upper domain bound. The resolved maximum also includes zero and
+    the largest data value, so bars are never clipped by a tighter bound.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Enables the SVG entrance animation when bars mount. Bind false for immediate rendering, especially while editing values. This is not an interpolated transition between datasets.</p>
+<ApiProperty
+  anchor="bar-chart-prop-animated"
+  name="animated"
+  valueType="RefOrValue&lt;boolean | string&gt;"
+  defaultValue="true"
+>
+  <p>
+    Enables the SVG entrance animation when bars mount. Bind false for immediate
+    rendering, especially while editing values. This is not an interpolated
+    transition between datasets.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-showValues" name="showValues" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Draws numeric values beside marks. Enable only when labels have enough room.</p>
+<ApiProperty
+  anchor="bar-chart-prop-showValues"
+  name="showValues"
+  valueType="RefOrValue&lt;boolean | string&gt;"
+  defaultValue="true"
+>
+  <p>
+    Draws numeric values beside marks. Enable only when labels have enough room.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-showLabels" name="showLabels" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
+<ApiProperty
+  anchor="bar-chart-prop-showLabels"
+  name="showLabels"
+  valueType="RefOrValue&lt;boolean | string&gt;"
+  defaultValue="true"
+>
   <p>Shows category labels along the horizontal axis.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-showAxis" name="showAxis" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
+<ApiProperty
+  anchor="bar-chart-prop-showAxis"
+  name="showAxis"
+  valueType="RefOrValue&lt;boolean | string&gt;"
+  defaultValue="true"
+>
   <p>Shows the axis grid and value labels.</p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="bar-chart-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="bar-chart-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="none"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="bar-chart-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="bar-chart-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineBarChartComponents. Bind a ref of BarChartItem[] to update the data.</p>
+  <p>
+    No slots. Register defineBarChartComponents. Bind a ref of BarChartItem[] to
+    update the data.
+  </p>
 </div>
 
 ## Related components

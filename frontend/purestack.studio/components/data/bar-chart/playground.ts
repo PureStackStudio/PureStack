@@ -64,16 +64,43 @@ export interface BarChartPlayground extends ChartAppearanceState {
 
 const barChartPlaygroundTemplate = html`<Flex direction="column">
   <Grid columns="1" columnsMd="3">
-    <FormSelectField id="bar-preset" label="Dataset" :model="preset" :options="presets" @change="applyPreset" />
-    <FormSelectField id="bar-palette" label="Bar colors" :model="palette" :options="palettes" />
-    <FormSelectField id="bar-unit" label="Value suffix" :model="suffix" :options="units" />
+    <FormSelectField
+      id="bar-preset"
+      label="Dataset"
+      :model="preset"
+      :options="presets"
+      @change="applyPreset"/>
+    <FormSelectField
+      id="bar-palette"
+      label="Bar colors"
+      :model="palette"
+      :options="palettes"/>
+    <FormSelectField
+      id="bar-unit"
+      label="Value suffix"
+      :model="suffix"
+      :options="units"/>
   </Grid>
-  <ChartAppearanceControls prefix="bar-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
+  <ChartAppearanceControls
+    prefix="bar-chart-appearance"
+    :tone="chartTone"
+    :variant="chartVariant"
+    :variantMode="chartVariantMode"
+    :width="chartWidth"
+    :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">LIVE PREVIEW · WEEKLY BALANCE</p>
-    <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable chart preview">
+    <div
+      class="overflow-x-auto"
+      tabindex="0"
+      role="region"
+      aria-label="Scrollable chart preview"
+    >
       <BarChart
-        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
+        :tone="chartTone"
+        :variant="chartVariant"
+        :variantMode="chartVariantMode"
+        :width="chartWidth"
         :items="chartItems"
         title="Weekly balance"
         description="Illustrative daily changes. Edit the exact values in the fields below."
@@ -87,16 +114,24 @@ const barChartPlaygroundTemplate = html`<Flex direction="column">
         :showAxis="axisVisible"
         :showLabels="labelsVisible"
         :animated="motionEnabled"
-        style="min-width: 440px"
-      />
+        style="min-width: 440px"/>
     </div>
     <FormStatus>{{ summary }}</FormStatus>
   </Panel>
   <Flex wrap="true">
-    <FormCheck id="bar-values" label="Values" :checked="valuesVisible" />
-    <FormCheck id="bar-axis" label="Grid and zero line" :checked="axisVisible" />
-    <FormCheck id="bar-labels" label="Category labels" :checked="labelsVisible" />
-    <FormCheck id="bar-motion" label="Entrance animation" :checked="motionEnabled" />
+    <FormCheck id="bar-values" label="Values" :checked="valuesVisible"/>
+    <FormCheck
+      id="bar-axis"
+      label="Grid and zero line"
+      :checked="axisVisible"/>
+    <FormCheck
+      id="bar-labels"
+      label="Category labels"
+      :checked="labelsVisible"/>
+    <FormCheck
+      id="bar-motion"
+      label="Entrance animation"
+      :checked="motionEnabled"/>
   </Flex>
   <Flex justify="between" align="center" wrap="true">
     <h3 class="m-0">Edit the data</h3>
@@ -112,15 +147,34 @@ const barChartPlaygroundTemplate = html`<Flex direction="column">
       :label="row.label"
       type="number"
       step="1"
-      :model="row.value"
-    />
+      :model="row.value"/>
   </Grid>
   <Grid columns="1" columnsMd="3">
-    <FormInputField id="bar-min" label="Minimum bound" type="number" placeholder="Automatic" :model="minimum" />
-    <FormInputField id="bar-max" label="Maximum bound" type="number" placeholder="Automatic" :model="maximum" />
-    <FormInputField id="bar-height" label="Chart height (px)" type="number" min="180" step="20" :model="height" />
+    <FormInputField
+      id="bar-min"
+      label="Minimum bound"
+      type="number"
+      placeholder="Automatic"
+      :model="minimum"/>
+    <FormInputField
+      id="bar-max"
+      label="Maximum bound"
+      type="number"
+      placeholder="Automatic"
+      :model="maximum"/>
+    <FormInputField
+      id="bar-height"
+      label="Chart height (px)"
+      type="number"
+      min="180"
+      step="20"
+      :model="height"/>
   </Grid>
-  <p class="m-0 text-muted">Blank bounds use the data range. The scale always includes zero and every value. On narrow screens, scroll the preview horizontally to keep its labels readable.</p>
+  <p class="m-0 text-muted">
+    Blank bounds use the data range. The scale always includes zero and every
+    value. On narrow screens, scroll the preview horizontally to keep its labels
+    readable.
+  </p>
 </Flex>`
 
 const presetValues: Record<BarChartPreset, number[]> = {
@@ -255,5 +309,5 @@ createApp(
       ...definePanelComponents(),
     },
   },
-  { selector: 'app#bar-chart-demo', template: html`<BarChartPlayground />` },
+  { selector: 'app#bar-chart-demo', template: html`<BarChartPlayground/>` },
 )

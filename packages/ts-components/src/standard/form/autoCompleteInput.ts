@@ -123,12 +123,8 @@ const autoCompleteInputTemplate = html`<div
     :aria-expanded="isOpen"
     :aria-activedescendant="activeOptionId"
     @input="handleInput"
-    @keydown="handleKeydown"
-  />
-  <div
-    class="auto-complete-input__popup"
-    r-if="shouldRenderPopup"
-  >
+    @keydown="handleKeydown"/>
+  <div class="auto-complete-input__popup" r-if="shouldRenderPopup">
     <div
       class="auto-complete-input__message"
       r-if="showLoading"
@@ -178,12 +174,12 @@ const autoCompleteInputTemplate = html`<div
 </div>`
 
 const autoCompleteOptionRowTemplate = html`<div class="auto-complete-input__default-row">
-  <span class="auto-complete-input__default-label">{{ option?.label }}</span>
+  <span class="auto-complete-input__default-label"
+    >{{ option?.label }}</span>
   <Icon
     class="auto-complete-input__default-check"
     name="lucide:check"
-    r-if="selected"
-  />
+    r-if="selected"/>
 </div>`
 
 function defineAutoCompleteInputComponent() {

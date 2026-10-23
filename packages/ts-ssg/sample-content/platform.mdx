@@ -26,53 +26,82 @@ nav:
     <Flex direction="column" align="start" class="gap-3">
       <IconFrame name="lucide:target" tone="accent" size="lg"/>
       <h3 class="fs-h3 m-0">Initiatives</h3>
-      <p class="text-subtle mb-0">Connect a goal to milestones, owners, and a realistic target date.</p>
+      <p class="text-subtle mb-0">
+        Connect a goal to milestones, owners, and a realistic target date.
+      </p>
     </Flex>
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" align="start" class="gap-3">
       <IconFrame name="lucide:message-circle" tone="secondary" size="lg"/>
       <h3 class="fs-h3 m-0">Updates</h3>
-      <p class="text-subtle mb-0">Record a concise summary of progress, risks, and the help a team needs.</p>
+      <p class="text-subtle mb-0">
+        Record a concise summary of progress, risks, and the help a team needs.
+      </p>
     </Flex>
   </Panel>
   <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
     <Flex direction="column" align="start" class="gap-3">
       <IconFrame name="lucide:git-branch" tone="info" size="lg"/>
       <h3 class="fs-h3 m-0">Decisions</h3>
-      <p class="text-subtle mb-0">Keep the question, context, owner, and outcome together for future readers.</p>
+      <p class="text-subtle mb-0">
+        Keep the question, context, owner, and outcome together for future
+        readers.
+      </p>
     </Flex>
   </Panel>
 </Grid>
 
 ## Follow a project from start to finish
 
-<Tabs ariaLabel="Waypoint workflow" tone="neutral" variant="flat" tabVariant="underline" class="mb-6">
+<Tabs
+  ariaLabel="Waypoint workflow"
+  tone="neutral"
+  variant="flat"
+  tabVariant="underline"
+  class="mb-6"
+>
   <TabPane id="plan" label="Plan" icon="lucide:target">
     <Grid columns="1" columnsMd="2" alignItems="center" class="gap-5">
       <div>
         <h3 class="mt-0">Agree on the destination.</h3>
-        <p class="text-subtle mb-0">Write the outcome in plain language. Add a small set of milestones and one accountable owner, so progress has a clear meaning.</p>
+        <p class="text-subtle mb-0">
+          Write the outcome in plain language. Add a small set of milestones and
+          one accountable owner, so progress has a clear meaning.
+        </p>
       </div>
-      <AlertBox title="Example milestone" tone="info" variant="rail">Customer onboarding is ready when the welcome flow, help content, and handoff owner are confirmed.</AlertBox>
+      <AlertBox title="Example milestone" tone="info" variant="rail"
+        >Customer onboarding is ready when the welcome flow, help content, and
+        handoff owner are confirmed.</AlertBox>
     </Grid>
   </TabPane>
   <TabPane id="update" label="Update" icon="lucide:message-circle">
     <Grid columns="1" columnsMd="2" alignItems="center" class="gap-5">
       <div>
         <h3 class="mt-0">Keep the picture current.</h3>
-        <p class="text-subtle mb-0">Share what changed, what is blocked, and what happens next. Short updates give the whole team useful context without another status meeting.</p>
+        <p class="text-subtle mb-0">
+          Share what changed, what is blocked, and what happens next. Short
+          updates give the whole team useful context without another status
+          meeting.
+        </p>
       </div>
-      <AlertBox title="Example update" tone="success" variant="rail">The help center draft is complete. The only open item is final review of the welcome email.</AlertBox>
+      <AlertBox title="Example update" tone="success" variant="rail"
+        >The help center draft is complete. The only open item is final review
+        of the welcome email.</AlertBox>
     </Grid>
   </TabPane>
   <TabPane id="decide" label="Decide" icon="lucide:git-branch">
     <Grid columns="1" columnsMd="2" alignItems="center" class="gap-5">
       <div>
         <h3 class="mt-0">Make decisions visible.</h3>
-        <p class="text-subtle mb-0">Record the options, the person deciding, and the reason for the choice. The next teammate can pick up the work with confidence.</p>
+        <p class="text-subtle mb-0">
+          Record the options, the person deciding, and the reason for the
+          choice. The next teammate can pick up the work with confidence.
+        </p>
       </div>
-      <AlertBox title="Example decision" tone="warning" variant="rail">The launch owner will choose the release date after accessibility review closes.</AlertBox>
+      <AlertBox title="Example decision" tone="warning" variant="rail"
+        >The launch owner will choose the release date after accessibility
+        review closes.</AlertBox>
     </Grid>
   </TabPane>
 </Tabs>
@@ -80,15 +109,27 @@ nav:
 ## Designed around a team rhythm
 
 <Grid columns="1" columnsMd="2" class="gap-5 mb-6">
-  <Flex direction="column" class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border">
+  <Flex
+    direction="column"
+    class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border"
+  >
     <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">Monday</span>
     <h3 class="fs-h3 m-0">Set the focus</h3>
-    <p class="tone--neutral text-subtle mb-0">Review milestones and choose the few actions that would move the initiative forward this week.</p>
+    <p class="tone--neutral text-subtle mb-0">
+      Review milestones and choose the few actions that would move the
+      initiative forward this week.
+    </p>
   </Flex>
-  <Flex direction="column" class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border">
+  <Flex
+    direction="column"
+    class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border"
+  >
     <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">Friday</span>
     <h3 class="fs-h3 m-0">Share the learning</h3>
-    <p class="tone--neutral text-subtle mb-0">Summarize the change, record open decisions, and give stakeholders a trustworthy view of progress.</p>
+    <p class="tone--neutral text-subtle mb-0">
+      Summarize the change, record open decisions, and give stakeholders a
+      trustworthy view of progress.
+    </p>
   </Flex>
 </Grid>
 
@@ -101,20 +142,46 @@ nav:
   title="What a shared workspace changes"
   subtitle="The comparison describes the sample product story and shows how to build a structured comparison page."
 >
-  <ComparisonColumn title="Scattered updates" summary="The story lives across messages and meetings." icon="lucide:message-circle" tone="neutral" variant="flat" class="rounded-lg p-5">
-    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Ownership is difficult to find.</ComparisonFeature>
-    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Status depends on who you ask.</ComparisonFeature>
-    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Decisions lose their context.</ComparisonFeature>
+  <ComparisonColumn
+    title="Scattered updates"
+    summary="The story lives across messages and meetings."
+    icon="lucide:message-circle"
+    tone="neutral"
+    variant="flat"
+    class="rounded-lg p-5"
+  >
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral"
+      >Ownership is difficult to find.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral"
+      >Status depends on who you ask.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral"
+      >Decisions lose their context.</ComparisonFeature>
   </ComparisonColumn>
-  <ComparisonColumn title="Waypoint" summary="The team sees the same current picture." icon="lucide:compass" tone="accent" variant="flat" badge="Example approach" class="theme--dark rounded-lg p-5">
-    <ComparisonFeature icon="lucide:check" tone="accent">Every initiative has an owner.</ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="accent">Updates connect to milestones.</ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="accent">Decisions stay with the work.</ComparisonFeature>
+  <ComparisonColumn
+    title="Waypoint"
+    summary="The team sees the same current picture."
+    icon="lucide:compass"
+    tone="accent"
+    variant="flat"
+    badge="Example approach"
+    class="theme--dark rounded-lg p-5"
+  >
+    <ComparisonFeature icon="lucide:check" tone="accent"
+      >Every initiative has an owner.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:check" tone="accent"
+      >Updates connect to milestones.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:check" tone="accent"
+      >Decisions stay with the work.</ComparisonFeature>
   </ComparisonColumn>
 </ComparisonTable>
 
 <Panel tone="accent" variant="spotlight" class="theme--dark rounded-lg p-6">
-  <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center" class="gap-5">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 1fr) auto"
+    alignItems="center"
+    class="gap-5"
+  >
     <SectionHeader
       eyebrow="See it in context"
       title="Open the example workspace."
@@ -123,8 +190,19 @@ nav:
       titleClass="fs-h2"
       subtitleClass="tone-text-surface-alt opacity-75 mb-0"/>
     <Flex wrap="true" class="gap-3">
-      <BtnLink href="/workspace/" tone="accent" icon="lucide:arrow-right" iconPosition="end" class="px-5 py-3 gap-4 fw-700 box-shadow-accent lift-1-hover">View workspace</BtnLink>
-      <BtnLink href="/guide/" variant="glass" icon="lucide:book-open" class="px-5 py-3 gap-3 fw-700 lift-1-hover">Read the guide</BtnLink>
+      <BtnLink
+        href="/workspace/"
+        tone="accent"
+        icon="lucide:arrow-right"
+        iconPosition="end"
+        class="px-5 py-3 gap-4 fw-700 box-shadow-accent lift-1-hover"
+        >View workspace</BtnLink>
+      <BtnLink
+        href="/guide/"
+        variant="glass"
+        icon="lucide:book-open"
+        class="px-5 py-3 gap-3 fw-700 lift-1-hover"
+        >Read the guide</BtnLink>
     </Flex>
   </Grid>
 </Panel>

@@ -19,25 +19,23 @@ const formCheckExampleTemplate = html`<Flex direction="column">
         name="updates"
         value="email"
         label="Email summaries"
-        :checked="emailUpdates"
-      />
+        :checked="emailUpdates"/>
       <FormCheck
         id="check-product"
         name="updates"
         value="product"
         label="Product updates"
-        :checked="productUpdates"
-      />
+        :checked="productUpdates"/>
       <FormCheck
         id="check-security"
         label="Security alerts · required"
         :checked="true"
-        :disabled="true"
-      />
+        :disabled="true"/>
     </Flex>
   </fieldset>
   <FormStatus>
-    Email summaries: {{ emailUpdates ? 'On' : 'Off' }} · Product updates: {{
+    Email summaries: {{ emailUpdates ? 'On' : 'Off' }} · Product updates:
+    {{
     productUpdates ? 'On' : 'Off' }}
   </FormStatus>
 </Flex>`
@@ -59,7 +57,7 @@ createApp(
       ...defineFormComponents(),
     },
   },
-  { selector: 'app#form-check-demo', template: html`<FormCheckExample />` },
+  { selector: 'app#form-check-demo', template: html`<FormCheckExample/>` },
 )
 
 mountFormAppearanceGalleries()

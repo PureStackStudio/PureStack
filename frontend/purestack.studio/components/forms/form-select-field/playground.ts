@@ -24,9 +24,8 @@ const formSelectFieldExampleTemplate = html`<Flex direction="column">
     placeholder="Choose a region"
     :model="regionValue"
     :options="regionOptions"
-    :disabled="locked"
-  />
-  <FormCheck id="select-lock" label="Lock selection" :checked="locked" />
+    :disabled="locked"/>
+  <FormCheck id="select-lock" label="Lock selection" :checked="locked"/>
   <FormStatus>Selected region: {{ regionValue || 'None' }}</FormStatus>
 </Flex>`
 
@@ -65,7 +64,7 @@ createApp(
   },
   {
     selector: 'app#form-select-field-demo',
-    template: html`<FormSelectFieldExample />`,
+    template: html`<FormSelectFieldExample/>`,
   },
 )
 

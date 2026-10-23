@@ -13,18 +13,33 @@ nav:
 
 # ClassicLogo
 
-<ComponentHeader name="ClassicLogo" kind="Original identity" summary="The original PureStack logo: uppercase lettering, indexed colors, a bordered icon tile and responsive typography." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/classicLogo/classicLogo.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="ClassicLogo"
+  kind="Original identity"
+  summary="The original PureStack logo: uppercase lettering, indexed colors, a bordered icon tile and responsive typography."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/classicLogo/classicLogo.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## Interactive playground
 
 This starts with the original PureStack identity and its original colors. Edit either line, change the color maps, or switch to SiteLogo to compare the two components. Restore original resets every control. Changing the component uses Regor's `:is`, just like TopBar.
 
-<Tabs group="classic-logo-sample" selectedTab="classic-logo-preview-tab" ariaLabel="Classic logo example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="classic-logo-sample"
+  selectedTab="classic-logo-preview-tab"
+  ariaLabel="Classic logo example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="classic-logo-preview-tab" label="Preview">
-<ComponentExample label="ClassicLogo in context" caption="Color maps, responsive dimensions, and navigation. Open the source tab to adapt the composition.">
-    <RegorApp id="classic-logo-playground" src="./playground.ts"/>
-
-</ComponentExample>
+    <ComponentExample
+      label="ClassicLogo in context"
+      caption="Color maps, responsive dimensions, and navigation. Open the source tab to adapt the composition."
+    >
+      <RegorApp id="classic-logo-playground" src="./playground.ts"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="classic-logo-mdx-tab" label="playground.mdx">
 ```html
@@ -32,7 +47,7 @@ This starts with the original PureStack identity and its original colors. Edit e
 ```
   </TabPane>
   <TabPane id="classic-logo-ts-tab" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -117,12 +132,42 @@ The original layout keeps both text lines on one line, distributes their letters
 
 ## A recognizable identity in different contexts
 
-<ComponentExample label="Classic branding at three scales" caption="ClassicLogo has its own indexed palette and dimensions. It does not expose semantic tones, component variants, or variant modes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Small signature</code><ClassicLogo brand="WEBSITE" subtitle="BUILD TOGETHER" brandSize="1rem" subtitleSize=".45rem" iconSize="2rem" subtitleInset=".1rem" :href="null"/></div>
-<div class="component-appearance-cell"><code>Custom icon</code><ClassicLogo brand="WEBSITE" subtitle="ONE SHARED LANGUAGE" icon="lucide:check" brandSize="1.2rem" subtitleSize=".4rem" iconSize="2.5rem" :href="null"/></div>
-<div class="component-appearance-cell"><code>Home destination</code><ClassicLogo brand="WEBSITE" subtitle="EXPLORE THE LIBRARY" href="/components/" ariaLabel="Website component library" brandSize="1rem" subtitleSize=".4rem" iconSize="2rem"/></div>
-</div>
+<ComponentExample
+  label="Classic branding at three scales"
+  caption="ClassicLogo has its own indexed palette and dimensions. It does not expose semantic tones, component variants, or variant modes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Small signature</code><ClassicLogo
+        brand="WEBSITE"
+        subtitle="BUILD TOGETHER"
+        brandSize="1rem"
+        subtitleSize=".45rem"
+        iconSize="2rem"
+        subtitleInset=".1rem"
+        :href="null"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom icon</code><ClassicLogo
+        brand="WEBSITE"
+        subtitle="ONE SHARED LANGUAGE"
+        icon="lucide:check"
+        brandSize="1.2rem"
+        subtitleSize=".4rem"
+        iconSize="2.5rem"
+        :href="null"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Home destination</code><ClassicLogo
+        brand="WEBSITE"
+        subtitle="EXPLORE THE LIBRARY"
+        href="/components/"
+        ariaLabel="Website component library"
+        brandSize="1rem"
+        subtitleSize=".4rem"
+        iconSize="2rem"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -138,44 +183,122 @@ This component has no semantic-tone, component-variant, or variant-mode props. I
 
 <div class="api-overview">
   <p class="text-eyebrow">Original appearance · independent component</p>
-  <p>Import ClassicLogoConfig for identity data and ClassicLogo for the component interface. Every input accepts a literal or a ref. Register defineClassicLogoComponents() and defineIconComponents(); the standard SSG registration includes both.</p>
+  <p>
+    Import ClassicLogoConfig for identity data and ClassicLogo for the component
+    interface. Every input accepts a literal or a ref. Register
+    defineClassicLogoComponents() and defineIconComponents(); the standard SSG
+    registration includes both.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ClassicLogo API">
   <a href="#classic-config-api">config</a><a href="#classic-brand-api">identity</a><a href="#classic-palette-api">palette</a><a href="#classic-maps-api">letter maps</a><a href="#classic-tile-api">icon tile</a><a href="#classic-dimensions-api">dimensions</a><a href="#classic-navigation-api">navigation</a>
 </nav>
 
-<ApiProperty anchor="classic-config-api" name="config" valueType="RefOrValue&lt;Partial&lt;ClassicLogoConfig&gt;&gt;" defaultValue="not set">
-  <p>Shared settings. Direct props override defined fields; undefined props inherit from config. Standalone instances do not read site configuration automatically.</p>
+<ApiProperty
+  anchor="classic-config-api"
+  name="config"
+  valueType="RefOrValue&lt;Partial&lt;ClassicLogoConfig&gt;&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Shared settings. Direct props override defined fields; undefined props
+    inherit from config. Standalone instances do not read site configuration
+    automatically.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-brand-api" name="brand · subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Brand and optional secondary line. Both render as individual uppercase letters. An empty subtitle removes the second line. Supply a brand for an accessible name.</p>
+<ApiProperty
+  anchor="classic-brand-api"
+  name="brand · subtitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Brand and optional secondary line. Both render as individual uppercase
+    letters. An empty subtitle removes the second line. Supply a brand for an
+    accessible name.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-palette-api" name="colors" valueType="RefOrValue&lt;string[]&gt;" defaultValue="not set">
-  <p>Indexed color palette shared by the brand, subtitle and icon tile. Accepts CSS colors, gradients and theme-variable references.</p>
+<ApiProperty
+  anchor="classic-palette-api"
+  name="colors"
+  valueType="RefOrValue&lt;string[]&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Indexed color palette shared by the brand, subtitle and icon tile. Accepts
+    CSS colors, gradients and theme-variable references.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-maps-api" name="letterColors · subtitleLetterColors" valueType="RefOrValue&lt;string&gt;" defaultValue="theme fills">
-  <p>Digit sequences selecting palette entries for each non-space letter. The final digit repeats; spaces do not advance the color index.</p>
+<ApiProperty
+  anchor="classic-maps-api"
+  name="letterColors · subtitleLetterColors"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="theme fills"
+>
+  <p>
+    Digit sequences selecting palette entries for each non-space letter. The
+    final digit repeats; spaces do not advance the color index.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-tile-api" name="logoBackground · logoForeground" valueType="RefOrValue&lt;number&gt;" defaultValue="theme button colors">
-  <p>Nonnegative integer palette indexes for the tile background and icon foreground. Invalid or missing indexes use the theme defaults.</p>
+<ApiProperty
+  anchor="classic-tile-api"
+  name="logoBackground · logoForeground"
+  valueType="RefOrValue&lt;number&gt;"
+  defaultValue="theme button colors"
+>
+  <p>
+    Nonnegative integer palette indexes for the tile background and icon
+    foreground. Invalid or missing indexes use the theme defaults.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-icon-api" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="built-in square">
-  <p>Registered SVG icon name. The icon fills 80% of its tile; without one, a small rounded square is drawn in the center. ClassicLogo has no image or mark slot.</p>
+<ApiProperty
+  anchor="classic-icon-api"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="built-in square"
+>
+  <p>
+    Registered SVG icon name. The icon fills 80% of its tile; without one, a
+    small rounded square is drawn in the center. ClassicLogo has no image or
+    mark slot.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-dimensions-api" name="brandSize · subtitleSize · iconSize · subtitleInset" valueType="RefOrValue&lt;string&gt;" defaultValue="responsive defaults">
-  <p>CSS lengths for the brand font, subtitle font, square tile, and subtitle's left/right inset. Each supports Sm, Md, Lg and Xl suffixes: brandSizeMd, subtitleSizeLg, iconSizeSm, subtitleInsetXl, and the other corresponding combinations.</p>
-  <p>Overrides carry forward to larger breakpoints. The table above lists the untouched original defaults.</p>
+<ApiProperty
+  anchor="classic-dimensions-api"
+  name="brandSize · subtitleSize · iconSize · subtitleInset"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="responsive defaults"
+>
+  <p>
+    CSS lengths for the brand font, subtitle font, square tile, and subtitle's
+    left/right inset. Each supports Sm, Md, Lg and Xl suffixes: brandSizeMd,
+    subtitleSizeLg, iconSizeSm, subtitleInsetXl, and the other corresponding
+    combinations.
+  </p>
+  <p>
+    Overrides carry forward to larger breakpoints. The table above lists the
+    untouched original defaults.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="classic-navigation-api" name="href · ariaLabel" valueType="RefOrValue&lt;string | null&gt; · RefOrValue&lt;string&gt;" defaultValue="/ · brand">
-  <p>Home destination and accessible name. SSG links respect the public base path. A null href removes navigation. Keyboard focus keeps the original visible outline.</p>
+<ApiProperty
+  anchor="classic-navigation-api"
+  name="href · ariaLabel"
+  valueType="RefOrValue&lt;string | null&gt; · RefOrValue&lt;string&gt;"
+  defaultValue="/ · brand"
+>
+  <p>
+    Home destination and accessible name. SSG links respect the public base
+    path. A null href removes navigation. Keyboard focus keeps the original
+    visible outline.
+  </p>
 </ApiProperty>
 
 ## Related components

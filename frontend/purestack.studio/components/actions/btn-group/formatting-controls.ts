@@ -29,8 +29,18 @@ export interface FormattingControls {
 
 const formattingControlsTemplate = html`<Flex direction="column" align="start">
   <BtnGroup :wrap="true" role="group" aria-label="Text formatting">
-    <Btn :variant="boldVariant" tone="accent" :aria-pressed="bold" @click="toggleBold">Bold</Btn>
-    <Btn :variant="italicVariant" tone="accent" :aria-pressed="italic" @click="toggleItalic">Italic</Btn>
+    <Btn
+      :variant="boldVariant"
+      tone="accent"
+      :aria-pressed="bold"
+      @click="toggleBold"
+      >Bold</Btn>
+    <Btn
+      :variant="italicVariant"
+      tone="accent"
+      :aria-pressed="italic"
+      @click="toggleItalic"
+      >Italic</Btn>
     <Btn variant="link" @click="reset">Reset</Btn>
   </BtnGroup>
   <p :style="textStyle">Build something worth sharing.</p>

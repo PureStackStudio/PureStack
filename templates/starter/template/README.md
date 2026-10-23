@@ -6,6 +6,9 @@ Use Node.js 22.12+ (22 LTS), 24 LTS, or 26+ and Yarn 4.18.1, pinned in
 project-pinned Yarn version automatically. If you skipped installation, follow
 <https://yarnpkg.com/getting-started/install> if Yarn is not already available.
 
+After installing dependencies, PureStack runs `yarn format` automatically and
+shows the formatting step in Forge and the terminal.
+
 Run `yarn install` if dependencies were not installed during creation, then
 `yarn dev`. Open the address printed by the server. Edit
 `content/modules/content/landing.ts` to change your home page copy; the preview reloads as you work.
@@ -50,9 +53,12 @@ deploy the release folder with your static hosting provider.
 - `yarn test`: run app tests in watch mode with Vitest, powered by Vite.
 - `yarn test:ci`: run tests once, suitable for CI.
 - `yarn lint`: check code with Biome's linter.
-- `yarn format`: format supported source files with Biome.
+- `yarn format`: format code with Biome and component markup with PureStack.
+- `yarn format:markup --write`: format only MDX/RMDX component markup and
+  `html`/`svg` templates in TypeScript.
+- `yarn format:check`: check formatting without changing files.
 - `yarn check`: check lint, formatting, and import organization together.
-- `yarn check:fix`: apply Biome's safe fixes and formatting.
+- `yarn check:fix`: apply Biome's safe fixes and both formatters.
 
 Add automated app tests under `tests/` as `*.test.ts`. The checklist example
 tests checkbox interaction, computed progress, completion, and reset in
@@ -63,7 +69,9 @@ still builds and serves the site; Vite is used by Vitest for tests only.
 The CLI creates an empty `yarn.lock` so this site is independent even when created
 inside another Yarn workspace. `yarn install` fills it with dependency resolutions;
 commit the resulting lockfile. The project uses Yarn's `node-modules` linker.
-Biome checks supported code and JSON; edit MDX content separately.
+Biome handles code and JSON. PureStack formats component markup in MDX/RMDX
+and `html`/`svg` templates in TypeScript, leaving Markdown prose and frontmatter
+untouched. Git-ignored files and generated directories are skipped.
 
 PureStack dependencies use `latest` to fetch current releases during installation.
 The lockfile records the exact versions used by your project.

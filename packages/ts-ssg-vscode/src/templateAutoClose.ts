@@ -80,7 +80,7 @@ async function maybeAutoInsertClosingTag(
   const tokens = scanTagTokens(sanitizedBeforeCursor)
   const lastToken = tokens[tokens.length - 1]
 
-  if (!lastToken || lastToken.kind !== 'opening') return
+  if (lastToken?.kind !== 'opening') return
   if (lastToken.end !== sanitizedBeforeCursor.length) return
   if (lastToken.selfClosing) return
   if (

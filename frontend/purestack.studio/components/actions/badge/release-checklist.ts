@@ -35,9 +35,21 @@ const releaseChecklistTemplate = html`<Flex direction="column" align="start">
   <fieldset class="m-0 p-3 w-full">
     <legend>Release checklist</legend>
     <Flex direction="column" align="start">
-      <FormCheck id="release-documentation" label="Documentation is up to date" :checked="documentation" :disabled="published"/>
-      <FormCheck id="release-tests" label="Tests are passing" :checked="tests" :disabled="published"/>
-      <FormCheck id="release-review" label="Review is complete" :checked="review" :disabled="published"/>
+      <FormCheck
+        id="release-documentation"
+        label="Documentation is up to date"
+        :checked="documentation"
+        :disabled="published"/>
+      <FormCheck
+        id="release-tests"
+        label="Tests are passing"
+        :checked="tests"
+        :disabled="published"/>
+      <FormCheck
+        id="release-review"
+        label="Review is complete"
+        :checked="review"
+        :disabled="published"/>
     </Flex>
   </fieldset>
   <Flex align="center" wrap="true" role="status">
@@ -45,7 +57,8 @@ const releaseChecklistTemplate = html`<Flex direction="column" align="start">
     <span>{{ message }}</span>
   </Flex>
   <BtnGroup :wrap="true" role="group" aria-label="Release actions">
-    <Btn tone="accent" :disabled="publishDisabled" @click="publish">Publish preview</Btn>
+    <Btn tone="accent" :disabled="publishDisabled" @click="publish"
+      >Publish preview</Btn>
     <Btn variant="surface" @click="reset">Reset checklist</Btn>
   </BtnGroup>
 </Flex>`

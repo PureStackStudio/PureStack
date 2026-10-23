@@ -32,7 +32,12 @@ export interface TopBarPreview {
   frameStyle: string
 }
 
-const sitePreviewTemplate = html`<iframe class="w-full rounded-md b-1 b-subtle" :title="title" :src="previewHref" :style="frameStyle"></iframe>`
+const sitePreviewTemplate = html`<iframe
+  class="w-full rounded-md b-1 b-subtle"
+  :title="title"
+  :src="previewHref"
+  :style="frameStyle"
+></iframe>`
 
 function resolveSitePreview(site: SiteConfig, slug: string, height: number) {
   return {

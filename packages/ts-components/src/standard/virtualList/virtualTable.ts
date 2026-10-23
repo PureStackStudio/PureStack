@@ -44,7 +44,7 @@ const virtualTableTemplate = html`<div class="virtual-table" :style="viewportSty
         :is="rowComponent"
         :item="row.item"
         :index="row.index"
-        style="height: var(--virtual-table-item-height) !important;"
+        style="height: var(--virtual-table-item-height) !important"
         r-for="row in visibleRows"
       ></tr>
       <tr class="virtual-table__spacer-row">

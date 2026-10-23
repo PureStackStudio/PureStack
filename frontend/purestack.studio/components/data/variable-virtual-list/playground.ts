@@ -56,8 +56,7 @@ const activityRowTemplate = html`<article
       :aria-expanded="item.expanded"
       :aria-controls="'activity-detail-' + item.id"
       @click="item.expanded = !item.expanded"
-      >{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn
-    >
+      >{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn>
   </Flex>
   <p class="mb-0">{{ item.summary }}</p>
   <div r-if="item.expanded" :id="'activity-detail-' + item.id" class="mt-3">
@@ -114,8 +113,7 @@ const variableListPlaygroundTemplate = html`<Flex direction="column">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · ACTIVITY FEED</p>
       <Badge tone="accent" variant="surface"
-        >{{ filtered.length }} matching records</Badge
-      >
+        >{{ filtered.length }} matching records</Badge>
     </Flex>
     <Grid columns="2" columnsMd="4" class="my-3">
       <div>
@@ -187,18 +185,15 @@ const variableListPlaygroundTemplate = html`<Flex direction="column">
     @change="restart"/>
   <Flex wrap="true">
     <Btn variant="outline" :disabled="!filtered.length" @click="first"
-      >Back to top</Btn
-    >
+      >Back to top</Btn>
     <Btn variant="outline" :disabled="!filtered.length" @click="previous"
-      >Previous screen</Btn
-    >
+      >Previous screen</Btn>
     <Btn
       tone="accent"
       variant="surface"
       :disabled="!filtered.length"
       @click="next"
-      >Next screen</Btn
-    >
+      >Next screen</Btn>
   </Flex>
   <p class="m-0 text-muted">
     The counters inspect mounted rows. Scroll height includes estimates for

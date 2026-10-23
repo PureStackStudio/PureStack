@@ -13,32 +13,45 @@ nav:
 
 # Landing<wbr/>Section
 
-<ComponentHeader name="LandingSection" kind="Section rhythm" summary="Introduce a section and arrange its content beside a clear heading at larger breakpoints." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="LandingSection"
+  kind="Section rhythm"
+  summary="Introduce a section and arrange its content beside a clear heading at larger breakpoints."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## Heading and feature
 
 The heading counts as a grid item. At lg, it shares the row with the feature card.
 
-<Tabs group="landing-section-sample-1" selectedTab="landing-section-sample-1-preview" ariaLabel="Heading and feature example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="landing-section-sample-1"
+  selectedTab="landing-section-sample-1-preview"
+  ariaLabel="Heading and feature example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="landing-section-sample-1-preview" label="Preview">
-<ComponentExample label="LandingSection in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <LandingSection
-      eyebrow="WORKFLOW"
-      title="From source to interface"
-      subtitle="A focused way to build."
-      columnsLg="2"
-      alignItems="center"
+    <ComponentExample
+      label="LandingSection in context"
+      caption="Compare the composition, then open its source tab to adapt it."
     >
-      <FeatureCard
-        title="Own every piece"
-        summary="Keep source, state and styles understandable."
-        tone="accent"
-        icon="lucide:check"
-      />
-    </LandingSection>
-
-</ComponentExample>
+      <LandingSection
+        eyebrow="WORKFLOW"
+        title="From source to interface"
+        subtitle="A focused way to build."
+        columnsLg="2"
+        alignItems="center"
+      >
+        <FeatureCard
+          title="Own every piece"
+          summary="Keep source, state and styles understandable."
+          tone="accent"
+          icon="lucide:check"/>
+      </LandingSection>
+    </ComponentExample>
   </TabPane>
   <TabPane id="landing-section-sample-1-source-0" label="split-section.mdx">
 ```html
@@ -64,18 +77,25 @@ The heading counts as a grid item. At lg, it shares the row with the feature car
 
 Omit the text props when the surrounding page already introduces the section.
 
-<Tabs group="landing-section-sample-2" selectedTab="landing-section-sample-2-preview" ariaLabel="Content without a heading example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="landing-section-sample-2"
+  selectedTab="landing-section-sample-2-preview"
+  ariaLabel="Content without a heading example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="landing-section-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <LandingSection variant="surface" tone="neutral">
-      <Grid columns="1" columnsSm="2">
-        <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
-        <Panel variant="outline" bodyClass="p-3">Add interactivity where it helps.</Panel>
-      </Grid>
-    </LandingSection>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <LandingSection variant="surface" tone="neutral">
+        <Grid columns="1" columnsSm="2">
+          <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
+          <Panel variant="outline" bodyClass="p-3"
+            >Add interactivity where it helps.</Panel>
+        </Grid>
+      </LandingSection>
+    </div>
+  </TabPane>
   <TabPane id="landing-section-sample-2-source-0" label="content-section.mdx">
 ```html
 <LandingSection variant="surface" tone="neutral">
@@ -92,53 +112,137 @@ Omit the text props when the surrounding page already introduces the section.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="LandingSection" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="LandingSection" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="LandingSection" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="LandingSection" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
 
-<ComponentExample label="Both variant modes" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="mode"><LandingAppearanceGallery component="LandingSection" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="mode">
+    <LandingAppearanceGallery component="LandingSection" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Heading semantics and alignment
 
 Choose the heading element to match the surrounding document. Every titleTag is rendered below with identical visual sizing; semantics and appearance are separate.
 
-<ComponentExample label="All nine title tags" caption="Use h1 only for a page title. Non-heading tags do not create document headings.">
-<div class="component-appearance-grid landing-title-tags">
-<div class="component-appearance-cell"><code>h1</code><LandingSection title="A clear chapter" titleTag="h1" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>h2</code><LandingSection title="A clear chapter" titleTag="h2" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>h3</code><LandingSection title="A clear chapter" titleTag="h3" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>h4</code><LandingSection title="A clear chapter" titleTag="h4" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>h5</code><LandingSection title="A clear chapter" titleTag="h5" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>h6</code><LandingSection title="A clear chapter" titleTag="h6" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>p</code><LandingSection title="A clear chapter" titleTag="p" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>div</code><LandingSection title="A clear chapter" titleTag="div" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-<div class="component-appearance-cell"><code>span</code><LandingSection title="A clear chapter" titleTag="span" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
-</div>
+<ComponentExample
+  label="All nine title tags"
+  caption="Use h1 only for a page title. Non-heading tags do not create document headings."
+>
+  <div class="component-appearance-grid landing-title-tags">
+    <div class="component-appearance-cell">
+      <code>h1</code><LandingSection title="A clear chapter" titleTag="h1" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h2</code><LandingSection title="A clear chapter" titleTag="h2" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h3</code><LandingSection title="A clear chapter" titleTag="h3" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h4</code><LandingSection title="A clear chapter" titleTag="h4" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h5</code><LandingSection title="A clear chapter" titleTag="h5" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h6</code><LandingSection title="A clear chapter" titleTag="h6" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>p</code><LandingSection title="A clear chapter" titleTag="p" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>div</code><LandingSection title="A clear chapter" titleTag="div" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>span</code><LandingSection title="A clear chapter" titleTag="span" variant="none"
+        ><p class="m-0">Supporting content</p></LandingSection>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Grid alignment
 
-<ComponentExample label="Place the heading beside the content" caption="columnsLg takes a count or CSS track definition; narrow screens keep one column.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>start</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="start"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
-<div class="component-appearance-cell"><code>center</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="center"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
-<div class="component-appearance-cell"><code>end</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="end"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
-<div class="component-appearance-cell"><code>stretch</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="stretch"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
-</div>
+<ComponentExample
+  label="Place the heading beside the content"
+  caption="columnsLg takes a count or CSS track definition; narrow screens keep one column."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>start</code><LandingSection
+        title="Build together"
+        titleTag="h3"
+        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
+        alignItems="start"
+        ><Panel tone="info" class="p-3"
+          ><p>More room for a supporting story.</p>
+          <p>Compare how the heading aligns.</p></Panel></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>center</code><LandingSection
+        title="Build together"
+        titleTag="h3"
+        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
+        alignItems="center"
+        ><Panel tone="info" class="p-3"
+          ><p>More room for a supporting story.</p>
+          <p>Compare how the heading aligns.</p></Panel></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>end</code><LandingSection
+        title="Build together"
+        titleTag="h3"
+        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
+        alignItems="end"
+        ><Panel tone="info" class="p-3"
+          ><p>More room for a supporting story.</p>
+          <p>Compare how the heading aligns.</p></Panel></LandingSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>stretch</code><LandingSection
+        title="Build together"
+        titleTag="h3"
+        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
+        alignItems="stretch"
+        ><Panel tone="info" class="p-3"
+          ><p>More room for a supporting story.</p>
+          <p>Compare how the heading aligns.</p></Panel></LandingSection>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -161,7 +265,11 @@ Use titleTag to fit the heading into the document. The base layout is always one
 
 <div class="api-overview">
   <p class="text-eyebrow">LandingSection contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="LandingSection properties">
@@ -177,50 +285,121 @@ Use titleTag to fit the heading into the document. The base layout is always one
   <a href="#landing-section-prop-alignItems">alignItems</a>
 </nav>
 
-<ApiProperty anchor="landing-section-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="landing-section-prop-eyebrow"
+  name="eyebrow"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Short context above the heading, such as a category or release label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="landing-section-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="landing-section-prop-subtitle"
+  name="subtitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting text beneath the title.</p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-titleTag" name="titleTag" valueType="RefOrValue&lt;LandingTitleTag&gt;" defaultValue="h2">
-  <p>Heading element. Accepts h1–h6, p, div or span; invalid values fall back to h2. Match the surrounding document hierarchy.</p>
+<ApiProperty
+  anchor="landing-section-prop-titleTag"
+  name="titleTag"
+  valueType="RefOrValue&lt;LandingTitleTag&gt;"
+  defaultValue="h2"
+>
+  <p>
+    Heading element. Accepts h1–h6, p, div or span; invalid values fall back to
+    h2. Match the surrounding document hierarchy.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="landing-section-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="landing-section-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="none"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="landing-section-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="landing-section-prop-columns"
+  name="columns"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="not set"
+>
   <p>Fallback large-breakpoint column definition. Base columns remain 1.</p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="columns, then 1">
-  <p>Large-breakpoint column definition. Includes the optional SectionHeader as a grid item.</p>
+<ApiProperty
+  anchor="landing-section-prop-columnsLg"
+  name="columnsLg"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="columns, then 1"
+>
+  <p>
+    Large-breakpoint column definition. Includes the optional SectionHeader as a
+    grid item.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="landing-section-prop-alignItems" name="alignItems" valueType="RefOrValue&lt;GridAlignItems&gt;" defaultValue="start">
+<ApiProperty
+  anchor="landing-section-prop-alignItems"
+  name="alignItems"
+  valueType="RefOrValue&lt;GridAlignItems&gt;"
+  defaultValue="start"
+>
   <p>Grid alignment: stretch, start, center or end.</p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> section grid items after the optional header. Register defineLandingSectionComponent plus Panel, Grid and SectionHeader.</p>
+  <p>
+    <strong>Default slot:</strong> section grid items after the optional header.
+    Register defineLandingSectionComponent plus Panel, Grid and SectionHeader.
+  </p>
 </div>
 
 ## Related components

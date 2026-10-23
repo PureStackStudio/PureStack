@@ -13,12 +13,29 @@ nav:
 
 # Buttons
 
-<ComponentHeader name="Btn" kind="Native action" summary="A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts"/>
+<ComponentHeader
+  name="Btn"
+  kind="Native action"
+  summary="A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts"/>
 
 ## In context
 
-<ComponentExample label="Action hierarchy" caption="Give one action the strongest emphasis. These are appearance samples; the playground below demonstrates activation.">
-<div class="component-recipe"><p class="text-eyebrow">PROJECT SETTINGS</p><h3>Ready for the next step?</h3><p>One primary action, a quieter alternative, and an explicit unavailable state.</p><BtnGroup :wrap="true"><Btn tone="accent">Save changes</Btn><Btn variant="outline">Preview</Btn><Btn variant="surface" :disabled="true">Publish</Btn></BtnGroup><p>Publishing becomes available after review.</p></div>
+<ComponentExample
+  label="Action hierarchy"
+  caption="Give one action the strongest emphasis. These are appearance samples; the playground below demonstrates activation."
+>
+  <div class="component-recipe">
+    <p class="text-eyebrow">PROJECT SETTINGS</p>
+    <h3>Ready for the next step?</h3>
+    <p>
+      One primary action, a quieter alternative, and an explicit unavailable
+      state.
+    </p>
+    <BtnGroup :wrap="true"
+      ><Btn tone="accent">Save changes</Btn><Btn variant="outline">Preview</Btn><Btn variant="surface" :disabled="true">Publish</Btn></BtnGroup>
+    <p>Publishing becomes available after review.</p>
+  </div>
 </ComponentExample>
 
 ```html
@@ -46,17 +63,17 @@ Explore every variant and all ten semantic tones. Change the size, move the icon
   tabVariant="underline"
 >
   <TabPane id="button-playground-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="button-playground" src="./button-playground.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="button-playground" src="./button-playground.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="button-playground-mdx" label="button-playground.mdx">
 ```html
 <RegorApp id="button-playground" src="./button-playground.ts"/>
 ```
   </TabPane>
   <TabPane id="button-playground-typescript" label="button-playground.ts">
-  <import-codeblock src="./button-playground.ts"/>
+    <import-codeblock src="./button-playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -87,29 +104,35 @@ Choose the visual treatment independently from the tone. Filled variants suit pr
   tabVariant="underline"
 >
   <TabPane id="button-variants-preview" label="Preview">
-<div class="component-preview-stage">
-    <Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
-      <Btn tone="accent" variant="solid">solid</Btn>
-      <Btn tone="accent" variant="surface">surface</Btn>
-      <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
-      <Btn tone="accent" variant="spotlight">spotlight</Btn>
-      <Btn tone="accent" variant="glass">glass</Btn>
-      <Btn tone="accent" variant="flat">flat</Btn>
-      <Btn tone="accent" variant="flatAlt">flatAlt</Btn>
-      <Btn tone="accent" variant="flatSolid">flatSolid</Btn>
-      <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
-      <Btn tone="accent" variant="outline">outline</Btn>
-      <Btn tone="accent" variant="subtle">subtle</Btn>
-      <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
-      <Btn tone="accent" variant="link">link</Btn>
-      <Btn tone="accent" variant="sheen">sheen</Btn>
-      <Btn tone="accent" variant="underline">underline</Btn>
-      <Btn tone="accent" variant="rail">rail</Btn>
-      <Btn tone="accent" variant="bracket">bracket</Btn>
-      <Btn tone="accent" variant="none">none</Btn>
-    </Grid>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid
+        columns="2"
+        columnsSm="3"
+        alignItems="center"
+        justifyItems="center"
+        class="gap-4"
+      >
+        <Btn tone="accent" variant="solid">solid</Btn>
+        <Btn tone="accent" variant="surface">surface</Btn>
+        <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
+        <Btn tone="accent" variant="spotlight">spotlight</Btn>
+        <Btn tone="accent" variant="glass">glass</Btn>
+        <Btn tone="accent" variant="flat">flat</Btn>
+        <Btn tone="accent" variant="flatAlt">flatAlt</Btn>
+        <Btn tone="accent" variant="flatSolid">flatSolid</Btn>
+        <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
+        <Btn tone="accent" variant="outline">outline</Btn>
+        <Btn tone="accent" variant="subtle">subtle</Btn>
+        <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
+        <Btn tone="accent" variant="link">link</Btn>
+        <Btn tone="accent" variant="sheen">sheen</Btn>
+        <Btn tone="accent" variant="underline">underline</Btn>
+        <Btn tone="accent" variant="rail">rail</Btn>
+        <Btn tone="accent" variant="bracket">bracket</Btn>
+        <Btn tone="accent" variant="none">none</Btn>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="button-variants-source" label="variants.mdx">
 ```html
 <Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
@@ -149,21 +172,20 @@ Communicate intent through the palette. Every tone participates in the same them
   tabVariant="underline"
 >
   <TabPane id="button-tones-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex wrap="true"
-      ><Btn tone="neutral" variant="surface">neutral</Btn>
-      <Btn tone="accent" variant="surface">accent</Btn>
-      <Btn tone="feature" variant="surface">feature</Btn>
-      <Btn tone="secondary" variant="surface">secondary</Btn>
-      <Btn tone="custom" variant="surface">custom</Btn>
-      <Btn tone="ghost" variant="surface">ghost</Btn>
-      <Btn tone="info" variant="surface">info</Btn>
-      <Btn tone="success" variant="surface">success</Btn>
-      <Btn tone="warning" variant="surface">warning</Btn>
-      <Btn tone="danger" variant="surface">danger</Btn></Flex
-    >
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex wrap="true"
+        ><Btn tone="neutral" variant="surface">neutral</Btn>
+        <Btn tone="accent" variant="surface">accent</Btn>
+        <Btn tone="feature" variant="surface">feature</Btn>
+        <Btn tone="secondary" variant="surface">secondary</Btn>
+        <Btn tone="custom" variant="surface">custom</Btn>
+        <Btn tone="ghost" variant="surface">ghost</Btn>
+        <Btn tone="info" variant="surface">info</Btn>
+        <Btn tone="success" variant="surface">success</Btn>
+        <Btn tone="warning" variant="surface">warning</Btn>
+        <Btn tone="danger" variant="surface">danger</Btn></Flex>
+    </div>
+  </TabPane>
   <TabPane id="button-tones-source" label="tones.mdx">
 ```html
 <Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
@@ -193,28 +215,27 @@ The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Pro
   tabVariant="underline"
 >
   <TabPane id="button-sizes-icons-preview" label="Preview">
-<div class="component-preview-stage">
-    <Flex wrap="true" align="center">
-      <Btn size="sm" tone="accent">Small</Btn>
-      <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
-      <Btn size="lg" tone="neutral">Large</Btn>
-      <Btn
-        tone="neutral"
-        variant="surface"
-        icon="tabler:arrow-right"
-        iconPosition="end"
-        >Continue</Btn
-      >
-      <Btn
-        tone="accent"
-        variant="surface"
-        icon="tabler:check"
-        :iconOnly="true"
-        ariaLabel="Confirm selection"/>
-      <Btn tone="neutral" :disabled="true">Unavailable</Btn>
-    </Flex>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Flex wrap="true" align="center">
+        <Btn size="sm" tone="accent">Small</Btn>
+        <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
+        <Btn size="lg" tone="neutral">Large</Btn>
+        <Btn
+          tone="neutral"
+          variant="surface"
+          icon="tabler:arrow-right"
+          iconPosition="end"
+          >Continue</Btn>
+        <Btn
+          tone="accent"
+          variant="surface"
+          icon="tabler:check"
+          :iconOnly="true"
+          ariaLabel="Confirm selection"/>
+        <Btn tone="neutral" :disabled="true">Unavailable</Btn>
+      </Flex>
+    </div>
+  </TabPane>
   <TabPane id="button-sizes-icons-source" label="sizes-and-icons.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -242,17 +263,17 @@ Build a collection of up to five items. Add creates a visible list item; Remove 
   tabVariant="underline"
 >
   <TabPane id="button-events-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="collection" src="./collection.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="collection" src="./collection.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="button-events-mdx" label="collection.mdx">
 ```html
 <RegorApp id="collection" src="./collection.ts"/>
 ```
   </TabPane>
   <TabPane id="button-events-typescript" label="collection.ts">
-  <import-codeblock src="./collection.ts"/>
+    <import-codeblock src="./collection.ts"/>
   </TabPane>
 </Tabs>
 
@@ -271,17 +292,17 @@ The form handles `@reset.prevent` so its reactive value stays synchronized with 
   tabVariant="underline"
 >
   <TabPane id="button-form-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="project-form" src="./project-form.ts"/>
-  </div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="project-form" src="./project-form.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="button-form-mdx" label="project-form.mdx">
 ```html
 <RegorApp id="project-form" src="./project-form.ts"/>
 ```
   </TabPane>
   <TabPane id="button-form-typescript" label="project-form.ts">
-  <import-codeblock src="./project-form.ts"/>
+    <import-codeblock src="./project-form.ts"/>
   </TabPane>
 </Tabs>
 
@@ -372,10 +393,7 @@ Color, treatment, and scale are independent. Combine them to fit the importance 
   </Flex>
   <div class="api-values" aria-label="Accepted variants">
     <code>solid</code><code>surface</code><code>surfaceAlt</code>
-    <code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code>
-    <code>outlineFill</code><code>outline</code><code>subtle</code>
-    <code>subtleBtn</code><code>link</code><code>sheen</code>
-    <code>underline</code><code>rail</code><code>bracket</code><code>none</code>
+    <code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code> <code>outlineFill</code><code>outline</code><code>subtle</code> <code>subtleBtn</code><code>link</code><code>sheen</code> <code>underline</code><code>rail</code><code>bracket</code><code>none</code>
   </div>
   <p><a href="#variants">Compare all variants</a></p>
 ```html
@@ -442,11 +460,9 @@ Keep the action understandable with or without its icon.
   </p>
   <Flex class="api-demo" wrap="true" aria-label="Accepted icon positions">
     <Btn icon="tabler:arrow-right" iconPosition="start" variant="surface"
-      >start</Btn
-    >
+      >start</Btn>
     <Btn icon="tabler:arrow-right" iconPosition="end" variant="surface"
-      >end</Btn
-    >
+      >end</Btn>
   </Flex>
 ```html
 <Btn icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
@@ -524,8 +540,7 @@ Use native form behavior and boolean state to control what the action can do.
   </dl>
   <p>
     <a href="#submit-and-reset"
-      >Try submit and reset with reactive form state</a
-    >
+      >Try submit and reset with reactive form state</a>
   </p>
 ```html
 <Btn type="submit">Save project</Btn>
@@ -563,9 +578,7 @@ Use native form behavior and boolean state to control what the action can do.
 
 <div class="api-contract" id="btn-default-slot">
   <Flex align="center" wrap="true"
-    ><code>default</code
-    ><Badge tone="neutral" variant="surface">Button label</Badge></Flex
-  >
+    ><code>default</code><Badge tone="neutral" variant="surface">Button label</Badge></Flex>
   <p>
     Text or inline markup placed between the tags becomes the visible label. It
     is hidden when <code>iconOnly</code> is true. Avoid nested links, buttons,
@@ -580,8 +593,7 @@ Use native form behavior and boolean state to control what the action can do.
 
 <div class="api-contract" id="btn-click-event">
   <Flex align="center" wrap="true"
-    ><code>@click</code><code>(event: MouseEvent) =&gt; void</code></Flex
-  >
+    ><code>@click</code><code>(event: MouseEvent) =&gt; void</code></Flex>
   <p>
     Fires on pointer or keyboard activation when the button is enabled. The
     handler must live in a mounted Regor app; static MDX does not run browser

@@ -13,21 +13,36 @@ nav:
 
 # Consent
 
-<ComponentHeader name="Consent" kind="Privacy preferences" summary="A consent banner and preference panel driven by the site’s categories, policy version and service configuration." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/consent/consent.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="Consent"
+  kind="Privacy preferences"
+  summary="A consent banner and preference panel driven by the site’s categories, policy version and service configuration."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/consent/consent.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## Make and revise a choice
 
 This preview uses this site's real consent settings and shares its saved privacy choice. Open settings to review the configured categories.
 
-<Tabs group="consent-sample-1" selectedTab="consent-sample-1-preview" ariaLabel="Make and revise a choice example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="consent-sample-1"
+  selectedTab="consent-sample-1-preview"
+  ariaLabel="Make and revise a choice example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="consent-sample-1-preview" label="Preview">
-<ComponentExample label="Consent in context" caption="Banner choices, required and optional categories, saved settings, and services. Open the source tab to adapt the composition.">
-    <ConsentPreview />
-
-</ComponentExample>
+    <ComponentExample
+      label="Consent in context"
+      caption="Banner choices, required and optional categories, saved settings, and services. Open the source tab to adapt the composition."
+    >
+      <ConsentPreview/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="consent-sample-1-source-1" label="preview.mdx">
-  <import-codeblock src="./preview.mdx"/>
+    <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -35,37 +50,78 @@ This preview uses this site's real consent settings and shares its saved privacy
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="tone"><SiteAppearanceGallery component="Consent" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="tone">
+    <SiteAppearanceGallery component="Consent" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="variant"><SiteAppearanceGallery component="Consent" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="variant">
+    <SiteAppearanceGallery component="Consent" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
 
-<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="mode"><SiteAppearanceGallery component="Consent" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="mode">
+    <SiteAppearanceGallery component="Consent" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Every step of the preference flow
 
 Use the working example to open, save, close, and reopen this site's real privacy settings. It shares the site's categories, services, and storage key.
 
-<ComponentExample label="The complete choice lifecycle" caption="Required categories remain enabled. A saved choice is checked against policyVersion; changing that version asks for a fresh decision.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Banner</code><strong>Privacy choices</strong><p class="m-0">Accept all · Reject optional · Manage preferences · Read the privacy policy.</p></div>
-<div class="component-appearance-cell"><code>Preference panel</code><strong>Necessary + optional categories</strong><p class="m-0">Required categories are locked. Optional categories can be changed before saving.</p></div>
-<div class="component-appearance-cell"><code>Saved choice</code><strong>Settings remain available</strong><p class="m-0">Reopen from the settings control, revise preferences, and save again.</p></div>
-<div class="component-appearance-cell"><code>Policy or storage reset</code><strong>A fresh decision</strong><p class="m-0">A new policyVersion or clearing the example storage brings back the banner.</p></div>
-</div>
+<ComponentExample
+  label="The complete choice lifecycle"
+  caption="Required categories remain enabled. A saved choice is checked against policyVersion; changing that version asks for a fresh decision."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Banner</code><strong>Privacy choices</strong>
+      <p class="m-0">
+        Accept all · Reject optional · Manage preferences · Read the privacy
+        policy.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Preference panel</code><strong>Necessary + optional categories</strong>
+      <p class="m-0">
+        Required categories are locked. Optional categories can be changed
+        before saving.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Saved choice</code><strong>Settings remain available</strong>
+      <p class="m-0">
+        Reopen from the settings control, revise preferences, and save again.
+      </p>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Policy or storage reset</code><strong>A fresh decision</strong>
+      <p class="m-0">
+        A new policyVersion or clearing the example storage brings back the
+        banner.
+      </p>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Configuration and service activation
@@ -98,7 +154,11 @@ Consent renders only when site.consent.enabled is true. The runtime opens the ba
 
 <div class="api-overview">
   <p class="text-eyebrow">Consent contract</p>
-  <p>The three public props style the component. Banner copy, categories, storage, policy version and services come from site.consent, not markup props.</p>
+  <p>
+    The three public props style the component. Banner copy, categories,
+    storage, policy version and services come from site.consent, not markup
+    props.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="Consent properties">
@@ -107,22 +167,53 @@ Consent renders only when site.consent.enabled is true. The runtime opens the ba
   <a href="#consent-prop-variantMode">variantMode</a>
 </nav>
 
-<ApiProperty anchor="consent-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="neutral">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="consent-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="neutral"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="consent-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="consent-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="consent-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="consent-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No public slots. The settings button teleports to .consent-settings-teleport-area, provided by SiteFooter or by your own template. Register defineConsentComponents with Panel, Flex, Btn, BtnLink and FormCheck. Include the standard consent runtime with the same resolved configuration.</p>
+  <p>
+    No public slots. The settings button teleports to
+    .consent-settings-teleport-area, provided by SiteFooter or by your own
+    template. Register defineConsentComponents with Panel, Flex, Btn, BtnLink
+    and FormCheck. Include the standard consent runtime with the same resolved
+    configuration.
+  </p>
 </div>
 
 ### Configuration responsibilities

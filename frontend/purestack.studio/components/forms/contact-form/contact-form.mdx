@@ -13,7 +13,13 @@ nav:
 
 # Contact<wbr/>Form
 
-<ComponentHeader name="ContactForm" kind="Complete form" summary="Start with a complete contact flow. Configure its copy and native endpoint, or capture a local preview." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/contactForm/contactForm.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="ContactForm"
+  kind="Complete form"
+  summary="Start with a complete contact flow. Configure its copy and native endpoint, or capture a local preview."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/contactForm/contactForm.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 Set your own action in production. The built-in default is a mailto destination; this preview intercepts submission and sends nothing.
 
@@ -21,20 +27,29 @@ Set your own action in production. The built-in default is a mailto destination;
 
 Fill in the required fields and submit. Native validation runs before the local message receipt appears.
 
-<Tabs group="contact-form-sample-1" selectedTab="contact-form-sample-1-preview" ariaLabel="Preview a contact message example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="contact-form-sample-1"
+  selectedTab="contact-form-sample-1-preview"
+  ariaLabel="Preview a contact message example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="contact-form-sample-1-preview" label="Preview">
-<ComponentExample label="ContactForm in context" caption="Fill the required fields and preview the message. This demo captures the submission locally.">
-    <RegorApp id="contact-form-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="ContactForm in context"
+      caption="Fill the required fields and preview the message. This demo captures the submission locally."
+    >
+      <RegorApp id="contact-form-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="contact-form-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="contact-form-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="contact-form-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -42,26 +57,31 @@ Fill in the required fields and submit. Native validation runs before the local 
 
 This fieldset disables submission while showing a second copy configuration.
 
-<Tabs group="contact-form-sample-2" selectedTab="contact-form-sample-2-preview" ariaLabel="Adapt the copy example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="contact-form-sample-2"
+  selectedTab="contact-form-sample-2-preview"
+  ariaLabel="Adapt the copy example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="contact-form-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <fieldset disabled class="p-3">
-      <legend>Support form configuration</legend>
-      <ContactForm
-        title="Ask for help"
-        description="Include the context needed to reproduce the issue."
-        action="#"
-        submitLabel="Send support request"
-        topicGeneralLabel="Usage question"
-        topicSupportLabel="Bug report"
-        topicPartnershipLabel="Integration"
-        messageLabel="What happened?"
-        messagePlaceholder="Describe the issue and expected result."
-      />
-    </fieldset>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <fieldset disabled class="p-3">
+        <legend>Support form configuration</legend>
+        <ContactForm
+          title="Ask for help"
+          description="Include the context needed to reproduce the issue."
+          action="#"
+          submitLabel="Send support request"
+          topicGeneralLabel="Usage question"
+          topicSupportLabel="Bug report"
+          topicPartnershipLabel="Integration"
+          messageLabel="What happened?"
+          messagePlaceholder="Describe the issue and expected result."/>
+      </fieldset>
+    </div>
+  </TabPane>
   <TabPane id="contact-form-sample-2-source-0" label="support-copy.mdx">
 ```html
 <fieldset disabled class="p-3">
@@ -86,8 +106,29 @@ This fieldset disables submission while showing a second copy configuration.
 
 ContactForm has no tone or variant prop. Its configurable layers are title, description, submit label, four field labels, three text placeholders, and three topic labels. The preview below shows all of them together; the working form above captures a local submission.
 
-<ComponentExample label="A complete copy configuration" caption="This disabled copy sample demonstrates the text API without submitting to an endpoint.">
-<fieldset disabled class="forms-copy-sample"><legend>Configured copy</legend><ContactForm title="Start a conversation" description="Tell us what you want to build." action="#" method="post" submitLabel="Send project brief" nameLabel="Your name" emailLabel="Contact email" topicLabel="What brings you here?" messageLabel="Project context" namePlaceholder="Alex Morgan" emailPlaceholder="alex@example.com" messagePlaceholder="Describe your goals and constraints." topicGeneralLabel="New project" topicSupportLabel="Product support" topicPartnershipLabel="Work together"/></fieldset>
+<ComponentExample
+  label="A complete copy configuration"
+  caption="This disabled copy sample demonstrates the text API without submitting to an endpoint."
+>
+  <fieldset disabled class="forms-copy-sample">
+    <legend>Configured copy</legend>
+    <ContactForm
+      title="Start a conversation"
+      description="Tell us what you want to build."
+      action="#"
+      method="post"
+      submitLabel="Send project brief"
+      nameLabel="Your name"
+      emailLabel="Contact email"
+      topicLabel="What brings you here?"
+      messageLabel="Project context"
+      namePlaceholder="Alex Morgan"
+      emailPlaceholder="alex@example.com"
+      messagePlaceholder="Describe your goals and constraints."
+      topicGeneralLabel="New project"
+      topicSupportLabel="Product support"
+      topicPartnershipLabel="Work together"/>
+  </fieldset>
 </ComponentExample>
 
 ```html
@@ -108,7 +149,11 @@ The component renders a native form with required fields and enctype text/plain.
 
 <div class="api-overview">
   <p class="text-eyebrow">ContactForm contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ContactForm properties">
@@ -129,70 +174,149 @@ The component renders a native form with required fields and enctype text/plain.
   <a href="#contact-form-prop-topicPartnershipLabel">topicPartnershipLabel</a>
 </nav>
 
-<ApiProperty anchor="contact-form-prop-title" name="title" valueType="string" defaultValue="Send a message">
+<ApiProperty
+  anchor="contact-form-prop-title"
+  name="title"
+  valueType="string"
+  defaultValue="Send a message"
+>
   <p>Text used for title.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-description" name="description" valueType="string" defaultValue="Share context and goals so we can route your request quickly.">
+<ApiProperty
+  anchor="contact-form-prop-description"
+  name="description"
+  valueType="string"
+  defaultValue="Share context and goals so we can route your request quickly."
+>
   <p>Text used for description.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-action" name="action" valueType="string" defaultValue="mailto:team@purestack.dev">
+<ApiProperty
+  anchor="contact-form-prop-action"
+  name="action"
+  valueType="string"
+  defaultValue="mailto:team@purestack.dev"
+>
   <p>Submission destination. Always replace the default for your own site.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-method" name="method" valueType="ContactFormMethod" defaultValue="post">
+<ApiProperty
+  anchor="contact-form-prop-method"
+  name="method"
+  valueType="ContactFormMethod"
+  defaultValue="post"
+>
   <p>get or post; values other than get resolve to post.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-submitLabel" name="submitLabel" valueType="string" defaultValue="Send Message">
+<ApiProperty
+  anchor="contact-form-prop-submitLabel"
+  name="submitLabel"
+  valueType="string"
+  defaultValue="Send Message"
+>
   <p>Text used for submit label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-nameLabel" name="nameLabel" valueType="string" defaultValue="Name">
+<ApiProperty
+  anchor="contact-form-prop-nameLabel"
+  name="nameLabel"
+  valueType="string"
+  defaultValue="Name"
+>
   <p>Text used for name label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-emailLabel" name="emailLabel" valueType="string" defaultValue="Email">
+<ApiProperty
+  anchor="contact-form-prop-emailLabel"
+  name="emailLabel"
+  valueType="string"
+  defaultValue="Email"
+>
   <p>Text used for email label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-topicLabel" name="topicLabel" valueType="string" defaultValue="Topic">
+<ApiProperty
+  anchor="contact-form-prop-topicLabel"
+  name="topicLabel"
+  valueType="string"
+  defaultValue="Topic"
+>
   <p>Text used for topic label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-messageLabel" name="messageLabel" valueType="string" defaultValue="Message">
+<ApiProperty
+  anchor="contact-form-prop-messageLabel"
+  name="messageLabel"
+  valueType="string"
+  defaultValue="Message"
+>
   <p>Text used for message label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-namePlaceholder" name="namePlaceholder" valueType="string" defaultValue="Your name">
+<ApiProperty
+  anchor="contact-form-prop-namePlaceholder"
+  name="namePlaceholder"
+  valueType="string"
+  defaultValue="Your name"
+>
   <p>Text used for name placeholder.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-emailPlaceholder" name="emailPlaceholder" valueType="string" defaultValue="name@company.com">
+<ApiProperty
+  anchor="contact-form-prop-emailPlaceholder"
+  name="emailPlaceholder"
+  valueType="string"
+  defaultValue="name@company.com"
+>
   <p>Text used for email placeholder.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-messagePlaceholder" name="messagePlaceholder" valueType="string" defaultValue="Tell us what you are trying to solve.">
+<ApiProperty
+  anchor="contact-form-prop-messagePlaceholder"
+  name="messagePlaceholder"
+  valueType="string"
+  defaultValue="Tell us what you are trying to solve."
+>
   <p>Text used for message placeholder.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-topicGeneralLabel" name="topicGeneralLabel" valueType="string" defaultValue="General inquiry">
+<ApiProperty
+  anchor="contact-form-prop-topicGeneralLabel"
+  name="topicGeneralLabel"
+  valueType="string"
+  defaultValue="General inquiry"
+>
   <p>Text used for topic general label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-topicSupportLabel" name="topicSupportLabel" valueType="string" defaultValue="Technical support">
+<ApiProperty
+  anchor="contact-form-prop-topicSupportLabel"
+  name="topicSupportLabel"
+  valueType="string"
+  defaultValue="Technical support"
+>
   <p>Text used for topic support label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="contact-form-prop-topicPartnershipLabel" name="topicPartnershipLabel" valueType="string" defaultValue="Partnership">
+<ApiProperty
+  anchor="contact-form-prop-topicPartnershipLabel"
+  name="topicPartnershipLabel"
+  valueType="string"
+  defaultValue="Partnership"
+>
   <p>Text used for topic partnership label.</p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Native submit events bubble from the nested form; handle them on a wrapper for local app behavior. Register defineContactFormComponents and defineButtonComponents.</p>
+  <p>
+    No slots. Native submit events bubble from the nested form; handle them on a
+    wrapper for local app behavior. Register defineContactFormComponents and
+    defineButtonComponents.
+  </p>
 </div>
 
 ## Related components

@@ -32,11 +32,16 @@ export interface ReviewTaskRow {
 }
 
 const reviewTaskRowTemplate = html`<Flex
-  align="center" class="px-3 bb-1 b-subtle"
+  align="center"
+  class="px-3 bb-1 b-subtle"
   style="height: 100%; box-sizing: border-box; overflow: hidden"
-  role="listitem" :aria-posinset="index + 1"
+  role="listitem"
+  :aria-posinset="index + 1"
 >
-  <FormCheck :id="'review-task-' + item.id" :label="item.title" :checked="item.reviewed" />
+  <FormCheck
+    :id="'review-task-' + item.id"
+    :label="item.title"
+    :checked="item.reviewed"/>
 </Flex>`
 
 const reviewTaskRow = defineComponent<ReviewTaskRow>(reviewTaskRowTemplate, {
@@ -57,21 +62,38 @@ const persistentStateTemplate = html`<Panel variant="surfaceAlt" bodyClass="p-3 
   <Flex direction="column">
     <Flex justify="between" align="center" wrap="true">
       <h3 class="m-0">Review checklist</h3>
-      <Badge tone="success" variant="surface">{{ reviewedCount }} / {{ tasks.length }} reviewed</Badge>
+      <Badge tone="success" variant="surface"
+        >{{ reviewedCount }} / {{ tasks.length }} reviewed</Badge>
     </Flex>
-    <p class="m-0">Check a task, jump to the last row, then return to the first. Your selection survives the row being removed and mounted again.</p>
+    <p class="m-0">
+      Check a task, jump to the last row, then return to the first. Your
+      selection survives the row being removed and mounted again.
+    </p>
     <Flex wrap="true">
-      <Btn variant="outline" :disabled="!visible.length" @click="first">First task</Btn>
-      <Btn variant="outline" :disabled="!visible.length" @click="last">Last task</Btn>
-      <Btn variant="outline" :disabled="!reviewedCount" @click="clear">Clear selections</Btn>
+      <Btn variant="outline" :disabled="!visible.length" @click="first"
+        >First task</Btn>
+      <Btn variant="outline" :disabled="!visible.length" @click="last"
+        >Last task</Btn>
+      <Btn variant="outline" :disabled="!reviewedCount" @click="clear"
+        >Clear selections</Btn>
     </Flex>
-    <FormCheck id="reviewed-only" label="Show reviewed only" :checked="reviewedOnly" />
+    <FormCheck
+      id="reviewed-only"
+      label="Show reviewed only"
+      :checked="reviewedOnly"/>
     <VirtualList
-      id="review-viewport" :items="visible" height="240" itemHeight="48" overscan="3"
-      rowComponent="ReviewTaskRow" role="list" tabindex="0" aria-label="Review tasks"
-      class="b-1 b-subtle rounded-md"
-    />
-    <FormStatus r-if="!visible.length" role="status">No reviewed tasks yet. Turn off the filter to select a task.</FormStatus>
+      id="review-viewport"
+      :items="visible"
+      height="240"
+      itemHeight="48"
+      overscan="3"
+      rowComponent="ReviewTaskRow"
+      role="list"
+      tabindex="0"
+      aria-label="Review tasks"
+      class="b-1 b-subtle rounded-md"/>
+    <FormStatus r-if="!visible.length" role="status"
+      >No reviewed tasks yet. Turn off the filter to select a task.</FormStatus>
   </Flex>
 </Panel>`
 
@@ -129,6 +151,6 @@ createApp(
   },
   {
     selector: 'app#virtual-list-state-demo',
-    template: html`<PersistentStateExample />`,
+    template: html`<PersistentStateExample/>`,
   },
 )

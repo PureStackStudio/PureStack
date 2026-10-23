@@ -13,26 +13,41 @@ nav:
 
 # Drop<wbr/>Files
 
-<ComponentHeader name="DropFiles" kind="Local file collection" summary="Collect files with a familiar picker, drop gesture, or paste. Filter types, inspect selections, and remove individual files." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/dropFiles/dropFiles.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="DropFiles"
+  kind="Local file collection"
+  summary="Collect files with a familiar picker, drop gesture, or paste. Filter types, inspect selections, and remove individual files."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/dropFiles/dropFiles.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Collect project attachments
 
 Add local text, image or PDF files, remove individual entries and inspect the total size. Nothing is uploaded. In single-file mode, the next accepted file replaces the selection.
 
-<Tabs group="drop-files-sample-1" selectedTab="drop-files-sample-1-preview" ariaLabel="Collect project attachments example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="drop-files-sample-1"
+  selectedTab="drop-files-sample-1-preview"
+  ariaLabel="Collect project attachments example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="drop-files-sample-1-preview" label="Preview">
-<ComponentExample label="DropFiles in context" caption="Choose, drop, or paste supported files. Selections stay in this browser; the demo does not upload them.">
-    <RegorApp id="drop-files-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="DropFiles in context"
+      caption="Choose, drop, or paste supported files. Selections stay in this browser; the demo does not upload them."
+    >
+      <RegorApp id="drop-files-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="drop-files-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="drop-files-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="drop-files-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,19 +55,24 @@ Add local text, image or PDF files, remove individual entries and inspect the to
 
 Use a hint to explain why selection is unavailable.
 
-<Tabs group="drop-files-sample-2" selectedTab="drop-files-sample-2-preview" ariaLabel="A clearly disabled drop zone example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="drop-files-sample-2"
+  selectedTab="drop-files-sample-2-preview"
+  ariaLabel="A clearly disabled drop zone example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="drop-files-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <DropFiles
-      label="Attachments"
-      emptyTitle="Attachments are locked"
-      emptyText="Finish the current review to add files."
-      hint="Read-only example"
-      :disabled="true"
-    />
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <DropFiles
+        label="Attachments"
+        emptyTitle="Attachments are locked"
+        emptyText="Finish the current review to add files."
+        hint="Read-only example"
+        :disabled="true"/>
+    </div>
+  </TabPane>
   <TabPane id="drop-files-sample-2-source-0" label="disabled-zone.mdx">
 ```html
 <DropFiles
@@ -70,20 +90,42 @@ Use a hint to explain why selection is unavailable.
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-drop-files-tone-gallery" data-form-gallery data-component="DropFiles" data-axis="tone">
-<FormAppearanceGallery component="DropFiles" axis="tone" prefix="forms-drop-files-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-drop-files-tone-gallery"
+    data-form-gallery
+    data-component="DropFiles"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="DropFiles"
+      axis="tone"
+      prefix="forms-drop-files-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-drop-files-variant-gallery" data-form-gallery data-component="DropFiles" data-axis="variant">
-<FormAppearanceGallery component="DropFiles" axis="variant" prefix="forms-drop-files-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-drop-files-variant-gallery"
+    data-form-gallery
+    data-component="DropFiles"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="DropFiles"
+      axis="variant"
+      prefix="forms-drop-files-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## File collection features
@@ -116,7 +158,11 @@ The drop zone opens the native picker with Enter or Space. File acceptance is a 
 
 <div class="api-overview">
   <p class="text-eyebrow">DropFiles contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="DropFiles properties">
@@ -137,70 +183,173 @@ The drop zone opens the native picker with Enter or Space. File acceptance is a 
   <a href="#drop-files-prop-onChange">onChange</a>
 </nav>
 
-<ApiProperty anchor="drop-files-prop-files" name="files" valueType="SRef&lt;DropFileItem[]&gt;" defaultValue="sref([])">
-  <p>Writable shallow ref of DropFileItem[]. Each item retains its File plus id, name, type, size, sizeLabel, lastModified and icon.</p>
+<ApiProperty
+  anchor="drop-files-prop-files"
+  name="files"
+  valueType="SRef&lt;DropFileItem[]&gt;"
+  defaultValue="sref([])"
+>
+  <p>
+    Writable shallow ref of DropFileItem[]. Each item retains its File plus id,
+    name, type, size, sizeLabel, lastModified and icon.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-accept" name="accept" valueType="RefOrValue&lt;string&gt; | string[]" defaultValue="all files, or iconMap keys">
-  <p>Comma-separated MIME types, wildcards or extensions; arrays are also accepted. An explicit accept list takes precedence over iconMap keys.</p>
+<ApiProperty
+  anchor="drop-files-prop-accept"
+  name="accept"
+  valueType="RefOrValue&lt;string&gt; | string[]"
+  defaultValue="all files, or iconMap keys"
+>
+  <p>
+    Comma-separated MIME types, wildcards or extensions; arrays are also
+    accepted. An explicit accept list takes precedence over iconMap keys.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-iconMap" name="iconMap" valueType="DropFilesIconMap | SRef&lt;DropFilesIconMap&gt;" defaultValue="built-in type icons">
-  <p>MIME/extension-to-icon map merged with the defaults. When accept is omitted, a supplied map also determines accepted types.</p>
+<ApiProperty
+  anchor="drop-files-prop-iconMap"
+  name="iconMap"
+  valueType="DropFilesIconMap | SRef&lt;DropFilesIconMap&gt;"
+  defaultValue="built-in type icons"
+>
+  <p>
+    MIME/extension-to-icon map merged with the defaults. When accept is omitted,
+    a supplied map also determines accepted types.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="drop-files-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-hint" name="hint" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="drop-files-prop-hint"
+  name="hint"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting text beneath the drop-zone instructions.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-emptyTitle" name="emptyTitle" valueType="RefOrValue&lt;string&gt;" defaultValue="Add files">
+<ApiProperty
+  anchor="drop-files-prop-emptyTitle"
+  name="emptyTitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="Add files"
+>
   <p>Drop-zone heading, shown even when files are selected.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-emptyText" name="emptyText" valueType="RefOrValue&lt;string&gt;" defaultValue="Click, tap, paste, or drag files here.">
+<ApiProperty
+  anchor="drop-files-prop-emptyText"
+  name="emptyText"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="Click, tap, paste, or drag files here."
+>
   <p>Drop-zone instructions.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+<ApiProperty
+  anchor="drop-files-prop-disabled"
+  name="disabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Disables interaction. Use a bound boolean, for example :disabled="isLocked".
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-multiple" name="multiple" valueType="RefOrValue&lt;boolean&gt;" defaultValue="true">
+<ApiProperty
+  anchor="drop-files-prop-multiple"
+  name="multiple"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="true"
+>
   <p>false accepts the first matching file and replaces the current list.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="drop-files-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="drop-files-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-uploadIcon" name="uploadIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:cloud-upload">
+<ApiProperty
+  anchor="drop-files-prop-uploadIcon"
+  name="uploadIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:cloud-upload"
+>
   <p>Drop-zone icon.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-fileIcon" name="fileIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:file">
+<ApiProperty
+  anchor="drop-files-prop-fileIcon"
+  name="fileIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:file"
+>
   <p>Fallback file icon when no type-specific mapping matches.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-removeIcon" name="removeIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:trash">
+<ApiProperty
+  anchor="drop-files-prop-removeIcon"
+  name="removeIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:trash"
+>
   <p>Icon on each remove button.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-onChange" name="onChange" valueType="(files: DropFileItem[]) =&gt; void" defaultValue="not set">
-  <p>Callback receiving the updated DropFileItem[] after a component-driven change.</p>
+<ApiProperty
+  anchor="drop-files-prop-onChange"
+  name="onChange"
+  valueType="(files: DropFileItem[]) =&gt; void"
+  defaultValue="not set"
+>
+  <p>
+    Callback receiving the updated DropFileItem[] after a component-driven
+    change.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineDropFilesComponents and its icons. Use addDropFiles when another input path needs the same filtering, metadata and deduplication behavior.</p>
+  <p>
+    No slots. Register defineDropFilesComponents and its icons. Use addDropFiles
+    when another input path needs the same filtering, metadata and deduplication
+    behavior.
+  </p>
 </div>
 
 ## Related components

@@ -58,34 +58,69 @@ const composerInlineImagesTemplate = html`<Flex direction="column">
     <p class="text-eyebrow m-0">Inline image lab</p>
     <Badge tone="info" variant="surface">Local previews · no uploads</Badge>
   </Flex>
-  <Composer id="composer-images-editor" label="Image message" :html="messageHtml"
-    :imagePreviewUrls="previewUrls" minHeight="14rem" @files="receive"/>
-  <input :ref="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
-    multiple hidden @change="select"/>
+  <Composer
+    id="composer-images-editor"
+    label="Image message"
+    :html="messageHtml"
+    :imagePreviewUrls="previewUrls"
+    minHeight="14rem"
+    @files="receive"/>
+  <input
+    :ref="fileInput"
+    type="file"
+    accept="image/png,image/jpeg,image/webp,image/gif"
+    multiple
+    hidden
+    @change="select"/>
   <Flex wrap="true">
     <Btn tone="accent" variant="surface" @click="choose">Choose images</Btn>
-    <Btn variant="outline" :disabled="busy" @click="insertDemo">{{ busy ? 'Loading image…' : 'Insert demo image' }}</Btn>
+    <Btn variant="outline" :disabled="busy" @click="insertDemo"
+      >{{ busy ? 'Loading image…' : 'Insert demo image' }}</Btn>
   </Flex>
   <FormStatus role="status">{{ status }}</FormStatus>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
-    <Tabs group="composer-images-output" selectedTab="composer-attachments" ariaLabel="Image model inspection" tabVariant="underline">
+    <Tabs
+      group="composer-images-output"
+      selectedTab="composer-attachments"
+      ariaLabel="Image model inspection"
+      tabVariant="underline"
+    >
       <TabPane id="composer-attachments" label="Attachments">
-        <p r-if="!attachments.length" class="m-0 text-muted">Add an image to see its file and content ID.</p>
-        <Flex r-for="attachment in attachments" direction="column" class="py-3 bb-1 b-subtle">
+        <p r-if="!attachments.length" class="m-0 text-muted">
+          Add an image to see its file and content ID.
+        </p>
+        <Flex
+          r-for="attachment in attachments"
+          direction="column"
+          class="py-3 bb-1 b-subtle"
+        >
           <Flex justify="between" align="center" wrap="true">
-            <strong class="overflow-x-auto w-full">{{ attachment.file.name }}</strong>
-            <Btn variant="outline" size="sm" :aria-label="'Remove ' + attachment.file.name" @click="remove(attachment.contentId)">Remove</Btn>
+            <strong class="overflow-x-auto w-full"
+              >{{ attachment.file.name }}</strong>
+            <Btn
+              variant="outline"
+              size="sm"
+              :aria-label="'Remove ' + attachment.file.name"
+              @click="remove(attachment.contentId)"
+              >Remove</Btn>
           </Flex>
-          <span class="text-muted">{{ Math.ceil(attachment.file.size / 1024) }} KB · {{ attachment.file.type }}</span>
+          <span class="text-muted"
+            >{{ Math.ceil(attachment.file.size / 1024) }} KB · {{ attachment.file.type }}</span>
           <code class="overflow-x-auto">cid:{{ attachment.contentId }}</code>
         </Flex>
       </TabPane>
       <TabPane id="composer-images-html" label="HTML with cid: URLs">
-        <pre class="overflow-x-auto m-0"><code id="composer-image-html">{{ messageHtml }}</code></pre>
+        <pre
+          class="overflow-x-auto m-0"
+        ><code id="composer-image-html">{{ messageHtml }}</code></pre>
       </TabPane>
     </Tabs>
   </Panel>
-  <p class="text-muted m-0">You can also paste or drop image files into the editor. This example appends them to the message. PNG, JPEG, WebP and GIF files up to 5 MB each are accepted.</p>
+  <p class="text-muted m-0">
+    You can also paste or drop image files into the editor. This example appends
+    them to the message. PNG, JPEG, WebP and GIF files up to 5 MB each are
+    accepted.
+  </p>
 </Flex>`
 
 function createComposerInlineImages(): ComposerInlineImages {

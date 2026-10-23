@@ -14,14 +14,31 @@ const creationResultTemplate = html`<Flex direction="column" class="gap-5">
     <p class="forge-workspace-path fw-700 m-0">{{ project.directory }}</p>
     <p class="fs-sm mt-3 mb-0">{{ project.template }}</p>
   </Panel>
-  <FormStatus r-for="failure in project.failures" tone="warning">{{ failure }}</FormStatus>
-  <FormStatus r-if="project.previewError" tone="warning">{{ project.previewError }}</FormStatus>
+  <FormStatus r-for="failure in project.failures" tone="warning"
+    >{{ failure }}</FormStatus>
+  <FormStatus r-if="project.previewError" tone="warning"
+    >{{ project.previewError }}</FormStatus>
   <Flex wrap="true" class="gap-3">
-    <BtnLink r-if="project.previewUrl" :href="project.previewUrl" target="_blank" rel="noopener noreferrer" tone="accent">Browse live site ↗</BtnLink>
-    <Btn r-if="!project.previewUrl" tone="accent" :disabled="!connected" @click="restart">Start live site</Btn>
-    <Btn variant="outline" :disabled="!connected" @click="finish">Finish Forge</Btn>
+    <BtnLink
+      r-if="project.previewUrl"
+      :href="project.previewUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      tone="accent"
+      >Browse live site ↗</BtnLink>
+    <Btn
+      r-if="!project.previewUrl"
+      tone="accent"
+      :disabled="!connected"
+      @click="restart"
+      >Start live site</Btn>
+    <Btn variant="outline" :disabled="!connected" @click="finish"
+      >Finish Forge</Btn>
   </Flex>
-  <p class="text-subtle fs-sm m-0">Forge stays open while you explore. Source edits appear on the live site automatically. Finishing Forge stops both local servers.</p>
+  <p class="text-subtle fs-sm m-0">
+    Forge stays open while you explore. Source edits appear on the live site
+    automatically. Finishing Forge stops both local servers.
+  </p>
   <NextSteps :commands="project.commands"/>
 </Flex>`
 

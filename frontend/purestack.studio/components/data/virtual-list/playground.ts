@@ -43,12 +43,20 @@ export interface ReleaseRow {
 }
 
 const releaseRowTemplate = html`<Flex
-  align="center" justify="between" class="px-3 bb-1 b-subtle"
+  align="center"
+  justify="between"
+  class="px-3 bb-1 b-subtle"
   style="height: 100%; box-sizing: border-box; overflow: hidden"
-  role="listitem" :aria-posinset="index + 1" :data-index="index"
+  role="listitem"
+  :aria-posinset="index + 1"
+  :data-index="index"
 >
-  <strong class="min-w-0 ws-nowrap overflow-hidden text-ellipsis" :title="item.title">{{ item.title }}</strong>
-  <Badge :tone="item.tone" variant="surface" style="flex-shrink: 0">{{ item.state }}</Badge>
+  <strong
+    class="min-w-0 ws-nowrap overflow-hidden text-ellipsis"
+    :title="item.title"
+    >{{ item.title }}</strong>
+  <Badge :tone="item.tone" variant="surface" style="flex-shrink: 0"
+    >{{ item.state }}</Badge>
 </Flex>`
 
 const releaseRow = defineComponent<ReleaseRow>(releaseRowTemplate, {
@@ -83,19 +91,42 @@ export interface VirtualListPlayground {
 
 const virtualListPlaygroundTemplate = html`<Flex direction="column">
   <Grid columns="1" columnsMd="3">
-    <FormSelectField id="list-count" label="Dataset size" :model="count" :options="counts" @change="load" />
-    <FormInputField id="list-search" label="Find a release" placeholder="Try Release 42" :model="query" />
-    <FormSelectField id="list-state" label="Status filter" :model="state" :options="states" />
+    <FormSelectField
+      id="list-count"
+      label="Dataset size"
+      :model="count"
+      :options="counts"
+      @change="load"/>
+    <FormInputField
+      id="list-search"
+      label="Find a release"
+      placeholder="Try Release 42"
+      :model="query"/>
+    <FormSelectField
+      id="list-state"
+      label="Status filter"
+      :model="state"
+      :options="states"/>
   </Grid>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · RELEASE QUEUE</p>
-      <Badge tone="accent" variant="surface">{{ filtered.length }} matching records</Badge>
+      <Badge tone="accent" variant="surface"
+        >{{ filtered.length }} matching records</Badge>
     </Flex>
     <Grid columns="1" columnsSm="3" class="my-3">
-      <div><p class="text-muted m-0">Rows mounted</p><strong id="list-mounted">{{ mountedRows }}</strong></div>
-      <div><p class="text-muted m-0">Mounted positions</p><strong id="list-range">{{ mountedRange }}</strong></div>
-      <div><p class="text-muted m-0">Scroll offset</p><strong id="list-offset">{{ scrollOffset }} px</strong></div>
+      <div>
+        <p class="text-muted m-0">Rows mounted</p>
+        <strong id="list-mounted">{{ mountedRows }}</strong>
+      </div>
+      <div>
+        <p class="text-muted m-0">Mounted positions</p>
+        <strong id="list-range">{{ mountedRange }}</strong>
+      </div>
+      <div>
+        <p class="text-muted m-0">Scroll offset</p>
+        <strong id="list-offset">{{ scrollOffset }} px</strong>
+      </div>
     </Grid>
     <VirtualList
       id="release-viewport"
@@ -108,25 +139,51 @@ const virtualListPlaygroundTemplate = html`<Flex direction="column">
       role="list"
       aria-label="Filtered release queue"
       aria-describedby="list-keyboard-help"
-      class="b-1 b-subtle rounded-md"
-    />
+      class="b-1 b-subtle rounded-md"/>
     <FormStatus r-if="!filtered.length" role="status">
       {{ records.length ? 'No releases match. Clear the search or choose another status.' : 'The queue is empty. Load a dataset or reset the playground.' }}
     </FormStatus>
-    <p id="list-keyboard-help" class="mb-0 text-muted">Focus the list and use Arrow keys or Page Up / Page Down to scroll. Counters show real mounted rows, including the overscan buffer.</p>
+    <p id="list-keyboard-help" class="mb-0 text-muted">
+      Focus the list and use Arrow keys or Page Up / Page Down to scroll.
+      Counters show real mounted rows, including the overscan buffer.
+    </p>
   </Panel>
   <Grid columns="1" columnsMd="3">
-    <FormSelectField id="list-height" label="Viewport height" :model="height" :options="heights" />
-    <FormSelectField id="list-row-height" label="Row height" :model="rowHeight" :options="densities" />
-    <FormSelectField id="list-overscan" label="Overscan" :model="overscan" :options="buffers" />
+    <FormSelectField
+      id="list-height"
+      label="Viewport height"
+      :model="height"
+      :options="heights"/>
+    <FormSelectField
+      id="list-row-height"
+      label="Row height"
+      :model="rowHeight"
+      :options="densities"/>
+    <FormSelectField
+      id="list-overscan"
+      label="Overscan"
+      :model="overscan"
+      :options="buffers"/>
   </Grid>
-  <p class="m-0 text-muted">Increasing the viewport or overscan mounts more rows. Changing the row height also changes the scroll distance. Each row fills its fixed-height wrapper, so the geometry stays aligned.</p>
+  <p class="m-0 text-muted">
+    Increasing the viewport or overscan mounts more rows. Changing the row
+    height also changes the scroll distance. Each row fills its fixed-height
+    wrapper, so the geometry stays aligned.
+  </p>
   <Grid columns="1" columnsMd="2" alignItems="end">
-    <FormInputField id="list-target" label="Jump to matching position (1-based)" type="number" min="1" :model="target" />
+    <FormInputField
+      id="list-target"
+      label="Jump to matching position (1-based)"
+      type="number"
+      min="1"
+      :model="target"/>
     <Flex wrap="true">
-      <Btn tone="accent" :disabled="!filtered.length" @click="jump">Jump to row</Btn>
-      <Btn variant="outline" :disabled="!filtered.length" @click="first">First</Btn>
-      <Btn variant="outline" :disabled="!filtered.length" @click="last">Last</Btn>
+      <Btn tone="accent" :disabled="!filtered.length" @click="jump"
+        >Jump to row</Btn>
+      <Btn variant="outline" :disabled="!filtered.length" @click="first"
+        >First</Btn>
+      <Btn variant="outline" :disabled="!filtered.length" @click="last"
+        >Last</Btn>
     </Flex>
   </Grid>
   <Flex wrap="true">
@@ -294,6 +351,6 @@ createApp(
   },
   {
     selector: 'app#virtual-list-demo',
-    template: html`<VirtualListPlayground />`,
+    template: html`<VirtualListPlayground/>`,
   },
 )

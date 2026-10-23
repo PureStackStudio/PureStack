@@ -13,40 +13,58 @@ nav:
 
 # Site<wbr/>Footer
 
-<ComponentHeader name="SiteFooter" kind="Closing chapter" summary="A site-wide footer with content, legal and social slots, plus a built-in home for consent settings." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/footer/footer.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="SiteFooter"
+  kind="Closing chapter"
+  summary="A site-wide footer with content, legal and social slots, plus a built-in home for consent settings."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/footer/footer.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## A complete footer
 
 The explicit teleport target keeps this footer inside the example.
 
-<Tabs group="site-footer-sample-1" selectedTab="site-footer-sample-1-preview" ariaLabel="A complete footer example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="site-footer-sample-1"
+  selectedTab="site-footer-sample-1-preview"
+  ariaLabel="A complete footer example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="site-footer-sample-1-preview" label="Preview">
-<ComponentExample label="SiteFooter in context" caption="Content, legal, and social slots with an explicit teleport target. Open the source tab to adapt the composition.">
-    <div id="footer-example-target"></div>
-    <SiteFooter
-      teleport="#footer-example-target"
-      copyright="© Example Website"
-      legalLabel="Example documentation links"
+    <ComponentExample
+      label="SiteFooter in context"
+      caption="Content, legal, and social slots with an explicit teleport target. Open the source tab to adapt the composition."
     >
-      <Grid columns="1" columnsSm="2">
-        <div>
-          <h3>Example Website</h3>
-          <p>A footer composed from the same components as the page.</p>
-        </div>
-        <Flex direction="column" align="start">
-          <BtnLink href="/components/" variant="link">Component library</BtnLink>
-          <BtnLink href="/components/site/site-logo/" variant="link">Brand presentation</BtnLink>
-        </Flex>
-      </Grid>
-      <template #legal>
-        <BtnLink href="/components/site/consent/" variant="link">Privacy controls guide</BtnLink>
-      </template>
-      <template #social>
-        <BtnLink href="/components/" variant="link">Explore</BtnLink>
-      </template>
-    </SiteFooter>
-
-</ComponentExample>
+      <div id="footer-example-target"></div>
+      <SiteFooter
+        teleport="#footer-example-target"
+        copyright="© Example Website"
+        legalLabel="Example documentation links"
+      >
+        <Grid columns="1" columnsSm="2">
+          <div>
+            <h3>Example Website</h3>
+            <p>A footer composed from the same components as the page.</p>
+          </div>
+          <Flex direction="column" align="start">
+            <BtnLink href="/components/" variant="link"
+              >Component library</BtnLink>
+            <BtnLink href="/components/site/site-logo/" variant="link"
+              >Brand presentation</BtnLink>
+          </Flex>
+        </Grid>
+        <template #legal>
+          <BtnLink href="/components/site/consent/" variant="link"
+            >Privacy controls guide</BtnLink>
+        </template>
+        <template #social>
+          <BtnLink href="/components/" variant="link">Explore</BtnLink>
+        </template>
+      </SiteFooter>
+    </ComponentExample>
   </TabPane>
   <TabPane id="site-footer-sample-1-source-0" label="complete-footer.mdx">
 ```html
@@ -81,27 +99,75 @@ The explicit teleport target keeps this footer inside the example.
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="tone"><SiteAppearanceGallery component="SiteFooter" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="tone">
+    <SiteAppearanceGallery component="SiteFooter" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="variant"><SiteAppearanceGallery component="SiteFooter" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="variant">
+    <SiteAppearanceGallery component="SiteFooter" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Each footer slot
 
-<ComponentExample label="Minimal, legal, social, and complete" caption="A unique teleport target keeps each footer in its own preview. The real footer also hosts the consent settings control.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Copyright only</code><div id="site-footer-minimal"></div><SiteFooter teleport="#site-footer-minimal" copyright="© Example" ariaLabel="Minimal example footer"/></div>
-<div class="component-appearance-cell"><code>Legal destinations</code><div id="site-footer-legal"></div><SiteFooter teleport="#site-footer-legal" copyright="© Example" legalLabel="Example guide links"><template #legal><a href="/components/site/consent/">Privacy controls</a><a href="/components/site/site-footer/">Footer guide</a></template></SiteFooter></div>
-<div class="component-appearance-cell"><code>Social destinations</code><div id="site-footer-social"></div><SiteFooter teleport="#site-footer-social" copyright="© Example"><template #social><a href="https://github.com/PureStackStudio/PureStack" target="_blank" rel="noopener noreferrer">GitHub ↗</a></template></SiteFooter></div>
-<div class="component-appearance-cell"><code>Content slot</code><div id="site-footer-content"></div><SiteFooter teleport="#site-footer-content" copyright="© Example"><SectionHeader title="Keep exploring" subtitle="A footer can continue the story." titleTag="h3"/><BtnLink href="/components/" variant="link">Component library</BtnLink></SiteFooter></div>
-</div>
+<ComponentExample
+  label="Minimal, legal, social, and complete"
+  caption="A unique teleport target keeps each footer in its own preview. The real footer also hosts the consent settings control."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Copyright only</code>
+      <div id="site-footer-minimal"></div>
+      <SiteFooter
+        teleport="#site-footer-minimal"
+        copyright="© Example"
+        ariaLabel="Minimal example footer"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Legal destinations</code>
+      <div id="site-footer-legal"></div>
+      <SiteFooter
+        teleport="#site-footer-legal"
+        copyright="© Example"
+        legalLabel="Example guide links"
+        ><template #legal
+          ><a href="/components/site/consent/">Privacy controls</a><a href="/components/site/site-footer/">Footer guide</a></template></SiteFooter>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Social destinations</code>
+      <div id="site-footer-social"></div>
+      <SiteFooter teleport="#site-footer-social" copyright="© Example"
+        ><template #social
+          ><a
+            href="https://github.com/PureStackStudio/PureStack"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub ↗</a></template></SiteFooter>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Content slot</code>
+      <div id="site-footer-content"></div>
+      <SiteFooter teleport="#site-footer-content" copyright="© Example"
+        ><SectionHeader
+          title="Keep exploring"
+          subtitle="A footer can continue the story."
+          titleTag="h3"/><BtnLink href="/components/" variant="link"
+          >Component library</BtnLink></SiteFooter>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -122,7 +188,11 @@ The default teleport destination is body, so ordinary usage moves the footer out
 
 <div class="api-overview">
   <p class="text-eyebrow">SiteFooter contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="SiteFooter properties">
@@ -134,34 +204,80 @@ The default teleport destination is body, so ordinary usage moves the footer out
   <a href="#site-footer-prop-variant">variant</a>
 </nav>
 
-<ApiProperty anchor="site-footer-prop-teleport" name="teleport" valueType="string" defaultValue="body">
-  <p>Selector of the footer’s destination. A falsy value falls back to body; use an explicit local target for a contained example.</p>
+<ApiProperty
+  anchor="site-footer-prop-teleport"
+  name="teleport"
+  valueType="string"
+  defaultValue="body"
+>
+  <p>
+    Selector of the footer’s destination. A falsy value falls back to body; use
+    an explicit local target for a contained example.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="site-footer-prop-ariaLabel" name="ariaLabel" valueType="string" defaultValue="Site footer">
+<ApiProperty
+  anchor="site-footer-prop-ariaLabel"
+  name="ariaLabel"
+  valueType="string"
+  defaultValue="Site footer"
+>
   <p>Accessible name on the footer.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-footer-prop-copyright" name="copyright" valueType="string" defaultValue="current year and All rights reserved">
+<ApiProperty
+  anchor="site-footer-prop-copyright"
+  name="copyright"
+  valueType="string"
+  defaultValue="current year and All rights reserved"
+>
   <p>Copyright text; an empty value uses the built-in fallback.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-footer-prop-legalLabel" name="legalLabel" valueType="string" defaultValue="Legal and policy links">
+<ApiProperty
+  anchor="site-footer-prop-legalLabel"
+  name="legalLabel"
+  valueType="string"
+  defaultValue="Legal and policy links"
+>
   <p>Accessible name on the legal navigation.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-footer-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="site-footer-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="site-footer-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="site-footer-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> main footer content. <strong>legal:</strong> legal or policy links. <strong>social:</strong> additional links. The legal row includes the consent-settings teleport target. Register defineFooterComponents and defineFlexComponents.</p>
+  <p>
+    <strong>Default slot:</strong> main footer content.
+    <strong>legal:</strong> legal or policy links.
+    <strong>social:</strong> additional links. The legal row includes the
+    consent-settings teleport target. Register defineFooterComponents and
+    defineFlexComponents.
+  </p>
 </div>
 
 ## Related components

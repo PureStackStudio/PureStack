@@ -1,3 +1,7 @@
+import {
+  findMdxExpressionEnd,
+  isMdxExpressionStart,
+} from '@purestack/ts-format'
 import type * as TypeScript from 'typescript'
 import * as vscode from 'vscode'
 import runtimeTs from './typescriptRuntime'
@@ -6,37 +10,19 @@ const ts = runtimeTs
 
 const SUPPORTED_TEMPLATE_TAG_NAMES = new Set(['html', 'svg'])
 
-export const VOID_HTML_TAG_NAMES = new Set([
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
-])
+export {
+  findMdxExpressionEnd,
+  findTagEnd,
+  isMdxExpressionStart,
+  scanTagTokens,
+  type TagToken,
+  VOID_HTML_TAG_NAMES,
+} from '@purestack/ts-format'
 
 export interface MarkupContext {
   contentEndOffset: number
   contentStartOffset: number
   ignoredRanges: Array<{ end: number; start: number }>
-}
-
-export interface TagToken {
-  end: number
-  kind: 'closing' | 'opening'
-  name: string
-  nameEnd: number
-  nameStart: number
-  selfClosing: boolean
-  start: number
 }
 
 interface MdxIgnoreScanState {
@@ -94,44 +80,6 @@ export function sanitizeMarkup(
   }
 
   return chars.join('')
-}
-
-export function scanTagTokens(markup: string) {
-  const tokens: TagToken[] = []
-
-  for (let index = 0; index < markup.length; index++) {
-    if (markup[index] !== '<') continue
-
-    if (markup.startsWith('<!--', index)) {
-      const commentEnd = markup.indexOf('-->', index + 4)
-      if (commentEnd === -1) break
-      index = commentEnd + 2
-      continue
-    }
-
-    const isClosing = markup[index + 1] === '/'
-    const nameStart = skipWhitespace(markup, index + (isClosing ? 2 : 1))
-    const nameEnd = readTagNameEnd(markup, nameStart)
-    if (nameEnd === nameStart) continue
-
-    const tagEnd = findTagEnd(markup, nameEnd)
-    if (tagEnd === -1) break
-
-    const name = markup.slice(nameStart, nameEnd)
-    const trailing = markup.slice(nameEnd, tagEnd)
-    tokens.push({
-      start: index,
-      end: tagEnd + 1,
-      kind: isClosing ? 'closing' : 'opening',
-      name,
-      nameStart,
-      nameEnd,
-      selfClosing: !isClosing && /\/\s*$/.test(trailing),
-    })
-    index = tagEnd
-  }
-
-  return tokens
 }
 
 export function getPendingOpeningTagAtEnd(markup: string) {
@@ -407,57 +355,6 @@ export function getMdxExpressionRanges(document: vscode.TextDocument) {
   return ranges
 }
 
-export function isMdxExpressionStart(source: string, index: number) {
-  return (
-    source[index] === '{' &&
-    source[index - 1] !== '{' &&
-    source[index + 1] !== '{'
-  )
-}
-
-export function findMdxExpressionEnd(source: string, startIndex: number) {
-  let braceDepth = 0
-  let quote: '"' | "'" | '`' | undefined
-
-  for (let index = startIndex; index < source.length; index++) {
-    const current = source[index]
-    const previous = source[index - 1]
-
-    if (quote) {
-      if (current === quote && previous !== '\\') {
-        quote = undefined
-      } else if (
-        quote === '`' &&
-        current === '$' &&
-        source[index + 1] === '{'
-      ) {
-        const templateExpressionEnd = findMdxExpressionEnd(source, index + 1)
-        if (templateExpressionEnd === -1) return -1
-        index = templateExpressionEnd - 1
-      }
-      continue
-    }
-
-    if (current === '"' || current === "'" || current === '`') {
-      quote = current
-      continue
-    }
-
-    if (current === '{') {
-      braceDepth++
-      continue
-    }
-
-    if (current !== '}') continue
-
-    braceDepth--
-    if (braceDepth === 0) return index + 1
-    if (braceDepth < 0) return -1
-  }
-
-  return -1
-}
-
 function endsWithSelfClosingSlash(tagTail: string) {
   return /\/\s*$/.test(tagTail)
 }
@@ -478,27 +375,6 @@ function isTagTailBalanced(tagTail: string) {
   }
 
   return !quote
-}
-
-export function findTagEnd(markup: string, startIndex: number) {
-  let quote: '"' | "'" | undefined
-
-  for (let index = startIndex; index < markup.length; index++) {
-    const current = markup[index]
-    if (quote) {
-      if (current === quote && markup[index - 1] !== '\\') quote = undefined
-      continue
-    }
-
-    if (current === '"' || current === "'") {
-      quote = current
-      continue
-    }
-
-    if (current === '>') return index
-  }
-
-  return -1
 }
 
 function skipWhitespace(markup: string, startIndex: number) {

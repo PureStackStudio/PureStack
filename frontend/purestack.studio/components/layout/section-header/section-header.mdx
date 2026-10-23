@@ -13,12 +13,34 @@ nav:
 
 # Section<wbr/>Header
 
-<ComponentHeader name="SectionHeader" kind="Content hierarchy" summary="Introduce a section with a clear hierarchy: context, title, subtitle, and a small supporting note." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/sectionHeader/sectionHeader.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
+<ComponentHeader
+  name="SectionHeader"
+  kind="Content hierarchy"
+  summary="Introduce a section with a clear hierarchy: context, title, subtitle, and a small supporting note."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/sectionHeader/sectionHeader.ts"
+  section="Layout &amp; content"
+  sectionHref="/components/layout/"/>
 
 ## In context
 
-<ComponentExample label="An editorial introduction" caption="All four text layers, custom classes, a deliberate heading level, a title anchor, and content in the default slot.">
-<div class="component-recipe"><SectionHeader eyebrow="THE WORKSPACE" title="A home for your next idea" subtitle="Arrange the essentials, then make room for what comes next." footnote="Updated with the latest design review." titleTag="h3" titleId="workspace-heading" eyebrowClass="mb-2" titleClass="fs-h3 mb-2" subtitleClass="mb-3" footnoteClass="mb-3"><Badge tone="feature">12 projects</Badge></SectionHeader></div>
+<ComponentExample
+  label="An editorial introduction"
+  caption="All four text layers, custom classes, a deliberate heading level, a title anchor, and content in the default slot."
+>
+  <div class="component-recipe">
+    <SectionHeader
+      eyebrow="THE WORKSPACE"
+      title="A home for your next idea"
+      subtitle="Arrange the essentials, then make room for what comes next."
+      footnote="Updated with the latest design review."
+      titleTag="h3"
+      titleId="workspace-heading"
+      eyebrowClass="mb-2"
+      titleClass="fs-h3 mb-2"
+      subtitleClass="mb-3"
+      footnoteClass="mb-3"
+      ><Badge tone="feature">12 projects</Badge></SectionHeader>
+  </div>
 </ComponentExample>
 
 ```html
@@ -34,19 +56,23 @@ nav:
 
 Each text layer has a distinct job. The default heading level is h2.
 
-<Tabs group="section-header-sample-1" selectedTab="section-header-sample-1-preview" ariaLabel="A complete section heading example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="section-header-sample-1"
+  selectedTab="section-header-sample-1-preview"
+  ariaLabel="A complete section heading example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="section-header-sample-1-preview" label="Preview">
-<div class="component-preview-stage">
-    <SectionHeader
-      eyebrow="THE COMPONENT SYSTEM"
-      title="Small pieces. Complete interfaces."
-      subtitle="Compose a page from focused components that share one theme."
-      footnote="Every example includes its source."
-    />
-
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <SectionHeader
+        eyebrow="THE COMPONENT SYSTEM"
+        title="Small pieces. Complete interfaces."
+        subtitle="Compose a page from focused components that share one theme."
+        footnote="Every example includes its source."/>
+    </div>
+  </TabPane>
   <TabPane id="section-header-sample-1-source-0" label="complete-heading.mdx">
 ```html
 <SectionHeader
@@ -63,24 +89,29 @@ Each text layer has a distinct job. The default heading level is h2.
 
 Use h3 when the header belongs inside a section. Utility classes adjust appearance without changing semantics.
 
-<Tabs group="section-header-sample-2" selectedTab="section-header-sample-2-preview" ariaLabel="Fit the document hierarchy example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="section-header-sample-2"
+  selectedTab="section-header-sample-2-preview"
+  ariaLabel="Fit the document hierarchy example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="section-header-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <Panel bodyClass="p-4">
-      <SectionHeader
-        title="Within a card"
-        titleTag="h3"
-        titleClass="fs-h4 mb-2"
-        subtitle="The heading level follows the document, not the font size."
-        subtitleClass="mb-0"
-      >
-        <Badge tone="success">Ready to use</Badge>
-      </SectionHeader>
-    </Panel>
-
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Panel bodyClass="p-4">
+        <SectionHeader
+          title="Within a card"
+          titleTag="h3"
+          titleClass="fs-h4 mb-2"
+          subtitle="The heading level follows the document, not the font size."
+          subtitleClass="mb-0"
+        >
+          <Badge tone="success">Ready to use</Badge>
+        </SectionHeader>
+      </Panel>
+    </div>
+  </TabPane>
   <TabPane id="section-header-sample-2-source-0" label="heading-level.mdx">
 ```html
 <Panel bodyClass="p-4">
@@ -102,54 +133,85 @@ Use h3 when the header belongs inside a section. Utility classes adjust appearan
 
 titleTag accepts h1–h6, p, div, or span. These samples use a uniform visual size so you can compare the actual elements. Use heading levels that fit your real document.
 
-<ComponentExample label="Every title element" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>h1</code>
-<SectionHeader title="h1 title" titleTag="h1" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>h2</code>
-<SectionHeader title="h2 title" titleTag="h2" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>h3</code>
-<SectionHeader title="h3 title" titleTag="h3" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>h4</code>
-<SectionHeader title="h4 title" titleTag="h4" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>h5</code>
-<SectionHeader title="h5 title" titleTag="h5" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>h6</code>
-<SectionHeader title="h6 title" titleTag="h6" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>p</code>
-<SectionHeader title="p title" titleTag="p" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>div</code>
-<SectionHeader title="div title" titleTag="div" titleClass="fs-h4 mb-0"/>
-</div>
-<div class="component-appearance-cell"><code>span</code>
-<SectionHeader title="span title" titleTag="span" titleClass="fs-h4 mb-0"/>
-</div>
-</div>
+<ComponentExample
+  label="Every title element"
+  caption="Every value is visible. Compare treatments in the site’s light and dark themes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>h1</code>
+      <SectionHeader title="h1 title" titleTag="h1" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h2</code>
+      <SectionHeader title="h2 title" titleTag="h2" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h3</code>
+      <SectionHeader title="h3 title" titleTag="h3" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h4</code>
+      <SectionHeader title="h4 title" titleTag="h4" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h5</code>
+      <SectionHeader title="h5 title" titleTag="h5" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>h6</code>
+      <SectionHeader title="h6 title" titleTag="h6" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>p</code>
+      <SectionHeader title="p title" titleTag="p" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>div</code>
+      <SectionHeader title="div title" titleTag="div" titleClass="fs-h4 mb-0"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>span</code>
+      <SectionHeader
+        title="span title"
+        titleTag="span"
+        titleClass="fs-h4 mb-0"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Optional text layers
 
 Each missing layer is omitted. A title-only header can be enough; add context when it helps.
 
-<ComponentExample label="Optional text layers" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Title only</code>
-<SectionHeader title="Project library" titleTag="h3" titleClass="fs-h4"/>
-</div>
-<div class="component-appearance-cell"><code>Context + title</code>
-<SectionHeader eyebrow="WORKSPACE" title="Project library" titleTag="h3" titleClass="fs-h4"/>
-</div>
-<div class="component-appearance-cell"><code>Full hierarchy</code>
-<SectionHeader eyebrow="WORKSPACE" title="Project library" subtitle="A home for your next idea." footnote="Updated today." titleTag="h3" titleClass="fs-h4"/>
-</div>
-</div>
+<ComponentExample
+  label="Optional text layers"
+  caption="Every value is visible. Compare treatments in the site’s light and dark themes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Title only</code>
+      <SectionHeader title="Project library" titleTag="h3" titleClass="fs-h4"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Context + title</code>
+      <SectionHeader
+        eyebrow="WORKSPACE"
+        title="Project library"
+        titleTag="h3"
+        titleClass="fs-h4"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Full hierarchy</code>
+      <SectionHeader
+        eyebrow="WORKSPACE"
+        title="Project library"
+        subtitle="A home for your next idea."
+        footnote="Updated today."
+        titleTag="h3"
+        titleClass="fs-h4"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Styling each layer
@@ -173,7 +235,11 @@ Choose heading levels in order. Visual size and heading semantics are independen
 
 <div class="api-overview">
   <p class="text-eyebrow">SectionHeader contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="SectionHeader properties">
@@ -189,50 +255,123 @@ Choose heading levels in order. Visual size and heading semantics are independen
   <a href="#section-header-prop-footnoteClass">footnoteClass</a>
 </nav>
 
-<ApiProperty anchor="section-header-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="section-header-prop-eyebrow"
+  name="eyebrow"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Short context above the heading, such as a category or release label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="section-header-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="section-header-prop-subtitle"
+  name="subtitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting text beneath the title.</p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-footnote" name="footnote" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="section-header-prop-footnote"
+  name="footnote"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting note below the section description.</p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-titleTag" name="titleTag" valueType="RefOrValue&lt;string&gt;" defaultValue="h2">
-  <p>Heading element. Accepts h1–h6, p, div or span; invalid values fall back to h2. Match the surrounding document hierarchy.</p>
+<ApiProperty
+  anchor="section-header-prop-titleTag"
+  name="titleTag"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="h2"
+>
+  <p>
+    Heading element. Accepts h1–h6, p, div or span; invalid values fall back to
+    h2. Match the surrounding document hierarchy.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-titleId" name="titleId" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Id on the title element. Reference it from the surrounding section with aria-labelledby.</p>
+<ApiProperty
+  anchor="section-header-prop-titleId"
+  name="titleId"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Id on the title element. Reference it from the surrounding section with
+    aria-labelledby.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-eyebrowClass" name="eyebrowClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Additional classes on the eyebrow element. Use existing typography and spacing utilities.</p>
+<ApiProperty
+  anchor="section-header-prop-eyebrowClass"
+  name="eyebrowClass"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Additional classes on the eyebrow element. Use existing typography and
+    spacing utilities.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-titleClass" name="titleClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Additional classes on the title element. Use existing typography and spacing utilities.</p>
+<ApiProperty
+  anchor="section-header-prop-titleClass"
+  name="titleClass"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Additional classes on the title element. Use existing typography and spacing
+    utilities.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-subtitleClass" name="subtitleClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Additional classes on the subtitle element. Use existing typography and spacing utilities.</p>
+<ApiProperty
+  anchor="section-header-prop-subtitleClass"
+  name="subtitleClass"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Additional classes on the subtitle element. Use existing typography and
+    spacing utilities.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="section-header-prop-footnoteClass" name="footnoteClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Additional classes on the footnote element. Use existing typography and spacing utilities.</p>
+<ApiProperty
+  anchor="section-header-prop-footnoteClass"
+  name="footnoteClass"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Additional classes on the footnote element. Use existing typography and
+    spacing utilities.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> content following all text blocks, such as a badge or supporting link. Register defineSectionHeaderComponents.</p>
+  <p>
+    <strong>Default slot:</strong> content following all text blocks, such as a
+    badge or supporting link. Register defineSectionHeaderComponents.
+  </p>
 </div>
 
 

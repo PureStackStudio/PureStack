@@ -21,9 +21,8 @@ const formSubmitExampleTemplate = html`<Panel bodyClass="p-4">
       label="Release title"
       name="release"
       :model="releaseTitle"
-      :required="true"
-    />
-    <FormSubmit label="Save release title" tone="accent" />
+      :required="true"/>
+    <FormSubmit label="Save release title" tone="accent"/>
     <FormStatus tone="success" :hidden="!savedTitle">
       Saved locally: {{ savedTitle }}
     </FormStatus>
@@ -62,7 +61,7 @@ createApp(
       ...defineFormInputField(),
     },
   },
-  { selector: 'app#form-submit-demo', template: html`<FormSubmitExample />` },
+  { selector: 'app#form-submit-demo', template: html`<FormSubmitExample/>` },
 )
 
 mountFormAppearanceGalleries()

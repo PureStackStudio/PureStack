@@ -38,8 +38,7 @@ const featureShowcaseTemplate = html`<Panel
     variant="link"
     icon="tabler:arrow-up-right"
     iconPosition="end"
-    >{{ linkLabel }}</BtnLink
-  >
+    >{{ linkLabel }}</BtnLink>
 </Panel>`
 
 export function defineFeatureShowcaseComponent() {

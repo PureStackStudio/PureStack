@@ -12,8 +12,7 @@ const multiAutoCompleteOptionRowStatesTemplate = html`<MultiAutoCompleteInput
   label="Topics"
   rowComponent="MultiAutoCompleteOptionRow"
   :allowCustomValues="false"
-  :options="[{label:'Accessibility',value:'a11y'},{label:'Performance',value:'perf'}]"
-/>`
+  :options="[{label:'Accessibility',value:'a11y'},{label:'Performance',value:'perf'}]"/>`
 
 function createMultiAutoCompleteOptionRowStates(): MultiAutoCompleteOptionRowStates {
   return {}
@@ -41,6 +40,6 @@ createApp(
   },
   {
     selector: 'app#multi-auto-complete-option-row-states-demo',
-    template: html`<MultiAutoCompleteOptionRowStates />`,
+    template: html`<MultiAutoCompleteOptionRowStates/>`,
   },
 )

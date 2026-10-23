@@ -13,26 +13,41 @@ nav:
 
 # Form<wbr/>Submit
 
-<ComponentHeader name="FormSubmit" kind="Submission action" summary="Make the next step clear. A labelled submit button with every shared tone and visual treatment." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="FormSubmit"
+  kind="Submission action"
+  summary="Make the next step clear. A labelled submit button with every shared tone and visual treatment."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Submit a meaningful value
 
 The button triggers the form’s submit event, including when the user submits from the text field.
 
-<Tabs group="form-submit-sample-1" selectedTab="form-submit-sample-1-preview" ariaLabel="Submit a meaningful value example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-submit-sample-1"
+  selectedTab="form-submit-sample-1-preview"
+  ariaLabel="Submit a meaningful value example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-submit-sample-1-preview" label="Preview">
-<ComponentExample label="FormSubmit in context" caption="The live preview handles submission locally and shows the resulting value.">
-    <RegorApp id="form-submit-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="FormSubmit in context"
+      caption="The live preview handles submission locally and shows the resulting value."
+    >
+      <RegorApp id="form-submit-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="form-submit-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-submit-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="form-submit-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,19 +55,25 @@ The button triggers the form’s submit event, including when the user submits f
 
 The disabled fieldset keeps this visual comparison from triggering a form action.
 
-<Tabs group="form-submit-sample-2" selectedTab="form-submit-sample-2-preview" ariaLabel="Choose the action emphasis example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="form-submit-sample-2"
+  selectedTab="form-submit-sample-2-preview"
+  ariaLabel="Choose the action emphasis example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="form-submit-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <fieldset disabled class="p-3">
-      <legend>Submit treatments</legend>
-      <Flex wrap="true">
-        <FormSubmit label="Save changes" tone="accent" />
-        <FormSubmit label="Request review" tone="neutral" variant="outline" />
-      </Flex>
-    </fieldset>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <fieldset disabled class="p-3">
+        <legend>Submit treatments</legend>
+        <Flex wrap="true">
+          <FormSubmit label="Save changes" tone="accent"/>
+          <FormSubmit label="Request review" tone="neutral" variant="outline"/>
+        </Flex>
+      </fieldset>
+    </div>
+  </TabPane>
   <TabPane id="form-submit-sample-2-source-0" label="submit-treatments.mdx">
 ```html
 <fieldset disabled class="p-3">
@@ -70,20 +91,42 @@ The disabled fieldset keeps this visual comparison from triggering a form action
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-submit-tone-gallery" data-form-gallery data-component="FormSubmit" data-axis="tone">
-<FormAppearanceGallery component="FormSubmit" axis="tone" prefix="forms-form-submit-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-submit-tone-gallery"
+    data-form-gallery
+    data-component="FormSubmit"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="FormSubmit"
+      axis="tone"
+      prefix="forms-form-submit-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-form-submit-variant-gallery" data-form-gallery data-component="FormSubmit" data-axis="variant">
-<FormAppearanceGallery component="FormSubmit" axis="variant" prefix="forms-form-submit-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-form-submit-variant-gallery"
+    data-form-gallery
+    data-component="FormSubmit"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="FormSubmit"
+      axis="variant"
+      prefix="forms-form-submit-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Submit semantics
@@ -105,7 +148,11 @@ FormSubmit renders Btn with type submit. Put submission logic on the form to sup
 
 <div class="api-overview">
   <p class="text-eyebrow">FormSubmit contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="FormSubmit properties">
@@ -114,22 +161,51 @@ FormSubmit renders Btn with type submit. Put submission logic on the form to sup
   <a href="#form-submit-prop-variant">variant</a>
 </nav>
 
-<ApiProperty anchor="form-submit-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="form-submit-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-submit-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="form-submit-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="form-submit-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="solid">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="form-submit-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="solid"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineFormComponents and defineButtonComponents. Use Btn type="submit" directly when you need its wider API, such as disabled or icons.</p>
+  <p>
+    No slots. Register defineFormComponents and defineButtonComponents. Use Btn
+    type="submit" directly when you need its wider API, such as disabled or
+    icons.
+  </p>
 </div>
 
 ## Related components

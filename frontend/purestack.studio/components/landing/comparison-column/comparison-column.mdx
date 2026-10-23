@@ -13,35 +13,52 @@ nav:
 
 # Comparison<wbr/>Column
 
-<ComponentHeader name="ComparisonColumn" kind="One alternative" summary="One self-contained option in a comparison, with independent emphasis and freely composed details." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="ComparisonColumn"
+  kind="One alternative"
+  summary="One self-contained option in a comparison, with independent emphasis and freely composed details."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## A highlighted option
 
 An icon and badge identify the option before its supporting details.
 
-<Tabs group="comparison-column-sample-1" selectedTab="comparison-column-sample-1-preview" ariaLabel="A highlighted option example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-column-sample-1"
+  selectedTab="comparison-column-sample-1-preview"
+  ariaLabel="A highlighted option example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-column-sample-1-preview" label="Preview">
-<ComponentExample label="ComparisonColumn in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <ComparisonColumn
-      title="Component composition"
-      summary="Build a view from focused pieces."
-      badge="Recommended here"
-      icon="lucide:check"
-      tone="accent"
+    <ComponentExample
+      label="ComparisonColumn in context"
+      caption="Compare the composition, then open its source tab to adapt it."
     >
-      <ul class="pl-0">
-        <ComparisonFeature>Readable source</ComparisonFeature>
-        <ComparisonFeature>Shared theme tokens</ComparisonFeature>
-      </ul>
-      <BtnLink href="/components/landing/feature-card/" variant="link">
-        Explore card composition
-      </BtnLink>
-    </ComparisonColumn>
-
-</ComponentExample>
+      <ComparisonColumn
+        title="Component composition"
+        summary="Build a view from focused pieces."
+        badge="Recommended here"
+        icon="lucide:check"
+        tone="accent"
+      >
+        <ul class="pl-0">
+          <ComparisonFeature>Readable source</ComparisonFeature>
+          <ComparisonFeature>Shared theme tokens</ComparisonFeature>
+        </ul>
+        <BtnLink href="/components/landing/feature-card/" variant="link">
+          Explore card composition
+        </BtnLink>
+      </ComparisonColumn>
+    </ComponentExample>
   </TabPane>
-  <TabPane id="comparison-column-sample-1-source-0" label="highlighted-option.mdx">
+  <TabPane
+    id="comparison-column-sample-1-source-0"
+    label="highlighted-option.mdx"
+  >
 ```html
 <ComparisonColumn
   title="Component composition"
@@ -66,19 +83,27 @@ An icon and badge identify the option before its supporting details.
 
 Use outline or neutral treatments when both options should have equal emphasis.
 
-<Tabs group="comparison-column-sample-2" selectedTab="comparison-column-sample-2-preview" ariaLabel="A quiet alternative example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-column-sample-2"
+  selectedTab="comparison-column-sample-2-preview"
+  ariaLabel="A quiet alternative example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-column-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <ComparisonColumn
-      title="Plain content"
-      summary="A good fit for a short explanation."
-      variant="outline"
-    >
-      <p class="mb-0">Choose the simplest structure that communicates the information.</p>
-    </ComparisonColumn>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <ComparisonColumn
+        title="Plain content"
+        summary="A good fit for a short explanation."
+        variant="outline"
+      >
+        <p class="mb-0">
+          Choose the simplest structure that communicates the information.
+        </p>
+      </ComparisonColumn>
+    </div>
+  </TabPane>
   <TabPane id="comparison-column-sample-2-source-0" label="quiet-option.mdx">
 ```html
 <ComparisonColumn
@@ -96,26 +121,60 @@ Use outline or neutral treatments when both options should have equal emphasis.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="ComparisonColumn" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="ComparisonColumn" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="ComparisonColumn" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="ComparisonColumn" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Decoration and rich detail
 
-<ComponentExample label="A quiet alternative and a highlighted choice" caption="A title, summary, badge, and icon are independently optional. Compose feature lists in the default slot.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Quiet</code><ComparisonColumn title="Start small" summary="A few reusable patterns." variant="outline"><ul class="m-0 p-0"><ComparisonFeature>Basic composition</ComparisonFeature></ul></ComparisonColumn></div>
-<div class="component-appearance-cell"><code>Icon only</code><ComparisonColumn title="Reviewed" icon="lucide:check" tone="success"><p>Extra supporting text belongs in the default slot.</p></ComparisonColumn></div>
-<div class="component-appearance-cell"><code>Badge only</code><ComparisonColumn title="Team workflow" badge="Recommended" tone="feature"><ul class="m-0 p-0"><ComparisonFeature tone="feature">Shared workspace</ComparisonFeature></ul></ComparisonColumn></div>
-</div>
+<ComponentExample
+  label="A quiet alternative and a highlighted choice"
+  caption="A title, summary, badge, and icon are independently optional. Compose feature lists in the default slot."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Quiet</code><ComparisonColumn
+        title="Start small"
+        summary="A few reusable patterns."
+        variant="outline"
+        ><ul class="m-0 p-0">
+          <ComparisonFeature>Basic composition</ComparisonFeature>
+        </ul></ComparisonColumn>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Icon only</code><ComparisonColumn title="Reviewed" icon="lucide:check" tone="success"
+        ><p>
+          Extra supporting text belongs in the default slot.
+        </p></ComparisonColumn>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Badge only</code><ComparisonColumn
+        title="Team workflow"
+        badge="Recommended"
+        tone="feature"
+        ><ul class="m-0 p-0">
+          <ComparisonFeature tone="feature">Shared workspace</ComparisonFeature>
+        </ul></ComparisonColumn>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -138,7 +197,11 @@ Titles render as h3. A comparison column can contain links but is not itself cli
 
 <div class="api-overview">
   <p class="text-eyebrow">ComparisonColumn contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ComparisonColumn properties">
@@ -150,34 +213,80 @@ Titles render as h3. A comparison column can contain links but is not itself cli
   <a href="#comparison-column-prop-variant">variant</a>
 </nav>
 
-<ApiProperty anchor="comparison-column-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="comparison-column-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-column-prop-summary" name="summary" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="comparison-column-prop-summary"
+  name="summary"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>A concise explanation beneath the heading.</p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-column-prop-badge" name="badge" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="comparison-column-prop-badge"
+  name="badge"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Optional compact label rendered with Badge.</p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-column-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+<ApiProperty
+  anchor="comparison-column-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered SVG icon name. In browser apps, include the icon in the resolver
+    passed to defineIconComponents.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-column-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="comparison-column-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-column-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="comparison-column-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> details, feature lists and actions. Register defineComparisonColumnComponent with Panel, Flex, Badge and Icon dependencies.</p>
+  <p>
+    <strong>Default slot:</strong> details, feature lists and actions. Register
+    defineComparisonColumnComponent with Panel, Flex, Badge and Icon
+    dependencies.
+  </p>
 </div>
 
 ## Related components

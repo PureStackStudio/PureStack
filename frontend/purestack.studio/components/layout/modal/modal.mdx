@@ -13,12 +13,42 @@ nav:
 
 # Modal
 
-<ComponentHeader name="Modal" kind="Focused dialog" summary="Give an important moment its own space. Native dialogs with deliberate motion, flexible slots, and focus handling." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/modal/modal.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
+<ComponentHeader
+  name="Modal"
+  kind="Focused dialog"
+  summary="Give an important moment its own space. Native dialogs with deliberate motion, flexible slots, and focus handling."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/modal/modal.ts"
+  section="Layout &amp; content"
+  sectionHref="/components/layout/"/>
 
 ## In context
 
-<ComponentExample label="Review before publishing" caption="Open a real dialog. Its title, content, footer actions, and close control are visible; no data is published.">
-<div class="component-recipe"><Flex align="center" justify="between" wrap="true"><div><h3>Your release is ready</h3><p>Give the final decision a little breathing room.</p></div><ModalTrigger target="layout-review-modal" label="Review release" tone="accent"/></Flex><Modal id="layout-review-modal" title="Ready to share?" tone="neutral" size="md" :showClose="true"><Badge tone="success">All checks passed</Badge><p>This is a local preview. Review the content, then return to the page.</p><template #footer><Btn variant="outline" data-modal-close>Keep editing</Btn><Btn tone="accent" data-modal-close>Looks good</Btn></template></Modal></div>
+<ComponentExample
+  label="Review before publishing"
+  caption="Open a real dialog. Its title, content, footer actions, and close control are visible; no data is published."
+>
+  <div class="component-recipe">
+    <Flex align="center" justify="between" wrap="true"
+      ><div>
+        <h3>Your release is ready</h3>
+        <p>Give the final decision a little breathing room.</p>
+      </div>
+      <ModalTrigger
+        target="layout-review-modal"
+        label="Review release"
+        tone="accent"/></Flex><Modal
+      id="layout-review-modal"
+      title="Ready to share?"
+      tone="neutral"
+      size="md"
+      :showClose="true"
+      ><Badge tone="success">All checks passed</Badge>
+      <p>
+        This is a local preview. Review the content, then return to the page.
+      </p>
+      <template #footer
+        ><Btn variant="outline" data-modal-close>Keep editing</Btn><Btn tone="accent" data-modal-close>Looks good</Btn></template></Modal>
+  </div>
 </ComponentExample>
 
 ```html
@@ -47,15 +77,28 @@ nav:
 Open the dialog and try its close controls, backdrop, and Escape key. Focus returns to the trigger after dismissal. This example is entirely local.
 
 <Panel tone="neutral" variant="surface">
-<ModalTrigger target="publish-dialog" label="Review publication" tone="accent"/>
-<Modal id="publish-dialog" title="Ready to share your work?" tone="neutral" size="md" :showClose="true">
-  <p>Your next idea deserves a place on the web. This preview keeps everything local.</p>
-  <template #footer><Btn tone="neutral" variant="surface" data-modal-close>Keep editing</Btn><Btn tone="accent" data-modal-close>Looks good</Btn></template>
-</Modal>
+  <ModalTrigger
+    target="publish-dialog"
+    label="Review publication"
+    tone="accent"/>
+  <Modal
+    id="publish-dialog"
+    title="Ready to share your work?"
+    tone="neutral"
+    size="md"
+    :showClose="true"
+  >
+    <p>
+      Your next idea deserves a place on the web. This preview keeps everything
+      local.
+    </p>
+    <template #footer
+      ><Btn tone="neutral" variant="surface" data-modal-close>Keep editing</Btn><Btn tone="accent" data-modal-close>Looks good</Btn></template>
+  </Modal>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <ModalTrigger target="publish-dialog" label="Review publication" tone="accent"/>
@@ -64,7 +107,6 @@ Open the dialog and try its close controls, backdrop, and Escape key. Focus retu
   <template #footer><Btn tone="neutral" variant="surface" data-modal-close>Keep editing</Btn><Btn tone="accent" data-modal-close>Looks good</Btn></template>
 </Modal>
 ```
-
 </details>
 
 ## Usage
@@ -73,7 +115,12 @@ Connect `ModalTrigger.target` to a unique `Modal.id`. Set a title and explicitly
 
 <Panel tone="info" variant="surface">
   <strong>A native dialog, with a runtime</strong>
-  <p>PureStack automatically includes the modal runtime when you render <code>Modal</code> in MDX. The runtime opens the native dialog, manages focus, and coordinates dismissal animations. Opening a modal requires JavaScript.</p>
+  <p>
+    PureStack automatically includes the modal runtime when you render
+    <code>Modal</code> in MDX. The runtime opens the native dialog, manages
+    focus, and coordinates dismissal animations. Opening a modal requires
+    JavaScript.
+  </p>
 </Panel>
 
 ## Sizes
@@ -81,18 +128,47 @@ Connect `ModalTrigger.target` to a unique `Modal.id`. Set a title and explicitly
 Choose `sm`, `md`, `lg`, or `xl` to match the amount of content. All sizes remain constrained by the viewport, and long content scrolls inside the panel.
 
 <Panel tone="neutral" variant="surface">
-<Flex wrap="true"><ModalTrigger target="size-sm" label="SM dialog" tone="neutral" variant="surface"/>
-<Modal id="size-sm" title="SM dialog" size="sm" :showClose="true"><p>Size follows the modal’s built-in responsive width constraints.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
-<ModalTrigger target="size-md" label="MD dialog" tone="neutral" variant="surface"/>
-<Modal id="size-md" title="MD dialog" size="md" :showClose="true"><p>Size follows the modal’s built-in responsive width constraints.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
-<ModalTrigger target="size-lg" label="LG dialog" tone="neutral" variant="surface"/>
-<Modal id="size-lg" title="LG dialog" size="lg" :showClose="true"><p>Size follows the modal’s built-in responsive width constraints.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
-<ModalTrigger target="size-xl" label="XL dialog" tone="neutral" variant="surface"/>
-<Modal id="size-xl" title="XL dialog" size="xl" :showClose="true"><p>Size follows the modal’s built-in responsive width constraints.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal></Flex>
+  <Flex wrap="true"
+    ><ModalTrigger
+      target="size-sm"
+      label="SM dialog"
+      tone="neutral"
+      variant="surface"/>
+    <Modal id="size-sm" title="SM dialog" size="sm" :showClose="true"
+      ><p>Size follows the modal’s built-in responsive width constraints.</p>
+      <template #footer
+        ><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
+    <ModalTrigger
+      target="size-md"
+      label="MD dialog"
+      tone="neutral"
+      variant="surface"/>
+    <Modal id="size-md" title="MD dialog" size="md" :showClose="true"
+      ><p>Size follows the modal’s built-in responsive width constraints.</p>
+      <template #footer
+        ><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
+    <ModalTrigger
+      target="size-lg"
+      label="LG dialog"
+      tone="neutral"
+      variant="surface"/>
+    <Modal id="size-lg" title="LG dialog" size="lg" :showClose="true"
+      ><p>Size follows the modal’s built-in responsive width constraints.</p>
+      <template #footer
+        ><Btn tone="accent" data-modal-close>Done</Btn></template></Modal>
+    <ModalTrigger
+      target="size-xl"
+      label="XL dialog"
+      tone="neutral"
+      variant="surface"/>
+    <Modal id="size-xl" title="XL dialog" size="xl" :showClose="true"
+      ><p>Size follows the modal’s built-in responsive width constraints.</p>
+      <template #footer
+        ><Btn tone="accent" data-modal-close>Done</Btn></template></Modal></Flex>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <Flex wrap="true"><ModalTrigger target="size-sm" label="SM dialog" tone="neutral" variant="surface"/>
@@ -104,7 +180,6 @@ Choose `sm`, `md`, `lg`, or `xl` to match the amount of content. All sizes remai
 <ModalTrigger target="size-xl" label="XL dialog" tone="neutral" variant="surface"/>
 <Modal id="size-xl" title="XL dialog" size="xl" :showClose="true"><p>Size follows the modal’s built-in responsive width constraints.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal></Flex>
 ```
-
 </details>
 
 ## Motion
@@ -112,20 +187,81 @@ Choose `sm`, `md`, `lg`, or `xl` to match the amount of content. All sizes remai
 `slideFrom` controls the direction of the entrance and exit. `fade` controls the fade independently. Use `:fade="false"` for a real boolean rather than a string.
 
 <Panel tone="neutral" variant="surface">
-<Flex wrap="true"><ModalTrigger target="motion-none" label="none" variant="surface" tone="neutral"/>
-<Modal id="motion-none" title="Slide: none" slideFrom="none" :fade="false" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
-<ModalTrigger target="motion-top" label="top" variant="surface" tone="neutral"/>
-<Modal id="motion-top" title="Slide: top" slideFrom="top" :fade="true" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
-<ModalTrigger target="motion-right" label="right" variant="surface" tone="neutral"/>
-<Modal id="motion-right" title="Slide: right" slideFrom="right" :fade="true" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
-<ModalTrigger target="motion-bottom" label="bottom" variant="surface" tone="neutral"/>
-<Modal id="motion-bottom" title="Slide: bottom" slideFrom="bottom" :fade="true" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
-<ModalTrigger target="motion-left" label="left" variant="surface" tone="neutral"/>
-<Modal id="motion-left" title="Slide: left" slideFrom="left" :fade="true" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal></Flex>
+  <Flex wrap="true"
+    ><ModalTrigger
+      target="motion-none"
+      label="none"
+      variant="surface"
+      tone="neutral"/>
+    <Modal
+      id="motion-none"
+      title="Slide: none"
+      slideFrom="none"
+      :fade="false"
+      :showClose="true"
+      ><p>Dismiss with Escape or the button below.</p>
+      <template #footer
+        ><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
+    <ModalTrigger
+      target="motion-top"
+      label="top"
+      variant="surface"
+      tone="neutral"/>
+    <Modal
+      id="motion-top"
+      title="Slide: top"
+      slideFrom="top"
+      :fade="true"
+      :showClose="true"
+      ><p>Dismiss with Escape or the button below.</p>
+      <template #footer
+        ><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
+    <ModalTrigger
+      target="motion-right"
+      label="right"
+      variant="surface"
+      tone="neutral"/>
+    <Modal
+      id="motion-right"
+      title="Slide: right"
+      slideFrom="right"
+      :fade="true"
+      :showClose="true"
+      ><p>Dismiss with Escape or the button below.</p>
+      <template #footer
+        ><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
+    <ModalTrigger
+      target="motion-bottom"
+      label="bottom"
+      variant="surface"
+      tone="neutral"/>
+    <Modal
+      id="motion-bottom"
+      title="Slide: bottom"
+      slideFrom="bottom"
+      :fade="true"
+      :showClose="true"
+      ><p>Dismiss with Escape or the button below.</p>
+      <template #footer
+        ><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal>
+    <ModalTrigger
+      target="motion-left"
+      label="left"
+      variant="surface"
+      tone="neutral"/>
+    <Modal
+      id="motion-left"
+      title="Slide: left"
+      slideFrom="left"
+      :fade="true"
+      :showClose="true"
+      ><p>Dismiss with Escape or the button below.</p>
+      <template #footer
+        ><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal></Flex>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <Flex wrap="true"><ModalTrigger target="motion-none" label="none" variant="surface" tone="neutral"/>
@@ -139,7 +275,6 @@ Choose `sm`, `md`, `lg`, or `xl` to match the amount of content. All sizes remai
 <ModalTrigger target="motion-left" label="left" variant="surface" tone="neutral"/>
 <Modal id="motion-left" title="Slide: left" slideFrom="left" :fade="true" :showClose="true"><p>Dismiss with Escape or the button below.</p><template #footer><Btn data-modal-close tone="accent">Close preview</Btn></template></Modal></Flex>
 ```
-
 </details>
 
 ## Slots and composition
@@ -149,16 +284,31 @@ Use the `header`, `body`, and `footer` slots to compose a task-specific surface.
 When replacing the header, preserve the title connection: for `id="custom-dialog"`, provide an element with `id="custom-dialog-title"`.
 
 <Panel tone="neutral" variant="surface">
-<ModalTrigger target="custom-dialog" label="Open project summary" tone="accent" variant="surface"/>
-<Modal id="custom-dialog" tone="neutral" size="lg" :showClose="true">
-  <template #header><div class="p-4"><Badge tone="accent">Project preview</Badge><h2 id="custom-dialog-title">A place for your next idea.</h2></div></template>
-  <template #body><Grid columns="1" columnsSm="2"><Panel tone="neutral"><h3>Content</h3><p>Markdown and components, together.</p></Panel><Panel tone="accent"><h3>Interface</h3><p>Shared themes. Native browser output.</p></Panel></Grid></template>
-  <template #footer><Btn tone="accent" data-modal-close>Back to the docs</Btn></template>
-</Modal>
+  <ModalTrigger
+    target="custom-dialog"
+    label="Open project summary"
+    tone="accent"
+    variant="surface"/>
+  <Modal id="custom-dialog" tone="neutral" size="lg" :showClose="true">
+    <template #header
+      ><div class="p-4">
+        <Badge tone="accent">Project preview</Badge>
+        <h2 id="custom-dialog-title">A place for your next idea.</h2>
+      </div></template>
+    <template #body
+      ><Grid columns="1" columnsSm="2"
+        ><Panel tone="neutral"
+          ><h3>Content</h3>
+          <p>Markdown and components, together.</p></Panel><Panel tone="accent"
+          ><h3>Interface</h3>
+          <p>Shared themes. Native browser output.</p></Panel></Grid></template>
+    <template #footer
+      ><Btn tone="accent" data-modal-close>Back to the docs</Btn></template>
+  </Modal>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <ModalTrigger target="custom-dialog" label="Open project summary" tone="accent" variant="surface"/>
@@ -168,7 +318,6 @@ When replacing the header, preserve the title connection: for `id="custom-dialog
   <template #footer><Btn tone="accent" data-modal-close>Back to the docs</Btn></template>
 </Modal>
 ```
-
 </details>
 
 ### Full content override
@@ -176,14 +325,25 @@ When replacing the header, preserve the title connection: for `id="custom-dialog
 The `content` slot replaces the entire interior, including the built-in close button. Retain `.modal__panel` for size, motion, and focus handling. Provide a heading connected to the dialog and at least one clear dismissal control.
 
 <Panel tone="neutral" variant="surface">
-<ModalTrigger target="custom-content-dialog" label="Open custom surface" tone="neutral" variant="surface"/>
-<Modal id="custom-content-dialog" :fade="false" size="sm">
-  <template #content><article class="modal__panel p-6" role="document" tabindex="-1"><h2 id="custom-content-dialog-title">Your own composition.</h2><p>You own the interior. PureStack manages opening, dismissal, and focus.</p><Btn tone="accent" data-modal-close>Got it</Btn></article></template>
-</Modal>
+  <ModalTrigger
+    target="custom-content-dialog"
+    label="Open custom surface"
+    tone="neutral"
+    variant="surface"/>
+  <Modal id="custom-content-dialog" :fade="false" size="sm">
+    <template #content
+      ><article class="modal__panel p-6" role="document" tabindex="-1">
+        <h2 id="custom-content-dialog-title">Your own composition.</h2>
+        <p>
+          You own the interior. PureStack manages opening, dismissal, and focus.
+        </p>
+        <Btn tone="accent" data-modal-close>Got it</Btn>
+      </article></template>
+  </Modal>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <ModalTrigger target="custom-content-dialog" label="Open custom surface" tone="neutral" variant="surface"/>
@@ -191,7 +351,6 @@ The `content` slot replaces the entire interior, including the built-in close bu
   <template #content><article class="modal__panel p-6" role="document" tabindex="-1"><h2 id="custom-content-dialog-title">Your own composition.</h2><p>You own the interior. PureStack manages opening, dismissal, and focus.</p><Btn tone="accent" data-modal-close>Got it</Btn></article></template>
 </Modal>
 ```
-
 </details>
 
 ## Nested dialogs
@@ -199,20 +358,39 @@ The `content` slot replaces the entire interior, including the built-in close bu
 A trigger inside one dialog can open another. Close the child to return to the parent’s trigger, then close the parent to return to the page.
 
 <Panel tone="neutral" variant="surface">
-<ModalTrigger target="parent-dialog" label="Open nested example" tone="neutral" variant="surface"/>
-<Modal id="parent-dialog" title="Project settings" :showClose="true"><p>Review a second dialog without losing your place.</p><template #footer><Btn tone="neutral" variant="surface" data-modal-close>Close settings</Btn><ModalTrigger target="child-dialog" label="Review details" tone="accent"/></template></Modal>
-<Modal id="child-dialog" title="A little more detail" :showClose="false" size="sm"><p>This dialog uses a footer action in place of the built-in close button.</p><template #footer><Btn tone="accent" data-modal-close>Return to settings</Btn></template></Modal>
+  <ModalTrigger
+    target="parent-dialog"
+    label="Open nested example"
+    tone="neutral"
+    variant="surface"/>
+  <Modal id="parent-dialog" title="Project settings" :showClose="true"
+    ><p>Review a second dialog without losing your place.</p>
+    <template #footer
+      ><Btn tone="neutral" variant="surface" data-modal-close
+        >Close settings</Btn><ModalTrigger
+        target="child-dialog"
+        label="Review details"
+        tone="accent"/></template></Modal>
+  <Modal
+    id="child-dialog"
+    title="A little more detail"
+    :showClose="false"
+    size="sm"
+    ><p>
+      This dialog uses a footer action in place of the built-in close button.
+    </p>
+    <template #footer
+      ><Btn tone="accent" data-modal-close>Return to settings</Btn></template></Modal>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <ModalTrigger target="parent-dialog" label="Open nested example" tone="neutral" variant="surface"/>
 <Modal id="parent-dialog" title="Project settings" :showClose="true"><p>Review a second dialog without losing your place.</p><template #footer><Btn tone="neutral" variant="surface" data-modal-close>Close settings</Btn><ModalTrigger target="child-dialog" label="Review details" tone="accent"/></template></Modal>
 <Modal id="child-dialog" title="A little more detail" :showClose="false" size="sm"><p>This dialog uses a footer action in place of the built-in close button.</p><template #footer><Btn tone="accent" data-modal-close>Return to settings</Btn></template></Modal>
 ```
-
 </details>
 
 ## Browser API
@@ -220,11 +398,11 @@ A trigger inside one dialog can open another. Close the child to return to the p
 Open or close an existing dialog with `window.tsSsgModal.open(id)` and `.close(id)`. Call `.refresh()` after inserting dialogs dynamically so their triggers and close controls are bound.
 
 <Panel tone="neutral" variant="surface">
-<div data-doc-demo="modal-api"><DocsModalApi/></div>
+  <div data-doc-demo="modal-api"><DocsModalApi/></div>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <Flex direction="column" align="start">
@@ -237,7 +415,7 @@ Open or close an existing dialog with `window.tsSsgModal.open(id)` and `.close(i
 </Flex>
 ```
 
-**Browser TypeScript bindings**
+  **Browser TypeScript bindings**
 
 ```typescript
 import { ref } from 'regor'
@@ -256,7 +434,6 @@ const cancelled = () => status('Dismissed with Escape.')
 // defineIconComponents(). After mounting, call
 // window.tsSsgModal?.refresh().
 ```
-
 </details>
 
 ### Dialogs from application state
@@ -264,11 +441,11 @@ const cancelled = () => status('Dismissed with Escape.')
 For dialogs created from application state, register `defineModalComponents()`, mount `<ModalStore/>` once in your live Regor application, and call `useModalStore().openModal(options)`. The store accepts the modal props plus body text, a note, and actions with asynchronous handlers.
 
 <Panel tone="neutral" variant="surface">
-<div data-doc-demo="modal-store"><DocsModalStore/></div>
+  <div data-doc-demo="modal-store"><DocsModalStore/></div>
 </Panel>
 
 <details>
-<summary>View source</summary>
+  <summary>View source</summary>
 
 ```html
 <Flex direction="column" align="start">
@@ -278,7 +455,7 @@ For dialogs created from application state, register `defineModalComponents()`, 
 </Flex>
 ```
 
-**Browser TypeScript bindings**
+  **Browser TypeScript bindings**
 
 ```typescript
 import { ref } from 'regor'
@@ -305,141 +482,583 @@ const review = () => useModalStore().openModal({
 // defineButtonComponents(), defineFlexComponents(), and
 // defineIconComponents(). Render ModalStore before invoking review.
 ```
-
 </details>
 
 ## All semantic tones
 
 All ten supported tones. A semantic palette communicates intent; visible labels keep the meaning explicit.
 
-<ComponentExample label="All semantic tones" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>neutral</code>
-<Panel tone="neutral" variant="surface"><strong>neutral</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-neutral" label="Open neutral" variant="outline"/><Modal id="gallery-modal-tone-neutral" title="neutral dialog" tone="neutral" variant="surface" :showClose="true"><p>This is the actual neutral dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>accent</code>
-<Panel tone="accent" variant="surface"><strong>accent</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-accent" label="Open accent" variant="outline"/><Modal id="gallery-modal-tone-accent" title="accent dialog" tone="accent" variant="surface" :showClose="true"><p>This is the actual accent dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>feature</code>
-<Panel tone="feature" variant="surface"><strong>feature</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-feature" label="Open feature" variant="outline"/><Modal id="gallery-modal-tone-feature" title="feature dialog" tone="feature" variant="surface" :showClose="true"><p>This is the actual feature dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>secondary</code>
-<Panel tone="secondary" variant="surface"><strong>secondary</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-secondary" label="Open secondary" variant="outline"/><Modal id="gallery-modal-tone-secondary" title="secondary dialog" tone="secondary" variant="surface" :showClose="true"><p>This is the actual secondary dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>custom</code>
-<Panel tone="custom" variant="surface"><strong>custom</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-custom" label="Open custom" variant="outline"/><Modal id="gallery-modal-tone-custom" title="custom dialog" tone="custom" variant="surface" :showClose="true"><p>This is the actual custom dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>ghost</code>
-<Panel tone="ghost" variant="surface"><strong>ghost</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-ghost" label="Open ghost" variant="outline"/><Modal id="gallery-modal-tone-ghost" title="ghost dialog" tone="ghost" variant="surface" :showClose="true"><p>This is the actual ghost dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>info</code>
-<Panel tone="info" variant="surface"><strong>info</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-info" label="Open info" variant="outline"/><Modal id="gallery-modal-tone-info" title="info dialog" tone="info" variant="surface" :showClose="true"><p>This is the actual info dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>success</code>
-<Panel tone="success" variant="surface"><strong>success</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-success" label="Open success" variant="outline"/><Modal id="gallery-modal-tone-success" title="success dialog" tone="success" variant="surface" :showClose="true"><p>This is the actual success dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>warning</code>
-<Panel tone="warning" variant="surface"><strong>warning</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-warning" label="Open warning" variant="outline"/><Modal id="gallery-modal-tone-warning" title="warning dialog" tone="warning" variant="surface" :showClose="true"><p>This is the actual warning dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>danger</code>
-<Panel tone="danger" variant="surface"><strong>danger</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-tone-danger" label="Open danger" variant="outline"/><Modal id="gallery-modal-tone-danger" title="danger dialog" tone="danger" variant="surface" :showClose="true"><p>This is the actual danger dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-</div>
+<ComponentExample
+  label="All semantic tones"
+  caption="Every value is visible. Compare treatments in the site’s light and dark themes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>neutral</code>
+      <Panel tone="neutral" variant="surface"
+        ><strong>neutral</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-neutral"
+        label="Open neutral"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-neutral"
+        title="neutral dialog"
+        tone="neutral"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual neutral dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>accent</code>
+      <Panel tone="accent" variant="surface"
+        ><strong>accent</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-accent"
+        label="Open accent"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-accent"
+        title="accent dialog"
+        tone="accent"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual accent dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>feature</code>
+      <Panel tone="feature" variant="surface"
+        ><strong>feature</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-feature"
+        label="Open feature"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-feature"
+        title="feature dialog"
+        tone="feature"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual feature dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>secondary</code>
+      <Panel tone="secondary" variant="surface"
+        ><strong>secondary</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-secondary"
+        label="Open secondary"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-secondary"
+        title="secondary dialog"
+        tone="secondary"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual secondary dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>custom</code>
+      <Panel tone="custom" variant="surface"
+        ><strong>custom</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-custom"
+        label="Open custom"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-custom"
+        title="custom dialog"
+        tone="custom"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual custom dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>ghost</code>
+      <Panel tone="ghost" variant="surface"
+        ><strong>ghost</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-ghost"
+        label="Open ghost"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-ghost"
+        title="ghost dialog"
+        tone="ghost"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual ghost dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>info</code>
+      <Panel tone="info" variant="surface"
+        ><strong>info</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-info"
+        label="Open info"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-info"
+        title="info dialog"
+        tone="info"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual info dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>success</code>
+      <Panel tone="success" variant="surface"
+        ><strong>success</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-success"
+        label="Open success"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-success"
+        title="success dialog"
+        tone="success"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual success dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>warning</code>
+      <Panel tone="warning" variant="surface"
+        ><strong>warning</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-warning"
+        label="Open warning"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-warning"
+        title="warning dialog"
+        tone="warning"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual warning dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>danger</code>
+      <Panel tone="danger" variant="surface"
+        ><strong>danger</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-tone-danger"
+        label="Open danger"
+        variant="outline"/><Modal
+        id="gallery-modal-tone-danger"
+        title="danger dialog"
+        tone="danger"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual danger dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown together. Inline surfaces preview the palette; each Open button reveals the matching real dialog.
 
-<ComponentExample label="All visual variants" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>solid</code>
-<Panel tone="accent" variant="solid"><strong>solid</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-solid" label="Open solid" variant="outline"/><Modal id="gallery-modal-variant-solid" title="solid dialog" tone="accent" variant="solid" :showClose="true"><p>This is the actual solid dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>surface</code>
-<Panel tone="accent" variant="surface"><strong>surface</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-surface" label="Open surface" variant="outline"/><Modal id="gallery-modal-variant-surface" title="surface dialog" tone="accent" variant="surface" :showClose="true"><p>This is the actual surface dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>surfaceAlt</code>
-<Panel tone="accent" variant="surfaceAlt"><strong>surfaceAlt</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-surfaceAlt" label="Open surfaceAlt" variant="outline"/><Modal id="gallery-modal-variant-surfaceAlt" title="surfaceAlt dialog" tone="accent" variant="surfaceAlt" :showClose="true"><p>This is the actual surfaceAlt dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>spotlight</code>
-<Panel tone="accent" variant="spotlight"><strong>spotlight</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-spotlight" label="Open spotlight" variant="outline"/><Modal id="gallery-modal-variant-spotlight" title="spotlight dialog" tone="accent" variant="spotlight" :showClose="true"><p>This is the actual spotlight dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>glass</code>
-<Panel tone="accent" variant="glass"><strong>glass</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-glass" label="Open glass" variant="outline"/><Modal id="gallery-modal-variant-glass" title="glass dialog" tone="accent" variant="glass" :showClose="true"><p>This is the actual glass dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>flat</code>
-<Panel tone="accent" variant="flat"><strong>flat</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-flat" label="Open flat" variant="outline"/><Modal id="gallery-modal-variant-flat" title="flat dialog" tone="accent" variant="flat" :showClose="true"><p>This is the actual flat dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>flatAlt</code>
-<Panel tone="accent" variant="flatAlt"><strong>flatAlt</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-flatAlt" label="Open flatAlt" variant="outline"/><Modal id="gallery-modal-variant-flatAlt" title="flatAlt dialog" tone="accent" variant="flatAlt" :showClose="true"><p>This is the actual flatAlt dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>flatSolid</code>
-<Panel tone="accent" variant="flatSolid"><strong>flatSolid</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-flatSolid" label="Open flatSolid" variant="outline"/><Modal id="gallery-modal-variant-flatSolid" title="flatSolid dialog" tone="accent" variant="flatSolid" :showClose="true"><p>This is the actual flatSolid dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>outlineFill</code>
-<Panel tone="accent" variant="outlineFill"><strong>outlineFill</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-outlineFill" label="Open outlineFill" variant="outline"/><Modal id="gallery-modal-variant-outlineFill" title="outlineFill dialog" tone="accent" variant="outlineFill" :showClose="true"><p>This is the actual outlineFill dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>outline</code>
-<Panel tone="accent" variant="outline"><strong>outline</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-outline" label="Open outline" variant="outline"/><Modal id="gallery-modal-variant-outline" title="outline dialog" tone="accent" variant="outline" :showClose="true"><p>This is the actual outline dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>subtle</code>
-<Panel tone="accent" variant="subtle"><strong>subtle</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-subtle" label="Open subtle" variant="outline"/><Modal id="gallery-modal-variant-subtle" title="subtle dialog" tone="accent" variant="subtle" :showClose="true"><p>This is the actual subtle dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>subtleBtn</code>
-<Panel tone="accent" variant="subtleBtn"><strong>subtleBtn</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-subtleBtn" label="Open subtleBtn" variant="outline"/><Modal id="gallery-modal-variant-subtleBtn" title="subtleBtn dialog" tone="accent" variant="subtleBtn" :showClose="true"><p>This is the actual subtleBtn dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>link</code>
-<Panel tone="accent" variant="link"><strong>link</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-link" label="Open link" variant="outline"/><Modal id="gallery-modal-variant-link" title="link dialog" tone="accent" variant="link" :showClose="true"><p>This is the actual link dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>sheen</code>
-<Panel tone="accent" variant="sheen"><strong>sheen</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-sheen" label="Open sheen" variant="outline"/><Modal id="gallery-modal-variant-sheen" title="sheen dialog" tone="accent" variant="sheen" :showClose="true"><p>This is the actual sheen dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>underline</code>
-<Panel tone="accent" variant="underline"><strong>underline</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-underline" label="Open underline" variant="outline"/><Modal id="gallery-modal-variant-underline" title="underline dialog" tone="accent" variant="underline" :showClose="true"><p>This is the actual underline dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>rail</code>
-<Panel tone="accent" variant="rail"><strong>rail</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-rail" label="Open rail" variant="outline"/><Modal id="gallery-modal-variant-rail" title="rail dialog" tone="accent" variant="rail" :showClose="true"><p>This is the actual rail dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>bracket</code>
-<Panel tone="accent" variant="bracket"><strong>bracket</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-bracket" label="Open bracket" variant="outline"/><Modal id="gallery-modal-variant-bracket" title="bracket dialog" tone="accent" variant="bracket" :showClose="true"><p>This is the actual bracket dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-<div class="component-appearance-cell"><code>none</code>
-<Panel tone="accent" variant="none"><strong>none</strong><p>Review the release.</p></Panel><ModalTrigger target="gallery-modal-variant-none" label="Open none" variant="outline"/><Modal id="gallery-modal-variant-none" title="none dialog" tone="accent" variant="none" :showClose="true"><p>This is the actual none dialog treatment.</p><template #footer><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
-</div>
-</div>
+<ComponentExample
+  label="All visual variants"
+  caption="Every value is visible. Compare treatments in the site’s light and dark themes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>solid</code>
+      <Panel tone="accent" variant="solid"
+        ><strong>solid</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-solid"
+        label="Open solid"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-solid"
+        title="solid dialog"
+        tone="accent"
+        variant="solid"
+        :showClose="true"
+        ><p>This is the actual solid dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>surface</code>
+      <Panel tone="accent" variant="surface"
+        ><strong>surface</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-surface"
+        label="Open surface"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-surface"
+        title="surface dialog"
+        tone="accent"
+        variant="surface"
+        :showClose="true"
+        ><p>This is the actual surface dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>surfaceAlt</code>
+      <Panel tone="accent" variant="surfaceAlt"
+        ><strong>surfaceAlt</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-surfaceAlt"
+        label="Open surfaceAlt"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-surfaceAlt"
+        title="surfaceAlt dialog"
+        tone="accent"
+        variant="surfaceAlt"
+        :showClose="true"
+        ><p>This is the actual surfaceAlt dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>spotlight</code>
+      <Panel tone="accent" variant="spotlight"
+        ><strong>spotlight</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-spotlight"
+        label="Open spotlight"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-spotlight"
+        title="spotlight dialog"
+        tone="accent"
+        variant="spotlight"
+        :showClose="true"
+        ><p>This is the actual spotlight dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>glass</code>
+      <Panel tone="accent" variant="glass"
+        ><strong>glass</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-glass"
+        label="Open glass"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-glass"
+        title="glass dialog"
+        tone="accent"
+        variant="glass"
+        :showClose="true"
+        ><p>This is the actual glass dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>flat</code>
+      <Panel tone="accent" variant="flat"
+        ><strong>flat</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-flat"
+        label="Open flat"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-flat"
+        title="flat dialog"
+        tone="accent"
+        variant="flat"
+        :showClose="true"
+        ><p>This is the actual flat dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>flatAlt</code>
+      <Panel tone="accent" variant="flatAlt"
+        ><strong>flatAlt</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-flatAlt"
+        label="Open flatAlt"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-flatAlt"
+        title="flatAlt dialog"
+        tone="accent"
+        variant="flatAlt"
+        :showClose="true"
+        ><p>This is the actual flatAlt dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>flatSolid</code>
+      <Panel tone="accent" variant="flatSolid"
+        ><strong>flatSolid</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-flatSolid"
+        label="Open flatSolid"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-flatSolid"
+        title="flatSolid dialog"
+        tone="accent"
+        variant="flatSolid"
+        :showClose="true"
+        ><p>This is the actual flatSolid dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>outlineFill</code>
+      <Panel tone="accent" variant="outlineFill"
+        ><strong>outlineFill</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-outlineFill"
+        label="Open outlineFill"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-outlineFill"
+        title="outlineFill dialog"
+        tone="accent"
+        variant="outlineFill"
+        :showClose="true"
+        ><p>This is the actual outlineFill dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>outline</code>
+      <Panel tone="accent" variant="outline"
+        ><strong>outline</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-outline"
+        label="Open outline"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-outline"
+        title="outline dialog"
+        tone="accent"
+        variant="outline"
+        :showClose="true"
+        ><p>This is the actual outline dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>subtle</code>
+      <Panel tone="accent" variant="subtle"
+        ><strong>subtle</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-subtle"
+        label="Open subtle"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-subtle"
+        title="subtle dialog"
+        tone="accent"
+        variant="subtle"
+        :showClose="true"
+        ><p>This is the actual subtle dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>subtleBtn</code>
+      <Panel tone="accent" variant="subtleBtn"
+        ><strong>subtleBtn</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-subtleBtn"
+        label="Open subtleBtn"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-subtleBtn"
+        title="subtleBtn dialog"
+        tone="accent"
+        variant="subtleBtn"
+        :showClose="true"
+        ><p>This is the actual subtleBtn dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>link</code>
+      <Panel tone="accent" variant="link"
+        ><strong>link</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-link"
+        label="Open link"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-link"
+        title="link dialog"
+        tone="accent"
+        variant="link"
+        :showClose="true"
+        ><p>This is the actual link dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>sheen</code>
+      <Panel tone="accent" variant="sheen"
+        ><strong>sheen</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-sheen"
+        label="Open sheen"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-sheen"
+        title="sheen dialog"
+        tone="accent"
+        variant="sheen"
+        :showClose="true"
+        ><p>This is the actual sheen dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>underline</code>
+      <Panel tone="accent" variant="underline"
+        ><strong>underline</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-underline"
+        label="Open underline"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-underline"
+        title="underline dialog"
+        tone="accent"
+        variant="underline"
+        :showClose="true"
+        ><p>This is the actual underline dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>rail</code>
+      <Panel tone="accent" variant="rail"
+        ><strong>rail</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-rail"
+        label="Open rail"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-rail"
+        title="rail dialog"
+        tone="accent"
+        variant="rail"
+        :showClose="true"
+        ><p>This is the actual rail dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>bracket</code>
+      <Panel tone="accent" variant="bracket"
+        ><strong>bracket</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-bracket"
+        label="Open bracket"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-bracket"
+        title="bracket dialog"
+        tone="accent"
+        variant="bracket"
+        :showClose="true"
+        ><p>This is the actual bracket dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>none</code>
+      <Panel tone="accent" variant="none"
+        ><strong>none</strong>
+        <p>Review the release.</p></Panel><ModalTrigger
+        target="gallery-modal-variant-none"
+        label="Open none"
+        variant="outline"/><Modal
+        id="gallery-modal-variant-none"
+        title="none dialog"
+        tone="accent"
+        variant="none"
+        :showClose="true"
+        ><p>This is the actual none dialog treatment.</p>
+        <template #footer
+          ><Btn data-modal-close variant="outline">Done</Btn></template></Modal>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Variant modes
 
 Stateless shows the base treatment. Stateful includes hover, focus, and active styling; it does not add an action handler.
 
-<ComponentExample label="Variant modes" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>stateless</code>
-<Panel tone="accent" variant="outlineFill" variantMode="stateless" tabindex="0"><p>stateless surface preview.</p></Panel><ModalTrigger target="modal-mode-stateless" label="Open stateless" variant="outline"/><Modal id="modal-mode-stateless" title="stateless" variant="outlineFill" variantMode="stateless" :showClose="true"><p>Focus or hover to compare.</p></Modal>
-</div>
-<div class="component-appearance-cell"><code>stateful</code>
-<Panel tone="accent" variant="outlineFill" variantMode="stateful" tabindex="0"><p>stateful surface preview.</p></Panel><ModalTrigger target="modal-mode-stateful" label="Open stateful" variant="outline"/><Modal id="modal-mode-stateful" title="stateful" variant="outlineFill" variantMode="stateful" :showClose="true"><p>Focus or hover to compare.</p></Modal>
-</div>
-</div>
+<ComponentExample
+  label="Variant modes"
+  caption="Every value is visible. Compare treatments in the site’s light and dark themes."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>stateless</code>
+      <Panel
+        tone="accent"
+        variant="outlineFill"
+        variantMode="stateless"
+        tabindex="0"
+        ><p>stateless surface preview.</p></Panel><ModalTrigger
+        target="modal-mode-stateless"
+        label="Open stateless"
+        variant="outline"/><Modal
+        id="modal-mode-stateless"
+        title="stateless"
+        variant="outlineFill"
+        variantMode="stateless"
+        :showClose="true"
+        ><p>Focus or hover to compare.</p></Modal>
+    </div>
+    <div class="component-appearance-cell">
+      <code>stateful</code>
+      <Panel
+        tone="accent"
+        variant="outlineFill"
+        variantMode="stateful"
+        tabindex="0"
+        ><p>stateful surface preview.</p></Panel><ModalTrigger
+        target="modal-mode-stateful"
+        label="Open stateful"
+        variant="outline"/><Modal
+        id="modal-mode-stateful"
+        title="stateful"
+        variant="outlineFill"
+        variantMode="stateful"
+        :showClose="true"
+        ><p>Focus or hover to compare.</p></Modal>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Close-control choices
 
 `showClose` defaults to false. Enable it for the built-in close button, or provide an explicit dismissal action in your own content. Both examples remain dismissible with Escape and return focus to the trigger.
 
-<ComponentExample label="Built-in or custom dismissal" caption="Open each dialog to compare both showClose values. These choices do not change the dialog’s tone, size, or motion.">
+<ComponentExample
+  label="Built-in or custom dismissal"
+  caption="Open each dialog to compare both showClose values. These choices do not change the dialog’s tone, size, or motion."
+>
   <Flex wrap="true">
-    <ModalTrigger target="layout-close-true" label="Built-in close button" tone="accent" variant="outline"/>
-    <ModalTrigger target="layout-close-false" label="Custom close action" tone="neutral" variant="outline"/>
+    <ModalTrigger
+      target="layout-close-true"
+      label="Built-in close button"
+      tone="accent"
+      variant="outline"/>
+    <ModalTrigger
+      target="layout-close-false"
+      label="Custom close action"
+      tone="neutral"
+      variant="outline"/>
   </Flex>
   <Modal id="layout-close-true" title="Built-in dismissal" :showClose="true">
     <p>The header includes the standard close button.</p>
   </Modal>
   <Modal id="layout-close-false" title="Custom dismissal" :showClose="false">
     <p>The header has no built-in close button. Use the footer action below.</p>
-    <template #footer><Btn data-modal-close tone="accent">Return to the guide</Btn></template>
+    <template #footer
+      ><Btn data-modal-close tone="accent">Return to the guide</Btn></template>
   </Modal>
 </ComponentExample>
 

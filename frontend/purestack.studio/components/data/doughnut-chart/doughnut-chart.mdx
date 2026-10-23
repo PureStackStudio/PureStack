@@ -13,26 +13,41 @@ nav:
 
 # Doughnut<wbr/>Chart
 
-<ComponentHeader name="DoughnutChart" kind="Parts of a whole" summary="Turn a positive distribution into a readable ring. Tune its geometry, explain the total, and keep exact shares in a nearby legend." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
+<ComponentHeader
+  name="DoughnutChart"
+  kind="Parts of a whole"
+  summary="Turn a positive distribution into a readable ring. Tune its geometry, explain the total, and keep exact shares in a nearby legend."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts"
+  section="Charts &amp; large data"
+  sectionHref="/components/data/"/>
 
 ## Interactive playground
 
 Edit segment names and values, hide a category, and watch the total and percentage shares recalculate. Try **Tiny slices** with a larger gap, **One positive segment**, or **All zero** to explore the edge cases. Entrance animation is enabled; use Replay to see it again.
 
-<Tabs group="doughnut-chart-sample-1" selectedTab="doughnut-chart-sample-1-preview" ariaLabel="Interactive doughnut chart playground" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="doughnut-chart-sample-1"
+  selectedTab="doughnut-chart-sample-1-preview"
+  ariaLabel="Interactive doughnut chart playground"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="doughnut-chart-sample-1-preview" label="Preview">
-<ComponentExample label="DoughnutChart in context" caption="Edit segment values and names, change the ring geometry, and compare automatic or custom center content.">
-    <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="DoughnutChart in context"
+      caption="Edit segment values and names, change the ring geometry, and compare automatic or custom center content."
+    >
+      <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="doughnut-chart-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="doughnut-chart-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -42,34 +57,44 @@ The legend, percentage calculations and center modes are composed in the example
 
 Pair the ring with a visible legend and a short interpretation. The automatic center value is the sum of the positive segments.
 
-<Tabs group="ring-distribution" selectedTab="ring-distribution-preview" ariaLabel="A distribution with context" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="ring-distribution"
+  selectedTab="ring-distribution-preview"
+  ariaLabel="A distribution with context"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="ring-distribution-preview" label="Preview">
-<div class="component-preview-stage">
-<Panel variant="surface" bodyClass="p-3 min-w-0">
-  <p class="text-eyebrow">RELEASE READINESS</p>
-  <h3 class="mt-0">A clear picture of the sprint</h3>
-  <Grid columns="1" columnsMd="2" alignItems="center">
-    <DoughnutChart
-      title="Sprint task distribution"
-      description="Of 40 tasks, 24 are complete, 10 are in review and 6 are planned."
-      :segments="[{label:'Complete',value:24},{label:'In review',value:10},{label:'Planned',value:6}]"
-      centerLabel="Tasks"
-      centerLabelSize="5"
-      size="240"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <Flex direction="column">
-      <Flex justify="between" wrap="true"><Badge tone="accent" variant="surface">Complete</Badge><strong>24 · 60%</strong></Flex>
-      <Flex justify="between" wrap="true"><Badge tone="feature" variant="surface">In review</Badge><strong>10 · 25%</strong></Flex>
-      <Flex justify="between" wrap="true"><Badge tone="success" variant="surface">Planned</Badge><strong>6 · 15%</strong></Flex>
-      <p class="text-muted m-0">60% of the sprint is complete. Review is the next place to focus.</p>
-    </Flex>
-  </Grid>
-</Panel>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Panel variant="surface" bodyClass="p-3 min-w-0">
+        <p class="text-eyebrow">RELEASE READINESS</p>
+        <h3 class="mt-0">A clear picture of the sprint</h3>
+        <Grid columns="1" columnsMd="2" alignItems="center">
+          <DoughnutChart
+            title="Sprint task distribution"
+            description="Of 40 tasks, 24 are complete, 10 are in review and 6 are planned."
+            :segments="[{label:'Complete',value:24},{label:'In review',value:10},{label:'Planned',value:6}]"
+            centerLabel="Tasks"
+            centerLabelSize="5"
+            size="240"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <Flex direction="column">
+            <Flex justify="between" wrap="true"
+              ><Badge tone="accent" variant="surface">Complete</Badge><strong>24 · 60%</strong></Flex>
+            <Flex justify="between" wrap="true"
+              ><Badge tone="feature" variant="surface">In review</Badge><strong>10 · 25%</strong></Flex>
+            <Flex justify="between" wrap="true"
+              ><Badge tone="success" variant="surface">Planned</Badge><strong>6 · 15%</strong></Flex>
+            <p class="text-muted m-0">
+              60% of the sprint is complete. Review is the next place to focus.
+            </p>
+          </Flex>
+        </Grid>
+      </Panel>
+    </div>
+  </TabPane>
   <TabPane id="ring-distribution-source" label="distribution.mdx">
 ```html
 <Panel variant="surface" bodyClass="p-3 min-w-0">
@@ -102,36 +127,44 @@ Pair the ring with a visible legend and a short interpretation. The automatic ce
 
 Pass actual counts as segments and compute the percentage separately. Setting centerValue to 75% does not turn a single value of 18 into a progress ring; include the remaining 6 as a second segment.
 
-<Tabs group="ring-completion" selectedTab="ring-completion-preview" ariaLabel="A focused completion ring" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="ring-completion"
+  selectedTab="ring-completion-preview"
+  ariaLabel="A focused completion ring"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="ring-completion-preview" label="Preview">
-<div class="component-preview-stage">
-<Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
-  <Grid columns="1" columnsMd="2" alignItems="center">
-    <DoughnutChart
-      title="Release checklist completion"
-      ariaLabel="18 of 24 checks complete; 6 remaining"
-      :segments="[{label:'Complete',value:18},{label:'Remaining',value:6}]"
-      centerValue="75%"
-      centerLabel="Complete"
-      centerValueSize="16"
-      centerLabelSize="5"
-      thickness="9"
-      gap="3"
-      size="240"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <Flex direction="column">
-      <Badge tone="accent" variant="surface">Release checklist</Badge>
-      <h3 class="m-0">18 of 24 checks complete</h3>
-      <p class="m-0">6 checks remain before the release is ready.</p>
-      <p class="text-muted m-0">The center shows completion. The segments still contain the actual counts.</p>
-    </Flex>
-  </Grid>
-</Panel>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+        <Grid columns="1" columnsMd="2" alignItems="center">
+          <DoughnutChart
+            title="Release checklist completion"
+            ariaLabel="18 of 24 checks complete; 6 remaining"
+            :segments="[{label:'Complete',value:18},{label:'Remaining',value:6}]"
+            centerValue="75%"
+            centerLabel="Complete"
+            centerValueSize="16"
+            centerLabelSize="5"
+            thickness="9"
+            gap="3"
+            size="240"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <Flex direction="column">
+            <Badge tone="accent" variant="surface">Release checklist</Badge>
+            <h3 class="m-0">18 of 24 checks complete</h3>
+            <p class="m-0">6 checks remain before the release is ready.</p>
+            <p class="text-muted m-0">
+              The center shows completion. The segments still contain the actual
+              counts.
+            </p>
+          </Flex>
+        </Grid>
+      </Panel>
+    </div>
+  </TabPane>
   <TabPane id="ring-completion-source" label="completion-ring.mdx">
 ```html
 <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
@@ -166,51 +199,55 @@ Pass actual counts as segments and compute the percentage separately. Setting ce
 
 Compare a thin, continuous ring with a thicker ring containing very small shares. Gaps adapt to adjacent slices, so a large requested gap does not erase a tiny category. Keep exact values visible alongside the chart.
 
-<Tabs group="ring-geometry" selectedTab="ring-geometry-preview" ariaLabel="Ring geometry and tiny slices" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="ring-geometry"
+  selectedTab="ring-geometry-preview"
+  ariaLabel="Ring geometry and tiny slices"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="ring-geometry-preview" label="Preview">
-<div class="component-preview-stage">
-<Grid columns="1" columnsMd="2">
-  <Panel variant="surface" bodyClass="p-3 min-w-0">
-    <h3 class="mt-0">Continuous ring</h3>
-    <DoughnutChart
-      title="Storage allocation without gaps"
-      ariaLabel="Media 60 GB, documents 25 GB, backups 15 GB"
-      :segments="[{label:'Media',value:60},{label:'Documents',value:25},{label:'Backups',value:15}]"
-      valueSuffix="GB"
-      centerLabel="Storage"
-      centerValueSize="12"
-      centerLabelSize="5"
-      thickness="8"
-      gap="0"
-      startAngle="0"
-      size="220"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <p>Media 60 GB · Documents 25 GB · Backups 15 GB</p>
-  </Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0">
-    <h3 class="mt-0">Tiny shares</h3>
-    <DoughnutChart
-      title="Traffic allocation with small slices"
-      ariaLabel="Stable 99.5%, canary 0.4%, preview 0.1%"
-      :segments="[{label:'Stable',value:99.5},{label:'Canary',value:0.4},{label:'Preview',value:0.1}]"
-      centerValue="99.5%"
-      centerLabel="Stable"
-      centerValueSize="10"
-      centerLabelSize="4"
-      thickness="20"
-      gap="8"
-      size="220"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <p>Stable 99.5% · Canary 0.4% · Preview 0.1%</p>
-  </Panel>
-</Grid>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid columns="1" columnsMd="2">
+        <Panel variant="surface" bodyClass="p-3 min-w-0">
+          <h3 class="mt-0">Continuous ring</h3>
+          <DoughnutChart
+            title="Storage allocation without gaps"
+            ariaLabel="Media 60 GB, documents 25 GB, backups 15 GB"
+            :segments="[{label:'Media',value:60},{label:'Documents',value:25},{label:'Backups',value:15}]"
+            valueSuffix="GB"
+            centerLabel="Storage"
+            centerValueSize="12"
+            centerLabelSize="5"
+            thickness="8"
+            gap="0"
+            startAngle="0"
+            size="220"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <p>Media 60 GB · Documents 25 GB · Backups 15 GB</p>
+        </Panel>
+        <Panel variant="surface" bodyClass="p-3 min-w-0">
+          <h3 class="mt-0">Tiny shares</h3>
+          <DoughnutChart
+            title="Traffic allocation with small slices"
+            ariaLabel="Stable 99.5%, canary 0.4%, preview 0.1%"
+            :segments="[{label:'Stable',value:99.5},{label:'Canary',value:0.4},{label:'Preview',value:0.1}]"
+            centerValue="99.5%"
+            centerLabel="Stable"
+            centerValueSize="10"
+            centerLabelSize="4"
+            thickness="20"
+            gap="8"
+            size="220"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <p>Stable 99.5% · Canary 0.4% · Preview 0.1%</p>
+        </Panel>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="ring-geometry-source" label="ring-geometry.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -260,40 +297,50 @@ Compare a thin, continuous ring with a thicker ring containing very small shares
 
 A single positive segment becomes a full ring. An empty array and an array of all-zero values both have no positive total.
 
-<Tabs group="ring-empty" selectedTab="ring-empty-preview" ariaLabel="Single and empty distributions" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="ring-empty"
+  selectedTab="ring-empty-preview"
+  ariaLabel="Single and empty distributions"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="ring-empty-preview" label="Preview">
-<div class="component-preview-stage">
-<Grid columns="1" columnsMd="2">
-  <Panel variant="surface" bodyClass="p-3 min-w-0">
-    <h3 class="mt-0">One category</h3>
-    <DoughnutChart
-      title="All 24 checks passed"
-      :segments="[{label:'Passed',value:24}]"
-      centerLabel="Passed"
-      centerLabelSize="5"
-      gap="12"
-      size="220"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <p>24 passed. One positive segment fills the entire ring, with no separator.</p>
-  </Panel>
-  <Panel variant="surface" bodyClass="p-3 min-w-0">
-    <h3 class="mt-0">Awaiting data</h3>
-    <DoughnutChart
-      title="No check results yet"
-      :segments="[]"
-      emptyLabel="Pending"
-      size="220"
-      class="mx-auto"
-      style="max-width: 100%; height: auto"
-    />
-    <p>No results yet. Leave both center props unset to display the empty label.</p>
-  </Panel>
-</Grid>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <Grid columns="1" columnsMd="2">
+        <Panel variant="surface" bodyClass="p-3 min-w-0">
+          <h3 class="mt-0">One category</h3>
+          <DoughnutChart
+            title="All 24 checks passed"
+            :segments="[{label:'Passed',value:24}]"
+            centerLabel="Passed"
+            centerLabelSize="5"
+            gap="12"
+            size="220"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <p>
+            24 passed. One positive segment fills the entire ring, with no
+            separator.
+          </p>
+        </Panel>
+        <Panel variant="surface" bodyClass="p-3 min-w-0">
+          <h3 class="mt-0">Awaiting data</h3>
+          <DoughnutChart
+            title="No check results yet"
+            :segments="[]"
+            emptyLabel="Pending"
+            size="220"
+            class="mx-auto"
+            style="max-width: 100%; height: auto"/>
+          <p>
+            No results yet. Leave both center props unset to display the empty
+            label.
+          </p>
+        </Panel>
+      </Grid>
+    </div>
+  </TabPane>
   <TabPane id="ring-empty-source" label="single-and-empty.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -332,57 +379,132 @@ A single positive segment becomes a full ring. An empty array and an array of al
 
 Compare all ten tones together. These examples use tone-aware plot colors; custom data colors and the chart’s tone remain independent.
 
-<ComponentExample label="All ten semantic tones" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="tone"><ChartAppearanceGallery component="DoughnutChart" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="tone">
+    <ChartAppearanceGallery component="DoughnutChart" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported treatment is visible in accent, including none. The default chart variant is none; the live editor lets you combine any tone and treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="variant"><ChartAppearanceGallery component="DoughnutChart" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="variant">
+    <ChartAppearanceGallery component="DoughnutChart" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Stateless keeps the resting appearance. Stateful adds the treatment’s hover and active classes; hover the outlineFill examples to compare them. Charts default to stateless and retain their native plot hover feedback in either mode.
 
-<ComponentExample label="Both variant modes" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
-<div data-chart-gallery="mode"><ChartAppearanceGallery component="DoughnutChart" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="All samples use the same illustrative values. Switch the site theme to compare both palettes."
+>
+  <div data-chart-gallery="mode">
+    <ChartAppearanceGallery component="DoughnutChart" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Ring geometry and center copy
 
 Thin and thick rings, joined and separated slices, rotation, automatic totals, and custom center text are all shown together. Only finite positive values contribute.
 
-<ComponentExample label="Compare the whole ring" caption="Complete 18 · Review 7 · Planned 5. The live editor exposes exact values, percentages, font sizes, and entrance animation.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Thin ring</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" thickness="6" size="180" centerLabel="Tasks" ariaLabel="Tasks: complete18, review7, planned5" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Thick ring</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" thickness="28" size="180" centerLabel="Tasks" centerValueSize="8" centerLabelSize="4" ariaLabel="Tasks: complete18, review7, planned5" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>No gap</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" gap="0" size="180" centerLabel="Tasks" ariaLabel="Joined slices: complete18, review7, planned5" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Separated slices</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" gap="6" size="180" centerLabel="Tasks" ariaLabel="Separated slices: complete18, review7, planned5" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Rotated</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" startAngle="0" size="180" centerLabel="Tasks" ariaLabel="Rotated slices: complete18, review7, planned5" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Custom center</code>
-<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" centerValue="60%" centerLabel="Complete" size="180" ariaLabel="18 of30 tasks complete" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>One full-circle segment</code>
-<DoughnutChart :segments="[{label:'Complete',value:30}]" centerLabel="Complete" size="180" ariaLabel="All30 tasks complete" :animated="false"/>
-</div>
-<div class="component-appearance-cell"><code>Empty</code>
-<DoughnutChart :segments="[]" emptyLabel="No positive values" centerValue="—" size="180" ariaLabel="No positive values" :animated="false"/>
-</div>
-</div>
+<ComponentExample
+  label="Compare the whole ring"
+  caption="Complete 18 · Review 7 · Planned 5. The live editor exposes exact values, percentages, font sizes, and entrance animation."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Thin ring</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        thickness="6"
+        size="180"
+        centerLabel="Tasks"
+        ariaLabel="Tasks: complete18, review7, planned5"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Thick ring</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        thickness="28"
+        size="180"
+        centerLabel="Tasks"
+        centerValueSize="8"
+        centerLabelSize="4"
+        ariaLabel="Tasks: complete18, review7, planned5"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>No gap</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        gap="0"
+        size="180"
+        centerLabel="Tasks"
+        ariaLabel="Joined slices: complete18, review7, planned5"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Separated slices</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        gap="6"
+        size="180"
+        centerLabel="Tasks"
+        ariaLabel="Separated slices: complete18, review7, planned5"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Rotated</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        startAngle="0"
+        size="180"
+        centerLabel="Tasks"
+        ariaLabel="Rotated slices: complete18, review7, planned5"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom center</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]"
+        centerValue="60%"
+        centerLabel="Complete"
+        size="180"
+        ariaLabel="18 of30 tasks complete"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>One full-circle segment</code>
+      <DoughnutChart
+        :segments="[{label:'Complete',value:30}]"
+        centerLabel="Complete"
+        size="180"
+        ariaLabel="All30 tasks complete"
+        :animated="false"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Empty</code>
+      <DoughnutChart
+        :segments="[]"
+        emptyLabel="No positive values"
+        centerValue="—"
+        size="180"
+        ariaLabel="No positive values"
+        :animated="false"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -410,7 +532,11 @@ Thin and thick rings, joined and separated slices, rotation, automatic totals, a
 
 <div class="api-overview">
   <p class="text-eyebrow">DoughnutChart contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="DoughnutChart properties">
@@ -436,82 +562,235 @@ Thin and thick rings, joined and separated slices, rotation, automatic totals, a
 
 ### Data and accessible descriptions
 
-<ApiProperty anchor="doughnut-chart-prop-segments" name="segments" valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;DoughnutChartSegment&gt;&gt;&gt;" defaultValue="[]">
-  <p>An array of labelled positive values with optional CSS colors. Zero, negative and non-finite values do not contribute to the ring or total. Values need not sum to 100; each arc represents its share of the positive total.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-segments"
+  name="segments"
+  valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;DoughnutChartSegment&gt;&gt;&gt;"
+  defaultValue="[]"
+>
+  <p>
+    An array of labelled positive values with optional CSS colors. Zero,
+    negative and non-finite values do not contribute to the ring or total.
+    Values need not sum to 100; each arc represents its share of the positive
+    total.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG title text. Provide a visible heading alongside the chart when readers need one.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    SVG title text. Provide a visible heading alongside the chart when readers
+    need one.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG description with context such as the period, unit and meaning of the distribution.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-description"
+  name="description"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    SVG description with context such as the period, unit and meaning of the
+    distribution.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="title, then Doughnut chart">
+<ApiProperty
+  anchor="doughnut-chart-prop-ariaLabel"
+  name="ariaLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="title, then Doughnut chart"
+>
   <p>Accessible name on the SVG image.</p>
 </ApiProperty>
 
 ### Center content
 
-<ApiProperty anchor="doughnut-chart-prop-centerLabel" name="centerLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Supporting text below the center value. Keep it short: the component does not wrap or fit center text automatically.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-centerLabel"
+  name="centerLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Supporting text below the center value. Keep it short: the component does
+    not wrap or fit center text automatically.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-centerValue" name="centerValue" valueType="RefOrValue&lt;string&gt;" defaultValue="sum of positive values">
-  <p>Nonempty text overrides the automatic total without changing segment geometry. Empty or whitespace-only text falls back to the positive total with valueSuffix; it does not hide the total.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-centerValue"
+  name="centerValue"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="sum of positive values"
+>
+  <p>
+    Nonempty text overrides the automatic total without changing segment
+    geometry. Empty or whitespace-only text falls back to the positive total
+    with valueSuffix; it does not hide the total.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-centerLabelSize" name="centerLabelSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
-  <p>Font size for the center label. Numbers become pixel lengths in SVG coordinates, so the text scales with the whole chart. Reduce it for long labels or thick rings.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-centerLabelSize"
+  name="centerLabelSize"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="theme styles"
+>
+  <p>
+    Font size for the center label. Numbers become pixel lengths in SVG
+    coordinates, so the text scales with the whole chart. Reduce it for long
+    labels or thick rings.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-centerValueSize" name="centerValueSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
-  <p>Font size for the center value. Numbers become pixel lengths in SVG coordinates; CSS size strings are also accepted. It does not resize the hole or fit text automatically.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-centerValueSize"
+  name="centerValueSize"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="theme styles"
+>
+  <p>
+    Font size for the center value. Numbers become pixel lengths in SVG
+    coordinates; CSS size strings are also accepted. It does not resize the hole
+    or fit text automatically.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-emptyLabel" name="emptyLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="No data">
-  <p>Shown when there are no positive segments and both centerLabel and centerValue are empty. Clear centre copy if the empty label should appear.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-emptyLabel"
+  name="emptyLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="No data"
+>
+  <p>
+    Shown when there are no positive segments and both centerLabel and
+    centerValue are empty. Clear centre copy if the empty label should appear.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-valueSuffix" name="valueSuffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Appended to each segment title and the automatic center total. It does not calculate percentages and is not appended to an explicit centerValue.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-valueSuffix"
+  name="valueSuffix"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Appended to each segment title and the automatic center total. It does not
+    calculate percentages and is not appended to an explicit centerValue.
+  </p>
 </ApiProperty>
 
 ### Ring geometry
 
-<ApiProperty anchor="doughnut-chart-prop-size" name="size" valueType="RefOrValue&lt;number | string&gt;" defaultValue="100%">
-  <p>Width and height of the square SVG. Numbers become pixel lengths; strings can use CSS units. The samples add max-width: 100% and height: auto to fit narrow containers.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-size"
+  name="size"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="100%"
+>
+  <p>
+    Width and height of the square SVG. Numbers become pixel lengths; strings
+    can use CSS units. The samples add max-width: 100% and height: auto to fit
+    narrow containers.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-thickness" name="thickness" valueType="RefOrValue&lt;number | string&gt;" defaultValue="14">
-  <p>Radial thickness on the 100-unit SVG canvas, clamped to 2–40. The outer radius is 46, so the hole radius is 46 minus thickness. A thicker ring leaves less room for center text.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-thickness"
+  name="thickness"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="14"
+>
+  <p>
+    Radial thickness on the 100-unit SVG canvas, clamped to 2–40. The outer
+    radius is 46, so the hole radius is 46 minus thickness. A thicker ring
+    leaves less room for center text.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-gap" name="gap" valueType="RefOrValue&lt;number | string&gt;" defaultValue="2">
-  <p>Maximum separator width on the SVG canvas, clamped to 0–24. Transparent mask cuts separate adjacent segments; widths shrink near tiny slices and may disappear. Zero joins the slices. A single segment has no separators.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-gap"
+  name="gap"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="2"
+>
+  <p>
+    Maximum separator width on the SVG canvas, clamped to 0–24. Transparent mask
+    cuts separate adjacent segments; widths shrink near tiny slices and may
+    disappear. Zero joins the slices. A single segment has no separators.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-startAngle" name="startAngle" valueType="RefOrValue&lt;number | string&gt;" defaultValue="-90">
-  <p>Starting angle in degrees, moving clockwise: -90 starts at the top, 0 at the right, 90 at the bottom. A single full ring has no visible starting edge.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-startAngle"
+  name="startAngle"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="-90"
+>
+  <p>
+    Starting angle in degrees, moving clockwise: -90 starts at the top, 0 at the
+    right, 90 at the bottom. A single full ring has no visible starting edge.
+  </p>
 </ApiProperty>
 
 ### Animation and appearance
 
-<ApiProperty anchor="doughnut-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Enables the entrance fade and rotation of the ring, plus a separate center fade. It does not tween values or sweep arcs when data changes. Bind false for immediate rendering; Replay in the playground restarts the native SVG animations.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-animated"
+  name="animated"
+  valueType="RefOrValue&lt;boolean | string&gt;"
+  defaultValue="true"
+>
+  <p>
+    Enables the entrance fade and rotation of the ring, plus a separate center
+    fade. It does not tween values or sweep arcs when data changes. Bind false
+    for immediate rendering; Replay in the playground restarts the native SVG
+    animations.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent for theme styling. Segment fills use the chart palette or each segment’s explicit color; changing tone does not assign all segments that color.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent for theme styling. Segment fills use the chart palette or
+    each segment’s explicit color; changing tone does not assign all segments
+    that color.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="none"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="doughnut-chart-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="doughnut-chart-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
 ### Segment contract
@@ -531,7 +810,12 @@ Missing names become Segment 1, Segment 2, and so on, based on the input order. 
 ### Composition
 
 <div class="api-contract">
-  <p>No slots or built-in legend. Register defineDoughnutChartComponents in a Regor app and bind a segments ref or computed value. Compose titles, legends and controls with Panel, Flex and native form components, as the playground does.</p>
+  <p>
+    No slots or built-in legend. Register defineDoughnutChartComponents in a
+    Regor app and bind a segments ref or computed value. Compose titles, legends
+    and controls with Panel, Flex and native form components, as the playground
+    does.
+  </p>
 </div>
 
 ## Related components

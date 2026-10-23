@@ -1060,7 +1060,16 @@ __metadata:
   resolution: "@purestack/ts-css@workspace:packages/ts-css"
   dependencies:
     "@purestack/ts-util": "workspace:^"
-    prettier: "npm:^3.8.1"
+    prettier: "npm:^3.9.10"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-format@workspace:^, @purestack/ts-format@workspace:packages/ts-format":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-format@workspace:packages/ts-format"
+  dependencies:
+    prettier: "npm:^3.9.10"
+    typescript-parser: "npm:typescript@6.0.3"
   languageName: unknown
   linkType: soft
 
@@ -1080,7 +1089,7 @@ __metadata:
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
   dependencies:
     "@purestack/ts-util": "workspace:^"
-    prettier: "npm:^3.8.1"
+    prettier: "npm:^3.9.10"
   languageName: unknown
   linkType: soft
 
@@ -4726,12 +4735,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.8.1":
-  version: 3.8.1
-  resolution: "prettier@npm:3.8.1"
+"prettier@npm:^3.9.10":
+  version: 3.9.10
+  resolution: "prettier@npm:3.9.10"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/33169b594009e48f570471271be7eac7cdcf88a209eed39ac3b8d6d78984039bfa9132f82b7e6ba3b06711f3bfe0222a62a1bfb87c43f50c25a83df1b78a2c42
+  checksum: 10c0/0b3531593aa6fb36ac6baf629cb058bda472c59a6938774f931fe55283a07c62e6f56e621b043a82d8a3e21fc284c08c34f9e539fc70072635f79b7bae1a1067
   languageName: node
   linkType: hard
 
@@ -4774,11 +4783,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "purestack-component-navigation@workspace:packages/ts-ssg-vscode"
   dependencies:
+    "@purestack/ts-format": "workspace:^"
     "@types/vscode": "npm:^1.138.0"
     "@vscode/vsce": "npm:^4.0.0"
     esbuild: "npm:^0.28.0"
-    prettier: "npm:^3.8.1"
     typescript: "npm:^6.0.3"
+    typescript-parser: "npm:typescript@6.0.3"
   languageName: unknown
   linkType: soft
 
@@ -4803,6 +4813,7 @@ __metadata:
   resolution: "purestack@workspace:packages/purestack"
   dependencies:
     "@purestack/ts-components": "workspace:^"
+    "@purestack/ts-format": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-ssg": "workspace:^"
     "@purestack/ts-style": "workspace:^"

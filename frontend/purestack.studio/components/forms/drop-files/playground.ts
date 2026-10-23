@@ -47,27 +47,41 @@ const dropFilesExampleTemplate = html`<Flex direction="column">
     accept="text/*,image/*,.pdf"
     :files="selectedFiles"
     :multiple="allowMany"
-    :disabled="locked"
-  />
+    :disabled="locked"/>
   <Flex wrap="true">
     <FormCheck
       id="files-multiple"
       label="Allow multiple files"
-      :checked="allowMany"
-    />
-    <FormCheck id="files-disabled" label="Lock file selection" :checked="locked" />
+      :checked="allowMany"/>
+    <FormCheck
+      id="files-disabled"
+      label="Lock file selection"
+      :checked="locked"/>
     <Btn variant="link" :disabled="locked" @click="clear">Clear files</Btn>
   </Flex>
   <FormStatus>
     {{ selectedFiles.length }} files · {{ totalBytes }} bytes selected
   </FormStatus>
   <h3>Custom copy, icons, and change callback</h3>
-  <DropFiles :files="referenceFiles" label="Design references" hint="Images and PDF files only."
-    emptyTitle="Add your references" emptyText="Choose files, drop them, or paste."
-    accept="image/*,.pdf" uploadIcon="lucide:file-image" fileIcon="lucide:file"
-    removeIcon="lucide:trash" :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
+  <DropFiles
+    :files="referenceFiles"
+    label="Design references"
+    hint="Images and PDF files only."
+    emptyTitle="Add your references"
+    emptyText="Choose files, drop them, or paste."
+    accept="image/*,.pdf"
+    uploadIcon="lucide:file-image"
+    fileIcon="lucide:file"
+    removeIcon="lucide:trash"
+    :iconMap="fileIcons"
+    :context="{ onChange: filesChanged }"/>
   <FormStatus>{{ activity }}</FormStatus>
-  <ul><li r-for="file in referenceFiles">{{ file.name }} · {{ file.type || 'Unknown type' }} · {{ file.sizeLabel }} · {{ file.icon }}</li></ul>
+  <ul>
+    <li r-for="file in referenceFiles">
+      {{ file.name }} · {{ file.type || 'Unknown type' }} ·
+      {{ file.sizeLabel }} · {{ file.icon }}
+    </li>
+  </ul>
 </Flex>`
 
 function createDropFilesExample(): DropFilesExample {
@@ -115,7 +129,7 @@ createApp(
       ...defineIconComponents((name) => icons[name] ?? ''),
     },
   },
-  { selector: 'app#drop-files-demo', template: html`<DropFilesExample />` },
+  { selector: 'app#drop-files-demo', template: html`<DropFilesExample/>` },
 )
 
 mountFormAppearanceGalleries()

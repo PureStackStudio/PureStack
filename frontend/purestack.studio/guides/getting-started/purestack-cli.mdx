@@ -30,35 +30,76 @@ The command starts Forge as a local PureStack website. Click the URL printed in 
 **1. Name it.** Choose a title and project folder, relative to where you ran the command.
 
 <figure class="m-0 my-5">
-  <a href="/assets/guides/purestack-cli/forge-site.png" target="_blank" rel="noopener">
-    <img src="/assets/guides/purestack-cli/forge-site.png" width="1440" height="820" loading="lazy" alt="PureStack Forge site details with a site title, project folder, and navigation between setup sections." class="w-full rounded-md b-1 b-subtle"/>
+  <a
+    href="/assets/guides/purestack-cli/forge-site.png"
+    target="_blank"
+    rel="noopener"
+  >
+    <img
+      src="/assets/guides/purestack-cli/forge-site.png"
+      width="1440"
+      height="820"
+      loading="lazy"
+      alt="PureStack Forge site details with a site title, project folder, and navigation between setup sections."
+      class="w-full rounded-md b-1 b-subtle"/>
   </a>
-  <figcaption class="fs-sm text-subtle mt-2">Give your site a name. Move between setup sections whenever you need.</figcaption>
+  <figcaption class="fs-sm text-subtle mt-2">
+    Give your site a name. Move between setup sections whenever you need.
+  </figcaption>
 </figure>
 
 **2. Shape it.** Pick **Starter**, explore the palettes, and choose your features. Go back to adjust anything before creating.
 
 <figure class="m-0 my-5">
-  <a href="/assets/guides/purestack-cli/forge-options.png" target="_blank" rel="noopener">
-    <img src="/assets/guides/purestack-cli/forge-options.png" width="1440" height="820" loading="lazy" alt="PureStack Forge template options showing appearance settings and the Ember color palette." class="w-full rounded-md b-1 b-subtle"/>
+  <a
+    href="/assets/guides/purestack-cli/forge-options.png"
+    target="_blank"
+    rel="noopener"
+  >
+    <img
+      src="/assets/guides/purestack-cli/forge-options.png"
+      width="1440"
+      height="820"
+      loading="lazy"
+      alt="PureStack Forge template options showing appearance settings and the Ember color palette."
+      class="w-full rounded-md b-1 b-subtle"/>
   </a>
-  <figcaption class="fs-sm text-subtle mt-2">Your template brings its own settings. Choose a palette and the features you want.</figcaption>
+  <figcaption class="fs-sm text-subtle mt-2">
+    Your template brings its own settings. Choose a palette and the features you
+    want.
+  </figcaption>
 </figure>
 
 **3. Create it.** Select **Install dependencies**, optionally enable Git, and click **Create site** after reviewing. Watch the progress, then choose **Browse live site**.
 
 <figure class="m-0 my-5">
-  <a href="/assets/guides/purestack-cli/forge-review.png" target="_blank" rel="noopener">
-    <img src="/assets/guides/purestack-cli/forge-review.png" width="1440" height="820" loading="lazy" alt="PureStack Forge review screen summarizing the site title, folder, starter template, and dependency installation before creating the site." class="w-full rounded-md b-1 b-subtle"/>
+  <a
+    href="/assets/guides/purestack-cli/forge-review.png"
+    target="_blank"
+    rel="noopener"
+  >
+    <img
+      src="/assets/guides/purestack-cli/forge-review.png"
+      width="1440"
+      height="820"
+      loading="lazy"
+      alt="PureStack Forge review screen summarizing the site title, folder, starter template, and dependency installation before creating the site."
+      class="w-full rounded-md b-1 b-subtle"/>
   </a>
-  <figcaption class="fs-sm text-subtle mt-2">Review your choices, then create your site and open it live.</figcaption>
+  <figcaption class="fs-sm text-subtle mt-2">
+    Review your choices, then create your site and open it live.
+  </figcaption>
 </figure>
 
 The CLI can set up Yarn during installation. Git setup creates or reuses a repository without making a commit.
 
 <Panel tone="accent" variant="surface" class="p-0" bodyClass="p-5">
   <h3 class="mt-0">A real site. Your source.</h3>
-  <p class="mb-0">A responsive landing page, About page, light and dark themes, a customization guide, and an interactive launch checklist. All yours to edit, with guidance for you and your AI assistant.</p>
+  <p class="mb-0">
+    A responsive landing page, About page, light and dark themes, a
+    customization guide, and an interactive launch checklist. All yours to edit,
+    with guidance for you and your AI assistant.
+  </p>
 </Panel>
 
 ## Make the first change
@@ -90,6 +131,7 @@ Replace `my-site` with your folder name. Skipped installation? Run `yarn install
 | Command | What it does |
 | --- | --- |
 | `yarn dev` | Open your site locally. Saved changes reload in your browser. |
+| `yarn format` | Format your code, MDX components, and TypeScript templates. |
 | `yarn check` | Check code quality and formatting. |
 | `yarn test` | Run app tests while you work. |
 | `yarn build` | Generate the complete site in `dist/dev`. |
@@ -98,25 +140,42 @@ Replace `my-site` with your folder name. Skipped installation? Run `yarn install
 Ready to go live? Follow the [deployment guide](/guides/publishing/deployment/).
 
 <ExpandablePanel title="Need more control from the terminal?" variant="surface">
-
-<p>You can prefill Forge without skipping it:</p>
+  <p>You can prefill Forge without skipping it:</p>
 
 ```sh
 npx purestack@latest init my-site --title "My next idea"
 ```
 
-<p>Run <code>npx purestack@latest init --help</code> for template selection, preset options, Forge's host and port, and direct creation for scripts. For existing content, use commands such as <code>yarn purestack build --content ./content</code>.</p>
+  <p>
+    Run <code>npx purestack@latest init --help</code> for template selection,
+    preset options, Forge's host and port, and direct creation for scripts. For
+    existing content, use commands such as
+    <code>yarn purestack build --content ./content</code>.
+  </p>
 
-<h3 id="build-generate-static-files"><code>build</code>: generate static files</h3>
+  <h3 id="build-generate-static-files">
+    <code>build</code>: generate static files
+  </h3>
 
-<p>Writes the complete site to <code>outDir</code>. Use <code>--clean</code> to empty it first or <code>--no-cache</code> to bypass persistent caches.</p>
+  <p>
+    Writes the complete site to <code>outDir</code>. Use <code>--clean</code> to
+    empty it first or <code>--no-cache</code> to bypass persistent caches.
+  </p>
 
-<h3 id="serve-preview-and-edit"><code>serve</code>: preview and edit</h3>
+  <h3 id="serve-preview-and-edit"><code>serve</code>: preview and edit</h3>
 
-<p>Watches edits and reloads your browser. <code>--port</code> changes the address; <code>--full-render</code> builds every page before browsing.</p>
+  <p>
+    Watches edits and reloads your browser. <code>--port</code> changes the
+    address; <code>--full-render</code> builds every page before browsing.
+  </p>
 
-<h3 id="publish-prepare-a-release-folder"><code>publish</code>: prepare a release folder</h3>
+  <h3 id="publish-prepare-a-release-folder">
+    <code>publish</code>: prepare a release folder
+  </h3>
 
-<p>Cleans <code>publishDir</code> and prepares an optimized release locally. Set your public URL in <a href="/guides/getting-started/site-config/">site configuration</a>.</p>
-
+  <p>
+    Cleans <code>publishDir</code> and prepares an optimized release locally.
+    Set your public URL in
+    <a href="/guides/getting-started/site-config/">site configuration</a>.
+  </p>
 </ExpandablePanel>

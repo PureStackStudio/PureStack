@@ -47,20 +47,30 @@ const autoCompleteInputExampleTemplate = html`<Flex direction="column">
     :maxResults="limit"
     :openOnFocus="focusOpens"
     :context="{ onSearch: searched, onSelect: selected }"
-    emptyText="No matching region"
-  />
+    emptyText="No matching region"/>
   <Flex wrap="true">
-    <FormInputField id="auto-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
-    <FormInputField id="auto-limit" label="Maximum results" type="number" min="1" :model="limit" />
+    <FormInputField
+      id="auto-minimum"
+      label="Minimum query length"
+      type="number"
+      min="0"
+      :model="minimum"/>
+    <FormInputField
+      id="auto-limit"
+      label="Maximum results"
+      type="number"
+      min="1"
+      :model="limit"/>
   </Flex>
   <Flex wrap="true">
-    <FormCheck id="auto-focus" label="Open on focus" :checked="focusOpens" />
-    <FormCheck id="auto-loading" label="Loading state" :checked="pending" />
-    <FormCheck id="auto-disabled" label="Disabled state" :checked="locked" />
+    <FormCheck id="auto-focus" label="Open on focus" :checked="focusOpens"/>
+    <FormCheck id="auto-loading" label="Loading state" :checked="pending"/>
+    <FormCheck id="auto-disabled" label="Disabled state" :checked="locked"/>
     <Btn variant="link" @click="reset">Clear selection</Btn>
   </Flex>
   <FormStatus>
-    Query: {{ searchQuery || 'Empty' }} · Selected value: {{ chosenRegion ?? 'None'
+    Query: {{ searchQuery || 'Empty' }} · Selected value:
+    {{ chosenRegion ?? 'None'
     }}
   </FormStatus>
   <p class="text-muted">onSearch: {{ searchActivity || '(empty query)' }}</p>
@@ -129,7 +139,7 @@ createApp(
   },
   {
     selector: 'app#auto-complete-input-demo',
-    template: html`<AutoCompleteInputExample />`,
+    template: html`<AutoCompleteInputExample/>`,
   },
 )
 

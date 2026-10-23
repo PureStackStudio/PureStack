@@ -16,12 +16,23 @@ export interface CreationProgress {
 const creationProgressTemplate = html`<Flex direction="column" class="gap-4" aria-label="Site creation progress">
   <Flex align="center" class="gap-3">
     <span class="forge-progress-spinner" aria-hidden="true"></span>
-    <div role="status" aria-live="polite"><strong>{{ currentLabel }}</strong><p class="text-subtle fs-xs mt-2 mb-0">{{ completed }} of {{ tasks.length }} steps finished</p></div>
+    <div role="status" aria-live="polite">
+      <strong>{{ currentLabel }}</strong>
+      <p class="text-subtle fs-xs mt-2 mb-0">
+        {{ completed }} of {{ tasks.length }} steps finished
+      </p>
+    </div>
   </Flex>
-  <progress class="forge-progress-meter" :value="completed" :max="tasks.length || 1" aria-label="Completed setup steps"></progress>
+  <progress
+    class="forge-progress-meter"
+    :value="completed"
+    :max="tasks.length || 1"
+    aria-label="Completed setup steps"
+  ></progress>
   <ol class="forge-task-list m-0 p-0">
     <li r-for="task in tasks" :data-state="task.state" class="py-3">
-      <span class="forge-task-marker" aria-hidden="true">{{ task.state === 'done' ? '✓' : task.state === 'failed' ? '×' : '○' }}</span>
+      <span class="forge-task-marker" aria-hidden="true"
+        >{{ task.state === 'done' ? '✓' : task.state === 'failed' ? '×' : '○' }}</span>
       <span>{{ task.label }}</span><span class="text-subtle fs-xs">{{ task.state === 'running' ? 'In progress' : task.state === 'done' ? 'Complete' : task.state === 'failed' ? 'Needs attention' : 'Waiting' }}</span>
     </li>
   </ol>

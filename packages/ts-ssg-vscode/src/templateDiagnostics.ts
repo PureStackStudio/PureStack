@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import { formatHtmlFragment, getHtmlFormattingOptions } from './htmlFormatting'
+import { maskMdxFencedRegions } from './mdxFenceFormatting'
 import {
   getMdxMarkupBlocks,
   type MdxMarkupBlock,
   maskMdxExpressions,
 } from './mdxFormatting'
-import { maskMdxFencedRegions } from './mdxFenceFormatting'
 import {
   getSupportedTaggedTemplates,
   type SupportedTaggedTemplate,

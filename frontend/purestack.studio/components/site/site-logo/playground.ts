@@ -61,30 +61,85 @@ const logoPlaygroundTemplate = html`<Flex direction="column">
     <Flex align="center" justify="center" class="py-5">
       <SiteLogo id="logo-preview" :config="previewConfig"/>
     </Flex>
-    <p class="text-muted m-0">Switch the site theme to see the same logo in light and dark.</p>
+    <p class="text-muted m-0">
+      Switch the site theme to see the same logo in light and dark.
+    </p>
   </Panel>
   <Grid columns="1" columnsMd="3">
     <FormInputField id="logo-brand" label="Brand name" :model="brandName"/>
-    <FormInputField id="logo-subtitle" label="Subtitle" :model="tagline" placeholder="Optional tagline"/>
-    <FormInputField id="logo-suffix" label="Accented suffix" :model="punctuation"/>
-    <FormSelectField id="logo-layout" label="Layout" :model="logoLayout" :options="layouts"/>
-    <FormSelectField id="logo-size" label="Size" :model="logoSize" :options="sizes"/>
-    <FormSelectField id="logo-gap" label="Mark-to-title spacing" :model="spacing" :options="spacings" :disabled="logoLayout === 'mark' || logoLayout === 'wordmark'"/>
-    <FormSelectField id="logo-appearance" label="Appearance" :model="treatment" :options="treatments"/>
-    <FormSelectField id="logo-mark" label="Mark treatment" :model="markTreatment" :options="marks"/>
-    <FormSelectField id="logo-wordmark" label="Wordmark treatment" :model="wordmarkTreatment" :options="wordmarks"/>
-    <FormSelectField id="logo-shape" label="Mark shape" :model="markShape" :options="shapes"/>
-    <FormSelectField id="logo-tone" label="Tone" :model="logoTone" :options="tones"/>
-    <FormSelectField id="logo-source" label="Mark source" :model="markSource" :options="sources"/>
-    <FormInputField id="logo-accent" label="Custom accent color" :model="customAccent" placeholder="Theme default, or #58a6ff"/>
+    <FormInputField
+      id="logo-subtitle"
+      label="Subtitle"
+      :model="tagline"
+      placeholder="Optional tagline"/>
+    <FormInputField
+      id="logo-suffix"
+      label="Accented suffix"
+      :model="punctuation"/>
+    <FormSelectField
+      id="logo-layout"
+      label="Layout"
+      :model="logoLayout"
+      :options="layouts"/>
+    <FormSelectField
+      id="logo-size"
+      label="Size"
+      :model="logoSize"
+      :options="sizes"/>
+    <FormSelectField
+      id="logo-gap"
+      label="Mark-to-title spacing"
+      :model="spacing"
+      :options="spacings"
+      :disabled="logoLayout === 'mark' || logoLayout === 'wordmark'"/>
+    <FormSelectField
+      id="logo-appearance"
+      label="Appearance"
+      :model="treatment"
+      :options="treatments"/>
+    <FormSelectField
+      id="logo-mark"
+      label="Mark treatment"
+      :model="markTreatment"
+      :options="marks"/>
+    <FormSelectField
+      id="logo-wordmark"
+      label="Wordmark treatment"
+      :model="wordmarkTreatment"
+      :options="wordmarks"/>
+    <FormSelectField
+      id="logo-shape"
+      label="Mark shape"
+      :model="markShape"
+      :options="shapes"/>
+    <FormSelectField
+      id="logo-tone"
+      label="Tone"
+      :model="logoTone"
+      :options="tones"/>
+    <FormSelectField
+      id="logo-source"
+      label="Mark source"
+      :model="markSource"
+      :options="sources"/>
+    <FormInputField
+      id="logo-accent"
+      label="Custom accent color"
+      :model="customAccent"
+      placeholder="Theme default, or #58a6ff"/>
   </Grid>
   <Flex justify="between" align="center" wrap="true">
-    <FormCheck id="logo-linked" label="Link the preview to the home page" :checked="linked"/>
+    <FormCheck
+      id="logo-linked"
+      label="Link the preview to the home page"
+      :checked="linked"/>
     <Btn variant="outline" @click="reset">Reset playground</Btn>
   </Flex>
   <Panel variant="outline" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">Live configuration</p>
-    <pre class="overflow-auto max-h-inspector m-0"><code id="logo-config-output">{{ configSource }}</code></pre>
+    <pre
+      class="overflow-auto max-h-inspector m-0"
+    ><code id="logo-config-output">{{ configSource }}</code></pre>
   </Panel>
 </Flex>`
 

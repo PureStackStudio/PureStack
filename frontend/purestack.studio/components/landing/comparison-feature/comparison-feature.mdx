@@ -13,24 +13,39 @@ nav:
 
 # Comparison<wbr/>Feature
 
-<ComponentHeader name="ComparisonFeature" kind="Comparison detail" summary="A list item with a compact icon, designed for clear and consistent comparison details." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="ComparisonFeature"
+  kind="Comparison detail"
+  summary="A list item with a compact icon, designed for clear and consistent comparison details."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## A readable feature list
 
 Every feature is an li, so place it inside a list.
 
-<Tabs group="comparison-feature-sample-1" selectedTab="comparison-feature-sample-1-preview" ariaLabel="A readable feature list example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-feature-sample-1"
+  selectedTab="comparison-feature-sample-1-preview"
+  ariaLabel="A readable feature list example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-feature-sample-1-preview" label="Preview">
-<ComponentExample label="ComparisonFeature in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <ul class="pl-0">
-      <ComparisonFeature tone="success">Keyboard-operable controls</ComparisonFeature>
-      <ComparisonFeature tone="info" icon="lucide:mail">
-        Email integration supplied by your application
-      </ComparisonFeature>
-    </ul>
-
-</ComponentExample>
+    <ComponentExample
+      label="ComparisonFeature in context"
+      caption="Compare the composition, then open its source tab to adapt it."
+    >
+      <ul class="pl-0">
+        <ComparisonFeature tone="success"
+          >Keyboard-operable controls</ComparisonFeature>
+        <ComparisonFeature tone="info" icon="lucide:mail">
+          Email integration supplied by your application
+        </ComparisonFeature>
+      </ul>
+    </ComponentExample>
   </TabPane>
   <TabPane id="comparison-feature-sample-1-source-0" label="feature-list.mdx">
 ```html
@@ -48,22 +63,28 @@ Every feature is an li, so place it inside a list.
 
 The slot can contain more than a short string.
 
-<Tabs group="comparison-feature-sample-2" selectedTab="comparison-feature-sample-2-preview" ariaLabel="Rich supporting detail example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="comparison-feature-sample-2"
+  selectedTab="comparison-feature-sample-2-preview"
+  ariaLabel="Rich supporting detail example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="comparison-feature-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <ul class="pl-0">
-      <ComparisonFeature>
-        <div>
-          <strong>Own the source</strong>
-          <p class="mb-0">
-            Every example includes the markup and TypeScript that powers it.
-          </p>
-        </div>
-      </ComparisonFeature>
-    </ul>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <ul class="pl-0">
+        <ComparisonFeature>
+          <div>
+            <strong>Own the source</strong>
+            <p class="mb-0">
+              Every example includes the markup and TypeScript that powers it.
+            </p>
+          </div>
+        </ComparisonFeature>
+      </ul>
+    </div>
+  </TabPane>
   <TabPane id="comparison-feature-sample-2-source-0" label="rich-feature.mdx">
 ```html
 <ul class="pl-0">
@@ -84,18 +105,45 @@ The slot can contain more than a short string.
 
 Every tone is visible on the icon frame. The row text keeps the surrounding text color.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="ComparisonFeature" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="ComparisonFeature" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## Defaults, custom icons, and rich text
 
-<ComponentExample label="Explain the difference clearly" caption="ComparisonFeature creates an li. Keep it inside ul or ol; tone colors its icon rather than the entire row.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Default check</code><ul class="m-0 p-0"><ComparisonFeature>Shared themes</ComparisonFeature></ul></div>
-<div class="component-appearance-cell"><code>Custom icon</code><ul class="m-0 p-0"><ComparisonFeature icon="iconoir:check" tone="success">Reviewed patterns</ComparisonFeature></ul></div>
-<div class="component-appearance-cell"><code>Rich detail</code><ul class="m-0 p-0"><ComparisonFeature tone="info"><span><strong>Your own source</strong><br/>Read, adapt, and compose each pattern.<br/><a href="/components/">Explore the library</a></span></ComparisonFeature></ul></div>
-</div>
+<ComponentExample
+  label="Explain the difference clearly"
+  caption="ComparisonFeature creates an li. Keep it inside ul or ol; tone colors its icon rather than the entire row."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Default check</code>
+      <ul class="m-0 p-0">
+        <ComparisonFeature>Shared themes</ComparisonFeature>
+      </ul>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom icon</code>
+      <ul class="m-0 p-0">
+        <ComparisonFeature icon="iconoir:check" tone="success"
+          >Reviewed patterns</ComparisonFeature>
+      </ul>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Rich detail</code>
+      <ul class="m-0 p-0">
+        <ComparisonFeature tone="info"
+          ><span
+            ><strong>Your own source</strong><br/>Read, adapt, and compose each
+            pattern.<br/><a href="/components/">Explore the library</a></span></ComparisonFeature>
+      </ul>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -117,7 +165,11 @@ Use explicit text for included, limited or unavailable features. An icon color a
 
 <div class="api-overview">
   <p class="text-eyebrow">ComparisonFeature contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="ComparisonFeature properties">
@@ -125,18 +177,38 @@ Use explicit text for included, limited or unavailable features. An icon color a
   <a href="#comparison-feature-prop-tone">tone</a>
 </nav>
 
-<ApiProperty anchor="comparison-feature-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:check">
-  <p>Registered icon name. The default check is decorative support for the feature text.</p>
+<ApiProperty
+  anchor="comparison-feature-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:check"
+>
+  <p>
+    Registered icon name. The default check is decorative support for the
+    feature text.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="comparison-feature-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="comparison-feature-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>Default slot:</strong> feature text or flow content. Root element is li. Register defineComparisonFeatureComponent with Flex and Icon dependencies.</p>
+  <p>
+    <strong>Default slot:</strong> feature text or flow content. Root element is
+    li. Register defineComparisonFeatureComponent with Flex and Icon
+    dependencies.
+  </p>
 </div>
 
 ## Related components

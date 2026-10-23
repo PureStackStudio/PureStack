@@ -2,7 +2,7 @@
   "name": "purestack-component-navigation",
   "displayName": "PureStack Component Tools",
   "description": "Component navigation, prop IntelliSense, lit-html syntax highlighting, and template formatting for Markdown, Regor MDX, and TypeScript templates.",
-  "version": "1.1.23",
+  "version": "1.1.24",
   "private": true,
   "publisher": "purestack",
   "license": "MIT",
@@ -39,7 +39,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "prettier": "^3.8.1"
+    "@purestack/ts-format": "workspace:^",
+    "typescript-parser": "npm:typescript@6.0.3"
   },
   "contributes": {
     "commands": [

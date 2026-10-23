@@ -10,8 +10,9 @@ refines the standard PureStack palette for both light and dark, while preserving
 Forge's color choices. Starter copy explains what to replace; it makes no
 fictional business claims.
 
-Generated projects use pinned Yarn 4, Vite-powered Vitest app tests, and Biome
-for linting, formatting, and import organization. PureStack dependencies use
+Generated projects use pinned Yarn 4, Vite-powered Vitest app tests, Biome
+for code quality, and PureStack's markup formatter for MDX components and
+TypeScript templates. PureStack dependencies use
 `latest`, with exact installed versions recorded in the project's lockfile. See the generated
 [README](template/README.md) for commands and requirements.
 

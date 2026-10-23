@@ -13,7 +13,13 @@ nav:
 
 # Composer
 
-<ComponentHeader name="Composer" kind="Rich text editing" summary="Give a message room to take shape. Formatting, HTML source, synchronized outputs, and inline image workflows." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="Composer"
+  kind="Rich text editing"
+  summary="Give a message room to take shape. Formatting, HTML source, synchronized outputs, and inline image workflows."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Interactive playground
 
@@ -30,18 +36,20 @@ Change the tone, variant and height below the editor. Choose **Empty draft** to 
   tabVariant="underline"
 >
   <TabPane id="composer-playground-sample-preview" label="Preview">
-<ComponentExample label="Composer in context" caption="Edit the content and explore the toolbar. The HTML and plain-text previews follow the current draft.">
-    <RegorApp id="composer-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="Composer in context"
+      caption="Edit the content and explore the toolbar. The HTML and plain-text previews follow the current draft."
+    >
+      <RegorApp id="composer-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="composer-playground-sample-mdx" label="playground.mdx">
 ```html
 <RegorApp id="composer-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="composer-playground-sample-ts" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -73,18 +81,17 @@ The sample saves both models in memory and requires non-empty plain text. That v
   tabVariant="underline"
 >
   <TabPane id="composer-draft-workflow-sample-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="composer-draft-workflow-sample-mdx" label="draft-workflow.mdx">
 ```html
 <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
 ```
   </TabPane>
   <TabPane id="composer-draft-workflow-sample-ts" label="draft-workflow.ts">
-  <import-codeblock src="./draft-workflow.ts"/>
+    <import-codeblock src="./draft-workflow.ts"/>
   </TabPane>
 </Tabs>
 
@@ -118,18 +125,17 @@ Try **Insert demo image**, choose a local image, or paste/drop an image file int
   tabVariant="underline"
 >
   <TabPane id="composer-inline-images-sample-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="composer-inline-images-sample-mdx" label="inline-images.mdx">
 ```html
 <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
 ```
   </TabPane>
   <TabPane id="composer-inline-images-sample-ts" label="inline-images.ts">
-  <import-codeblock src="./inline-images.ts"/>
+    <import-codeblock src="./inline-images.ts"/>
   </TabPane>
 </Tabs>
 
@@ -337,8 +343,9 @@ In source mode, the textarea keeps the text you are currently editing while the 
 >
   <p>
     Shell treatment. Surface, surfaceAlt and outline are useful starting points
-    for editors. The complete shared type also accepts solid, spotlight, glass, flat, flatAlt, flatSolid, outlineFill,
-    subtle, subtleBtn, link, sheen, underline, rail, bracket and none.
+    for editors. The complete shared type also accepts solid, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, subtle, subtleBtn, link, sheen,
+    underline, rail, bracket and none.
   </p>
 </ApiProperty>
 
@@ -388,20 +395,42 @@ In source mode, the textarea keeps the text you are currently editing while the 
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-composer-tone-gallery" data-form-gallery data-component="Composer" data-axis="tone">
-<FormAppearanceGallery component="Composer" axis="tone" prefix="forms-composer-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-composer-tone-gallery"
+    data-form-gallery
+    data-component="Composer"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="Composer"
+      axis="tone"
+      prefix="forms-composer-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-composer-variant-gallery" data-form-gallery data-component="Composer" data-axis="variant">
-<FormAppearanceGallery component="Composer" axis="variant" prefix="forms-composer-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-composer-variant-gallery"
+    data-form-gallery
+    data-component="Composer"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="Composer"
+      axis="variant"
+      prefix="forms-composer-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Keyboard and accessibility

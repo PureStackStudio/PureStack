@@ -71,14 +71,10 @@ const logoTemplate = html`<a
     aria-hidden="true"
   >
     <span class="site-logo__name"
-      ><span class="site-logo__brand">{{ options.brand }}</span
-      ><span class="site-logo__suffix" r-if="options.suffix"
-        >{{ options.suffix }}</span
-      ></span
-    >
+      ><span class="site-logo__brand">{{ options.brand }}</span><span class="site-logo__suffix" r-if="options.suffix"
+        >{{ options.suffix }}</span></span>
     <span class="site-logo__subtitle" r-if="options.subtitle"
-      >{{ options.subtitle }}</span
-    >
+      >{{ options.subtitle }}</span>
   </span>
 </a>`
 

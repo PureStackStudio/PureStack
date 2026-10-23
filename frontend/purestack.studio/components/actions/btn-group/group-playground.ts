@@ -35,12 +35,32 @@ export interface GroupPlayground {
 
 const groupPlaygroundTemplate = html`<Flex direction="column">
   <Grid columns="1" columnsSm="2">
-    <FormSelectField id="group-align" label="Alignment" :model="groupAlign" :options="alignments"/>
-    <FormSelectField id="group-width" label="Preview width" :model="width" :options="widths"/>
+    <FormSelectField
+      id="group-align"
+      label="Alignment"
+      :model="groupAlign"
+      :options="alignments"/>
+    <FormSelectField
+      id="group-width"
+      label="Preview width"
+      :model="width"
+      :options="widths"/>
   </Grid>
   <FormCheck id="group-wrap" label="Allow wrapping" :checked="allowWrap"/>
-  <div class="overflow-x-auto p-2" :style="previewStyle" tabindex="0" role="region" aria-label="Button group preview">
-    <BtnGroup :align="groupAlign" :wrap="allowWrap" class="w-full" role="group" aria-label="Draft actions">
+  <div
+    class="overflow-x-auto p-2"
+    :style="previewStyle"
+    tabindex="0"
+    role="region"
+    aria-label="Button group preview"
+  >
+    <BtnGroup
+      :align="groupAlign"
+      :wrap="allowWrap"
+      class="w-full"
+      role="group"
+      aria-label="Draft actions"
+    >
       <Btn tone="accent" @click="choose('Save draft')">Save draft</Btn>
       <Btn variant="surface" @click="choose('Preview')">Preview</Btn>
       <Btn variant="surface" @click="choose('Duplicate')">Duplicate</Btn>

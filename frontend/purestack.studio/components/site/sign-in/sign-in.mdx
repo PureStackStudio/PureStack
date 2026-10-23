@@ -13,21 +13,36 @@ nav:
 
 # Sign<wbr/>In
 
-<ComponentHeader name="SignIn" kind="Account entry" summary="An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/signIn/signIn.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="SignIn"
+  kind="Account entry"
+  summary="An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/signIn/signIn.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## An account menu with custom destinations
 
 The isolated preview enables the account component locally and uses working documentation links in its default slot.
 
-<Tabs group="sign-in-sample-1" selectedTab="sign-in-sample-1-preview" ariaLabel="An account menu with custom destinations example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="sign-in-sample-1"
+  selectedTab="sign-in-sample-1-preview"
+  ariaLabel="An account menu with custom destinations example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="sign-in-sample-1-preview" label="Preview">
-<ComponentExample label="SignIn in context" caption="Signed-out and signed-in states, avatars, sign-up, and custom destinations. Open the source tab to adapt the composition.">
-    <SignInPreview />
-
-</ComponentExample>
+    <ComponentExample
+      label="SignIn in context"
+      caption="Signed-out and signed-in states, avatars, sign-up, and custom destinations. Open the source tab to adapt the composition."
+    >
+      <SignInPreview/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="sign-in-sample-1-source-1" label="preview.mdx">
-  <import-codeblock src="./preview.mdx"/>
+    <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -35,30 +50,50 @@ The isolated preview enables the account component locally and uses working docu
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="tone"><SiteAppearanceGallery component="SignIn" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="tone">
+    <SiteAppearanceGallery component="SignIn" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="variant"><SiteAppearanceGallery component="SignIn" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="variant">
+    <SiteAppearanceGallery component="SignIn" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
 
-<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="mode"><SiteAppearanceGallery component="SignIn" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="mode">
+    <SiteAppearanceGallery component="SignIn" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Feature comparisons
 
-<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
-<div data-site-gallery="features"><SiteAppearanceGallery component="SignIn" axis="features"/></div>
+<ComponentExample
+  label="Every configuration in view"
+  caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples."
+>
+  <div data-site-gallery="features">
+    <SiteAppearanceGallery component="SignIn" axis="features"/>
+  </div>
 </ComponentExample>
 
 ## Account state and content slots
@@ -83,7 +118,11 @@ The component defaults to site.auth.enabled; the enabled prop overrides it for a
 
 <div class="api-overview">
   <p class="text-eyebrow">SignIn contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="SignIn properties">
@@ -100,54 +139,129 @@ The component defaults to site.auth.enabled; the enabled prop overrides it for a
   <a href="#sign-in-prop-signedIn">signedIn</a>
 </nav>
 
-<ApiProperty anchor="sign-in-prop-avatarSrc" name="avatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="sign-in-prop-avatarSrc"
+  name="avatarSrc"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Signed-in avatar URL. With no avatar, accountIcon is used.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-avatarAlt" name="avatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="empty string">
-  <p>Avatar image alternative text. Decorative account imagery can keep the empty default.</p>
+<ApiProperty
+  anchor="sign-in-prop-avatarAlt"
+  name="avatarAlt"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="empty string"
+>
+  <p>
+    Avatar image alternative text. Decorative account imagery can keep the empty
+    default.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:log-in">
+<ApiProperty
+  anchor="sign-in-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:log-in"
+>
   <p>Signed-out trigger icon.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-accountIcon" name="accountIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="tabler:user-filled">
+<ApiProperty
+  anchor="sign-in-prop-accountIcon"
+  name="accountIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="tabler:user-filled"
+>
   <p>Signed-in fallback icon.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="Account">
-  <p>Hidden trigger text. The summary currently has the fixed accessible label Account menu.</p>
+<ApiProperty
+  anchor="sign-in-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="Account"
+>
+  <p>
+    Hidden trigger text. The summary currently has the fixed accessible label
+    Account menu.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="sign-in-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+<ApiProperty
+  anchor="sign-in-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
   <p>Account menu panel treatment.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+<ApiProperty
+  anchor="sign-in-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for content surfaces; stateful enables the treatment’s hover,
+    focus and active styles. It does not add interaction handlers.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-enabled" name="enabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.enabled">
+<ApiProperty
+  anchor="sign-in-prop-enabled"
+  name="enabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="site.auth.enabled"
+>
   <p>Overrides authentication UI visibility for this instance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-signUp" name="signUp" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.signUp">
+<ApiProperty
+  anchor="sign-in-prop-signUp"
+  name="signUp"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="site.auth.signUp"
+>
   <p>Overrides visibility of the default sign-up action.</p>
 </ApiProperty>
 
-<ApiProperty anchor="sign-in-prop-signedIn" name="signedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
-  <p>Selects signed-in or signed-out presentation for this instance. Omit it to follow the runtime auth hint. This prop does not authenticate a session.</p>
+<ApiProperty
+  anchor="sign-in-prop-signedIn"
+  name="signedIn"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="runtime auth state"
+>
+  <p>
+    Selects signed-in or signed-out presentation for this instance. Omit it to
+    follow the runtime auth hint. This prop does not authenticate a session.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>avatar:</strong> custom signed-in trigger content. <strong>default slot:</strong> replaces the generated account links. Default routes are /signin/, /signup/, /account/, /account/settings/ and /signout/. Register defineSignInComponents with Panel, Flex, BtnLink and Icon.</p>
+  <p>
+    <strong>avatar:</strong> custom signed-in trigger content.
+    <strong>default slot:</strong> replaces the generated account links. Default
+    routes are /signin/, /signup/, /account/, /account/settings/ and /signout/.
+    Register defineSignInComponents with Panel, Flex, BtnLink and Icon.
+  </p>
 </div>
 
 ## Related components

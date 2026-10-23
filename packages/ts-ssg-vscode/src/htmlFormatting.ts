@@ -1,30 +1,14 @@
-import htmlPlugin from 'prettier/plugins/html'
-import postcssPlugin from 'prettier/plugins/postcss'
-import prettier from 'prettier/standalone'
 import * as vscode from 'vscode'
+
+export type { HtmlFormattingOptions } from '@purestack/ts-format'
+export {
+  formatHtmlFragment,
+  getLineIndent,
+  normalizeSelfClosingTagSpacing,
+} from '@purestack/ts-format'
 
 const DEFAULT_PRINT_WIDTH = 80
 const DEFAULT_TAB_SIZE = 2
-
-export interface HtmlFormattingOptions {
-  printWidth: number
-  tabSize: number
-  useTabs: boolean
-}
-
-export async function formatHtmlFragment(
-  source: string,
-  options: HtmlFormattingOptions,
-) {
-  return prettier.format(source, {
-    htmlWhitespaceSensitivity: 'css',
-    parser: 'html',
-    plugins: [htmlPlugin, postcssPlugin],
-    printWidth: options.printWidth,
-    tabWidth: options.tabSize,
-    useTabs: options.useTabs,
-  })
-}
 
 export function getHtmlFormattingOptions(document: vscode.TextDocument) {
   const editorConfig = vscode.workspace.getConfiguration('editor', document.uri)
@@ -49,15 +33,6 @@ export function getHtmlFormattingOptions(document: vscode.TextDocument) {
         : DEFAULT_TAB_SIZE,
     useTabs: configuredInsertSpaces === false,
   }
-}
-
-export function getLineIndent(line: string) {
-  const match = /^\s*/.exec(line)
-  return match?.[0] ?? ''
-}
-
-export function normalizeSelfClosingTagSpacing(formatted: string) {
-  return formatted.replace(/\s+\/>/g, '/>')
 }
 
 export function shouldFormatOnSave(document: vscode.TextDocument) {

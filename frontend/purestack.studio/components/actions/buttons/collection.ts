@@ -32,8 +32,14 @@ const collectionTemplate = html`<Flex direction="column" align="start">
   </ul>
   <Flex wrap="true">
     <Btn tone="accent" :disabled="isFull" @click="addItem">Add item</Btn>
-    <Btn tone="neutral" variant="surface" :disabled="isEmpty" @click="removeItem">Remove item</Btn>
-    <Btn tone="neutral" variant="link" :disabled="isEmpty" @click="reset">Reset</Btn>
+    <Btn
+      tone="neutral"
+      variant="surface"
+      :disabled="isEmpty"
+      @click="removeItem"
+      >Remove item</Btn>
+    <Btn tone="neutral" variant="link" :disabled="isEmpty" @click="reset"
+      >Reset</Btn>
   </Flex>
 </Flex>`
 

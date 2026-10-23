@@ -9,7 +9,12 @@ export interface NoteRow {
   item: RefOrValue<Note>
   index: RefOrValue<number>
 }
-const noteRowTemplate = html`<article class="p-3 bb-1 b-subtle" role="listitem" :aria-posinset="index + 1" aria-setsize="200">
+const noteRowTemplate = html`<article
+  class="p-3 bb-1 b-subtle"
+  role="listitem"
+  :aria-posinset="index + 1"
+  aria-setsize="200"
+>
   <strong>{{ item.title }}</strong>
   <p class="mb-0">{{ item.body }}</p>
 </article>`
@@ -21,10 +26,15 @@ export interface NotesExample {
   notes: Note[]
 }
 const notesTemplate = html`<VariableVirtualList
-  :items="notes" height="300" estimateHeight="100" overscan="3"
-  rowComponent="NoteRow" role="list" tabindex="0" aria-label="Release notes"
-  class="b-1 b-subtle rounded-md"
-/>`
+  :items="notes"
+  height="300"
+  estimateHeight="100"
+  overscan="3"
+  rowComponent="NoteRow"
+  role="list"
+  tabindex="0"
+  aria-label="Release notes"
+  class="b-1 b-subtle rounded-md"/>`
 const notesExample = defineComponent<NotesExample>(notesTemplate, {
   context: () => ({
     notes: Array.from({ length: 200 }, (_, index) => ({
@@ -46,6 +56,6 @@ createApp(
   },
   {
     selector: 'app#variable-list-basic-demo',
-    template: html`<NotesExample />`,
+    template: html`<NotesExample/>`,
   },
 )

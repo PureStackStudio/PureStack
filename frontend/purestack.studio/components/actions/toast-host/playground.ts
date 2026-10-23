@@ -22,16 +22,26 @@ export interface ToastHostExample {
 }
 
 const toastHostExampleTemplate = html`<Flex direction="column">
-  <ToastHost :items="notifications.items" :dismiss="notifications.dismiss" />
+  <ToastHost :items="notifications.items" :dismiss="notifications.dismiss"/>
   <Flex wrap="true">
     <Btn tone="success" @click="save">Save local draft</Btn>
-    <Btn tone="warning" variant="outline" @click="warn">Show review reminder</Btn>
-    <Btn tone="danger" variant="outline" @click="fail">Show persistent error</Btn>
+    <Btn tone="warning" variant="outline" @click="warn"
+      >Show review reminder</Btn>
+    <Btn tone="danger" variant="outline" @click="fail"
+      >Show persistent error</Btn>
     <Btn variant="link" @click="clear">Clear notifications</Btn>
   </Flex>
-  <p>Try every supported tone. Info and success last 5 seconds, warning lasts 10; all others stay until dismissed.</p>
+  <p>
+    Try every supported tone. Info and success last 5 seconds, warning lasts 10;
+    all others stay until dismissed.
+  </p>
   <Flex wrap="true" aria-label="All notification tones">
-    <Btn r-for="tone in tones" :tone="tone" variant="surface" @click="notifyTone(tone)">{{ tone }}</Btn>
+    <Btn
+      r-for="tone in tones"
+      :tone="tone"
+      variant="surface"
+      @click="notifyTone(tone)"
+      >{{ tone }}</Btn>
   </Flex>
   <FormStatus>{{ notifications.items.length }} active notifications</FormStatus>
 </Flex>`
@@ -73,5 +83,5 @@ createApp(
       ...defineIconComponents((name) => icons[name] ?? ''),
     },
   },
-  { selector: 'app#toast-host-demo', template: html`<ToastHostExample />` },
+  { selector: 'app#toast-host-demo', template: html`<ToastHostExample/>` },
 )

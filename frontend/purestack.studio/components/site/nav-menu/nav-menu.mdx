@@ -13,7 +13,13 @@ nav:
 
 # Nav<wbr/>Menu
 
-<ComponentHeader name="NavMenu" kind="Prepared navigation" summary="A hierarchical site navigation panel with active-page state, collapsible groups and optional search and account controls." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/navMenu/navMenu.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
+<ComponentHeader
+  name="NavMenu"
+  kind="Prepared navigation"
+  summary="A hierarchical site navigation panel with active-page state, collapsible groups and optional search and account controls."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/navMenu/navMenu.ts"
+  section="Site navigation &amp; services"
+  sectionHref="/components/site/"/>
 
 ## Playground
 
@@ -28,10 +34,12 @@ Switch between a documentation tree and an application menu, then pick the curre
   tabVariant="underline"
 >
   <TabPane id="nav-menu-playground-preview" label="Preview">
-<ComponentExample label="NavMenu in context" caption="Active paths, open ancestors, hierarchy, and site controls. Open the source tab to adapt the composition.">
-    <RegorApp id="nav-menu-playground" src="./nav-menu-playground.ts"/>
-
-</ComponentExample>
+    <ComponentExample
+      label="NavMenu in context"
+      caption="Active paths, open ancestors, hierarchy, and site controls. Open the source tab to adapt the composition."
+    >
+      <RegorApp id="nav-menu-playground" src="./nav-menu-playground.ts"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="nav-menu-playground-mdx" label="nav-menu-playground.mdx">
 ```html
@@ -39,7 +47,7 @@ Switch between a documentation tree and an application menu, then pick the curre
 ```
   </TabPane>
   <TabPane id="nav-menu-playground-ts" label="nav-menu-playground.ts">
-  <import-codeblock src="./nav-menu-playground.ts"/>
+    <import-codeblock src="./nav-menu-playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -87,48 +95,75 @@ In a client-side app, pass a shallow `sref` for `items` and a `ref` for `current
 
 This ordinary page uses the standard documentation template, which renders the site's navigation with its configured appearance and runtime. The narrow iframe uses the mobile layout: open the menu with the header's navigation toggle. Open the full page in a wide window to try desktop sidebar collapse, restore, and resizing. Links open the real guides within the preview.
 
-<Tabs group="nav-menu-sample-1" selectedTab="nav-menu-sample-1-preview" ariaLabel="A focused navigation tree example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="nav-menu-sample-1"
+  selectedTab="nav-menu-sample-1-preview"
+  ariaLabel="A focused navigation tree example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="nav-menu-sample-1-preview" label="Preview">
-<div class="component-preview-stage">
-    <NavMenuPreview />
-
-</div>
+    <div class="component-preview-stage">
+      <NavMenuPreview/>
+    </div>
   </TabPane>
   <TabPane id="nav-menu-sample-1-source-1" label="preview.mdx">
-  <import-codeblock src="./preview.mdx"/>
+    <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
-<BtnLink href="./preview/" target="_blank" rel="noopener" variant="link">Open the full-page layout preview</BtnLink>
+<BtnLink href="./preview/" target="_blank" rel="noopener" variant="link"
+  >Open the full-page layout preview</BtnLink>
 
 ## All ten semantic tones
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="tone"><SiteAppearanceGallery component="NavMenu" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="tone">
+    <SiteAppearanceGallery component="NavMenu" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 All supported values are visible together on the actual component, in an isolated document.
 
-<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="variant"><SiteAppearanceGallery component="NavMenu" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="variant">
+    <SiteAppearanceGallery component="NavMenu" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Both variant modes
 
 Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
 
-<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
-<div data-site-gallery="mode"><SiteAppearanceGallery component="NavMenu" axis="mode"/></div>
+<ComponentExample
+  label="Both variant modes"
+  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
+>
+  <div data-site-gallery="mode">
+    <SiteAppearanceGallery component="NavMenu" axis="mode"/>
+  </div>
 </ComponentExample>
 
 ## Feature comparisons
 
-<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
-<div data-site-gallery="features"><SiteAppearanceGallery component="NavMenu" axis="features"/></div>
+<ComponentExample
+  label="Every configuration in view"
+  caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples."
+>
+  <div data-site-gallery="features">
+    <SiteAppearanceGallery component="NavMenu" axis="features"/>
+  </div>
 </ComponentExample>
 
 ## Navigation is data plus page state
@@ -155,7 +190,11 @@ Use [NavList](/components/site/nav-list/) when you already have prepared row sta
 
 <div class="api-overview">
   <p class="text-eyebrow">NavMenu contract</p>
-  <p>Items, current page, tone and treatment are reactive. The SSG context supplies the default navigation, current URL, search configuration and authentication configuration.</p>
+  <p>
+    Items, current page, tone and treatment are reactive. The SSG context
+    supplies the default navigation, current URL, search configuration and
+    authentication configuration.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="NavMenu properties">
@@ -171,50 +210,122 @@ Use [NavList](/components/site/nav-list/) when you already have prepared row sta
   <a href="#nav-menu-prop-signInSignedIn">signInSignedIn</a>
 </nav>
 
-<ApiProperty anchor="nav-menu-prop-items" name="items" valueType="NavItem[] | SRef&lt;NavItem[]&gt;" defaultValue="context navigation items, then global">
-  <p>The tree to show. Each NavItem has a title and an optional url, children, icon and other navigation metadata.</p>
+<ApiProperty
+  anchor="nav-menu-prop-items"
+  name="items"
+  valueType="NavItem[] | SRef&lt;NavItem[]&gt;"
+  defaultValue="context navigation items, then global"
+>
+  <p>
+    The tree to show. Each NavItem has a title and an optional url, children,
+    icon and other navigation metadata.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-currentUrl" name="currentUrl" valueType="RefOrValue&lt;string&gt;" defaultValue="the rendered page, then the browser location">
-  <p>The URL of the current page. Its item is marked current and its ancestor groups open.</p>
+<ApiProperty
+  anchor="nav-menu-prop-currentUrl"
+  name="currentUrl"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="the rendered page, then the browser location"
+>
+  <p>
+    The URL of the current page. Its item is marked current and its ancestor
+    groups open.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="neutral">
-  <p>Panel tone. Active links are assigned accent; other items are assigned neutral by the state builder.</p>
+<ApiProperty
+  anchor="nav-menu-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="neutral"
+>
+  <p>
+    Panel tone. Active links are assigned accent; other items are assigned
+    neutral by the state builder.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="flat">
-  <p>Visual treatment of the panel. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none. When docked in the doc sidebar, the panel stays square and borderless whatever the variant.</p>
+<ApiProperty
+  anchor="nav-menu-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="flat"
+>
+  <p>
+    Visual treatment of the panel. Accepts solid, surface, surfaceAlt,
+    spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle,
+    subtleBtn, link, sheen, underline, rail, bracket or none. When docked in the
+    doc sidebar, the panel stays square and borderless whatever the variant.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
-  <p>Use stateless for the navigation panel; stateful enables the treatment’s hover and active styles on the whole panel. Links keep their own hover and active styles either way.</p>
+<ApiProperty
+  anchor="nav-menu-prop-variantMode"
+  name="variantMode"
+  valueType="RefOrValue&lt;ComponentVariantMode&gt;"
+  defaultValue="stateless"
+>
+  <p>
+    Use stateless for the navigation panel; stateful enables the treatment’s
+    hover and active styles on the whole panel. Links keep their own hover and
+    active styles either way.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-signInAvatarSrc" name="signInAvatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="nav-menu-prop-signInAvatarSrc"
+  name="signInAvatarSrc"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Avatar image forwarded to the account control.</p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-signInAvatarAlt" name="signInAvatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="nav-menu-prop-signInAvatarAlt"
+  name="signInAvatarAlt"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Avatar alternative text forwarded to the account control.</p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-search" name="search" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.pagefind.enabled">
+<ApiProperty
+  anchor="nav-menu-prop-search"
+  name="search"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="site.pagefind.enabled"
+>
   <p>Overrides search visibility for this instance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-signInEnabled" name="signInEnabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.enabled">
+<ApiProperty
+  anchor="nav-menu-prop-signInEnabled"
+  name="signInEnabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="site.auth.enabled"
+>
   <p>Overrides account control visibility for this instance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="nav-menu-prop-signInSignedIn" name="signInSignedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
+<ApiProperty
+  anchor="nav-menu-prop-signInSignedIn"
+  name="signInSignedIn"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="runtime auth state"
+>
   <p>Forwards an explicit signed-in presentation to the account control.</p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineNavigationComponents with BtnLink, Icon, SignIn and SearchBox dependencies. NavItem is an internal row component that reads its item from the surrounding list context.</p>
+  <p>
+    No slots. Register defineNavigationComponents with BtnLink, Icon, SignIn and
+    SearchBox dependencies. NavItem is an internal row component that reads its
+    item from the surrounding list context.
+  </p>
 </div>
 
 ## Related components

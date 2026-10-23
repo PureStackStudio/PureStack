@@ -13,26 +13,41 @@ nav:
 
 # Auto<wbr/>Complete<wbr/>Input
 
-<ComponentHeader name="AutoCompleteInput" kind="Searchable selection" summary="Find a known value without scrolling a long list. Query text and selected data remain separate." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
+<ComponentHeader
+  name="AutoCompleteInput"
+  kind="Searchable selection"
+  summary="Find a known value without scrolling a long list. Query text and selected data remain separate."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts"
+  section="Forms &amp; input"
+  sectionHref="/components/forms/"/>
 
 ## Find a region
 
 Type a label, value or keyword; choose a result with the mouse or arrow keys and Enter. Toggle loading and disabled states to inspect their behavior.
 
-<Tabs group="auto-complete-input-sample-1" selectedTab="auto-complete-input-sample-1-preview" ariaLabel="Find a region example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="auto-complete-input-sample-1"
+  selectedTab="auto-complete-input-sample-1-preview"
+  ariaLabel="Find a region example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="auto-complete-input-sample-1-preview" label="Preview">
-<ComponentExample label="AutoCompleteInput in context" caption="Search by label or keyword, select a region, and compare loading and disabled behavior.">
-    <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
-
-</ComponentExample>
-</TabPane>
+    <ComponentExample
+      label="AutoCompleteInput in context"
+      caption="Search by label or keyword, select a region, and compare loading and disabled behavior."
+    >
+      <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
+    </ComponentExample>
+  </TabPane>
   <TabPane id="auto-complete-input-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="auto-complete-input-sample-1-source-1" label="playground.ts">
-  <import-codeblock src="./playground.ts"/>
+    <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 
@@ -40,20 +55,26 @@ Type a label, value or keyword; choose a result with the mouse or arrow keys and
 
 Rows can show richer context while the parent owns listbox semantics and selection. This example waits for one character and limits results to three.
 
-<Tabs group="auto-complete-input-sample-2" selectedTab="auto-complete-input-sample-2-preview" ariaLabel="A custom suggestion row example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="auto-complete-input-sample-2"
+  selectedTab="auto-complete-input-sample-2-preview"
+  ariaLabel="A custom suggestion row example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="auto-complete-input-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-    <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
-
-</div>
-</TabPane>
+    <div class="component-preview-stage">
+      <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
+    </div>
+  </TabPane>
   <TabPane id="auto-complete-input-sample-2-source-0" label="custom-row.mdx">
 ```html
 <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
 ```
   </TabPane>
   <TabPane id="auto-complete-input-sample-2-source-1" label="custom-row.ts">
-  <import-codeblock src="./custom-row.ts"/>
+    <import-codeblock src="./custom-row.ts"/>
   </TabPane>
 </Tabs>
 
@@ -61,20 +82,42 @@ Rows can show richer context while the parent owns listbox semantics and selecti
 
 All ten tones are visible at once. The control’s label and content explain the intent independently of color.
 
-<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-auto-complete-input-tone-gallery" data-form-gallery data-component="AutoCompleteInput" data-axis="tone">
-<FormAppearanceGallery component="AutoCompleteInput" axis="tone" prefix="forms-auto-complete-input-tone-gallery"/>
-</div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-auto-complete-input-tone-gallery"
+    data-form-gallery
+    data-component="AutoCompleteInput"
+    data-axis="tone"
+  >
+    <FormAppearanceGallery
+      component="AutoCompleteInput"
+      axis="tone"
+      prefix="forms-auto-complete-input-tone-gallery"/>
+  </div>
 </ComponentExample>
 
 ## All visual variants
 
 All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
 
-<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
-<div id="forms-auto-complete-input-variant-gallery" data-form-gallery data-component="AutoCompleteInput" data-axis="variant">
-<FormAppearanceGallery component="AutoCompleteInput" axis="variant" prefix="forms-auto-complete-input-variant-gallery"/>
-</div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes."
+>
+  <div
+    id="forms-auto-complete-input-variant-gallery"
+    data-form-gallery
+    data-component="AutoCompleteInput"
+    data-axis="variant"
+  >
+    <FormAppearanceGallery
+      component="AutoCompleteInput"
+      axis="variant"
+      prefix="forms-auto-complete-input-variant-gallery"/>
+  </div>
 </ComponentExample>
 
 ## Search and selection features
@@ -107,7 +150,11 @@ Arrow keys move through enabled suggestions; Enter selects, Escape closes. Searc
 
 <div class="api-overview">
   <p class="text-eyebrow">AutoCompleteInput contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="AutoCompleteInput properties">
@@ -137,106 +184,270 @@ Arrow keys move through enabled suggestions; Enter selects, Escape closes. Searc
   <a href="#auto-complete-input-prop-onSearch">onSearch</a>
 </nav>
 
-<ApiProperty anchor="auto-complete-input-prop-id" name="id" valueType="RefOrValue&lt;string&gt;" defaultValue="generated">
-  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-id"
+  name="id"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="generated"
+>
+  <p>
+    Unique control ID. Supply an explicit value when help text or another
+    element needs to reference this control.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible label. Use language that describes the control or value in its
+    surrounding context.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="inherited FormInputField surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="inherited FormInputField surfaceAlt"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-model" name="model" valueType="Ref&lt;string&gt;" defaultValue="ref('')">
-  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-model"
+  name="model"
+  valueType="Ref&lt;string&gt;"
+  defaultValue="ref('')"
+>
+  <p>
+    Two-way value ref. Pass the ref itself with :model="fieldValue" so edits
+    update application state.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-selectedValue" name="selectedValue" valueType="Ref&lt;AutoCompleteValue | null&gt;" defaultValue="ref(null)">
+<ApiProperty
+  anchor="auto-complete-input-prop-selectedValue"
+  name="selectedValue"
+  valueType="Ref&lt;AutoCompleteValue | null&gt;"
+  defaultValue="ref(null)"
+>
   <p>Selected option value, independent of the editable query model.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-type" name="type" valueType="RefOrValue&lt;FormInputFieldType&gt;" defaultValue="search">
+<ApiProperty
+  anchor="auto-complete-input-prop-type"
+  name="type"
+  valueType="RefOrValue&lt;FormInputFieldType&gt;"
+  defaultValue="search"
+>
   <p>Native input type forwarded to FormInputField.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="auto-complete-input-prop-name"
+  name="name"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Native form field name used during FormData serialization.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-required"
+  name="required"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Native required constraint. Validate the owning form before accepting its
+    data.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+<ApiProperty
+  anchor="auto-complete-input-prop-autocomplete"
+  name="autocomplete"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="off"
+>
   <p>Native browser autofill hint, such as name, email or current-password.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="auto-complete-input-prop-placeholder"
+  name="placeholder"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>A short input hint shown while empty. Keep a separate visible label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-disabled"
+  name="disabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Disables interaction. Use a bound boolean, for example :disabled="isLocked".
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-icon"
+  name="icon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Registered SVG icon name. In browser apps, include the icon in the resolver
+    passed to defineIconComponents.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:chevron-down; loader-circle while loading">
-  <p>Trailing input icon. Include both default icons in the browser resolver when the loading state is used. An explicit iconEnd overrides both.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-iconEnd"
+  name="iconEnd"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="lucide:chevron-down; loader-circle while loading"
+>
+  <p>
+    Trailing input icon. Include both default icons in the browser resolver when
+    the loading state is used. An explicit iconEnd overrides both.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-options" name="options" valueType="RefOrValue&lt;AutoCompleteOption[]&gt;" defaultValue="[]">
-  <p>Suggestion or select data. Each option has a label, an optional value and an optional disabled flag. Omitted values use the label.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-options"
+  name="options"
+  valueType="RefOrValue&lt;AutoCompleteOption[]&gt;"
+  defaultValue="[]"
+>
+  <p>
+    Suggestion or select data. Each option has a label, an optional value and an
+    optional disabled flag. Omitted values use the label.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="AutoCompleteOptionRow">
-  <p>Registered suggestion row component. Receives option, item, index, query, active, selected and disabled. The parent supplies the clickable option wrapper.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-rowComponent"
+  name="rowComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="AutoCompleteOptionRow"
+>
+  <p>
+    Registered suggestion row component. Receives option, item, index, query,
+    active, selected and disabled. The parent supplies the clickable option
+    wrapper.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-minLength" name="minLength" valueType="RefOrValue&lt;number | string&gt;" defaultValue="0">
+<ApiProperty
+  anchor="auto-complete-input-prop-minLength"
+  name="minLength"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="0"
+>
   <p>Minimum trimmed query length before suggestions may open.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-maxResults" name="maxResults" valueType="RefOrValue&lt;number | string&gt;" defaultValue="10">
+<ApiProperty
+  anchor="auto-complete-input-prop-maxResults"
+  name="maxResults"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="10"
+>
   <p>Maximum number of matching suggestions rendered.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-openOnFocus" name="openOnFocus" valueType="RefOrValue&lt;boolean&gt;" defaultValue="true">
+<ApiProperty
+  anchor="auto-complete-input-prop-openOnFocus"
+  name="openOnFocus"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="true"
+>
   <p>Opens suggestions on focus when the minimum query length is met.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-loading" name="loading" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Shows a loading state. Your application supplies options and manages any asynchronous request.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-loading"
+  name="loading"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Shows a loading state. Your application supplies options and manages any
+    asynchronous request.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-emptyText" name="emptyText" valueType="RefOrValue&lt;string&gt;" defaultValue="No suggestions">
+<ApiProperty
+  anchor="auto-complete-input-prop-emptyText"
+  name="emptyText"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="No suggestions"
+>
   <p>Message displayed when the query has no matching suggestions.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-loadingText" name="loadingText" valueType="RefOrValue&lt;string&gt;" defaultValue="Loading suggestions">
+<ApiProperty
+  anchor="auto-complete-input-prop-loadingText"
+  name="loadingText"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="Loading suggestions"
+>
   <p>Status message while loading is true.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-onSelect" name="onSelect" valueType="(option: ResolvedAutoCompleteOption) =&gt; void" defaultValue="not set">
+<ApiProperty
+  anchor="auto-complete-input-prop-onSelect"
+  name="onSelect"
+  valueType="(option: ResolvedAutoCompleteOption) =&gt; void"
+  defaultValue="not set"
+>
   <p>Callback receiving a ResolvedAutoCompleteOption after selection.</p>
 </ApiProperty>
 
-<ApiProperty anchor="auto-complete-input-prop-onSearch" name="onSearch" valueType="(query: string) =&gt; void" defaultValue="not set">
-  <p>Callback receiving the query string after an edit. Use it to load or filter application data.</p>
+<ApiProperty
+  anchor="auto-complete-input-prop-onSearch"
+  name="onSearch"
+  valueType="(query: string) =&gt; void"
+  defaultValue="not set"
+>
+  <p>
+    Callback receiving the query string after an edit. Use it to load or filter
+    application data.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineAutoCompleteInputComponents, defineFormInputField and defineIconComponents. Custom rows are registered under the name passed to rowComponent.</p>
+  <p>
+    No slots. Register defineAutoCompleteInputComponents, defineFormInputField
+    and defineIconComponents. Custom rows are registered under the name passed
+    to rowComponent.
+  </p>
 </div>
 
 ### Option and event contracts

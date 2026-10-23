@@ -63,7 +63,7 @@ createApp(
       ...defineFormComponents(),
     },
   },
-  { selector: 'app#form-status-demo', template: html`<FormStatusExample />` },
+  { selector: 'app#form-status-demo', template: html`<FormStatusExample/>` },
 )
 
 mountFormAppearanceGalleries()

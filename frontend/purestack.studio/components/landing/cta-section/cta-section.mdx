@@ -13,29 +13,42 @@ nav:
 
 # Cta<wbr/>Section
 
-<ComponentHeader name="CtaSection" kind="The next step" summary="Close a section with a clear next step, an optional secondary route and concise supporting context." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
+<ComponentHeader
+  name="CtaSection"
+  kind="The next step"
+  summary="Close a section with a clear next step, an optional secondary route and concise supporting context."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  section="Landing &amp; pricing"
+  sectionHref="/components/landing/"/>
 
 ## Primary and secondary destinations
 
 Both actions are real links. A button appears only when its label and destination are supplied.
 
-<Tabs group="cta-section-sample-1" selectedTab="cta-section-sample-1-preview" ariaLabel="Primary and secondary destinations example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="cta-section-sample-1"
+  selectedTab="cta-section-sample-1-preview"
+  ariaLabel="Primary and secondary destinations example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="cta-section-sample-1-preview" label="Preview">
-<ComponentExample label="CtaSection in context" caption="Compare the composition, then open its source tab to adapt it.">
-
-    <CtaSection
-      eyebrow="KEEP EXPLORING"
-      title="Build your next interface"
-      subtitle="Start with a surface, then add the interaction."
-      primaryLabel="Explore Panel"
-      primaryHref="/components/layout/panel/"
-      secondaryLabel="Browse all components"
-      secondaryHref="/components/"
-      meta="Source included in every guide."
-      tone="accent"
-    />
-
-</ComponentExample>
+    <ComponentExample
+      label="CtaSection in context"
+      caption="Compare the composition, then open its source tab to adapt it."
+    >
+      <CtaSection
+        eyebrow="KEEP EXPLORING"
+        title="Build your next interface"
+        subtitle="Start with a surface, then add the interaction."
+        primaryLabel="Explore Panel"
+        primaryHref="/components/layout/panel/"
+        secondaryLabel="Browse all components"
+        secondaryHref="/components/"
+        meta="Source included in every guide."
+        tone="accent"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="cta-section-sample-1-source-0" label="two-destinations.mdx">
 ```html
@@ -58,22 +71,30 @@ Both actions are real links. A button appears only when its label and destinatio
 
 The actions slot follows the built-in links.
 
-<Tabs group="cta-section-sample-2" selectedTab="cta-section-sample-2-preview" ariaLabel="Add a custom action example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="cta-section-sample-2"
+  selectedTab="cta-section-sample-2-preview"
+  ariaLabel="Add a custom action example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="cta-section-sample-2-preview" label="Preview">
-<div class="component-preview-stage">
-
-    <CtaSection
-      title="Choose a layout"
-      subtitle="Match the structure to your content."
-      variant="outline"
-    >
-      <template #actions>
-        <BtnLink href="/components/layout/flex/" variant="outline">One axis</BtnLink>
-        <BtnLink href="/components/layout/grid/" tone="accent">Two axes</BtnLink>
-      </template>
-    </CtaSection>
-
-</div>  </TabPane>
+    <div class="component-preview-stage">
+      <CtaSection
+        title="Choose a layout"
+        subtitle="Match the structure to your content."
+        variant="outline"
+      >
+        <template #actions>
+          <BtnLink href="/components/layout/flex/" variant="outline"
+            >One axis</BtnLink>
+          <BtnLink href="/components/layout/grid/" tone="accent"
+            >Two axes</BtnLink>
+        </template>
+      </CtaSection>
+    </div>
+  </TabPane>
   <TabPane id="cta-section-sample-2-source-0" label="custom-actions.mdx">
 ```html
 <CtaSection
@@ -94,28 +115,81 @@ The actions slot follows the built-in links.
 
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
-<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="tone"><LandingAppearanceGallery component="CtaSection" axis="tone"/></div>
+<ComponentExample
+  label="All ten semantic tones"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="tone">
+    <LandingAppearanceGallery component="CtaSection" axis="tone"/>
+  </div>
 </ComponentExample>
 
 ## All eighteen visual variants
 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
-<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
-<div data-landing-gallery="variant"><LandingAppearanceGallery component="CtaSection" axis="variant"/></div>
+<ComponentExample
+  label="All eighteen visual variants"
+  caption="Switch the site theme to compare the same samples in both palettes."
+>
+  <div data-landing-gallery="variant">
+    <LandingAppearanceGallery component="CtaSection" axis="variant"/>
+  </div>
 </ComponentExample>
 
 ## Every action arrangement
 
-<ComponentExample label="One destination, two choices, or a custom action" caption="Built-in links require both a label and href. The actions slot renders independently; meta supplies supporting copy.">
-<div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Primary only</code><CtaSection title="Start building" primaryLabel="See components" primaryHref="/components/" primaryIcon="lucide:check" tone="accent"/></div>
-<div class="component-appearance-cell"><code>Secondary only</code><CtaSection title="Keep exploring" secondaryLabel="See layouts" secondaryHref="/components/layout/" secondaryIcon="iconoir:check" tone="info"/></div>
-<div class="component-appearance-cell"><code>Both destinations</code><CtaSection eyebrow="YOUR NEXT STEP" title="Find your pattern" subtitle="Explore by the work you need to do." primaryLabel="Layouts" primaryHref="/components/layout/" primaryIcon="lucide:check" secondaryLabel="Forms" secondaryHref="/components/forms/" secondaryIcon="iconoir:check" meta="Every guide includes source." tone="feature"/></div>
-<div class="component-appearance-cell"><code>Custom actions</code><CtaSection title="Choose a starting point" meta="Slot content is yours to compose." tone="success"><template #actions><BtnLink href="/components/landing/pricing-plan/" tone="success">Explore plan cards</BtnLink><Badge tone="success">Ready</Badge></template></CtaSection></div>
-<div class="component-appearance-cell"><code>Copy without navigation</code><CtaSection title="A clear invitation" subtitle="Add destinations when they are ready." variant="outline"/></div>
-</div>
+<ComponentExample
+  label="One destination, two choices, or a custom action"
+  caption="Built-in links require both a label and href. The actions slot renders independently; meta supplies supporting copy."
+>
+  <div class="component-appearance-grid">
+    <div class="component-appearance-cell">
+      <code>Primary only</code><CtaSection
+        title="Start building"
+        primaryLabel="See components"
+        primaryHref="/components/"
+        primaryIcon="lucide:check"
+        tone="accent"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Secondary only</code><CtaSection
+        title="Keep exploring"
+        secondaryLabel="See layouts"
+        secondaryHref="/components/layout/"
+        secondaryIcon="iconoir:check"
+        tone="info"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Both destinations</code><CtaSection
+        eyebrow="YOUR NEXT STEP"
+        title="Find your pattern"
+        subtitle="Explore by the work you need to do."
+        primaryLabel="Layouts"
+        primaryHref="/components/layout/"
+        primaryIcon="lucide:check"
+        secondaryLabel="Forms"
+        secondaryHref="/components/forms/"
+        secondaryIcon="iconoir:check"
+        meta="Every guide includes source."
+        tone="feature"/>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Custom actions</code><CtaSection
+        title="Choose a starting point"
+        meta="Slot content is yours to compose."
+        tone="success"
+        ><template #actions
+          ><BtnLink href="/components/landing/pricing-plan/" tone="success"
+            >Explore plan cards</BtnLink><Badge tone="success">Ready</Badge></template></CtaSection>
+    </div>
+    <div class="component-appearance-cell">
+      <code>Copy without navigation</code><CtaSection
+        title="A clear invitation"
+        subtitle="Add destinations when they are ready."
+        variant="outline"/>
+    </div>
+  </div>
 </ComponentExample>
 
 ## Feature map
@@ -139,7 +213,11 @@ The title is h2. Use specific action labels that describe the destination. Prima
 
 <div class="api-overview">
   <p class="text-eyebrow">CtaSection contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="CtaSection properties">
@@ -157,58 +235,131 @@ The title is h2. Use specific action labels that describe the destination. Prima
   <a href="#cta-section-prop-variant">variant</a>
 </nav>
 
-<ApiProperty anchor="cta-section-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-eyebrow"
+  name="eyebrow"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Short context above the heading, such as a category or release label.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+<ApiProperty
+  anchor="cta-section-prop-title"
+  name="title"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Visible heading. Choose a short title that identifies the content or task.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-subtitle"
+  name="subtitle"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Supporting text beneath the title.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-primaryLabel" name="primaryLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-primaryLabel"
+  name="primaryLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Visible primary link text. Requires the matching Href prop.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-primaryHref" name="primaryHref" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-primaryHref"
+  name="primaryHref"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Primary link destination. Requires the matching Label prop.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-primaryIcon" name="primaryIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-primaryIcon"
+  name="primaryIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Registered SVG icon for the primary link.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-secondaryLabel" name="secondaryLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-secondaryLabel"
+  name="secondaryLabel"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Visible secondary link text. Requires the matching Href prop.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-secondaryHref" name="secondaryHref" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-secondaryHref"
+  name="secondaryHref"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Secondary link destination. Requires the matching Label prop.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-secondaryIcon" name="secondaryIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-secondaryIcon"
+  name="secondaryIcon"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Registered SVG icon for the secondary link.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-meta" name="meta" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="cta-section-prop-meta"
+  name="meta"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Secondary context such as an update time, limitation or reassurance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="cta-section-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="cta-section-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="cta-section-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surface"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, spotlight, glass,
+    flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link,
+    sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p><strong>actions slot:</strong> additional actions. There is no default content slot. Register defineCtaSectionComponent with Panel, Grid, SectionHeader, Flex and BtnLink dependencies.</p>
+  <p>
+    <strong>actions slot:</strong> additional actions. There is no default
+    content slot. Register defineCtaSectionComponent with Panel, Grid,
+    SectionHeader, Flex and BtnLink dependencies.
+  </p>
 </div>
 
 ## Related components

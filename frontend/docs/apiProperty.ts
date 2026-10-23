@@ -11,8 +11,7 @@ const apiPropertyTemplate = html`<section class="api-property" :id="anchor" :ari
   <header class="api-property__header">
     <h4>
       <a :href="'#' + anchor"
-        ><code>{{ name }}</code><span aria-hidden="true"> #</span></a
-      >
+        ><code>{{ name }}</code><span aria-hidden="true"> #</span></a>
     </h4>
     <code class="api-property__type">{{ valueType }}</code>
     <dl class="api-property__default">

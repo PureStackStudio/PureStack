@@ -74,8 +74,7 @@ const formAssistLinkTemplate = html`<a
 </a>`
 
 const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant"
-  >{{ label }}</Btn
->`
+  >{{ label }}</Btn>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
