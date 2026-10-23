@@ -1,7 +1,7 @@
 # PureStack CLI development sites
 
-Use this folder to exercise the PureStack CLI and create any number of test
-sites. This README and `.gitignore` are shared repository files. Generated site
+Use this folder to exercise PureStack CLI and PureStack Forge and create any number
+of test sites. This README and `.gitignore` are shared repository files. Generated site
 directories are Git-ignored.
 
 Run all commands below from inside `sites/`. The workspace launcher runs the
@@ -11,7 +11,7 @@ local CLI with `tsx` and preserves your current folder as the destination base.
 yarn purestack init
 ```
 
-Optionally choose the wizard address and port:
+Optionally choose Forge's address and port:
 
 ```sh
 yarn purestack init --host 127.0.0.1 --port 4700
@@ -20,16 +20,16 @@ yarn purestack init --host 127.0.0.1 --port 4700
 The defaults are `127.0.0.1` and an automatically assigned port. Server logging
 starts at warning level; creation progress and next steps remain visible.
 
-The CLI serves the wizard's ordinary PureStack content at the URL printed in
+The CLI serves Forge's ordinary PureStack content at the URL printed in
 your terminal. Open the complete link to configure site details, templates,
 template-defined options, and project setup. Choices are kept while moving
 between sections. **Create site** shows progress and starts the generated site;
-**Browse live site** opens it in a new tab. Studio stays open while you explore,
+**Browse live site** opens it in a new tab. Forge stays open while you explore,
 and source edits reload the live site automatically.
 
-Sites are created inside this folder, for example `sites/my-site`. **Finish
-Studio** or Ctrl+C stops both local servers while preserving the generated
-project. The terminal prints commands for continuing independently. Studio and
+Sites are created inside this folder, for example `sites/my-site`. **Finish Forge**
+or Ctrl+C stops both local servers while preserving the generated
+project. The terminal prints commands for continuing independently. Forge and
 preview build output use system temporary folders rather than the repo root.
 
 In this checkout, official template choices use local source automatically.
@@ -68,7 +68,7 @@ yarn purestack init --help
 ```
 
 Template menus and settings come from each package's `template.ui.json`.
-See [the Site Studio guide](../docs/site-studio.md) for the schema and architecture.
+See [the PureStack Forge guide](../docs/forge.md) for the schema and architecture.
 
 Generated files are the CLI's normal output. There are no site-specific wrapper
 commands or modifications to the generated projects.

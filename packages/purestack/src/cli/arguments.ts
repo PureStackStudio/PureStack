@@ -21,18 +21,18 @@ export interface InitArguments {
 }
 export const initHelp = `Usage: purestack init [directory] [options]
 
-Start the local PureStack wizard and open the URL printed in your terminal.
-Configure your project, create it, and browse the live site in Studio.
-Studio stays open until you finish. Options below preset its choices.
+Start PureStack Forge and open the URL printed in your terminal.
+Configure your project, create it, and browse the live site.
+Forge stays open until you finish. Options below preset its choices.
 
   -t, --template <source>  Official alias, npm package, local folder, or .tgz
       --title <title>      Site title and logo brand
       --set <id=value>     A template-defined option; repeat for more options
-      --host <address>     Studio bind address (default: 127.0.0.1)
-      --port <number>      Studio port (default: automatic; 0 selects a free port)
+      --host <address>     Forge bind address (default: 127.0.0.1)
+      --port <number>      Forge port (default: automatic; 0 selects a free port)
       --install            Install dependencies with the template's package manager
       --git                Initialize or reuse a Git repository
-  -y, --yes                Skip Studio and create with these choices (scripts, CI)
+  -y, --yes                Skip Forge and create directly (scripts, CI)
   -h, --help               Show help
 
 Examples:

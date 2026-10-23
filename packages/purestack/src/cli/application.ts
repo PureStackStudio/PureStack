@@ -8,11 +8,11 @@ import {
   parseTemplateOverrides,
 } from './arguments'
 import { createSiteWithProgress } from './creation'
-import { runWizard } from './wizard/run'
+import { runForge } from './forge/run'
 
 const help = `PureStack
 
-  purestack init                         Create a site in Site Studio
+  purestack init                         Open PureStack Forge
   purestack serve --content <directory>  Preview with live reload
   purestack build --content <directory>  Build static files
   purestack publish --content <dir>      Prepare a local release artifact
@@ -59,7 +59,7 @@ export async function runApplication(
       console.log(initHelp)
       return 0
     }
-    if (!input.yes) return await runWizard(environment, input)
+    if (!input.yes) return await runForge(environment, input)
     if (!input.directory)
       throw new Error(
         'A directory is required with --yes. Use purestack init my-site --yes.',

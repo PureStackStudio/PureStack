@@ -5,8 +5,8 @@ import { runApplication } from './cli/application'
 import { invocationDirectory } from './cli/invocation'
 
 async function main() {
-  if (process.send && process.argv[2] === '__studio-preview') {
-    const { runPreviewProcess } = await import('./cli/wizard/preview-process')
+  if (process.send && process.argv[2] === '__forge-preview') {
+    const { runPreviewProcess } = await import('./cli/forge/preview-process')
     await runPreviewProcess(process.argv[3], process.argv[4])
     return
   }

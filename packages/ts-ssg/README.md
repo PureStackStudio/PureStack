@@ -612,7 +612,7 @@ By default, the dev server prepares routes and shared navigation when it starts.
 
 An initial build error is logged while the dev server keeps watching for fixes.
 Embedded callers can set `startDevServer({ failOnInitialBuildError: true })` to
-reject startup and close the server instead. Studio previews use this option to
+reject startup and close the server instead. PurStack Forge previews use this option to
 report startup failures.
 
 ## Templates

@@ -98,7 +98,7 @@ export function defineFormAppearanceGallery() {
                 ? inputValue(value)
                 : component === 'FormSelectField'
                   ? 'eu'
-                  : 'Studio docs',
+                  : 'Project docs',
             ),
             query: ref(''),
             selected: ref<string | number | null>(null),
@@ -136,7 +136,7 @@ export function defineFormAppearanceGallery() {
 function inputValue(type: string): string {
   const values: Record<string, string> = {
     color: '#2563eb',
-    text: 'Studio docs',
+    text: 'Project docs',
     email: 'you@example.com',
     password: 'example-password',
     number: '3',

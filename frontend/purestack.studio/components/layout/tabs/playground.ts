@@ -58,7 +58,7 @@ const tabsPlaygroundTemplate = html`<Flex direction="column">
     :tone="tone" :variant="shell" :tabVariant="controls" :variantMode="mode" :mobileSelect="mobileSelect" ariaLabel="Project workspace">
     <template #header>
       <Flex r-if="header" class="tabs__header" justify="between" align="center" wrap="true">
-        <div><p class="text-eyebrow m-0">PureStack Studio</p><h3 class="mt-1 mb-0">Project workspace</h3></div>
+        <div><p class="text-eyebrow m-0">PureStack</p><h3 class="mt-1 mb-0">Project workspace</h3></div>
         <Badge tone="success" variant="surface">Preview ready</Badge>
       </Flex>
     </template>

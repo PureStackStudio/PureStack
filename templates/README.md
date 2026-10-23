@@ -16,7 +16,7 @@ yarn purestack init my-site --template ../templates/starter --yes
 Templates share the product version with framework packages. The root
 `templates/*` workspace pattern includes new folders in packing, dependency
 checks, version bumps, and release discovery. Add a template's alias and catalog
-entry in the CLI when making it an official wizard choice.
+entry in the CLI when making it an official Forge choice.
 
 Keep `.gitignore` and `.yarnrc.yml` under their real names and explicitly list
 them in the template package's `files` array. `yarn package` uses npm to pack

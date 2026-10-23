@@ -25,12 +25,12 @@ The explicit teleport target keeps this footer inside the example.
     <div id="footer-example-target"></div>
     <SiteFooter
       teleport="#footer-example-target"
-      copyright="© Example Studio"
+      copyright="© Example Website"
       legalLabel="Example documentation links"
     >
       <Grid columns="1" columnsSm="2">
         <div>
-          <h3>Example Studio</h3>
+          <h3>Example Website</h3>
           <p>A footer composed from the same components as the page.</p>
         </div>
         <Flex direction="column" align="start">
@@ -53,12 +53,12 @@ The explicit teleport target keeps this footer inside the example.
 <div id="footer-example-target"></div>
 <SiteFooter
   teleport="#footer-example-target"
-  copyright="© Example Studio"
+  copyright="© Example Website"
   legalLabel="Example documentation links"
 >
   <Grid columns="1" columnsSm="2">
     <div>
-      <h3>Example Studio</h3>
+      <h3>Example Website</h3>
       <p>A footer composed from the same components as the page.</p>
     </div>
     <Flex direction="column" align="start">
@@ -97,10 +97,10 @@ All supported values are visible together on the actual component, in an isolate
 
 <ComponentExample label="Minimal, legal, social, and complete" caption="A unique teleport target keeps each footer in its own preview. The real footer also hosts the consent settings control.">
 <div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Copyright only</code><div id="site-footer-minimal"></div><SiteFooter teleport="#site-footer-minimal" copyright="© Studio" ariaLabel="Minimal example footer"/></div>
-<div class="component-appearance-cell"><code>Legal destinations</code><div id="site-footer-legal"></div><SiteFooter teleport="#site-footer-legal" copyright="© Studio" legalLabel="Example guide links"><template #legal><a href="/components/site/consent/">Privacy controls</a><a href="/components/site/site-footer/">Footer guide</a></template></SiteFooter></div>
-<div class="component-appearance-cell"><code>Social destinations</code><div id="site-footer-social"></div><SiteFooter teleport="#site-footer-social" copyright="© Studio"><template #social><a href="https://github.com/PureStackStudio/PureStack" target="_blank" rel="noopener noreferrer">GitHub ↗</a></template></SiteFooter></div>
-<div class="component-appearance-cell"><code>Content slot</code><div id="site-footer-content"></div><SiteFooter teleport="#site-footer-content" copyright="© Studio"><SectionHeader title="Keep exploring" subtitle="A footer can continue the story." titleTag="h3"/><BtnLink href="/components/" variant="link">Component library</BtnLink></SiteFooter></div>
+<div class="component-appearance-cell"><code>Copyright only</code><div id="site-footer-minimal"></div><SiteFooter teleport="#site-footer-minimal" copyright="© Example" ariaLabel="Minimal example footer"/></div>
+<div class="component-appearance-cell"><code>Legal destinations</code><div id="site-footer-legal"></div><SiteFooter teleport="#site-footer-legal" copyright="© Example" legalLabel="Example guide links"><template #legal><a href="/components/site/consent/">Privacy controls</a><a href="/components/site/site-footer/">Footer guide</a></template></SiteFooter></div>
+<div class="component-appearance-cell"><code>Social destinations</code><div id="site-footer-social"></div><SiteFooter teleport="#site-footer-social" copyright="© Example"><template #social><a href="https://github.com/PureStackStudio/PureStack" target="_blank" rel="noopener noreferrer">GitHub ↗</a></template></SiteFooter></div>
+<div class="component-appearance-cell"><code>Content slot</code><div id="site-footer-content"></div><SiteFooter teleport="#site-footer-content" copyright="© Example"><SectionHeader title="Keep exploring" subtitle="A footer can continue the story." titleTag="h3"/><BtnLink href="/components/" variant="link">Component library</BtnLink></SiteFooter></div>
 </div>
 </ComponentExample>
 

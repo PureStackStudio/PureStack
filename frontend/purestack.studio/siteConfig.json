@@ -8,7 +8,7 @@
     "themes": ["light", "dark"],
     "pretty": false,
     "theme": {
-      "skin": "studio"
+      "skin": "purestack"
     }
   },
   "auth": {
@@ -70,7 +70,7 @@
     "imageAlt": "PureStack. One language. A whole frontend. A TypeScript-native frontend ecosystem.",
     "imageWidth": 1200,
     "imageHeight": 630,
-    "siteName": "PureStack Studio",
+    "siteName": "PureStack",
     "twitterCard": "summary_large_image"
   },
   "logo": {

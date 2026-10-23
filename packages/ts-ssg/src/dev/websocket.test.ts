@@ -81,8 +81,8 @@ describe('WebSocket endpoints on an existing HTTP listener', () => {
       server,
       [
         {
-          path: '/studio',
-          authorize: (request) => request.url === '/studio?token=secret',
+          path: '/session',
+          authorize: (request) => request.url === '/session?token=secret',
           connect: (connection) => {
             peer = connection
             connection.send('welcome')
@@ -103,9 +103,9 @@ describe('WebSocket endpoints on an existing HTTP listener', () => {
         'ordinary HTTP',
       )
       expect(await upgradeStatus(base, '/unknown')).toBe(404)
-      expect(await upgradeStatus(base, '/studio')).toBe(403)
+      expect(await upgradeStatus(base, '/session')).toBe(403)
       client = new WebSocket(
-        `${base.replace('http:', 'ws:')}/studio?token=secret`,
+        `${base.replace('http:', 'ws:')}/session?token=secret`,
       )
       const messages: string[] = []
       client.addEventListener('message', (event) =>

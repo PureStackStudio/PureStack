@@ -1,7 +1,7 @@
 # My PureStack site
 
 Use Node.js 22.12+ (22 LTS), 24 LTS, or 26+ and Yarn 4.18.1, pinned in
-`package.json`. When dependency installation is selected in Studio or with
+`package.json`. When dependency installation is selected in Forge or with
 `--install`, the CLI installs missing Corepack, enables Yarn, and prepares the
 project-pinned Yarn version automatically. If you skipped installation, follow
 <https://yarnpkg.com/getting-started/install> if Yarn is not already available.

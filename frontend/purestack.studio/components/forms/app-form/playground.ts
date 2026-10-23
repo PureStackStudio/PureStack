@@ -36,7 +36,7 @@ const appFormExampleTemplate = html`<Panel bodyClass="p-4">
 </Panel>`
 
 function createAppFormExample(): AppFormExample {
-  const projectName = ref('Studio docs')
+  const projectName = ref('Project docs')
   const savedProject = ref('')
   return {
     projectName,
@@ -47,7 +47,7 @@ function createAppFormExample(): AppFormExample {
       savedProject(String(new FormData(form).get('project') ?? ''))
     },
     reset: () => {
-      projectName('Studio docs')
+      projectName('Project docs')
       savedProject('')
     },
   }

@@ -48,23 +48,24 @@ The aim is a source model that remains understandable as the product grows.
 files work for prose pages. See the [Regor guide](https://purestack.studio/guides/extending/regor/)
 for the markup and browser app model.
 
-## Get your first page running
+## Get your first site running
 
-Open PureStack Studio, the local site wizard:
+**PureStack Forge** is PureStack's website builder. Build, customize, and maintain
+your PureStack website.
 
 ```sh
 npx purestack@latest init
 ```
 
-Studio prints a link to open in your browser. Name your site, choose a template
-and its options, decide whether to install dependencies and set up Git, then
-create it. Studio shows each step, starts the live site, and stays open while
-you explore. Source edits appear on the live site automatically.
+PureStack CLI opens PureStack Forge to set up your website. Follow the link in your
+terminal, choose a template, configure plugins, and shape your project in the browser.
+Create your site and explore it live. Saved source changes appear in the preview
+as you work.
 
-Each project includes `README.md` and `AGENTS.md` to guide customization, plus
-dev, build, and publish scripts. Run `npx purestack@latest init --help` for
-options that preset Studio's choices, or that create a site without Studio in
-scripts and CI.
+Your project includes development and publishing commands, with `README.md` and
+`AGENTS.md` to guide you and your AI assistant through the source. The
+[CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/) walks
+you through your first site and covers options for automated setup.
 
 To assemble a site manually instead, follow the steps below.
 

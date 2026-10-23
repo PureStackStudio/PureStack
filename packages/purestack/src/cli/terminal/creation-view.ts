@@ -18,7 +18,7 @@ const colors: Record<Tone, string> = {
 }
 const ansiEscape = String.fromCharCode(27)
 
-/** Scrollback output shares the Studio palette, without framing shell commands. */
+/** Scrollback output shares Forge's palette, without framing shell commands. */
 export class CreationView {
   private readonly columns: number
   private readonly color: boolean
@@ -65,17 +65,17 @@ export class CreationView {
     )}\n\n`
   }
 
-  wizard(url: string, cwd: string) {
+  openForge(url: string, cwd: string) {
     return [
       '',
       this.frame(
-        '◈ PURESTACK STUDIO WIZARD',
+        '◈ PURESTACK FORGE',
         [
           'Open the link below to configure your new site.',
           `Working folder  ${cwd}`,
           '',
           'Configure your project in the browser.',
-          'Press Ctrl+C here to stop the wizard.',
+          'Press Ctrl+C here to stop Forge.',
         ],
         'accent',
       ),

@@ -85,3 +85,36 @@ Do not edit generated files under `packages/ts-page-scripts/src/embed` manually.
 When page script source changes require regenerated embeds, update only the source and generator configuration, then tell the user to run the embed script manually.
 
 Use the stable TypeScript 7 `tsc` command to build and type-check TypeScript files.
+
+Product naming rule
+
+Use the following names consistently in documentation, UI copy, CLI output, and code:
+
+| Name               | Meaning                     | Command or package scope       |
+| ------------------ | --------------------------- | ------------------------------ |
+| PureStack          | The ecosystem               | —                              |
+| PureStack CLI      | The command-line tool       | `purestack`                    |
+| PureStack Forge    | PureStack's website builder | Launched with `purestack init` |
+| PureStack Packages | The framework packages      | `@purestack/*`                 |
+
+Introduce **PureStack Forge** by its full name; use **Forge** afterward when the
+context is clear. Describe it as a **website builder**. Its approved purpose
+statement is:
+
+> Build, customize, and maintain your PureStack website.
+
+`purestack init` launches Forge's interactive project creation flow. Project
+creation is one Forge workflow; the product's scope includes ongoing customization
+and maintenance. Describe available features accurately and identify planned
+capabilities as future work.
+
+Use “wizard” only to describe a guided flow. Do not use Studio, Wizard, or
+“visual workspace” as Forge's product name or description. Propose terminology
+changes to the user before adopting a different name or description.
+
+Preserve `purestack.studio`, `PureStackStudio`, and other existing addresses and
+account names. Their spelling does not define the product name.
+
+Keep branding at feature boundaries. Name internal modules, types, and components
+by their responsibility, using folders for context rather than repeating product
+names or generic prefixes such as `Website` throughout the code.

@@ -4,7 +4,7 @@ import {
   themeSkins,
 } from '@purestack/ts-style'
 
-/** Keep the wizard's palette choice, then give both modes the same design language. */
+/** Keep Forge's palette choice, then give both modes the same design language. */
 export function createStarterPalettes(presets?: SkinPresetList) {
   const selected = presets?.length ? presets : ['orange']
   const palettes = themeSkins.standard.create(selected)

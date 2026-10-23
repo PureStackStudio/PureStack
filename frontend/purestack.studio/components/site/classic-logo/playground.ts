@@ -40,7 +40,7 @@ export interface ClassicLogoPlayground {
 
 const classicLogoPlaygroundTemplate = html`<Flex direction="column">
   <Panel variant="surfaceAlt" bodyClass="p-4 min-w-0 overflow-auto">
-    <p class="text-eyebrow mt-0">Original Studio identity</p>
+    <p class="text-eyebrow mt-0">Original PureStack identity</p>
     <div id="classic-preview" class="py-4"><div :is="component" :config="config"></div></div>
     <p class="text-muted mb-0">The original container, letter spacing, icon and responsive sizes. Switch the site theme to compare both skins.</p>
   </Panel>

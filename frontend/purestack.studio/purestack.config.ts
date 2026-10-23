@@ -1,6 +1,6 @@
 import { defineConfig } from '@purestack/ts-ssg'
-import { studioPlugin } from '../studioPlugin'
+import { frontendPlugin } from '../plugin'
 
 export default defineConfig({
-  plugins: [studioPlugin],
+  plugins: [frontendPlugin],
 })

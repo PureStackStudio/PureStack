@@ -1,4 +1,4 @@
-# purestack.studio
+# PureStack website
 
 The PureStack launch site, built with PureStack's SSG, MDX, typed HTML/CSS
 builders, components, and Regor.
@@ -12,7 +12,7 @@ yarn frontend
 ```
 
 Open **http://127.0.0.1:4700**. The content watcher updates MDX and browser
-TypeScript, and reloads the Studio plugin when it, a component, or the theme
+TypeScript, and reloads the website plugin when it, a component, or the theme
 changes; the process watcher restarts the server when PureStack's own sources change.
 
 ```sh
@@ -25,7 +25,7 @@ yarn frontend:publish
   `frontend/out/purestack.studio/web`. This is a local build, not a deployment.
 - Serve the production folder as a static website at `https://purestack.studio`.
 - Each command runs the `purestack` CLI. It loads `purestack.studio/purestack.config.ts`,
-  whose plugin registers the `studio` skin, composition components, template, and typed styles.
+  whose plugin registers the `purestack` skin, composition components, templates, and typed styles.
 
 ## Legal pages
 
@@ -35,35 +35,38 @@ See [Private legal content](legal-content.md) for paths and setup.
 
 ## Source map
 
-| File                                        | Purpose                                                                                       |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `studioPlugin.ts`                           | The Studio plugin: skin, components, templates, styles, and generated previews                |
-| `purestack.studio/purestack.config.ts`      | Adds the Studio plugin, so the CLI builds and serves the site                                 |
-| `demoStyle.ts`                              | Typed CSS for the real Style API workbench preview                                            |
-| `purestack.studio/index.mdx`                | Landing page, source examples, and static component previews                                  |
-| `purestack.studio/header.mdx`, `footer.mdx` | Shared navigation and footer                                                                  |
-| `purestack.studio/studio.ts`                | Keyboard enhancement for native Tabs, clipboard feedback, mobile menu, and live Regor counter |
-| `components/studioComponents.ts`            | Explicit registration of the Studio components                                                |
-| `components/studio*.ts`                     | One file per component, with its exported interface, named template, and typed definition     |
-| `theme/studioSkin.ts`                       | Dark studio skin using the standard semantic palette contract                                 |
-| `theme/studioSkinLight.ts`                  | Light studio palette with warm white surfaces, green accents, and ten semantic tones          |
-| `theme/studioSkinShared.ts`                 | Shared typography and corner radii for both studio modes                                      |
-| `theme/studioStyles.ts`                     | Registers the page's typed style extensions in PureStack's generated theme stylesheets        |
-| `theme/*Styles.ts`                          | Layout, typography, responsive rules, and component composition spacing                       |
-| `purestack.studio/siteConfig.json`          | SEO, social preview, assets, and output paths                                                 |
-| `designs/social-preview.svg`                | Editable source for the 1200×630 social preview PNG                                           |
-| `purestack.studio/_designs/_newspaper.mdx`  | Earlier design reference                                                                      |
+| Location                                                    | Responsibility                                                                 |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `plugin.ts`                                                 | Connects the skin, components, templates, styles, and generated previews       |
+| `purestack.studio/purestack.config.ts`                      | Registers the frontend plugin                                                  |
+| `templates/landing.ts`                                      | Landing layout with shared header, footer, and skip link                       |
+| `purestack.studio/index.mdx`                                | Landing content, source examples, and component previews                       |
+| `purestack.studio/header.mdx`, `footer.mdx`                 | Shared navigation and footer content                                           |
+| `components/index.ts`                                       | Explicit component registration                                                |
+| `components/shell/`                                         | Brand and palette picker                                                       |
+| `components/shared/`                                        | Copy button shared by other compositions                                       |
+| `components/landing/`                                       | Feature showcases, source workbench, package links, and other landing sections |
+| `components/getting-started/`                               | Command blocks and Forge overview                                              |
+| `theme/skin.ts`, `theme/palette/`                           | Light/dark skin, palette generation, and shared tokens                         |
+| `theme/presets.ts`, `theme/surfaces.ts`                     | Selectable color families and their surface profiles                           |
+| `theme/head.ts`, `theme/colors.ts`                          | Restore the selected palette before paint and emit palette overrides           |
+| `styles/landing/`, `styles/documentation/`, `styles/shell/` | Layout and presentation rules grouped by purpose                               |
+| `purestack.studio/modules/`                                 | Browser enhancements and palette selection                                     |
+| `demoStyle.ts`                                              | Typed styles for the workbench's Style API example                             |
+| `purestack.studio/siteConfig.json`                          | SEO, social preview, assets, and output paths                                  |
+| `designs/social-preview.svg`                                | Editable source for the social preview image                                   |
 
 ## Components and theme
 
 The MDX page uses `Grid` and `Flex` for responsive layouts, `BtnLink` for actions,
-and typed `Studio*` compositions for repeated sections. The workbench uses the
+and focused compositions such as `FeatureShowcase`, `SourceWorkbench`, and
+`CommandBlock`. The workbench uses the
 framework's `Tabs` and `TabPane`, including its existing bundled runtime and
 native radio fallback. FAQ items use `ExpandablePanel`.
 
-Colors, component states, fonts, and radii come from the registered `studio` skin.
+Colors, component states, fonts, and radii come from the registered `purestack` skin.
 The identity is a cobalt accent over blue-slate neutrals, with indigo and
-violet companions. Each role is one OKLCH hue in `theme/studioSkinShared.ts`;
+violet companions. Each role is one OKLCH hue in `theme/palette/shared.ts`;
 light mode paints it as paper tints with saturated fills, dark mode as deep ink
 fields with luminous fills. The standard theme switcher respects the
 saved choice or system preference. Buttons, panels, badges, and icon
@@ -73,38 +76,38 @@ and `themes.forEach`, with framework breakpoint tokens. They are emitted into
 `site.css` and `site.dark.css`; there is no separate handwritten CSS asset.
 
 The palette icon before the theme toggle offers Cobalt, Violet, Teal, Emerald,
-Amber, and Rose. Edit `theme/studioColorPresets.ts` to adjust each complete color
+Amber, and Rose. Edit `theme/presets.ts` to adjust each complete color
 family: neutrals, accents, companion colors, and semantic roles. Each preset
 coordinates page backgrounds, reading surfaces, text, borders, controls, shadows,
 and highlights in both modes. Status colors retain their familiar meanings.
-`theme/studioSurfaceProfiles.ts` defines each preset's lightness steps for the
+`theme/surfaces.ts` defines each preset's lightness steps for the
 page, cards, inset surfaces, and controls, plus border strength, saturation, and
-shadow density. Dark presets range from crisp slate to a brighter warm studio.
+shadow density. Dark presets range from crisp slate to a brighter warm neutral palette.
 Documentation derives its colors from these same roles, so its code panels and
 copy controls keep their own layers instead of sharing one flat reading surface.
-`theme/studioLandingColors.ts` keeps the landing page's original light-paper and
+`theme/palette/landing.ts` keeps the landing page's original light-paper and
 deep-slate brightness while applying the selected color family's hues. Its
-palette overrides stay within the studio template; documentation retains each
+palette overrides stay within the landing template; documentation retains each
 preset's distinct layer contrast. The initial background style uses the same
 template-specific palette before the full stylesheets load.
-`studioColorStyles.ts` emits the changed palette variables and documentation
-color variables. A tiny inline startup script before the
+`theme/colors.ts` emits changed palette variables; `styles/documentation/colors.ts`
+defines documentation color roles. A tiny inline startup script before the
 stylesheet links restores `purestack-site-color` from local storage. The picker
 uses the normal `PageScript` asset pipeline for its separately bundled runtime,
 supports native radio keyboard controls, and follows changes from other tabs.
 If storage is unavailable, the choice still applies for the current visit.
 
-To change a selectable identity, edit its preset; `theme/studioSkinShared.ts`
+To change a selectable identity, edit its preset; `theme/palette/shared.ts`
 defines the skin's baseline hues and shared typography. To add a
 reusable section,
 compose existing primitives in its own file under `components/`, register its
-definition in `studioComponents.ts`, and register only the extra layout styles
+definition in `components/index.ts`, and register only the extra layout styles
 it needs. `demoStyle.ts` intentionally remains a small,
 self-contained example matching the workbench's displayed Style API source.
 
 The page presents the published npm package and links to the CLI guide for new
-projects. Its quick start still uses the repository workflow to run the included
-sample site. GitHub links target `PureStackStudio/PureStack` and the `main` branch.
+projects. Its quick start launches PureStack Forge through the CLI to configure
+and create a site. GitHub links target `PureStackStudio/PureStack` and the `main` branch.
 
 ## Component documentation
 

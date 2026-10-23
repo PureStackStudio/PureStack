@@ -1,4 +1,4 @@
-# PureStack Studio launch site
+# PureStack launch site
 
 ## Component documentation pilot
 
@@ -30,7 +30,7 @@ calls. There is no shared example contract, lookup table, or mounting helper.
 Browser verification found existing shared-framework accessibility issues:
 - The default doc template emits no `lang` for a site without locale routing.
 - Navigation and TOC header opacity gives insufficient text contrast in the
-  studio skin.
+  website skin.
 - Generated Tabs controls have `aria-selected` on buttons without tab roles;
   the original tablist contains inputs and panels, and enhanced radios refer
   to hidden labels.
@@ -93,7 +93,7 @@ line-by-line audit of every source file or generated asset.
    a closing call to explore the repository.
 
 The landing page uses MDX and typed PureStack compositions for its content,
-a registered studio skin for its identity, and typed style registrations for
+a registered site skin for its identity, and typed style registrations for
 its layout. One explicit TypeScript entry point provides progressive enhancement.
 It does not require changes to generated embeds or framework APIs.
 
@@ -121,14 +121,14 @@ Keep build output and browser tooling under ignored directories.
 
 ## Framework-native frontend
 
-- Register the studio skin before config resolution. Register custom compositions
+- Register the PureStack site skin before config resolution. Register custom compositions
   and styles in `onConfigResolved`, after the SSG initializes its DOM and builtins.
 - Use native `Grid`/`Flex` layouts and `BtnLink` actions in MDX. Compose typed
-  `StudioFeature`, `StudioPackage`, `StudioCopy`, `StudioFaq`, `StudioWorkbench`,
-  `StudioBrand`, and `StudioActivityChart` components from framework primitives.
+  `FeatureShowcase`, `PackageLink`, `CopyButton`, `FaqItem`, `SourceWorkbench`,
+  `Brand`, and `ActivityChartPreview` components from framework primitives.
 - Let component tone/variant classes own button, panel, badge, and icon-frame
   colors and states. Reuse the standard palette contract for page typography,
-  semantic colors, radii, and effects. Keep site-specific styles scoped to `.studio`.
+  semantic colors, radii, and effects. Keep site-specific styles scoped to `.landing-page`.
 - Replace the handwritten stylesheet with typed `styleBuilder` registrations,
   emitted through the existing light/dark stylesheet pipeline. Both modes use
   the dark identity. The document supplies an initial theme for no-JavaScript use.

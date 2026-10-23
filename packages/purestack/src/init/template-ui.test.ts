@@ -154,7 +154,7 @@ describe('template UI contract', () => {
 })
 
 describe('native argument parsing', () => {
-  it('accepts optional Studio host and port, including automatic port selection', () => {
+  it('accepts optional Forge host and port, including automatic port selection', () => {
     expect(parseInitArguments([], process.cwd())).toMatchObject({
       host: undefined,
       port: undefined,
@@ -181,7 +181,7 @@ describe('native argument parsing', () => {
     '1e3',
     '0x50',
     '9'.repeat(400),
-  ])('rejects invalid Studio port %j', (port) => {
+  ])('rejects invalid Forge port %j', (port) => {
     expect(() => parseInitArguments([`--port=${port}`], process.cwd())).toThrow(
       'Port must be an integer between 0 and 65535.',
     )

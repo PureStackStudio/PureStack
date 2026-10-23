@@ -1,7 +1,7 @@
 ---
 title: One language. A whole frontend.
 description: Build content sites, product interfaces, and interactive apps with a coherent TypeScript-native framework. Markdown, Regor components, typed styles, and static publishing.
-template: studio
+template: landing
 layout:
   fullWidth: true
   showNav: false
@@ -55,7 +55,7 @@ nav:
   </div>
 
   <div class="container workbench-wrap">
-    <StudioWorkbench
+    <SourceWorkbench
       ><template #content
         ><Grid
           class="example-panel"
@@ -66,7 +66,7 @@ nav:
           <div class="source-pane">
             <div class="pane-caption">
               <span>SOURCE</span
-              ><StudioCopy target="source-content" label="Copy MDX example"/>
+              ><CopyButton target="source-content" label="Copy MDX example"/>
             </div>
             <pre
               class="source-code"
@@ -116,7 +116,7 @@ Write the story. Build the product.
           <div class="source-pane">
             <div class="pane-caption">
               <span>SOURCE</span
-              ><StudioCopy
+              ><CopyButton
                 target="source-interactive"
                 label="Copy Regor counter example"/>
             </div>
@@ -167,7 +167,7 @@ Write the story. Build the product.
           <div class="source-pane">
             <div class="pane-caption">
               <span>SOURCE</span
-              ><StudioCopy
+              ><CopyButton
                 target="source-style"
                 label="Copy typed CSS example"/>
             </div>
@@ -203,7 +203,7 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
             </div>
           </div>
         </Grid></template
-      ></StudioWorkbench
+      ></SourceWorkbench
     >
     <p class="workbench-caption">
       Not a new language to learn. A better way to bring the pieces together.
@@ -239,7 +239,7 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
     </p>
   </SectionHeader>
   <Grid class="feature-grid" columns="1" columnsSm="6">
-    <StudioFeature
+    <FeatureShowcase
       class="feature-content"
       icon="tabler:file-code"
       title="Content is part of the product."
@@ -276,8 +276,8 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
           >
         </div>
       </div>
-    </StudioFeature>
-    <StudioFeature
+    </FeatureShowcase>
+    <FeatureShowcase
       class="feature-components"
       icon="tabler:layers-linked"
       title="Primitives for real interfaces."
@@ -291,7 +291,7 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
         </div>
         <div class="sample-chart">
           <span class="sample-chart-label">Example activity</span>
-          <StudioActivityChart/>
+          <ActivityChartPreview/>
           <div class="sample-chart-axis">
             <span>01</span><span>04</span><span>08</span><span>12</span>
           </div>
@@ -302,8 +302,8 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
           ><span class="sample-avatar">PS</span>
         </div>
       </div>
-    </StudioFeature>
-    <StudioFeature
+    </FeatureShowcase>
+    <FeatureShowcase
       class="feature-small"
       icon="tabler:palette"
       title="Design with a system."
@@ -316,8 +316,8 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
         <i></i><i></i><i></i><i></i><i></i
         ><span>One palette.<br/>Every component.</span>
       </div>
-    </StudioFeature>
-    <StudioFeature
+    </FeatureShowcase>
+    <FeatureShowcase
       class="feature-small"
       icon="tabler:bolt"
       title="Static where it can be."
@@ -327,8 +327,8 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
         <span>HTML</span><span>CSS</span><span class="output-js">+ your JS</span
         ><Icon name="tabler:arrow-right"/><span class="output-web">WEB</span>
       </div>
-    </StudioFeature>
-    <StudioFeature
+    </FeatureShowcase>
+    <FeatureShowcase
       class="feature-small"
       icon="tabler:code"
       title="Your editor is in on it."
@@ -346,7 +346,7 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
         href="https://marketplace.visualstudio.com/items?itemName=purestack.purestack-component-navigation"
         tone="accent"
         variant="link">Install the VS Code extension</BtnLink>
-    </StudioFeature>
+    </FeatureShowcase>
   </Grid>
 </section>
 
@@ -461,28 +461,28 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
         >
       </Flex>
     </div>
-    <StudioRegorConnection/>
+    <RegorRelationship/>
   </Grid>
   <Grid class="package-grid" columns="1" columnsSm="2">
-    <StudioPackage
+    <PackageLink
       href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg"
       number="01"
       title="Content &amp; publishing"
       summary="MDX, routing, navigation, live reload, search, i18n, and static output."
       packageName="@purestack/ts-ssg"/>
-    <StudioPackage
+    <PackageLink
       href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-components"
       number="02"
       title="Components &amp; interaction"
       summary="Regor primitives for pages, forms, charts, and application interfaces."
       packageName="@purestack/ts-components"/>
-    <StudioPackage
+    <PackageLink
       href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-style"
       number="03"
       title="Styles &amp; themes"
       summary="Palettes, semantic tones, skins, typography, and responsive tokens."
       packageName="@purestack/ts-style"/>
-    <StudioPackage
+    <PackageLink
       href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode"
       number="04"
       title="Tools &amp; foundations"
@@ -522,14 +522,14 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
       <span class="eyebrow">03 / START BUILDING</span>
       <h2 id="start-title">Make something<br/><span>of your own.</span></h2>
       <p>
-        Start PureStack Studio with one command, then open it in your browser.
-        Choose a starting point, find your colors, and make it yours.
+        PureStack CLI opens PureStack Forge, PureStack's website builder.
+        Start from a template, create your site, and make it yours.
       </p>
       <ol class="start-steps">
         <li>
           <span>01</span>
           <div>
-            <strong>Open Studio</strong>
+            <strong>Open Forge</strong>
             <p>Run init. Follow the link in your terminal.</p>
           </div>
         </li>
@@ -537,7 +537,7 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
           <span>02</span>
           <div>
             <strong>Find your starting point</strong>
-            <p>Choose a template, colors, and the features you need.</p>
+            <p>Choose a template and configure your project.</p>
           </div>
         </li>
         <li>
@@ -552,16 +552,16 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
     <div class="start-terminal">
       <div class="terminal-heading">
         <span><Icon name="tabler:terminal-2"/>Your terminal</span
-        ><span>START WITH STUDIO</span>
+        ><span>CLI → PURESTACK FORGE</span>
       </div>
       <div class="terminal-body">
-        <StudioCommand
+        <CommandBlock
           target="command-init"
-          label="Copy Studio command"
+          label="Copy Forge command"
           description="# Your new site starts here"
           command="npx purestack@latest init"/>
-        <StudioSetupStep/>
-        <StudioCommand
+        <ForgeOverview/>
+        <CommandBlock
           target="command-dev"
           label="Copy development command"
           description="# After setup, keep building in your project folder"
@@ -594,34 +594,34 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
     </p>
   </div>
   <div class="faq-list">
-    <StudioFaq title="What can I build with PureStack?">
+    <FaqItem title="What can I build with PureStack?">
       Content sites, documentation, landing pages, product interfaces,
       dashboards, and admin tools. Start with static pages and add TypeScript
       browser apps where you need interaction.
-    </StudioFaq>
-    <StudioFaq title="How does interactivity work?">
+    </FaqItem>
+    <FaqItem title="How does interactivity work?">
       MDX components render to HTML during the build. For client-side state and
       events, mount a Regor application from a TypeScript entry point using
       RegorApp or PageScript. PureStack bundles that entry point and its
       dependencies for the browser.
-    </StudioFaq>
-    <StudioFaq title="Can I use the same components in pages and apps?">
+    </FaqItem>
+    <FaqItem title="Can I use the same components in pages and apps?">
       Yes. Regor renders components and directives in MDX to static HTML during
       the build, and powers interactive apps in the browser. Your own components
       can work in both places; browser apps register the built-in and custom
       components they use. <a href="/guides/extending/regor/">See the Regor guide</a>.
-    </StudioFaq>
-    <StudioFaq title="Do I need a particular backend or host?">
+    </FaqItem>
+    <FaqItem title="Do I need a particular backend or host?">
       No. PureStack produces static HTML, CSS, and browser assets that you can
       serve from a static host or your own infrastructure. Your browser code can
       talk to whichever backend your product uses.
-    </StudioFaq>
-    <StudioFaq title="How do I install PureStack?">
+    </FaqItem>
+    <FaqItem title="How do I install PureStack?">
       Run <code>npx purestack@latest init</code> and open the link in your
-      terminal. Studio guides you through choosing and creating your site,
+      terminal. PureStack Forge guides you through configuring and creating your site,
       including optional dependency installation. Follow the
       <a href="/guides/getting-started/purestack-cli/">CLI guide</a> for your first steps.
-    </StudioFaq>
+    </FaqItem>
   </div>
 </Grid>
 
@@ -650,4 +650,4 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
 </section>
 
 <div class="copy-toast" id="copy-status" role="status" aria-live="polite"></div>
-<PageScript src="./studio.ts"/>
+<PageScript src="./modules/enhance-page.ts"/>

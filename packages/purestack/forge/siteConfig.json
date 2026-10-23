@@ -1,0 +1,24 @@
+{
+  "siteTitle": "PureStack Forge",
+  "logo": {
+    "brand": "PureStack Forge",
+    "suffix": ".",
+    "icon": "tabler:stack-2",
+    "href": "/",
+    "size": "md",
+    "ariaLabel": "PureStack Forge home",
+    "markStyle": "plain"
+  },
+  "style": {
+    "fileName": "forge.css",
+    "href": "/assets/forge.css",
+    "themes": ["light", "dark"],
+    "theme": { "skin": "forge" }
+  },
+  "navigation": { "mode": "none" },
+  "auth": { "enabled": false },
+  "consent": { "enabled": false },
+  "pagefind": { "enabled": false },
+  "sitemap": { "enabled": false },
+  "mdx": { "disableHighlighter": true }
+}

@@ -63,7 +63,7 @@ function templateFor(
   const appearance = `tone="${tone}" variant="${variant}"${modes.has(name) ? ` variantMode="${mode}"` : ''}`
   switch (name) {
     case 'SiteLogo':
-      return `<SiteLogo brand="Studio" subtitle="Build together" :href="null" tone="${tone}" markStyle="soft" appearance="badge"/>`
+      return `<SiteLogo brand="PureStack" subtitle="Build together" :href="null" tone="${tone}" markStyle="soft" appearance="badge"/>`
     case 'TopBar':
       return `<TopBar ${appearance} :search="false"/>`
     case 'SignIn':
@@ -79,7 +79,7 @@ function templateFor(
     case 'PageToc':
       return `<PageToc ${appearance} title="In this guide" :outline="[{id:'introduction',title:'Introduction',depth:2,children:[{id:'details',title:'Details',depth:3}]}]"/>`
     default:
-      return `<div id="footer-${index}"></div><SiteFooter ${appearance} teleport="#footer-${index}" copyright="© Studio" legalLabel="Example guide destinations"><strong>A shared starting point</strong><template #legal><a href="/components/site/consent/">Privacy guide</a></template><template #social><a href="/components/">Components</a></template></SiteFooter>`
+      return `<div id="footer-${index}"></div><SiteFooter ${appearance} teleport="#footer-${index}" copyright="© Example" legalLabel="Example guide destinations"><strong>A shared starting point</strong><template #legal><a href="/components/site/consent/">Privacy guide</a></template><template #social><a href="/components/">Components</a></template></SiteFooter>`
   }
 }
 
@@ -101,7 +101,7 @@ function featureSamples(name: string): Sample[] {
         },
         {
           label: 'Account access and avatar',
-          template: `<TopBar :search="false" :signInEnabled="true" :signInSignedIn="true" signInAvatarSrc="${mark}" signInAvatarAlt="Studio account"/>`,
+          template: `<TopBar :search="false" :signInEnabled="true" :signInSignedIn="true" signInAvatarSrc="${mark}" signInAvatarAlt="Example account"/>`,
         },
       ]
     case 'SignIn':
@@ -122,7 +122,7 @@ function featureSamples(name: string): Sample[] {
         },
         {
           label: 'Signed in, custom avatar',
-          template: `<SignIn :enabled="true" :signedIn="true" open avatarSrc="${mark}" avatarAlt="Studio account" label="Studio"/>`,
+          template: `<SignIn :enabled="true" :signedIn="true" open avatarSrc="${mark}" avatarAlt="Example account" label="Example"/>`,
         },
         {
           label: 'Custom icons and avatar slot',
@@ -166,7 +166,7 @@ function featureSamples(name: string): Sample[] {
         },
         {
           label: 'Search and account configuration',
-          template: `<NavMenu :search="true" :signInEnabled="true" :signInSignedIn="true" signInAvatarSrc="${mark}" signInAvatarAlt="Studio account" :items="[{title:'Site guides',url:'/components/site/'}]"/>`,
+          template: `<NavMenu :search="true" :signInEnabled="true" :signInSignedIn="true" signInAvatarSrc="${mark}" signInAvatarAlt="Example account" :items="[{title:'Site guides',url:'/components/site/'}]"/>`,
         },
       ]
     default:

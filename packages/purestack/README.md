@@ -10,17 +10,18 @@ a page needs it.
 
 ## Build your first site
 
-Open PureStack Studio, the local site wizard:
+**PureStack Forge** is PureStack's website builder. Build, customize, and maintain
+your PureStack website.
 
 ```sh
 npx purestack@latest init
 ```
 
-Studio prints a link to open in your browser. Configure your site's details,
+PureStack CLI prints a link to open Forge in your browser. Configure your site's details,
 choose a template and its settings, decide whether to install dependencies and
 set up Git, then create the project and follow its progress. Use
-**Browse live site** to open the running project. Studio stays open, and source
-edits reload the live site. **Finish Studio** stops both local servers.
+**Browse live site** to open the running project. Forge stays open, and source
+edits reload the live site. **Finish Forge** stops both local servers.
 
 The `starter` template creates a site with a home page, about page, and
 customization guide. Template files become your project's source, and
@@ -28,7 +29,7 @@ customization guide. Template files become your project's source, and
 provide `yarn dev`, `yarn build`, and `yarn publish`; the latter prepares
 `dist/publish` for deployment without uploading anything.
 
-Studio listens on `127.0.0.1` with an automatically assigned port. Command-line
+Forge listens on `127.0.0.1` with an automatically assigned port. Command-line
 options can preset its choices, for example a folder, template, and options:
 
 ```sh
@@ -38,7 +39,7 @@ npx purestack@latest init my-site --template starter --set palette=mint
 Templates can be official aliases, explicit releases such as `starter@1.1.20`,
 npm package names, or local folders and `.tgz` archives. Run
 `npx purestack@latest init --help` for every option, including `--yes`, which
-creates a site without Studio for scripts and CI.
+creates a site directly for scripts and CI.
 
 ### Create a site manually
 

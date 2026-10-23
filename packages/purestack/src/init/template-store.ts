@@ -68,7 +68,7 @@ export class TemplateStore implements TemplateSourceStore {
     return pending
   }
   private async fetch(source: string): Promise<LoadedTemplate> {
-    this.directory ??= mkdtemp(path.join(tmpdir(), 'purestack-studio-'))
+    this.directory ??= mkdtemp(path.join(tmpdir(), 'purestack-templates-'))
     const stage = await mkdtemp(path.join(await this.directory, 'template-'))
     const resolved = await localTemplate(source, this.environment)
     const archive = await fetchTemplate(

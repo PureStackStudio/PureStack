@@ -17,7 +17,7 @@ nav:
 
 ## Interactive playground
 
-This starts with the original Studio identity and its original colors. Edit either line, change the color maps, or switch to SiteLogo to compare the two components. Restore original resets every control. Changing the component uses Regor's `:is`, just like TopBar.
+This starts with the original PureStack identity and its original colors. Edit either line, change the color maps, or switch to SiteLogo to compare the two components. Restore original resets every control. Changing the component uses Regor's `:is`, just like TopBar.
 
 <Tabs group="classic-logo-sample" selectedTab="classic-logo-preview-tab" ariaLabel="Classic logo example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="classic-logo-preview-tab" label="Preview">
@@ -38,7 +38,7 @@ This starts with the original Studio identity and its original colors. Edit eith
 
 ## Use the original logo in TopBar
 
-Set `logo.component` to `ClassicLogo` in `siteConfig.json`. This complete configuration restores the original Studio identity:
+Set `logo.component` to `ClassicLogo` in `siteConfig.json`. This complete configuration restores the original PureStack identity:
 
 ```json
 {
@@ -119,9 +119,9 @@ The original layout keeps both text lines on one line, distributes their letters
 
 <ComponentExample label="Classic branding at three scales" caption="ClassicLogo has its own indexed palette and dimensions. It does not expose semantic tones, component variants, or variant modes.">
 <div class="component-appearance-grid">
-<div class="component-appearance-cell"><code>Small signature</code><ClassicLogo brand="STUDIO" subtitle="BUILD TOGETHER" brandSize="1rem" subtitleSize=".45rem" iconSize="2rem" subtitleInset=".1rem" :href="null"/></div>
-<div class="component-appearance-cell"><code>Custom icon</code><ClassicLogo brand="STUDIO" subtitle="ONE SHARED LANGUAGE" icon="lucide:check" brandSize="1.2rem" subtitleSize=".4rem" iconSize="2.5rem" :href="null"/></div>
-<div class="component-appearance-cell"><code>Home destination</code><ClassicLogo brand="STUDIO" subtitle="EXPLORE THE LIBRARY" href="/components/" ariaLabel="Studio component library" brandSize="1rem" subtitleSize=".4rem" iconSize="2rem"/></div>
+<div class="component-appearance-cell"><code>Small signature</code><ClassicLogo brand="WEBSITE" subtitle="BUILD TOGETHER" brandSize="1rem" subtitleSize=".45rem" iconSize="2rem" subtitleInset=".1rem" :href="null"/></div>
+<div class="component-appearance-cell"><code>Custom icon</code><ClassicLogo brand="WEBSITE" subtitle="ONE SHARED LANGUAGE" icon="lucide:check" brandSize="1.2rem" subtitleSize=".4rem" iconSize="2.5rem" :href="null"/></div>
+<div class="component-appearance-cell"><code>Home destination</code><ClassicLogo brand="WEBSITE" subtitle="EXPLORE THE LIBRARY" href="/components/" ariaLabel="Website component library" brandSize="1rem" subtitleSize=".4rem" iconSize="2rem"/></div>
 </div>
 </ComponentExample>
 

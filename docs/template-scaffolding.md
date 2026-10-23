@@ -7,10 +7,10 @@ code. Generated files belong to the user; templates are not project dependencies
 
 ## First release
 
-See [Site Studio](site-studio.md) for the browser wizard's PureStack content,
+See [PureStack Forge](forge.md) for its PureStack content,
 template-defined categories, configuration bindings, and extension points.
 - Official alias: `starter`.
-- `init` serves the wizard content with PureStack; `--yes` creates directly.
+- `init` serves Forge content with PureStack; `--yes` creates directly.
 - Install dependencies with the template's package manager only when `--install` is supplied or selected. The starter pins Yarn; templates without a `packageManager` field use npm.
 - For Yarn projects, installation also sets up missing Corepack and enables Yarn
   through npm's global prefix, then prepares the project's pinned Yarn version.

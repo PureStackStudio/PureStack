@@ -69,7 +69,7 @@ const releaseWorkspace = defineComponent<ReleaseWorkspace>(
   {
     context: () => {
       const selected = ref('release-details')
-      const name = ref('Studio component library')
+      const name = ref('Website component library')
       const channel = ref('Preview')
       const saved = sref<string[]>([])
       const canSave = computed(() => name().trim().length > 0)
