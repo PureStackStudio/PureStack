@@ -6,6 +6,11 @@ import { formatSource } from './index'
 import type { FormatOptions } from './source'
 
 const exec = promisify(execFile)
+// Windows and macOS file systems ignore letter case by default.
+const caseInsensitivePaths =
+  process.platform === 'win32' || process.platform === 'darwin'
+const comparablePath = (value: string) =>
+  caseInsensitivePaths ? value.toLowerCase() : value
 const extensions = /\.(?:[cm]?ts|mdx|rmdx)$/i
 const ignoredDirectories = new Set([
   '.git',
@@ -40,20 +45,22 @@ export async function formatFiles(
 ) {
   const cwd = path.resolve(options.cwd ?? process.cwd())
   const excluded = (options.exclude ?? []).map((entry) =>
-    path.resolve(cwd, entry),
+    comparablePath(path.resolve(cwd, entry)),
   )
   const files = new Set<string>()
   const errors: FormatFileError[] = []
   const changed: string[] = []
 
   function isExcluded(file: string) {
+    const comparable = comparablePath(file)
     return (
       path
         .relative(cwd, file)
         .split(path.sep)
-        .some((part) => ignoredDirectories.has(part)) ||
+        .some((part) => ignoredDirectories.has(comparablePath(part))) ||
       excluded.some(
-        (entry) => file === entry || file.startsWith(`${entry}${path.sep}`),
+        (entry) =>
+          comparable === entry || comparable.startsWith(`${entry}${path.sep}`),
       )
     )
   }
@@ -84,34 +91,26 @@ export async function formatFiles(
       if (!entry.isDirectory() || isExcluded(target)) continue
       let gitFiles: string[] | undefined
       try {
-        const { stdout: root } = await exec('git', [
-          '-C',
-          target,
-          'rev-parse',
-          '--show-toplevel',
-        ])
-        const repository = root.trim()
-        const relative =
-          path.relative(repository, target).split(path.sep).join('/') || '.'
         const { stdout } = await exec(
           'git',
           [
             '-C',
-            repository,
+            target,
             'ls-files',
             '--cached',
             '--others',
             '--exclude-standard',
             '-z',
             '--',
-            relative,
+            '.',
           ],
           { maxBuffer: 32 * 1024 * 1024 },
         )
         gitFiles = stdout
           .split('\0')
           .filter(Boolean)
-          .map((file) => path.resolve(repository, file))
+          // Git lists paths relative to -C, so keep the caller's path spelling.
+          .map((file) => path.resolve(target, file))
       } catch {
         // Git is optional; a standalone project still has a formatter.
       }

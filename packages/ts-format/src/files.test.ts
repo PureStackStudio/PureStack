@@ -1,5 +1,12 @@
 import { execFileSync } from 'node:child_process'
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -31,39 +38,78 @@ describe('formatFiles', () => {
     }
   })
 
-  it('honors Git ignores and exclusions while collecting errors and formatting other files', async () => {
-    const cwd = await mkdtemp(path.join(tmpdir(), 'purestack-format-'))
+  const caseInsensitivePaths =
+    process.platform === 'win32' || process.platform === 'darwin'
+
+  it.each(caseInsensitivePaths ? [false, true] : [false])(
+    'honors Git ignores and exclusions while collecting errors (uppercase path: %s)',
+    async (uppercase) => {
+      const directory = await mkdtemp(path.join(tmpdir(), 'purestack-format-'))
+      const cwd = uppercase ? directory.toUpperCase() : directory
+      try {
+        execFileSync('git', ['init', cwd], { stdio: 'ignore' })
+        await writeFile(path.join(cwd, '.gitignore'), 'ignored.mdx\n')
+        await writeFile(
+          path.join(cwd, 'ignored.mdx'),
+          '<Panel><Badge /></Panel>',
+        )
+        await writeFile(
+          path.join(cwd, 'excluded.mdx'),
+          '<Panel><Badge /></Panel>',
+        )
+        await writeFile(path.join(cwd, 'good.mdx'), '<Panel><Badge /></Panel>')
+        await writeFile(
+          path.join(cwd, 'bad.mdx'),
+          '<Panel title="broken></Panel>',
+        )
+        const result = await formatFiles(['.', 'missing.mdx'], {
+          cwd,
+          write: true,
+          exclude: [uppercase ? 'EXCLUDED.mdx' : 'excluded.mdx'],
+        })
+        expect(result.checked).toBe(2)
+        expect(result.changed).toEqual([path.join(cwd, 'good.mdx')])
+        expect(
+          result.errors.map((error) => path.basename(error.filePath)).sort(),
+        ).toEqual(['bad.mdx', 'missing.mdx'])
+        expect(await readFile(path.join(cwd, 'bad.mdx'), 'utf8')).toBe(
+          '<Panel title="broken></Panel>',
+        )
+        expect(await readFile(path.join(cwd, 'ignored.mdx'), 'utf8')).toBe(
+          '<Panel><Badge /></Panel>',
+        )
+      } finally {
+        await rm(directory, { recursive: true, force: true })
+      }
+    },
+  )
+
+  it('honors Git ignores and exclusions through a directory alias', async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), 'purestack-format-'))
+    const projects = path.join(directory, 'projects')
+    const repository = path.join(projects, 'project with spaces')
+    const alias = path.join(directory, 'projects-alias')
+    const cwd = path.join(alias, 'project with spaces')
     try {
-      execFileSync('git', ['init', cwd], { stdio: 'ignore' })
-      await writeFile(path.join(cwd, '.gitignore'), 'ignored.mdx\n')
-      await writeFile(path.join(cwd, 'ignored.mdx'), '<Panel><Badge /></Panel>')
-      await writeFile(
-        path.join(cwd, 'excluded.mdx'),
-        '<Panel><Badge /></Panel>',
+      await mkdir(repository, { recursive: true })
+      execFileSync('git', ['init', repository], { stdio: 'ignore' })
+      await writeFile(path.join(repository, '.gitignore'), 'ignored.mdx\n')
+      for (const file of ['good.mdx', 'excluded.mdx', 'ignored.mdx'])
+        await writeFile(path.join(repository, file), '<Panel><Badge /></Panel>')
+      await symlink(
+        projects,
+        alias,
+        process.platform === 'win32' ? 'junction' : 'dir',
       )
-      await writeFile(path.join(cwd, 'good.mdx'), '<Panel><Badge /></Panel>')
-      await writeFile(
-        path.join(cwd, 'bad.mdx'),
-        '<Panel title="broken></Panel>',
-      )
-      const result = await formatFiles(['.', 'missing.mdx'], {
+      const result = await formatFiles(['.'], {
         cwd,
-        write: true,
         exclude: ['excluded.mdx'],
       })
-      expect(result.checked).toBe(2)
+      expect(result.errors).toEqual([])
+      expect(result.checked).toBe(1)
       expect(result.changed).toEqual([path.join(cwd, 'good.mdx')])
-      expect(
-        result.errors.map((error) => path.basename(error.filePath)).sort(),
-      ).toEqual(['bad.mdx', 'missing.mdx'])
-      expect(await readFile(path.join(cwd, 'bad.mdx'), 'utf8')).toBe(
-        '<Panel title="broken></Panel>',
-      )
-      expect(await readFile(path.join(cwd, 'ignored.mdx'), 'utf8')).toBe(
-        '<Panel><Badge /></Panel>',
-      )
     } finally {
-      await rm(cwd, { recursive: true, force: true })
+      await rm(directory, { recursive: true, force: true })
     }
   })
 })
