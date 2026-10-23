@@ -20,7 +20,8 @@ const setupStepTemplate = html`<StepPanel
         :checked="workspace.install"
         tone="accent"/>
       <p class="text-subtle fs-xs mt-2 mb-0">
-        Use the package manager configured by the template.
+        Install dependencies, then format your project if the template provides
+        a format script.
       </p>
     </div>
     <div>

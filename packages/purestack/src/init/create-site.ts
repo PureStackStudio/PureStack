@@ -67,6 +67,7 @@ export async function createSite(
   const temporary = await mkdtemp(path.join(tmpdir(), 'purestack-init-'))
   let template: string
   let packageManager: PackageManager
+  let hasFormatScript: boolean
   try {
     const unpacked = path.join(temporary, 'unpacked')
     const templateRoot = options.templateRoot
@@ -104,6 +105,7 @@ export async function createSite(
     })
     template = `${project.name}@${project.version}`
     packageManager = project.packageManager
+    hasFormatScript = project.hasFormatScript
   } finally {
     await rm(temporary, { recursive: true, force: true })
   }
@@ -138,6 +140,23 @@ export async function createSite(
       if (error instanceof Error && error.name === 'AbortError') throw error
       result.failures.push(
         `Dependency installation failed: ${error instanceof Error ? error.message : String(error)}\nRetry ${packageManager} install in the project directory.`,
+      )
+    }
+  }
+  if (result.installed && hasFormatScript) {
+    try {
+      await perform('Format project files', () =>
+        runPackageManager(packageManager, ['run', 'format'], directory, {
+          capture: true,
+          signal: options.signal,
+        }),
+      )
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') throw error
+      const command =
+        packageManager === 'yarn' ? 'yarn format' : 'npm run format'
+      result.failures.push(
+        `Project formatting failed: ${error instanceof Error ? error.message : String(error)}\nRetry ${command} in the project directory.`,
       )
     }
   }

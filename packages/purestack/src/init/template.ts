@@ -357,6 +357,8 @@ export async function prepareProject(
     name: pkg.name,
     version: pkg.version,
     packageManager,
+    hasFormatScript:
+      typeof scripts.format === 'string' && scripts.format.trim().length > 0,
   }
 }
 

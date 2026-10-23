@@ -562,9 +562,120 @@ describe('project generation', () => {
     expect(result.failures).toEqual([
       expect.stringContaining('Retry yarn install'),
     ])
+    expect(install).toHaveBeenCalledTimes(1)
     expect(
       await readFile(path.join(destination, 'README.md'), 'utf8'),
     ).toContain('PureStack')
+  })
+
+  it.each(['yarn', 'npm'] as const)(
+    'formats after installing with %s and before setting up Git',
+    async (manager) => {
+      const templateRoot = await fixture()
+      if (manager === 'npm') {
+        const file = path.join(templateRoot, 'template/package.json')
+        const project = JSON.parse(await readFile(file, 'utf8'))
+        delete project.packageManager
+        await writeFile(file, JSON.stringify(project))
+      }
+      const destination = path.join(temporary, 'project')
+      const run = vi.spyOn(managers, 'runPackageManager').mockResolvedValue('')
+      vi.spyOn(processes, 'runProcess').mockResolvedValue(repository)
+      const labels: string[] = []
+      const signal = new AbortController().signal
+      const result = await createSite(
+        plan(destination, 'starter', { install: true, git: true }),
+        cliVersion,
+        repository,
+        async (label, action) => {
+          labels.push(label)
+          return action()
+        },
+        { templateRoot, signal },
+      )
+      expect(result.installed).toBe(true)
+      expect(result.failures).toEqual([])
+      expect(run.mock.calls.map((call) => call[1])).toEqual([
+        manager === 'yarn' ? ['install', '--no-immutable'] : ['install'],
+        ['run', 'format'],
+      ])
+      expect(run).toHaveBeenLastCalledWith(
+        manager,
+        ['run', 'format'],
+        destination,
+        { capture: true, signal },
+      )
+      expect(labels.slice(-3)).toEqual([
+        'Install dependencies',
+        'Format project files',
+        'Set up Git',
+      ])
+    },
+  )
+
+  it.each([undefined, '   '])(
+    'skips formatting when the template has no usable format script (%s)',
+    async (format) => {
+      const templateRoot = await fixture()
+      const file = path.join(templateRoot, 'template/package.json')
+      const project = JSON.parse(await readFile(file, 'utf8'))
+      project.scripts.format = format
+      await writeFile(file, JSON.stringify(project))
+      const run = vi.spyOn(managers, 'runPackageManager').mockResolvedValue('')
+      const result = await createSite(
+        plan(path.join(temporary, 'project'), 'starter', { install: true }),
+        cliVersion,
+        repository,
+        undefined,
+        { templateRoot },
+      )
+      expect(result.installed).toBe(true)
+      expect(result.failures).toEqual([])
+      expect(run).toHaveBeenCalledTimes(1)
+    },
+  )
+
+  it('preserves the installed project and continues Git setup when formatting fails', async () => {
+    const destination = path.join(temporary, 'project')
+    vi.spyOn(managers, 'runPackageManager')
+      .mockResolvedValueOnce('')
+      .mockRejectedValueOnce(new Error('Invalid markup'))
+    vi.spyOn(processes, 'runProcess').mockResolvedValue(repository)
+    const result = await createSite(
+      plan(destination, 'starter', { install: true, git: true }),
+      cliVersion,
+      repository,
+      undefined,
+      { templateRoot: await fixture() },
+    )
+    expect(result.installed).toBe(true)
+    expect(result.git).toBe('existing')
+    expect(result.failures).toEqual([
+      'Project formatting failed: Invalid markup\nRetry yarn format in the project directory.',
+    ])
+    expect(await readdir(destination)).toContain('README.md')
+  })
+
+  it('propagates formatting cancellation and does not start Git setup', async () => {
+    const cancelled = new Error('Cancelled')
+    cancelled.name = 'AbortError'
+    vi.spyOn(managers, 'runPackageManager')
+      .mockResolvedValueOnce('')
+      .mockRejectedValueOnce(cancelled)
+    const git = vi.spyOn(processes, 'runProcess')
+    await expect(
+      createSite(
+        plan(path.join(temporary, 'project'), 'starter', {
+          install: true,
+          git: true,
+        }),
+        cliVersion,
+        repository,
+        undefined,
+        { templateRoot: await fixture() },
+      ),
+    ).rejects.toBe(cancelled)
+    expect(git).not.toHaveBeenCalled()
   })
 
   it('skips Git initialization inside an existing repository', async () => {

@@ -13,12 +13,13 @@ import type {
   DevWebSocketConnection,
   DevWebSocketMessage,
 } from '@purestack/ts-ssg'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type {
   SessionCommand,
   SessionEvent,
 } from '../../../forge/modules/shared/protocol'
 import { createSite } from '../../init/create-site'
+import * as managers from '../../init/package-manager'
 import { readTemplateUi } from '../../init/template-ui'
 import { parseInitArguments } from '../arguments'
 import { Session } from './session'
@@ -122,6 +123,51 @@ async function fixture(previewFails = false) {
 }
 
 describe('Forge session', () => {
+  it('streams formatting progress after installation and before starting the live site', async () => {
+    const test = await fixture()
+    const prepare = vi
+      .spyOn(managers, 'preparePackageManager')
+      .mockResolvedValue(undefined)
+    const run = vi.spyOn(managers, 'runPackageManager').mockResolvedValue('')
+    test.gate.resolve()
+    try {
+      test.peer.request({
+        type: 'create',
+        configuration: {
+          ...test.session.snapshot.configuration,
+          install: true,
+        },
+      })
+      await expect.poll(() => test.session.snapshot.status).toBe('ready')
+      const tasks = test.session.snapshot.tasks
+      const labels = tasks.map((task) => task.label)
+      expect(labels.indexOf('Format project files')).toBeGreaterThan(
+        labels.indexOf('Install dependencies'),
+      )
+      expect(labels.indexOf('Format project files')).toBeLessThan(
+        labels.indexOf('Start live site'),
+      )
+      expect(tasks.every((task) => task.state === 'done')).toBe(true)
+      expect(
+        test.peer.events.some(
+          (event) =>
+            event.type === 'snapshot' &&
+            event.snapshot.tasks.some(
+              (task) =>
+                task.label === 'Format project files' &&
+                task.state === 'running',
+            ),
+        ),
+      ).toBe(true)
+      expect(test.session.snapshot.result?.failures).toEqual([])
+      expect(test.counts().previews).toBe(1)
+    } finally {
+      await test.close()
+      prepare.mockRestore()
+      run.mockRestore()
+    }
+  })
+
   it('creates once, streams tasks, survives reconnects and keeps the live site open until finishing', async () => {
     const test = await fixture()
     try {

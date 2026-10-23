@@ -10,9 +10,11 @@
     "test": "vitest",
     "test:ci": "vitest run",
     "lint": "biome lint .",
-    "format": "biome format --write .",
-    "check": "biome check .",
-    "check:fix": "biome check --write ."
+    "format": "biome format --write . && yarn format:markup --write",
+    "format:markup": "purestack format .",
+    "format:check": "biome format . && yarn format:markup --check",
+    "check": "biome check . && yarn format:markup --check",
+    "check:fix": "biome check --write . && yarn format:markup --write"
   },
   "dependencies": {
     "purestack": "latest",

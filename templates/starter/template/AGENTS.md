@@ -7,7 +7,10 @@
 - Verify content and configuration: `yarn build`.
 - Test app code: `yarn test` (watch) or `yarn test:ci` (once).
 - Code quality: `yarn check`; safe fixes: `yarn check:fix`.
-- Formatting: `yarn format`; lint only: `yarn lint`.
+- Formatting: `yarn format` (Biome followed by PureStack's markup formatter).
+- Check formatting without writing: `yarn format:check`.
+- Format only component markup: `yarn format:markup --write`.
+- Lint only: `yarn lint`.
 - Verify the release: `yarn publish`; inspect `dist/publish` before deployment.
 - `publish` creates local output. Deployment is a separate action.
 
