@@ -122,9 +122,15 @@ async function main() {
           : ['install', '--no-audit', '--no-fund'],
         directory,
       )
-      // Verify content, not formatting: the generated site's own format script
-      // reformats files the CLI writes.
-      for (const script of ['lint', 'test:ci', 'build', 'publish']) {
+      // Exercise formatting with the installed tarballs, as project creation does.
+      for (const script of [
+        'format',
+        'format:check',
+        'lint',
+        'test:ci',
+        'build',
+        'publish',
+      ]) {
         if (typeof project.scripts?.[script] === 'string')
           await runPackageManager(manager, ['run', script], directory)
       }

@@ -332,7 +332,11 @@ async function bundlePackage(pkg: PublishPackage) {
           treeshake: true,
           minify: false,
           deps: {
-            neverBundle: pkg.externalPackageNames,
+            // Match package subpaths before tsconfig aliases resolve them to source.
+            neverBundle: (id) =>
+              pkg.externalPackageNames.some(
+                (name) => id === name || id.startsWith(`${name}/`),
+              ),
           },
           outputOptions: {
             sourcemap: true,
