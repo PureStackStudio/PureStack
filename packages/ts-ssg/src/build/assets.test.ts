@@ -555,10 +555,6 @@ describe('static assets', () => {
       expect(runtimeFiles).toContain('chunks')
       expect(runtimeFiles.some((file) => file.startsWith('regor.'))).toBe(true)
       await expect(
-        fs.stat(path.join(outDir, '_assets', 'runtime')),
-      ).rejects.toMatchObject({ code: 'ENOENT' })
-
-      await expect(
         copyStaticAsset(
           root,
           outDir,

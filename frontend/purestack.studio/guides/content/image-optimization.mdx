@@ -62,7 +62,7 @@ For an eligible image, the plugin generates a `<picture>` with AVIF and WebP sou
 
 The plugin preserves `alt`, classes, IDs, styles, links around images, and author-supplied loading attributes. It fills missing `width` and `height` attributes from the image's oriented aspect ratio so the browser can reserve space. If you supply one dimension, the other is derived; if you supply both, both are kept.
 
-Generated images are written under `/_assets/images/`, with your site's `basePath` applied automatically. Filenames include a hash of the encoded bytes. Shared variants are reused across pages, and generated files are removed when no page references them. Original assets remain available at their usual URLs.
+Generated images are written under `/assets/images/`, with your site's `basePath` applied automatically. Filenames include a hash of the encoded bytes. Shared variants are reused across pages, and generated files are removed when no page references them. Original assets remain available at their usual URLs.
 
 Widths are sorted, deduplicated, and capped at the source image's dimensions. A 700-pixel-wide source with widths `[480, 960, 1440]` produces 480- and 700-pixel candidates for each format. The plugin never enlarges a source image.
 

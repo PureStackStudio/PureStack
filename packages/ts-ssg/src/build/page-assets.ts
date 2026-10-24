@@ -44,7 +44,7 @@ function reference(value: GeneratedAssetReference): GeneratedAssetReference {
   if (!validNamespace(value.namespace))
     throw new Error('Invalid generated asset namespace.')
   const relPath = relativeFile(value.path)
-  if (!relPath.startsWith(`_assets/${value.namespace}/`))
+  if (!relPath.startsWith(`assets/${value.namespace}/`))
     throw new Error('Generated output escapes its namespace.')
   return { namespace: value.namespace, path: relPath }
 }
@@ -231,7 +231,7 @@ export class PageAssetManager {
             emit: async (name, data) => {
               const file = reference({
                 namespace: processor.namespace,
-                path: `_assets/${processor.namespace}/${relativeFile(name)}`,
+                path: `assets/${processor.namespace}/${relativeFile(name)}`,
               })
               if (
                 !collected.outputs.some((output) => output.path === file.path)

@@ -22,7 +22,7 @@ export interface PageAssetInput {
 
 /** Each build/session owns its processors; core handles generated files and invalidation. */
 export interface SiteAssets {
-  /** A unique path segment under /_assets/. */
+  /** A unique path segment under /assets/. */
   namespace: string
   /** Ordered within a page; different pages may run concurrently. Input methods expire when this call completes. */
   processPage: (input: PageAssetInput) => void | Promise<void>

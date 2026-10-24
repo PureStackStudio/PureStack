@@ -52,7 +52,7 @@ use `package#exportName` to select named plugins from installed packages.
 
 The plugin produces `<picture>` sources for the configured modern formats and
 an `<img>` with a JPEG/PNG fallback, `srcset`, `sizes`, and missing dimensions.
-Generated URLs live under `/_assets/images/`, with the site's base path applied
+Generated URLs live under `/assets/images/`, with the site's base path applied
 by PureStack. Filenames contain the hash of the **encoded output bytes**.
 Widths are deduplicated, sorted, and capped at the source's oriented dimensions.
 If `formats: []` is selected, only the responsive fallback is emitted, without a

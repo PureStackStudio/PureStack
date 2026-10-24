@@ -229,7 +229,7 @@ describe('generic page assets', () => {
     await builder.renderByUrlPath('/a/')
     expect(
       await fs.readFile(
-        path.join(outDir, '_assets', 'files', 'shared.txt'),
+        path.join(outDir, 'assets', 'files', 'shared.txt'),
         'utf8',
       ),
     ).toBe('Shared')
@@ -237,7 +237,7 @@ describe('generic page assets', () => {
     expect(await pending).toBe(true)
     expect(
       (await readManifest(outDir))?.pageAssets?.['c.md'].outputs[0].path,
-    ).toBe('_assets/files/shared.txt')
+    ).toBe('assets/files/shared.txt')
   })
 
   it('keeps generated files leased to concurrent renders and marks an in-flight dependent dirty', async () => {
@@ -312,7 +312,7 @@ describe('generic page assets', () => {
     input.options = { ...input.options, writeErrorPages: true }
     await buildSite(input)
     await expect(
-      fs.stat(path.join(outDir, '_assets', 'files', 'unused.txt')),
+      fs.stat(path.join(outDir, 'assets', 'files', 'unused.txt')),
     ).rejects.toMatchObject({ code: 'ENOENT' })
     expect((await readManifest(outDir))?.pageAssets?.['a.md']).toEqual({
       dependencies: ['source.txt'],
@@ -340,7 +340,7 @@ describe('generic page assets', () => {
     await buildSite(input)
     const state = (await readManifest(outDir))?.pageAssets?.['a.md']
     expect(state).toEqual({ dependencies: ['source.txt'], outputs: [] })
-    expect(await fs.readdir(path.join(outDir, '_assets', 'files'))).toEqual([])
+    expect(await fs.readdir(path.join(outDir, 'assets', 'files'))).toEqual([])
     expect(
       await fs.readFile(path.join(outDir, 'a', 'index.html'), 'utf8'),
     ).toContain('Written hook failed')
@@ -357,12 +357,12 @@ describe('generic page assets', () => {
     await buildSite(input)
     expect(
       await fs.readFile(path.join(outDir, 'a', 'index.html'), 'utf8'),
-    ).toContain('/_assets/files/a%20%23.txt')
-    await fs.mkdir(path.join(contentDir, '_assets', 'files'), {
+    ).toContain('/assets/files/a%20%23.txt')
+    await fs.mkdir(path.join(contentDir, 'assets', 'files'), {
       recursive: true,
     })
     await fs.writeFile(
-      path.join(contentDir, '_assets', 'files', 'a #.txt'),
+      path.join(contentDir, 'assets', 'files', 'a #.txt'),
       'Source',
     )
     await expect(buildSite(input)).rejects.toThrow(
@@ -370,7 +370,7 @@ describe('generic page assets', () => {
     )
     expect(
       await fs.readFile(
-        path.join(contentDir, '_assets', 'files', 'a #.txt'),
+        path.join(contentDir, 'assets', 'files', 'a #.txt'),
         'utf8',
       ),
     ).toBe('Source')
@@ -383,7 +383,7 @@ describe('generic page assets', () => {
       const { input, contentDir } = await fixture(async (input) => {
         if (!scriptUrl) throw new Error('Expected script URL')
         await input.emit(
-          scriptUrl.replace('/_assets/files/', ''),
+          scriptUrl.replace('/assets/files/', ''),
           Buffer.from('Generated'),
         )
       })
@@ -400,13 +400,13 @@ describe('generic page assets', () => {
       })
       await fs.writeFile(
         path.join(contentDir, 'a.md'),
-        '<PageScript src="./_assets/files/script.tS"/>',
+        '<PageScript src="./assets/files/script.tS"/>',
       )
-      await fs.mkdir(path.join(contentDir, '_assets', 'files'), {
+      await fs.mkdir(path.join(contentDir, 'assets', 'files'), {
         recursive: true,
       })
       await fs.writeFile(
-        path.join(contentDir, '_assets', 'files', 'script.tS'),
+        path.join(contentDir, 'assets', 'files', 'script.tS'),
         'export const value = 1',
       )
       await expect(buildSite(input)).rejects.toThrow(
@@ -422,23 +422,23 @@ describe('generic page assets', () => {
     })
     input.siteConfig = { ...input.siteConfig, scripts: { cacheBusting: false } }
     input.options?.plugins?.push(componentsPlugin())
-    await fs.mkdir(path.join(contentDir, '_assets', 'files'), {
+    await fs.mkdir(path.join(contentDir, 'assets', 'files'), {
       recursive: true,
     })
     await fs.writeFile(
-      path.join(contentDir, '_assets', 'files', 'script.ts'),
+      path.join(contentDir, 'assets', 'files', 'script.ts'),
       'export const value = 1',
     )
     await fs.writeFile(
       path.join(contentDir, 'b.md'),
-      '<PageScript src="./_assets/files/script.ts"/>',
+      '<PageScript src="./assets/files/script.ts"/>',
     )
     await expect(buildSite(input)).rejects.toThrow(
       'conflicts with a generated asset',
     )
     expect(
       await fs.readFile(
-        path.join(outDir, '_assets', 'files', 'script.js'),
+        path.join(outDir, 'assets', 'files', 'script.js'),
         'utf8',
       ),
     ).toBe('Generated')
@@ -475,7 +475,7 @@ describe('generic page assets', () => {
       'input is closed',
     )
     await expect(
-      fs.stat(path.join(outDir, '_assets', 'files', 'late.txt')),
+      fs.stat(path.join(outDir, 'assets', 'files', 'late.txt')),
     ).rejects.toMatchObject({ code: 'ENOENT' })
   })
 
@@ -487,7 +487,7 @@ describe('generic page assets', () => {
       'must await all source resolution and emission work',
     )
     await expect(
-      fs.stat(path.join(outDir, '_assets', 'files', 'detached.txt')),
+      fs.stat(path.join(outDir, 'assets', 'files', 'detached.txt')),
     ).rejects.toMatchObject({ code: 'ENOENT' })
   })
 

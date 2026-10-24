@@ -82,7 +82,7 @@ describe('optional images plugin', () => {
     fs.readFile(path.join(outDir, file), 'utf8')
   async function generated(outDir: string) {
     return (
-      await fs.readdir(path.join(outDir, '_assets', 'images')).catch(() => [])
+      await fs.readdir(path.join(outDir, 'assets', 'images')).catch(() => [])
     ).sort()
   }
 
@@ -95,7 +95,7 @@ describe('optional images plugin', () => {
     const expectedFiles = await generated(outDir)
     const expectedBytes = await Promise.all(
       expectedFiles.map((file) =>
-        fs.readFile(path.join(outDir, '_assets', 'images', file)),
+        fs.readFile(path.join(outDir, 'assets', 'images', file)),
       ),
     )
     // A site-only package exercises fallback resolution without competing with
@@ -157,7 +157,7 @@ describe('optional images plugin', () => {
     expect(
       await Promise.all(
         expectedFiles.map((file) =>
-          fs.readFile(path.join(outDir, '_assets', 'images', file)),
+          fs.readFile(path.join(outDir, 'assets', 'images', file)),
         ),
       ),
     ).toEqual(expectedBytes)
@@ -202,7 +202,7 @@ describe('optional images plugin', () => {
       const image = document.querySelector('picture > img')
       expect(image?.getAttribute('alt')).toBe('A dashboard')
       expect(image?.getAttribute('src')).toMatch(
-        /^\/docs\/_assets\/images\/[a-f0-9]{64}\.64\.png$/,
+        /^\/docs\/assets\/images\/[a-f0-9]{64}\.64\.png$/,
       )
       expect(image?.getAttribute('width')).toBe('64')
       expect(image?.getAttribute('height')).toBe('32')
@@ -221,7 +221,7 @@ describe('optional images plugin', () => {
     })
     for (const file of await generated(outDir)) {
       const metadata = await sharp(
-        await fs.readFile(path.join(outDir, '_assets', 'images', file)),
+        await fs.readFile(path.join(outDir, 'assets', 'images', file)),
       ).metadata()
       expect(metadata.width).toBeLessThanOrEqual(64)
       expect(
@@ -251,7 +251,7 @@ describe('optional images plugin', () => {
         ).toBe('Photo')
         expect(
           document.querySelector('picture > img')?.getAttribute('src'),
-        ).toMatch(/^\/docs\/_assets\/images\//)
+        ).toMatch(/^\/docs\/assets\/images\//)
       },
     )
   })
@@ -325,7 +325,7 @@ describe('optional images plugin', () => {
     await runInDom(output, (document) => {
       expect(
         document.querySelector('img[alt="Header"]')?.getAttribute('src'),
-      ).toContain('/docs/_assets/images/')
+      ).toContain('/docs/assets/images/')
       expect(
         (
           document.querySelector('template') as HTMLTemplateElement
@@ -476,7 +476,7 @@ describe('optional images plugin', () => {
       expect(document.querySelectorAll('img[srcset]')).toHaveLength(2)
       expect(
         document.querySelector('img[alt="Hook"]')?.getAttribute('src'),
-      ).toContain('/docs/_assets/images/')
+      ).toContain('/docs/assets/images/')
     })
   })
 
@@ -508,7 +508,7 @@ describe('optional images plugin', () => {
     expect(
       (
         await sharp(
-          await fs.readFile(path.join(secondOutput, '_assets', 'images', file)),
+          await fs.readFile(path.join(secondOutput, 'assets', 'images', file)),
         ).metadata()
       ).width,
     ).toBe(24)
@@ -611,7 +611,7 @@ describe('optional images plugin', () => {
     expect(response.status).toBe(200)
     const output = await response.text()
     const urls =
-      output.match(/\/docs\/_assets\/images\/[a-f0-9]+\.\d+\.(?:avif|webp)/g) ??
+      output.match(/\/docs\/assets\/images\/[a-f0-9]+\.\d+\.(?:avif|webp)/g) ??
       []
     expect(urls.length).toBeGreaterThan(0)
     for (const extension of ['avif', 'webp']) {

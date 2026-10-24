@@ -137,7 +137,7 @@ describe('page asset source tracking', () => {
 
   const bytes = Buffer.from('First')
   const output = (context: BuildContext) =>
-    path.join(context.config.outDir, '_assets', 'test', 'shared.txt')
+    path.join(context.config.outDir, 'assets', 'test', 'shared.txt')
   async function seed(value = bytes) {
     const file = output(context)
     await fs.mkdir(path.dirname(file), { recursive: true })
