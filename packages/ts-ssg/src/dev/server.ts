@@ -3,6 +3,7 @@ import http from 'node:http'
 import path from 'node:path'
 import type { I18nConfig } from '@purestack/ts-common'
 import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
+import { OutputDirectoryLocks } from '@purestack/ts-util-node'
 import { getLogger, type LevelName, type Logger } from 'logpot'
 import {
   createIncrementalBuildSession,
@@ -87,6 +88,19 @@ type RebuildRequestState = {
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
+  const outputLocks = new OutputDirectoryLocks()
+  try {
+    return await startLockedDevServer(input, outputLocks)
+  } catch (error) {
+    await outputLocks.release()
+    throw error
+  }
+}
+
+async function startLockedDevServer(
+  input: DevServerInput,
+  outputLocks: OutputDirectoryLocks,
+): Promise<DevServerHandle> {
   const ownsLogger = await ensureLogger(input.logLevel)
   const logger = getLogger()
   const baseBuildInput: BuildInput = {
@@ -106,7 +120,7 @@ export async function startDevServer(
   }
   const projectConfig = trackProjectConfig(input.configFile)
   let buildInput = await projectConfig.load(baseBuildInput)
-  const session = await createIncrementalBuildSession(buildInput)
+  const session = await createIncrementalBuildSession(buildInput, outputLocks)
   const config = session.config
   let devMiddleware = composeDevMiddleware(session.plugins)
   const log = getLogger()
@@ -230,7 +244,17 @@ export async function startDevServer(
         watchConfigDependencies()
       }
       if (options?.recreateBuilder || options?.reloadConfig) {
-        const next = await createIncrementalBuildSession(buildInput)
+        const next = await createIncrementalBuildSession(
+          buildInput,
+          outputLocks,
+        )
+        // Requests serve the startup output, so a reload cannot move it.
+        if (next.config.outDir !== config.outDir) {
+          await outputLocks.release(next.config.outDir)
+          throw new Error(
+            `The reloaded config moves outDir to "${next.config.outDir}". Restart serve to use it.`,
+          )
+        }
         incremental = next.builder
         devMiddleware = composeDevMiddleware(next.plugins)
       }
@@ -345,6 +369,8 @@ export async function startDevServer(
       await closeWebSockets()
       await new Promise<void>((resolve) => server.close(() => resolve()))
       await rebuildDone
+      await Promise.all([...activeResponses])
+      await outputLocks.release()
       if (ownsLogger) await logger.close()
     })())
 

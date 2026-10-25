@@ -1,9 +1,10 @@
 import type { SiteConfigInput, WriteStylesResult } from '@purestack/ts-common'
+import { OutputDirectoryLocks } from '@purestack/ts-util-node'
 import type { ResolvedContentFile } from '../i18n/content'
 import type { NavigationTree } from '../navigation/navigation'
 import type { PureStackPlugin } from '../plugins/plugin'
 import type { PublishOptions } from './build-config'
-import { createIncrementalBuilder } from './incremental'
+import { createIncrementalBuildSession } from './incremental'
 import { ensureLogger } from './logger'
 import type { BuildContext, PageDocument, PageRenderResult } from './page'
 
@@ -80,6 +81,11 @@ export interface BuildInput {
 
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   await ensureLogger()
-  const builder = await createIncrementalBuilder(input)
-  return builder.buildAll('full build')
+  const outputLocks = new OutputDirectoryLocks()
+  try {
+    const { builder } = await createIncrementalBuildSession(input, outputLocks)
+    return await builder.buildAll('full build')
+  } finally {
+    await outputLocks.release()
+  }
 }

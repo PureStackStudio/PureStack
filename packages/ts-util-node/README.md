@@ -1,8 +1,8 @@
 # @purestack/ts-util-node
 
-Caching and file path helpers for PureStack's Node.js build tools. `ensureDir(filePath)`
-creates the parent directory for a file, and `replaceExt(filePath, newExt)`
-returns the path with a different extension.
+Caching, output locking, and file path helpers for PureStack's Node.js build
+tools. `ensureDir(filePath)` creates the parent directory for a file, and
+`replaceExt(filePath, newExt)` returns the path with a different extension.
 
 Use this package in build scripts and other Node.js code. Browser-safe helpers
 live in `@purestack/ts-util`.
@@ -117,3 +117,26 @@ not a freshness guarantee or a total disk-size limit.
 This cache stores independent values. Use specialized storage when a result
 requires publishing a group of files together, as image variants do. Browser
 components should use `Cache` from `@purestack/ts-util` instead.
+
+## Output directory locks
+
+`OutputDirectoryLocks` gives one owner exclusive use of output directories across
+processes on the same machine. `acquire(directory)` creates the directory, returns
+its canonical path, and fails immediately when another running owner holds it.
+`release(directory)` frees one held directory, and `release()` frees them all:
+
+```ts
+import { OutputDirectoryLocks } from '@purestack/ts-util-node'
+
+const locks = new OutputDirectoryLocks()
+try {
+  await writeSite(await locks.acquire('dist/site'))
+} finally {
+  await locks.release()
+}
+```
+
+Each lock is a local socket the owner listens on: a named pipe on Windows, an
+abstract socket on Linux, and a socket file in the temporary directory on macOS. Only a running owner can answer
+on it, so a killed command never blocks the next one, and cleaning the output
+cannot remove the lock.

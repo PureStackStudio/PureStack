@@ -99,7 +99,17 @@ describe('embedded dev server', () => {
         await fetch(server.url).then((response) => response.text()),
       ).toContain('Embedded site')
       await expect(
-        startDevServer({ ...input, port: Number(new URL(server.url).port) }),
+        startDevServer({
+          ...input,
+          port: Number(new URL(server.url).port),
+          build: {
+            ...input.build,
+            siteConfig: {
+              ...input.build.siteConfig,
+              outDir: path.join(root, 'other-out'),
+            },
+          },
+        }),
       ).rejects.toMatchObject({ code: 'EADDRINUSE' })
       expect(closeLogger).not.toHaveBeenCalled()
       expect(process.listenerCount('SIGINT')).toBe(listeners)

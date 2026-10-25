@@ -9,6 +9,7 @@ import {
   useStyleScope,
 } from '@purestack/ts-style'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
+import type { OutputDirectoryLocks } from '@purestack/ts-util-node'
 import { getLogger, type Logger } from 'logpot'
 import { resolveConfiguredPlugins } from '../../config/plugin-modules'
 import {
@@ -78,11 +79,15 @@ export async function createIncrementalBuilder(
 }
 
 /** Internal server setup shares the builder's resolved config and selected plugins. */
-export async function createIncrementalBuildSession(input: BuildInput = {}) {
+export async function createIncrementalBuildSession(
+  input: BuildInput = {},
+  outputLocks?: OutputDirectoryLocks,
+) {
   const styleContext = createStyleContext()
   return runWithStyleContext(styleContext, async () => {
     const { file, plugins } = await resolveConfiguredPlugins(input)
     const config = resolveBuildSiteConfig(input, plugins, file)
+    if (outputLocks) config.outDir = await outputLocks.acquire(config.outDir)
     const runtime = await createIncrementalRuntime(
       input,
       styleContext,

@@ -74,6 +74,8 @@ Flags:
 
 When the content directory holds a `purestack.config.ts`, every command loads its plugins; `serve` reloads it when it or a local file it imports changes. See [Plugins](#plugins).
 
+`build`, `serve`, and `publish` lock their output directory (`publishDir` for `publish`) before building, so a second command targeting it fails immediately instead of cleaning it. Commands with different outputs run side by side, which is why `outDir` and `publishDir` must be the same directory or separate ones, never nested. `serve` keeps one output and its lock until it closes; restart it after changing `outDir`. Locks cover commands on the same machine. A killed command, including one stopped with Ctrl+C or restarted by a watcher, frees its output at once.
+
 Examples from this monorepo:
 
 ```bash
