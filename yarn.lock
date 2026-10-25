@@ -4877,9 +4877,9 @@ __metadata:
   linkType: hard
 
 "regor@npm:^1.7.6":
-  version: 1.7.7
-  resolution: "regor@npm:1.7.7"
-  checksum: 10c0/fd48bc82a177fac674ac900067d5b94ba9abcec48b76e52a9b0fb447876444fe61fe7e6fcec73a3b76c4b244d667ad6d10ad61b166b3959a20fb88e93bd65afd
+  version: 1.7.8
+  resolution: "regor@npm:1.7.8"
+  checksum: 10c0/9b41a18e45148bd5aa5555d77b5fc653f16cf46588b48c1a8626b4793159b4f6b9e0204c27c260047f0d2ab4bc69604c043bfa6cff058ac5624806a65e7995fc
   languageName: node
   linkType: hard
 
