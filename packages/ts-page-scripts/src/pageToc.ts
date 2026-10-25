@@ -1,3 +1,7 @@
+import {
+  collectPageOutline,
+  resolvePageContent,
+} from '../../ts-common/src/pageOutline'
 import { BREAKPOINTS, matchMediaMax } from '../../ts-style/src/breakpoints'
 import {
   docLayoutDefaults,
@@ -8,6 +12,7 @@ import {
   DOC_LAYOUT_TOC_WIDTH_STORAGE_KEY,
   readDocLayoutPxVar,
 } from './docLayoutCssVars'
+import { renderPageTocContent } from './pageTocContent'
 import type { TsSsgPageTocApi } from './runtimeGlobals'
 
 const OPEN_LABEL = 'close'
@@ -29,13 +34,30 @@ const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 const MANUAL_ACTIVE_LOCK_MS = 900
 
-const initializedTocs = new WeakSet<HTMLElement>()
+const initializedTocs = new WeakMap<HTMLElement, { refresh(): void }>()
 
 applyStoredDocLayoutPreferences()
 
 const pageTocApi: TsSsgPageTocApi = {
   hydrate(root?: Element | null) {
     hydratePageToc(root)
+  },
+  refresh(root?: Element | null) {
+    // Without a root, every TOC that lists the article; explicit ones keep theirs.
+    const tocs = root
+      ? [resolvePageToc(root)]
+      : document.querySelectorAll<HTMLElement>('.page-toc[data-page-toc-auto]')
+    const contentHtml = renderPageTocContent(
+      collectPageOutline(resolvePageContent(document)),
+    )
+    for (const toc of tocs) {
+      const target = toc?.querySelector('.page-toc__content')
+      if (!toc || !target) continue
+      target.innerHTML = contentHtml
+      const initialized = initializedTocs.get(toc)
+      if (initialized) initialized.refresh()
+      else hydratePageToc(toc)
+    }
   },
 }
 
@@ -48,8 +70,7 @@ function hydratePageToc(root?: Element | null) {
     return
   }
   if (initializedTocs.has(toc)) return
-  initializedTocs.add(toc)
-  init(toc)
+  initializedTocs.set(toc, init(toc))
 }
 
 function init(toc: HTMLElement) {
@@ -285,43 +306,9 @@ function init(toc: HTMLElement) {
     }
   }
 
-  const links = Array.from(
-    toc.querySelectorAll<HTMLAnchorElement>('a.page-toc__link[href^="#"]'),
-  )
-  if (links.length === 0) {
-    if (!isCollapsible()) {
-      document.body.classList.remove(BODY_TOC_OPEN_CLASS)
-    }
-    return
-  }
-
-  for (const link of links) {
-    link.addEventListener('click', () => {
-      const id = (link.getAttribute('href') ?? '').slice(1)
-      if (id) {
-        setActive(id)
-        flashTarget(id)
-        lockManualActive()
-      }
-      if (isCollapsible()) setTocOpen(false)
-    })
-  }
-
+  let headings: HTMLElement[] = []
   const linkById = new Map<string, HTMLAnchorElement>()
-  for (const link of links) {
-    const href = link.getAttribute('href') ?? ''
-    const id = href.slice(1)
-    if (id) linkById.set(id, link)
-  }
-
-  const content = document.querySelector<HTMLElement>('.doc-main .doc-content')
-  if (!content) return
-
-  const headings = Array.from(
-    content.querySelectorAll<HTMLElement>('h2[id], h3[id]'),
-  )
-  if (headings.length === 0) return
-
+  const visible = new Set<string>()
   let activeId = ''
   let highlightedHeading: HTMLElement | null = null
   let highlightTimer: number | null = null
@@ -335,6 +322,8 @@ function init(toc: HTMLElement) {
 
   const setActive = (id: string) => {
     if (!id || id === activeId) return
+    const next = linkById.get(id)
+    if (!next) return
 
     const previous = linkById.get(activeId)
     if (previous) {
@@ -342,12 +331,9 @@ function init(toc: HTMLElement) {
       previous.removeAttribute('aria-current')
     }
 
-    const next = linkById.get(id)
-    if (next) {
-      next.classList.add(ACTIVE_LINK_CLASS)
-      next.setAttribute('aria-current', 'location')
-      activeId = id
-    }
+    next.classList.add(ACTIVE_LINK_CLASS)
+    next.setAttribute('aria-current', 'location')
+    activeId = id
   }
 
   const flashTarget = (id: string) => {
@@ -360,7 +346,7 @@ function init(toc: HTMLElement) {
     }
     heading.classList.add(ACTIVE_TARGET_CLASS)
     highlightedHeading = heading
-    if (highlightTimer) window.clearTimeout(highlightTimer)
+    if (highlightTimer !== null) window.clearTimeout(highlightTimer)
     highlightTimer = window.setTimeout(() => {
       if (highlightedHeading === heading) {
         heading.classList.remove(ACTIVE_TARGET_CLASS)
@@ -378,7 +364,7 @@ function init(toc: HTMLElement) {
       if (rect.top - ACTIVE_SCROLL_OFFSET <= 0) current = heading.id
       else break
     }
-    if (!current) current = headings[0].id
+    if (!current) current = headings[0]?.id ?? ''
     setActive(current)
   }
 
@@ -390,9 +376,25 @@ function init(toc: HTMLElement) {
 
   window.addEventListener('hashchange', handleHash)
 
+  // Delegate once so refreshed links inherit click behavior without listeners.
+  toc.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return
+    const link = event.target.closest<HTMLAnchorElement>('a.page-toc__link')
+    if (!link || !toc.contains(link)) return
+    const href = link.getAttribute('href') ?? ''
+    if (!href.startsWith('#')) return
+    const id = href.slice(1)
+    if (id) {
+      setActive(id)
+      flashTarget(id)
+      lockManualActive()
+    }
+    if (isCollapsible()) setTocOpen(false)
+  })
+
+  let observer: IntersectionObserver | undefined
   if ('IntersectionObserver' in window) {
-    const visible = new Set<string>()
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           const id = (entry.target as HTMLElement).id
@@ -418,9 +420,6 @@ function init(toc: HTMLElement) {
       },
       { rootMargin: '0px 0px -70% 0px', threshold: [0, 1] },
     )
-
-    for (const heading of headings) observer.observe(heading)
-    pickByScroll()
   } else {
     let ticking = false
     const onScroll = () => {
@@ -433,10 +432,39 @@ function init(toc: HTMLElement) {
     }
     globalThis.window.addEventListener('scroll', onScroll, { passive: true })
     globalThis.window.addEventListener('resize', onScroll)
-    pickByScroll()
   }
 
-  handleHash()
+  const refresh = () => {
+    observer?.disconnect()
+    visible.clear()
+    if (highlightTimer !== null) window.clearTimeout(highlightTimer)
+    highlightTimer = null
+    highlightedHeading?.classList.remove(ACTIVE_TARGET_CLASS)
+    highlightedHeading = null
+    activeId = ''
+    manualActiveUntil = 0
+    linkById.clear()
+    for (const link of toc.querySelectorAll<HTMLAnchorElement>(
+      'a.page-toc__link',
+    )) {
+      link.classList.remove(ACTIVE_LINK_CLASS)
+      link.removeAttribute('aria-current')
+      const href = link.getAttribute('href') ?? ''
+      const id = href.startsWith('#') ? href.slice(1) : ''
+      if (id) linkById.set(id, link)
+    }
+    const content = resolvePageContent(document)
+    headings = content
+      ? Array.from(
+          content.querySelectorAll<HTMLElement>('h1[id], h2[id], h3[id]'),
+        ).filter((heading) => linkById.has(heading.id))
+      : []
+    for (const heading of headings) observer?.observe(heading)
+    pickByScroll()
+    handleHash()
+  }
+  refresh()
+  return { refresh }
 }
 
 function clamp(value: number, min: number, max: number) {

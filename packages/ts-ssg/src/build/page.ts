@@ -13,6 +13,7 @@ import type {
   SiteSearch,
   SiteStyles,
 } from '@purestack/ts-common'
+import { collectPageOutline, resolvePageContent } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { isError, toOutputAssetRelPath, withBasePath } from '@purestack/ts-util'
@@ -81,7 +82,8 @@ export interface PageDocument {
   file: ResolvedContentFile
   frontmatter: PageFrontmatter
   urlPath: string
-  outline?: PageOutlineItem[]
+  /** The rendered article's h1-h3 headings, each with an ID. */
+  outline: PageOutlineItem[]
   runtimeEmbeds: RuntimeEmbeds
 }
 
@@ -158,7 +160,7 @@ export async function renderPageFromFile(
     )
     const frontmatter = resolvePageFrontmatterTitle(
       parsedContent.frontmatter,
-      compiled.outline,
+      compiled.headingTitle,
     )
     const navigation = resolvePageNavigation(
       context.navigation,
@@ -183,21 +185,23 @@ export async function renderPageFromFile(
       headConfig,
       template,
       navigation,
-      outline: compiled.outline,
       pageInfo,
     })
+    let outline: PageOutlineItem[] = []
     const html = await renderPageApp(
       context,
       file,
       htmlShell,
-      { pageInfo, navigation, outline: compiled.outline, scriptEntrypoints },
+      { pageInfo, navigation, scriptEntrypoints },
       async (document, runtimeEmbeds) => {
+        // Headings exist only once components render, so IDs come from here.
+        outline = collectPageOutline(resolvePageContent(document))
         await hooks.onPageDocument?.(context, {
           document,
           file,
           frontmatter,
           urlPath,
-          outline: compiled.outline,
+          outline,
           runtimeEmbeds,
         })
         await assetSession?.process(document)
@@ -210,7 +214,8 @@ export async function renderPageFromFile(
       body: parsedContent.body,
       frontmatter,
       headConfig,
-      ...compiled,
+      bodyHtml: compiled.bodyHtml,
+      outline,
       html,
       template,
       outPath,
@@ -323,25 +328,12 @@ function resolveSpecialContentFile(config: SiteConfig, file: ContentFile) {
 
 function resolvePageFrontmatterTitle(
   frontmatter: PageFrontmatter,
-  outline: PageOutlineItem[],
+  headingTitle: string | undefined,
 ) {
   if (typeof frontmatter.title === 'string' && frontmatter.title.trim()) {
     return frontmatter
   }
-  const title = findFirstOutlineTitle(outline)
-  return title ? { ...frontmatter, title } : frontmatter
-}
-
-function findFirstOutlineTitle(outline: PageOutlineItem[]): string | undefined {
-  for (const item of outline) {
-    const title = item.title.trim()
-    if (title) return title
-    const childTitle = item.children
-      ? findFirstOutlineTitle(item.children)
-      : undefined
-    if (childTitle) return childTitle
-  }
-  return undefined
+  return headingTitle ? { ...frontmatter, title: headingTitle } : frontmatter
 }
 
 function createPageTemplateInfo(
@@ -408,20 +400,12 @@ type RenderPageShellInput = {
   headConfig: BasicHeadConfig
   template: string | undefined
   navigation: PageNavigation | undefined
-  outline: PageOutlineItem[]
   pageInfo: PageInfo
 }
 
 async function renderPageShell(input: RenderPageShellInput): Promise<string> {
-  const {
-    context,
-    bodyHtml,
-    headConfig,
-    template,
-    navigation,
-    outline,
-    pageInfo,
-  } = input
+  const { context, bodyHtml, headConfig, template, navigation, pageInfo } =
+    input
   return await renderPage({
     bodyHtml,
     headConfig,
@@ -431,7 +415,6 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     headTemplates: context.headTemplates,
     site: context.config,
     navigation,
-    outline,
     pageInfo,
     ...resolvePagePartials(context, pageInfo),
   })
@@ -491,7 +474,6 @@ function toTemplateRelPath(relPath: string) {
 type RenderAppContextInput = {
   pageInfo: PageInfo
   navigation: PageNavigation | undefined
-  outline: PageOutlineItem[]
   scriptEntrypoints: Set<string>
 }
 

@@ -2,7 +2,9 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
+import { h } from '@purestack/ts-html'
 import { disableLogger, getLogger, type Logger } from 'logpot'
+import { defineComponent, html } from 'regor'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import { discoverContent, discoverStaticAssets } from '../discover/content'
@@ -139,6 +141,203 @@ describe('page content compilation', () => {
       expect(page.html).toContain('class="doc-toc"')
       expect(page.html).toContain('href="#section"')
       expect(page.html).not.toContain('href="#home"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('builds the final outline from rendered headings without rendering components twice', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-toc-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      let renders = 0
+      const countedSection = defineComponent(html`<h2>{{ title }}</h2>`, {
+        context: () => {
+          renders += 1
+          return { title: 'Rendered component' }
+        },
+      })
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        [
+          '---\nsections: [Alpha, Beta]\n---',
+          '# Home',
+          '<h2 id="raw">Raw heading</h2>',
+          '<SectionHeader title="Generated section"/>',
+          '<CountedSection/>',
+          '<section r-for="section in pageContext.pageInfo.frontmatter.sections"><h2>{{ section }}</h2></section>',
+          '<h2 id="alpha">Authored ID</h2>',
+          '## Doc toc',
+          '<h2 r-if="false">Excluded condition</h2>',
+          '<div data-toc-ignore><h2>Ignored example</h2></div>',
+          '## {{ pageContext.site.siteTitle }}',
+        ].join('\n\n'),
+      )
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        siteTitle: 'Documentation',
+      })
+      let hookOutline: unknown
+      const page = await renderPageFromFile(
+        {
+          config,
+          contentRoutes: await indexContent(config),
+          components: { countedSection },
+          headerHtmlByDir: new Map([['', '<h2 id="header">Header</h2>']]),
+        },
+        toContentFile(contentDir, 'index.mdx'),
+        {
+          onPageDocument: (_context, document) => {
+            hookOutline = document.outline
+          },
+        },
+      )
+      const sections = page.outline?.[0].children ?? []
+      expect(sections.map(({ id, title }) => ({ id, title }))).toEqual([
+        { id: 'raw', title: 'Raw heading' },
+        { id: 'generated-section', title: 'Generated section' },
+        { id: 'rendered-component', title: 'Rendered component' },
+        { id: 'alpha-2', title: 'Alpha' },
+        { id: 'beta', title: 'Beta' },
+        { id: 'alpha', title: 'Authored ID' },
+        { id: 'doc-toc-2', title: 'Doc toc' },
+        { id: 'documentation', title: 'Documentation' },
+      ])
+      expect(renders).toBe(1)
+      expect(hookOutline).toEqual(page.outline)
+      for (const section of sections) {
+        expect(page.html).toContain(`id="${section.id}"`)
+        expect(page.html).toContain(`href="#${section.id}"`)
+      }
+      expect(page.html).not.toContain('href="#header"')
+      expect(page.html).not.toContain('href="#ignored-example"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('removes the doc toc and its layout classes when the article has no sections', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-toc-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        '---\nlayout:\n  showToc: true\n  tocCollapsed: true\n---\n# Home\n\nText.',
+      )
+      const config = resolveSiteConfig({ rootDir: root, contentDir })
+      const page = await renderPageFromFile(
+        { config, contentRoutes: await indexContent(config) },
+        toContentFile(contentDir, 'index.mdx'),
+      )
+      expect(page.html).not.toContain('class="doc-toc"')
+      expect(page.html).not.toContain('template-doc--has-toc')
+      expect(page.html).not.toContain('template-doc--toc-collapsed')
+      expect(page.html).toContain('class="doc-shell doc-shell--single"')
+      expect(page.html).not.toContain('tsSsgPageToc')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it.each(['', '# Home'])(
+    'retains an enforced toc for client content with source %j',
+    async (source) => {
+      const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-toc-'))
+      try {
+        const contentDir = path.join(root, 'content')
+        await writeFile(
+          path.join(contentDir, 'index.mdx'),
+          `---\nlayout:\n  showToc: always\n---\n${source}`,
+        )
+        const config = resolveSiteConfig({
+          rootDir: root,
+          contentDir,
+          pageToc: { enabled: false },
+        })
+        const page = await renderPageFromFile(
+          { config, contentRoutes: await indexContent(config) },
+          toContentFile(contentDir, 'index.mdx'),
+        )
+        expect(page.html).toContain('class="doc-toc"')
+        expect(page.html).toContain('template-doc--has-toc')
+        expect(page.html).toContain('No sections yet.')
+        expect(page.html).toContain('tsSsgPageToc')
+      } finally {
+        await fs.rm(root, { recursive: true, force: true })
+      }
+    },
+  )
+
+  it('assigns rendered heading IDs when the toc is disabled and in splash templates', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-toc-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        '---\ntemplate: splash\nlayout:\n  showToc: false\n---\n<SectionHeader title="Rendered section"/>',
+      )
+      const config = resolveSiteConfig({ rootDir: root, contentDir })
+      const page = await renderPageFromFile(
+        { config, contentRoutes: await indexContent(config) },
+        toContentFile(contentDir, 'index.mdx'),
+      )
+      expect(page.outline).toEqual([
+        { id: 'rendered-section', title: 'Rendered section', depth: 2 },
+      ])
+      expect(page.html).toContain('id="rendered-section"')
+      expect(page.html).not.toContain('class="doc-toc"')
+      expect(page.html).not.toContain('tsSsgPageToc')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('updates implicit tocs in custom templates while preserving explicit outlines', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-toc-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        [
+          '---',
+          'template: custom',
+          'customOutline: [{ id: manual, title: Manual item, depth: 2 }]',
+          '---',
+          '<SectionHeader title="Rendered section"/>',
+        ].join('\n'),
+      )
+      const config = resolveSiteConfig({ rootDir: root, contentDir })
+      const page = await renderPageFromFile(
+        {
+          config,
+          contentRoutes: await indexContent(config),
+          templates: {
+            custom: ({ head, bodyHtml }) =>
+              h('html').push(
+                head,
+                h('body').push(
+                  h('h2').raw('Outside article'),
+                  h('section').attr({ 'data-page-content': '' }).raw(bodyHtml),
+                  h('PageToc'),
+                  h('PageToc').attr({
+                    ':outline':
+                      'pageContext.pageInfo.frontmatter.customOutline',
+                  }),
+                ),
+              ),
+          },
+        },
+        toContentFile(contentDir, 'index.mdx'),
+      )
+      expect(page.outline).toEqual([
+        { id: 'rendered-section', title: 'Rendered section', depth: 2 },
+      ])
+      expect(page.html).toContain('href="#rendered-section"')
+      expect(page.html).toContain('href="#manual"')
+      expect(page.html).not.toContain('href="#outside-article"')
+      // Only the implicit TOC stays marked, so a browser refresh skips the other.
+      expect(page.html.match(/<nav[^>]*data-page-toc-auto/g)).toHaveLength(1)
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

@@ -28,7 +28,6 @@ export interface PageContext {
   site: SiteConfig
   pageInfo: PageInfo
   navigation?: TsSsgNavigation
-  outline?: PageOutlineItem[]
   theme?: ThemeOptions
   basePath: string
   locale?: string

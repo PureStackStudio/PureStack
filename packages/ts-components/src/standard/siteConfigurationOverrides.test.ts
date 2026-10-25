@@ -14,9 +14,6 @@ async function render(template: string, enabled: boolean) {
           auth: { enabled, signUp: enabled },
           pagefind: { enabled },
         },
-        outline: [
-          { id: 'default-heading', title: 'Default heading', depth: 2 },
-        ],
       }),
     })
   } finally {
@@ -67,18 +64,18 @@ describe('site component configuration overrides', () => {
     expect(await render('<SignIn/>', true)).not.toContain('data-signed-in')
   })
 
-  it('PageToc uses the page outline by default and accepts custom and empty outlines', async () => {
-    expect(await render('<PageToc/>', false)).toContain(
-      'href="#default-heading"',
-    )
+  it('PageToc leaves the page outline to the build and accepts custom and empty outlines', async () => {
+    const implicit = await render('<PageToc/>', false)
+    expect(implicit).toContain('data-page-toc-auto')
+    expect(implicit).toContain('No sections yet.')
     const html = await render(
       `<PageToc :outline="[{id:'custom',title:'Custom',depth:2}]"/>`,
       false,
     )
     expect(html).toContain('href="#custom"')
-    expect(html).not.toContain('Default heading')
+    expect(html).not.toContain('data-page-toc-auto')
     const empty = await render('<PageToc :outline="[]"/>', false)
     expect(empty).toContain('No sections yet.')
-    expect(empty).not.toContain('Default heading')
+    expect(empty).not.toContain('data-page-toc-auto')
   })
 })

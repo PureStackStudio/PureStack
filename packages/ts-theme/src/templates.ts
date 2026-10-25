@@ -19,7 +19,6 @@ function renderDocTemplate({
   bodyHtml,
   site,
   navigation,
-  outline,
   pageInfo,
   headerHtml,
   footerHtml,
@@ -28,7 +27,10 @@ function renderDocTemplate({
   const { docLayout, pageToc } = site
   if (!docLayout || !pageToc)
     throw new Error('The doc template requires resolved theme settings.')
-  const layout = resolveDocLayout(frontmatter, navigation, outline)
+  const showNav = frontmatter.layout.showNav && hasNavItems(navigation)
+  // Rendered headings decide whether it stays; see removeUnusedDocToc.
+  const showToc = frontmatter.layout.showToc !== false
+  const layout = resolveDocLayout(frontmatter, showNav, showToc)
   const showFooter = frontmatter.layout.showFooter
   return h('html')
     .attr(resolveHtmlAttrs(pageInfo.locale))
@@ -44,7 +46,7 @@ function renderDocTemplate({
           h('div')
             .attr({ class: layout.shellClass })
             .push(
-              ...(layout.showNav
+              ...(showNav
                 ? [
                     h('aside')
                       .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
@@ -65,11 +67,11 @@ function renderDocTemplate({
                 .attr({ class: 'doc-main' })
                 .push(
                   h('article')
-                    .attr({ class: 'doc-content' })
+                    .attr({ class: 'doc-content', 'data-page-content': '' })
                     .raw(bodyHtml)
                     .push(...(navigation?.pageLinks ? [h('PageLinks')] : [])),
                 ),
-              ...(layout.showToc
+              ...(showToc
                 ? [
                     h('aside')
                       .attr({ class: 'doc-toc', id: 'doc-toc' })
@@ -94,30 +96,51 @@ function renderDocTemplate({
 type DocLayout = {
   bodyClass: string
   shellClass: string
-  showNav: boolean
-  showToc: boolean
-  tocCollapsed: boolean
 }
 
 function resolveDocLayout(
   frontmatter: PageFrontmatter,
-  navigation: PageNavigation | undefined,
-  outline: PageOutlineItem[] | undefined,
+  showNav: boolean,
+  showToc: boolean,
 ): DocLayout {
   const navMode = frontmatter.layout.navMode
-  const layoutClass = resolveDocLayoutClass(frontmatter)
-  const showNav = frontmatter.layout.showNav && hasNavItems(navigation)
-  const showToc = isTocEnabled(frontmatter, outline)
-  const tocCollapsed = frontmatter.layout.tocCollapsed === true
   const bodyClass = buildDocBodyClass(
     navMode,
-    layoutClass,
+    resolveDocLayoutClass(frontmatter),
     showNav,
     showToc,
-    tocCollapsed,
+    frontmatter.layout.tocCollapsed === true,
   )
   const shellClass = buildDocShellClass(showNav, showToc, navMode)
-  return { bodyClass, shellClass, showNav, showToc, tocCollapsed }
+  return { bodyClass, shellClass }
+}
+
+/** Drops the doc TOC when the rendered article has no sections for it. */
+export function removeUnusedDocToc(
+  document: Document,
+  frontmatter: PageFrontmatter,
+  outline: PageOutlineItem[],
+) {
+  const toc = document.querySelector('.doc-shell > .doc-toc')
+  if (!toc || isTocEnabled(frontmatter, outline)) return
+  toc.remove()
+  const showNav = document.querySelector('.doc-shell > .doc-sidebar') !== null
+  const shown = resolveDocLayout(frontmatter, showNav, true)
+  const hidden = resolveDocLayout(frontmatter, showNav, false)
+  swapClasses(document.body, shown.bodyClass, hidden.bodyClass)
+  swapClasses(
+    document.querySelector('.doc-shell'),
+    shown.shellClass,
+    hidden.shellClass,
+  )
+}
+
+function swapClasses(element: Element | null, from: string, to: string) {
+  const tokens = to.split(' ')
+  element?.classList.remove(
+    ...from.split(' ').filter((token) => !tokens.includes(token)),
+  )
+  element?.classList.add(...tokens)
 }
 
 function hasNavItems(navigation: PageNavigation | undefined) {
@@ -185,7 +208,11 @@ function renderSplashTemplate({
         .attr({ class: 'template-splash' })
         .push(
           buildTopBar(headerHtml),
-          h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
+          h('main').push(
+            h('section')
+              .attr({ class: 'splash', 'data-page-content': '' })
+              .raw(bodyHtml),
+          ),
           h('consent'),
           buildFooter(showFooter, footerHtml),
         ),

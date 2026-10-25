@@ -1,4 +1,8 @@
-import type { SiteConfigResolution } from '@purestack/ts-common'
+import type {
+  PageOutlineItem,
+  SiteConfigResolution,
+} from '@purestack/ts-common'
+import { renderPageTocContent } from '@purestack/ts-page-scripts'
 import { registerSemanticToneUtilityStyles } from '@purestack/ts-style'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { merge } from '@purestack/ts-util'
@@ -11,6 +15,21 @@ export function componentsPlugin() {
   return {
     name: 'purestack:components',
     defaults: true,
+    hooks: {
+      onPageDocument(
+        _context: unknown,
+        page: { document: Document; outline: PageOutlineItem[] },
+      ) {
+        // Explicit outlines belong to their caller; the others list the
+        // rendered article, in any template and inline.
+        const targets = page.document.querySelectorAll(
+          '[data-page-toc-auto] .page-toc__content',
+        )
+        if (targets.length === 0) return
+        const contentHtml = renderPageTocContent(page.outline)
+        for (const content of targets) content.innerHTML = contentHtml
+      },
+    },
     config: {
       resolve({ config, input, file }: SiteConfigResolution) {
         return {

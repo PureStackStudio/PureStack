@@ -1,0 +1,23 @@
+---
+title: Client-only TOC playground
+description: Start without server headings, then create and manage a table of contents from browser content.
+template: doc
+index: false
+nav:
+  hidden: true
+layout:
+  showNav: false
+  showToc: always
+  showFooter: false
+---
+
+<p class="text-eyebrow">PageToc live example</p>
+<p class="text-title">An empty page, ready for client headings</p>
+
+This page has no server-rendered h1, h2 or h3. Its frontmatter sets `layout.showToc: always`, so the table of contents starts with “No sections yet.” Open **on this page** if the panel is collapsed.
+
+Add a section and follow its TOC link. The section uses the textbox value, then the textbox advances to the next name by adding or incrementing its trailing number. Rename, reorder, exclude or remove sections. Turn off automatic refresh to see that the TOC changes only when you explicitly refresh it. Clear everything to return to the empty state; the textbox keeps its current value.
+
+<import-content src="./_playground.mdx"/>
+
+[Return to the PageToc guide](./page-toc.mdx#try-client-updates).

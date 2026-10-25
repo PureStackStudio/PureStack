@@ -3,7 +3,6 @@ import type { ThemeStylesheetLink } from '@purestack/ts-style'
 import type { PageFrontmatter } from './frontmatter-types'
 import type { PageNavigation } from './navMenu-types'
 import type { SiteConfig } from './site-config-types'
-import type { PageOutlineItem } from './ts-ssg-context'
 
 export interface PageInfo {
   relPath: string
@@ -37,7 +36,6 @@ export interface PageTemplateInput extends PageHeadConfigInput {
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
   navigation?: PageNavigation
-  outline?: PageOutlineItem[]
   headerHtml?: string
   footerHtml?: string
 }

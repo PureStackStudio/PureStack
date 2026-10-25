@@ -1,5 +1,5 @@
-import type { PageContext, PageOutlineItem } from '@purestack/ts-common'
-import { resolvePageContext } from '@purestack/ts-common'
+import type { PageOutlineItem } from '@purestack/ts-common'
+import { renderPageTocContent } from '@purestack/ts-page-scripts'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
@@ -28,12 +28,12 @@ export interface PageToc {
 const DEFAULT_PAGE_TOC_VARIANT: ComponentVariant = 'flat'
 const DEFAULT_PAGE_TOC_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
-export interface PageTocItem extends PageOutlineItem {
-  href: string
-  children?: PageTocItem[]
-}
-
-const pageTocTemplate = html`<nav class="page-toc" :class="classes" aria-label="On this page">
+const pageTocTemplate = html`<nav
+  class="page-toc"
+  :class="classes"
+  :data-page-toc-auto="autoOutline"
+  aria-label="On this page"
+>
   <button
     class="page-toc__panel-toggle tone-fill-button-all tone-text-button-all tone-border-button-all"
     type="button"
@@ -63,63 +63,11 @@ const pageTocTemplate = html`<nav class="page-toc" :class="classes" aria-label="
       </span>
     </button>
   </div>
-  <ul class="page-toc__list" r-if="items.length > 0">
-    <li r-for="item in items" class="page-toc__item page-toc__item--h2">
-      <BtnLink
-        variant="link"
-        :href="item.href"
-        class="page-toc__link justify-start w-full ws-normal fw-400 fs-sm tone-fill-button-active tone-text-button-active py-1 pl-2"
-      >
-        {{ item.title }}
-      </BtnLink>
-      <ul
-        r-if="item.children && item.children.length > 0"
-        class="page-toc__list page-toc__list--nested"
-      >
-        <li
-          r-for="child in item.children"
-          class="page-toc__item page-toc__item--h3"
-        >
-          <BtnLink
-            variant="link"
-            :href="child.href"
-            class="page-toc__link page-toc__link--sub justify-start w-full ws-normal fw-200 fs-xs tone-fill-button-active tone-text-button-active py-1 pl-2"
-          >
-            {{ child.title }}
-          </BtnLink>
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <div class="page-toc__empty" r-else>No sections yet.</div>
+  <div class="page-toc__content" r-html="contentHtml"></div>
   <script>
     window.tsSsgPageToc?.hydrate(document.currentScript?.parentElement)
   </script>
 </nav>`
-
-function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
-  return items.map((item) => {
-    const { children, ...rest } = item
-    const mappedChildren = children ? toPageTocItems(children) : undefined
-    return {
-      ...rest,
-      href: `#${item.id}`,
-      ...(mappedChildren ? { children: mappedChildren } : {}),
-    }
-  })
-}
-
-function omitSingleDocumentHeading(items: PageOutlineItem[]) {
-  if (items.length !== 1) return items
-  const [item] = items
-  if (item?.depth !== 1) return items
-  return item.children ?? []
-}
-
-function resolveItems(props: PageToc, context: PageContext | undefined) {
-  const items = unref(props.outline) ?? context?.outline ?? []
-  return toPageTocItems(omitSingleDocumentHeading(items))
-}
 
 function resolveTitle(props: PageToc) {
   return typeof props.title === 'string' && props.title.trim().length > 0
@@ -131,16 +79,18 @@ function definePageTocComponent() {
   return defineComponent<PageToc>(pageTocTemplate, {
     props: ['outline', 'title', 'tone', 'variant', 'variantMode'],
     context: (head) => {
-      const context = resolvePageContext(head)
+      const outline = unref(head.props.outline)
       return {
         title: resolveTitle(head.props),
+        // Without an outline, the page build fills in the article's headings.
+        autoOutline: outline === undefined ? '' : undefined,
         classes: computed(() =>
           resolveComponentClasses(head.props, {
             defaultVariant: DEFAULT_PAGE_TOC_VARIANT,
             defaultVariantMode: DEFAULT_PAGE_TOC_VARIANT_MODE,
           }),
         ),
-        items: resolveItems(head.props, context),
+        contentHtml: renderPageTocContent(outline ?? []),
       }
     },
   })

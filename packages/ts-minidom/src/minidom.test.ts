@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest'
 import { parseFragment } from './minidom'
 
 describe('parseFragment', () => {
+  it('finds the closest ancestor including self and toggles classes with a force value', () => {
+    const section = parseFragment(
+      '<section class="scope"><h2>Heading</h2></section>',
+    ).firstElementChild
+    const heading = section?.firstElementChild
+    if (!section || !heading) throw new Error('Missing fixture elements')
+    expect(heading.closest('section')).toBe(section)
+    expect(section.closest('.scope')).toBe(section)
+    expect(heading.closest('aside')).toBeNull()
+    expect(section.classList.toggle('open')).toBe(true)
+    expect(section.classList.toggle('open', true)).toBe(true)
+    expect(section.classList.toggle('open')).toBe(false)
+    expect(section.classList.toggle('scope', false)).toBe(false)
+    expect(section.hasAttribute('class')).toBe(false)
+  })
   it.each([
     '/images/photo.png',
     './photo.png',

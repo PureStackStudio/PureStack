@@ -14,7 +14,8 @@ export function addDocumentationLinks(document: Document) {
     link.setAttribute('aria-label', `Link to ${heading.textContent?.trim()}`)
     link.setAttribute('title', 'Link to this section')
     link.setAttribute('data-pagefind-ignore', '')
-    link.textContent = '#'
+    // The decorative mark comes from CSS so client TOC refresh reads only
+    // the heading's actual title. The link keeps its accessible name above.
     heading.appendChild(link)
   }
 }

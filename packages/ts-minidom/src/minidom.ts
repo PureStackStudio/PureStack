@@ -965,6 +965,15 @@ class MiniElement extends MiniNode {
     )
   }
 
+  closest(selector: string): MiniElement | null {
+    let current: MiniElement | null = this
+    while (current) {
+      if (current.matches(selector)) return current
+      current = current.parentElement
+    }
+    return null
+  }
+
   matches(selector: string) {
     const compiledSelectors = getCompiledSelectors(selector)
     for (const compiled of compiledSelectors) {
@@ -1231,6 +1240,13 @@ class ClassList {
 
   contains(token: string) {
     return this.getTokens().includes(token)
+  }
+
+  toggle(token: string, force?: boolean) {
+    const enabled = force ?? !this.contains(token)
+    if (enabled) this.add(token)
+    else this.remove(token)
+    return enabled
   }
 
   get length() {

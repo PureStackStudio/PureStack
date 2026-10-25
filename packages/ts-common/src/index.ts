@@ -48,6 +48,7 @@ export type {
   PageTemplateMap,
   PageTranslationInfo,
 } from './page-template-types'
+export { collectPageOutline, resolvePageContent } from './pageOutline'
 export {
   resolvePageContext,
   tryResolvePageContext,

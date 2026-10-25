@@ -1,4 +1,6 @@
 import type {
+  PageFrontmatter,
+  PageOutlineItem,
   PageTemplateInput,
   SiteConfig,
   SiteConfigResolution,
@@ -26,7 +28,7 @@ import { registerDocLayoutStyles } from './docLayoutStyles'
 import { writeGeneratedFavicon } from './favicon'
 import { markdownPresentation } from './markdownPresentation'
 import { registerMarkdownStyles } from './markdownStyles'
-import { defaultTemplates } from './templates'
+import { defaultTemplates, removeUnusedDocToc } from './templates'
 import { writeStyles } from './writeStyles'
 
 export { defaultTemplates } from './templates'
@@ -66,6 +68,16 @@ export function themePlugin() {
     styles: createSiteStyles,
     head: renderThemeHead,
     hooks: {
+      onPageDocument(
+        _context: unknown,
+        page: {
+          document: Document
+          frontmatter: PageFrontmatter
+          outline: PageOutlineItem[]
+        },
+      ) {
+        removeUnusedDocToc(page.document, page.frontmatter, page.outline)
+      },
       onContentDiscovered: ({ config }: { config: SiteConfig }) =>
         writeGeneratedFavicon(config),
     },

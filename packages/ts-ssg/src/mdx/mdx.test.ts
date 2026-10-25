@@ -422,9 +422,7 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     const compiledHtml = await compileMdxToHtml(source)
-    expect(compiledHtml).toContain(
-      '<h2 id="10-variants-with-icons">10. Variants with icons</h2>',
-    )
+    expect(compiledHtml).toContain('<h2>10. Variants with icons</h2>')
     expect(compiledHtml).not.toContain('<p><Btn')
     expect(compiledHtml).toContain(
       '<Btn tone="accent" icon="iconoir:check">Create project</Btn>',

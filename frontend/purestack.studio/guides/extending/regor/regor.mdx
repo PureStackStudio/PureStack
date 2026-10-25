@@ -195,7 +195,7 @@ Text in double braces is a Regor expression, anywhere in a page. Inside markup, 
 | `pageContext.pageInfo.urlPath` | The page's URL, such as `/guides/extending/regor/` |
 | `pageContext.pageInfo.relPath` | The source file path inside the content folder |
 | `pageContext.site` | The resolved site configuration |
-| `pageContext.navigation`, `pageContext.outline` | The page's navigation and heading outline |
+| `pageContext.navigation` | The page's navigation |
 | `pageContext.locale`, `pageContext.locales` | The page's language and the site's languages |
 
 This page lists three highlights in its frontmatter. The panel below reads them during the build. `:context="pageContext.pageInfo"` makes `frontmatter` available directly inside the panel:

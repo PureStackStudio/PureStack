@@ -20,6 +20,11 @@ export interface TsSsgNavMenuApi {
 
 export interface TsSsgPageTocApi {
   hydrate(root?: Element | null): void
+  /**
+   * Rebuilds links and section tracking from the current rendered article:
+   * in `root`'s TOC, or without it, in every TOC without an explicit outline.
+   */
+  refresh(root?: Element | null): void
 }
 
 declare global {

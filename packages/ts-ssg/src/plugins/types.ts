@@ -107,9 +107,9 @@ export interface PureStackMarkdown {
     | Promise<MdxCodeHighlighter['codeToHtml'] | null>
   /** Transform the Markdown tree, after Regor markup is restored. */
   remarkPlugins?: PluggableList
-  /** Transform the HTML tree, before the outline and code highlighting. */
+  /** Transform the HTML tree, before code highlighting. */
   rehypePlugins?: PluggableList
-  /** Final HTML transforms after ordinary rehype plugins, before outline/highlighting. */
+  /** Final HTML transforms after ordinary rehype plugins, before highlighting. */
   rehypePostPlugins?: PluggableList
 }
 

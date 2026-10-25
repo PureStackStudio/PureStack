@@ -4,6 +4,7 @@ import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
 import { registerComponentGuideStyles } from './docs/componentGuide'
 import { defineDocumentationComponents } from './docs/docsComponents'
 import { addDocumentationLinks } from './docs/documentationLinks'
+import { registerTocPlaygroundStyles } from './docs/pageTocStyles'
 import { previewTemplate } from './docs/previewTemplate'
 import { sitePreviewPages } from './docs/sitePreviews'
 import { ensureLegalContent } from './ensureLegalContent'
@@ -38,6 +39,7 @@ export const frontendPlugin = definePlugin({
       registerLandingStyles()
       registerApiReferenceStyles()
       registerComponentGuideStyles()
+      registerTocPlaygroundStyles()
       registerDocumentationStyles()
       registerPaletteStyles()
       registerPalettePickerStyles()

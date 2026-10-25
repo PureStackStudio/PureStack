@@ -131,12 +131,13 @@ export interface FrontmatterLayoutOptions {
   /**
    * Enables table-of-contents rendering when the page outline contains items.
    *
-   * The TOC appears only when this flag is `true` and the page actually has
-   * extracted headings.
+   * `true` shows the TOC when the rendered article has headings. `always`
+   * retains the panel and runtime even without headings, for client apps
+   * that populate the article and call `window.tsSsgPageToc.refresh()`.
    *
    * Defaults to the site-level `pageToc.enabled` setting.
    */
-  showToc: boolean
+  showToc: boolean | 'always'
 
   /**
    * Controls whether the generated page navigation menu is rendered.

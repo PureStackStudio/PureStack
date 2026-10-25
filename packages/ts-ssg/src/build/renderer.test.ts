@@ -280,7 +280,7 @@ describe('renderPage consent integration', () => {
     expect(html).toContain('<top-bar></top-bar>')
   })
 
-  it('does not render toc shell when toc is enabled but outline is empty', async () => {
+  it('renders the toc for the page build to check against rendered headings', async () => {
     const site = resolveSiteConfig({ rootDir: process.cwd() })
     const html = await renderPage({
       bodyHtml: '<p>Hello</p>',
@@ -293,12 +293,10 @@ describe('renderPage consent integration', () => {
           },
         }),
       },
-      outline: [],
       site,
     })
-    expect(html).not.toContain('class="doc-toc"')
-    expect(html).not.toContain('doc-shell--toc')
-    expect(html).not.toContain('page-toc')
+    expect(html).toContain('class="doc-toc"')
+    expect(html).toContain('doc-shell--toc')
   })
 
   it('passes the configured navigation variant and class to the nav menu', async () => {
@@ -366,7 +364,6 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({ layout: { showToc: true } }),
       },
-      outline: [{ id: 'intro', title: 'Intro', depth: 2 }],
       site,
     })
     expect(html).toContain(
@@ -383,7 +380,6 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({ layout: { showToc: true } }),
       },
-      outline: [{ id: 'intro', title: 'Intro', depth: 2 }],
       site,
     })
     expect(html).toContain('<page-toc tone="neutral">')

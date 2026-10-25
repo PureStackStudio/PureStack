@@ -1,4 +1,4 @@
-import type { MdxCodeHighlighter, PageOutlineItem } from '@purestack/ts-common'
+import type { MdxCodeHighlighter } from '@purestack/ts-common'
 import { toPosixPath } from '@purestack/ts-util'
 import type { Element, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
@@ -9,7 +9,8 @@ import { applyCodeHighlighting } from './codeHighlighting'
 
 export interface MdxCompileResult {
   bodyHtml: string
-  outline: PageOutlineItem[]
+  /** The first h1-h3 text, the title of a page whose frontmatter has none. */
+  headingTitle?: string
 }
 
 export interface MdxRenderOptions {
@@ -54,7 +55,7 @@ export async function compileAstToHtml(
   if (!isHastRoot(tree)) {
     throw new Error('Content compilation did not produce a HAST root node.')
   }
-  const outline = collectOutline(tree)
+  const headingTitle = findHeadingTitle(tree)
   if (options.highlighter) {
     await applyCodeHighlighting(tree, options.highlighter)
   }
@@ -64,7 +65,7 @@ export async function compileAstToHtml(
       .use(rehypeStringify, { allowDangerousHtml: true })
       .stringify(tree),
   )
-  return { bodyHtml, outline }
+  return { bodyHtml, headingTitle }
 }
 
 /**
@@ -94,90 +95,18 @@ function isHastRoot(node: unknown): node is Root {
   )
 }
 
-const OUTLINE_HEADING_LEVELS = new Map([
-  ['h1', 1],
-  ['h2', 2],
-  ['h3', 3],
-])
+const HEADING_TAGS = new Set(['h1', 'h2', 'h3'])
 
-type CollectedOutlineItem = PageOutlineItem & { depth: number }
-
-function collectOutline(root: Root): PageOutlineItem[] {
-  const outline: PageOutlineItem[] = []
-  const slugCounts = new Map<string, number>()
-  const ancestors: CollectedOutlineItem[] = []
-
-  const visit = (node: Element | Text) => {
-    if (node.type === 'element') {
-      const tag = node.tagName.toLowerCase()
-      const depth = OUTLINE_HEADING_LEVELS.get(tag)
-      if (depth) {
-        const title = extractText(node).trim()
-        if (title) {
-          const id = ensureHeadingId(node, title, slugCounts)
-          if (id) {
-            const item: CollectedOutlineItem = { id, title, depth }
-            while (true) {
-              const ancestor = ancestors.at(-1)
-              if (!ancestor || ancestor.depth < depth) break
-              ancestors.pop()
-            }
-            const parent = ancestors.at(-1)
-            if (parent) {
-              const children = parent.children ?? []
-              children.push(item)
-              parent.children = children
-            } else {
-              outline.push(item)
-            }
-            ancestors.push(item)
-          }
-        }
-      }
-      for (const child of node.children ?? []) {
-        if (child.type === 'element' || child.type === 'text') {
-          visit(child)
-        }
-      }
-    }
+function findHeadingTitle(node: Root | Element): string | undefined {
+  for (const child of node.children) {
+    if (child.type !== 'element') continue
+    const title = HEADING_TAGS.has(child.tagName)
+      ? extractText(child).trim()
+      : ''
+    const found = title || findHeadingTitle(child)
+    if (found) return found
   }
-
-  for (const child of root.children ?? []) {
-    if (child.type === 'element' || child.type === 'text') {
-      visit(child)
-    }
-  }
-
-  return outline
-}
-
-function ensureHeadingId(
-  node: Element,
-  title: string,
-  slugCounts: Map<string, number>,
-): string | undefined {
-  const raw = node.properties?.id
-  if (typeof raw === 'string' && raw.trim().length > 0) {
-    return raw.trim()
-  }
-  const base = slugify(title)
-  if (!base) return undefined
-  const count = (slugCounts.get(base) ?? 0) + 1
-  slugCounts.set(base, count)
-  const id = count === 1 ? base : `${base}-${count}`
-  if (!node.properties) node.properties = {}
-  node.properties.id = id
-  return id
-}
-
-function slugify(input: string) {
-  const normalized = input
-    .toLowerCase()
-    .replace(/['"`]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-  return normalized || 'section'
+  return undefined
 }
 
 function extractText(node: Element | Text): string {

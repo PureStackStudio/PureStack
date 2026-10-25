@@ -1,0 +1,34 @@
+<h3 id="toc-html-heading">A heading written as HTML</h3>
+<p>This h3 has an authored ID. Its TOC link points to #toc-html-heading.</p>
+
+<SectionHeader
+  title="A heading rendered by a component"
+  titleTag="h3"
+  titleId="toc-component-heading"
+  titleClass="fs-lg"/>
+<p>
+  SectionHeader emits the heading during SSG. It participates in the same
+  outline.
+</p>
+
+<section r-for="section in pageContext.pageInfo.frontmatter.tocExamples">
+  <h3 :id="section.id">{{ section.title }}</h3>
+  <p>This section comes from a Regor loop over the page's frontmatter.</p>
+</section>
+
+### {{ pageContext.pageInfo.frontmatter.tocEvaluatedTitle }}
+
+The label and generated ID use the evaluated title above.
+
+<h3 r-if="false">This conditional heading is never rendered</h3>
+
+<div class="p-3 b-1 rounded-md tone-border-surface" data-toc-ignore>
+  <h3 class="mt-0">An example deliberately outside the TOC</h3>
+  <p class="mb-0">
+    This heading is visible, but its containing element has data-toc-ignore. It
+    has no entry in the sidebar.
+  </p>
+</div>
+
+<h4>A detail below the TOC's heading range</h4>
+<p>h4, h5 and h6 remain ordinary content. They do not create TOC entries.</p>

@@ -40,15 +40,12 @@ describe('content processor', () => {
     expect(result.bodyHtml).toContain('<p>PLAIN WORDS.</p>')
   })
 
-  it('runs rehype plugins before the outline is collected', async () => {
+  it('runs rehype plugins on the HTML tree', async () => {
     const result = await compileMdx('## Install\n\nText.', {
       contentProcessor: createContentProcessor([], [prefixHeadingIds]),
     })
 
     expect(result.bodyHtml).toContain('<h2 id="custom-heading">Install</h2>')
-    expect(result.outline).toEqual([
-      { id: 'custom-heading', title: 'Install', depth: 2 },
-    ])
   })
 
   it('awaits asynchronous plugins', async () => {

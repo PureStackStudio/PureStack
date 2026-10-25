@@ -1,7 +1,6 @@
 import type {
   PageContext,
   PageInfo,
-  PageOutlineItem,
   SiteConfig,
   TsSsgNavigation,
 } from '@purestack/ts-common'
@@ -73,7 +72,6 @@ interface TestContextOptions {
   site?: DeepPartial<SiteConfig>
   pageInfo?: DeepPartial<PageInfo>
   navigation?: TsSsgNavigation
-  outline?: PageOutlineItem[]
   resolveScriptPublicPath?: (sourceRelPath: string) => string
 }
 
@@ -98,7 +96,6 @@ export function createTestContext(
     site,
     pageInfo,
     navigation: options.navigation,
-    outline: options.outline,
     theme: site.style?.theme,
     basePath: site.basePath,
     locale: pageInfo.locale,

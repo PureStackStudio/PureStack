@@ -15,9 +15,7 @@ async function renderPageToc(template: string) {
       ...defineIconComponents(getSvgIcon),
       ...definePageTocComponents(),
     },
-    context: createTestContext({
-      outline: [{ id: 'intro', title: 'Intro', depth: 2 }],
-    }),
+    context: createTestContext(),
   })
   cleanup()
   return html.match(/<nav class="([^"]*)"/)?.[1].split(' ') ?? []

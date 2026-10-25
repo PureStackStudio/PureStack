@@ -1,5 +1,8 @@
-import type { PageFrontmatter, RuntimeEmbeds } from '@purestack/ts-common'
-import { isTocEnabled, type PageTemplateInput } from '@purestack/ts-common'
+import type {
+  PageFrontmatter,
+  PageTemplateInput,
+  RuntimeEmbeds,
+} from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { buildCodeCopyScript } from './embed/codeCopy.embed'
 import { buildMenuRuntimeScript } from './embed/menuRuntime.embed'
@@ -22,6 +25,11 @@ export function pageScriptsPlugin() {
           frontmatter: PageFrontmatter
         },
       ) {
+        if (page.document.querySelector('.page-toc')) {
+          const script = page.document.createElement('script')
+          script.textContent = buildPageTocScript()
+          page.document.head.appendChild(script)
+        }
         appendRuntimeScripts(
           page.document,
           page.runtimeEmbeds,
@@ -36,7 +44,6 @@ function renderScriptsHead({
   head,
   site: config,
   pageInfo,
-  outline,
 }: PageTemplateInput) {
   head.push(h('script').raw(buildMenuRuntimeScript()))
   if (pageInfo.frontmatter.layout.showNav !== false)
@@ -53,7 +60,5 @@ function renderScriptsHead({
       h('script').attr({ type: 'module' }).raw(buildPagefindSearchScript()),
     )
   }
-  if (isTocEnabled(pageInfo.frontmatter, outline))
-    head.push(h('script').raw(buildPageTocScript()))
   return head
 }

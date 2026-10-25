@@ -102,6 +102,27 @@ describe('frontmatter', () => {
     expect(parsed.body).toContain('# Heading')
   })
 
+  it('allows a page to retain a toc for client-generated headings', () => {
+    const parsed = parseFrontmatterSource(
+      '---\nlayout:\n  showToc: always\n---\n',
+    )
+    expect(parsed.frontmatter.layout.showToc).toBe('always')
+  })
+
+  it.each([' always ', 'ALWAYS'])('normalizes showToc %j', (showToc) => {
+    expect(normalizeFrontmatter({ layout: { showToc } }).layout.showToc).toBe(
+      'always',
+    )
+  })
+
+  it('rejects invalid toc modes with the source path', () => {
+    expect(() =>
+      normalizeFrontmatter({ layout: { showToc: 'force' } }, 'app.mdx'),
+    ).toThrow(
+      'Invalid frontmatter.layout.showToc in app.mdx: expected true, false or "always"',
+    )
+  })
+
   it('normalizes preview frontmatter case-insensitively', () => {
     const normalized = normalizeFrontmatter({
       PREVIEW: {

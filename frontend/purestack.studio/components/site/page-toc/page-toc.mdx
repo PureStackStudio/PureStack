@@ -1,6 +1,6 @@
 ---
 title: PageToc
-description: "A linked document outline with nested section entries and standard doc-layout controls."
+description: Build a table of contents from rendered headings, refresh it from a client app, and try every behavior on a live page.
 template: doc
 layout:
   showNav: true
@@ -9,6 +9,12 @@ layout:
 nav:
   order: 70
   icon: tabler:components
+tocExamples:
+  - id: toc-loop-first
+    title: First heading from a loop
+  - id: toc-loop-second
+    title: Second heading from a loop
+tocEvaluatedTitle: A heading with evaluated text
 ---
 
 # Page<wbr/>Toc
@@ -16,117 +22,329 @@ nav:
 <ComponentHeader
   name="PageToc"
   kind="Document outline"
-  summary="A linked document outline with nested section entries and standard doc-layout controls."
+  summary="Write headings. Get a linked outline. When a client app changes the page, refresh the same TOC with one call."
   source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageToc/pageToc.ts"
   section="Site navigation &amp; services"
   sectionHref="/components/site/"/>
 
-## An outline with real targets
+The TOC beside this guide is the component in use. Its links come from the final rendered article, including headings produced by Regor. The playground below adds browser content to that same outline. On smaller screens, open **on this page** to see the links.
 
-The example uses a small outline in an isolated document. Each link resolves to its corresponding heading.
+## Start with headings
+
+Use the default doc template and write your sections. PureStack supplies the PageToc; you do not need to add a second component.
+
+```mdx
+---
+template: doc
+layout:
+  showToc: true
+---
+
+# Getting started
+
+## Install
+
+### Choose a package manager
+
+## Configure
+```
+
+The TOC starts at **Install**, nests **Choose a package manager** beneath it, and continues with **Configure**. The page's single h1 is treated as its document title and omitted from the list.
+
+| Setting | Default doc layout |
+| --- | --- |
+| `layout.showToc: true` | Show the panel when the rendered article has TOC entries. A lone h1 is not enough. |
+| `layout.showToc: false` | Omit the default panel and its TOC runtime. |
+| `layout.showToc: always` | Retain the panel and runtime even without entries, ready for client content. |
+| No page override | Use `pageToc.enabled` from site config. |
+
+Both `true` and `always` override a disabled site default. SSG collects the article from the existing rendered DOM; it does not render your content a second time to discover headings.
+
+## Try client updates
+
+Add a section and watch this guide's TOC. The textbox starts with **Client section 1**. Each section uses the text currently in the textbox, then the textbox advances to **Client section 2**, **Client section 3**, and so on. An existing trailing number is incremented in place. Change the heading text and choose **Rename last**: the label changes while its existing ID stays stable. Move, exclude and remove sections to see the outline follow the DOM.
+
+Turn off **Refresh after every change** to separate the two steps. The page changes immediately; its TOC keeps the previous links until you choose **Refresh TOC**. Clearing these sections leaves the guide's other entries intact.
+
+The playground is a Regor app mounted with `RegorApp`. Its exported class context owns the state and actions. Focused controls and section components compose PureStack's `FormInputField`, `FormCheck`, `Btn`, `Flex` and `Panel`. Controls access the ancestor context with `requireContext`; a keyed `r-for` preserves section elements and their IDs. `onMounted` performs the initial scan, and later actions refresh directly after a `batch` has flushed its DOM bindings.
+
+<ComponentExample
+  label="This page's live table of contents"
+  caption="These are real h3 headings in this article. Use the actual page TOC to navigate to them."
+>
+  <import-content src="./_playground.mdx"/>
+</ComponentExample>
+
+<details>
+  <summary>View the complete playground source</summary>
+  <Tabs
+    group="toc-client-source"
+    selectedTab="toc-client-source-mdx"
+    ariaLabel="Client playground source"
+    variant="surface"
+    tabVariant="underline"
+  >
+    <TabPane id="toc-client-source-mdx" label="_playground.mdx">
+      <import-codeblock src="./_playground.mdx"/>
+    </TabPane>
+    <TabPane id="toc-client-source-app" label="app.ts">
+      <import-codeblock src="./app.ts"/>
+    </TabPane>
+    <TabPane id="toc-client-source-ts" label="playground.ts">
+      <import-codeblock src="./playground.ts"/>
+    </TabPane>
+    <TabPane id="toc-client-source-controls" label="controls.ts">
+      <import-codeblock src="./controls.ts"/>
+    </TabPane>
+    <TabPane id="toc-client-source-section" label="section.ts">
+      <import-codeblock src="./section.ts"/>
+    </TabPane>
+  </Tabs>
+</details>
+
+## Start with no server headings
+
+A browser app may not have content at build time. Use `always` so its panel and runtime are published before the first heading exists:
+
+```yaml
+layout:
+  showToc: always
+```
+
+The example below uses the standard doc layout and contains **zero server-rendered headings**. Its title is ordinary paragraph text. Add a section, open **on this page**, then clear all sections to return to “No sections yet.” The example has its own document and TOC, so it does not change this guide's outline.
+
+<BtnLink href="./client-only.mdx" target="_blank" variant="outlineFill"
+  >Open the empty-page playground in a new tab</BtnLink>
+
+<iframe
+  src="./client-only.mdx"
+  title="An initially empty page with a client-managed table of contents"
+  class="toc-playground__frame d-block my-4 w-full rounded-md b-1 b-subtle"
+  loading="lazy"
+></iframe>
+
+<details>
+  <summary>View the empty page's frontmatter and content</summary>
+  <import-codeblock src="./client-only.mdx"/>
+</details>
+
+## Refresh from a client app
+
+Use `onMounted` for the initial scan, when the component's headings are in the DOM. Regor applies ref updates synchronously, so later actions can update state and call `refresh()` immediately afterwards. When grouping changes with `batch()`, refresh after that call returns. A mounted hook runs once; it does not run again for title changes, reordering or removals.
+
+Mount the app inside the page's content:
+
+```html
+<RegorApp id="app-content" class="d-block" src="./app.ts"/>
+```
+
+```ts
+import type {} from '@purestack/ts-page-scripts'
+import { defineButtonComponents } from '@purestack/ts-components'
+import { createApp, defineComponent, html, onMounted, type SRef, sref } from 'regor'
+
+interface Section {
+  key: number
+  title: string
+}
+
+export interface SectionList {
+  sections: SRef<Section[]>
+  addSection: () => void
+}
+
+const sectionList = defineComponent<SectionList>(html`<div>
+  <Btn tone="accent" @click="addSection">Add section</Btn>
+  <section r-for="section in sections" :key="section.key">
+    <h2>{{ section.title }}</h2>
+  </section>
+</div>`, {
+  context: () => {
+    const sections = sref<Section[]>([])
+    let nextKey = 0
+    const refresh = () => window.tsSsgPageToc?.refresh()
+
+    onMounted(refresh)
+
+    return {
+      sections,
+      addSection: () => {
+        const key = ++nextKey
+        sections([...sections(), { key, title: `Account settings ${key}` }])
+        refresh()
+      },
+    }
+  },
+})
+
+createApp({ components: { SectionList: sectionList, ...defineButtonComponents() } }, {
+  selector: '#app-content',
+  template: html`<SectionList/>`,
+})
+```
+
+The refresh reads the current article, assigns IDs to new headings, rebuilds the links in DOM order, and updates active-section tracking. It preserves panel preferences and the IDs already on your headings.
+
+Call it after adding, removing, renaming or reordering sections, or changing `data-toc-ignore`. Refresh once after a group of changes. To remove an app's entries on unmount, remove its content and refresh again.
+
+For fetched content, await your loader in a component action or mounted hook, assign the resolved entries to the sections ref, then refresh. Keep loading and error state in your app. The same `refresh()` API works with any app that renders headings into the content container.
+
+## Headings from rendered content
+
+The examples in this section participate in this guide's real TOC. Find the HTML heading, the component heading, both loop entries and the evaluated title in the sidebar. The conditional heading is absent; the ignored example and h4 detail stay outside the outline.
+
+<import-content src="./_rendered-headings.mdx"/>
+
+<details>
+  <summary>View the rendered-heading examples</summary>
+  <import-codeblock src="./_rendered-headings.mdx"/>
+</details>
+
+## Heading and ID rules
+
+| Rule | Result |
+| --- | --- |
+| h1, h2 and h3 inside the content container | Collected in DOM order and nested by heading level. |
+| One h1 at the root of the outline | Its children become the visible TOC entries. Multiple h1 roots remain visible. |
+| h4 through h6, or a heading with no text | No entry. |
+| `r-if="false"` | No rendered heading, so no entry. |
+| `r-show`, CSS visibility or a closed disclosure | The heading still exists in the DOM; hiding it visually does not exclude it. |
+| A heading or ancestor with `data-toc-ignore` | No entry, even when the heading is visible. |
+| Heading with an existing ID | Keep it, including after renaming or reordering. |
+| Heading without an ID | Derive an ID from the rendered title, adding a suffix to avoid existing page IDs. |
+
+Generated IDs use lowercase ASCII letters and digits, with punctuation and spaces becoming hyphens. Duplicate **Installation** headings receive IDs such as `installation` and `installation-2`. A title without ASCII letters or digits uses `section` and numbered suffixes. For translated titles, public deep links or headings that change often, author an explicit ID:
+
+```html
+<h2 id="account-settings">Account settings</h2>
+```
+
+A generated ID is assigned once to that DOM element. Refreshing after a rename keeps it. Replacing the element with a new heading without an ID generates an ID for the new element. Authors are responsible for keeping explicitly supplied IDs unique.
+
+Exclude an individual heading or a whole example:
+
+```html
+<h3 data-toc-ignore>Preview label</h3>
+
+<div data-toc-ignore>
+  <h2>A heading inside an embedded interface</h2>
+</div>
+```
+
+## Choose the content container
+
+The standard doc layout already marks its article. Custom templates can use `data-page-content` to identify the area whose headings should become entries:
+
+```html
+<main>
+  <article data-page-content>
+    <!-- Static content and client app mounts go here. -->
+  </article>
+</main>
+```
+
+Discovery uses the first matching `data-page-content` container, then the standard `.doc-main .doc-content` article, then the first `main`, then the body. Headers, navigation and footers outside the selected container do not participate. The same discovery rules apply during SSG and browser refresh.
+
+## Appearance and layout
+
+The docked panel takes its appearance from site config. A page can override its tone and initial collapsed state in frontmatter.
 
 <Tabs
-  group="page-toc-sample-1"
-  selectedTab="page-toc-sample-1-preview"
-  ariaLabel="An outline with real targets example"
-  tone="neutral"
+  group="toc-configuration"
+  selectedTab="toc-configuration-site"
+  ariaLabel="Table of contents configuration"
   variant="surface"
   tabVariant="underline"
 >
-  <TabPane id="page-toc-sample-1-preview" label="Preview">
-    <ComponentExample
-      label="PageToc in context"
-      caption="Nested and flat headings, empty state, and layout controls. Open the source tab to adapt the composition."
-    >
-      <PageTocPreview/>
-    </ComponentExample>
-  </TabPane>
-  <TabPane id="page-toc-sample-1-source-1" label="preview.mdx">
-    <import-codeblock src="./preview.mdx"/>
-  </TabPane>
-</Tabs>
-
-## From site config
-
-The table of contents the doc layout renders takes its tone, variant and extra classes from the `pageToc` section of `siteConfig.json`. A page can still override the tone with `layout.tocTone` in its frontmatter.
-
+  <TabPane id="toc-configuration-site" label="siteConfig.json">
 ```json
 {
   "pageToc": {
+    "enabled": true,
     "tone": "neutral",
     "variant": "surfaceAlt",
     "class": "spotlight-from-top-right"
   }
 }
 ```
+  </TabPane>
+  <TabPane id="toc-configuration-page" label="Page frontmatter">
+```yaml
+layout:
+  showToc: true
+  tocTone: accent
+  tocCollapsed: true
+```
+  </TabPane>
+</Tabs>
 
-The panel keeps its own rounded corners whatever the variant, and drops its border when it collapses to a rail.
+On wide screens, the panel follows the document as you scroll. Use its pin control to collapse or restore it and drag its left edge to resize it. On smaller screens, **on this page** opens the panel; selecting a link, clicking outside or pressing Escape closes it. Collapse and width preferences are remembered in this browser. `tocCollapsed` supplies the page's initial state; a saved collapse preference takes precedence.
 
-## All ten semantic tones
+The active section's link carries `aria-current="location"`. Links use native fragments, so deep links and keyboard navigation work. Refreshing the entries does not reset the panel's open state or width.
 
-All supported values are visible together on the actual component, in an isolated document.
+<details>
+  <summary>Explore all tones, variants and outline examples</summary>
+  <p>
+    These isolated examples keep their headings and TOCs inside their own
+    documents.
+  </p>
+  <p><strong>Ten semantic tones</strong></p>
+  <SiteAppearanceGallery component="PageToc" axis="tone"/>
+  <p><strong>Eighteen visual variants</strong></p>
+  <SiteAppearanceGallery component="PageToc" axis="variant"/>
+  <p><strong>Stateless and stateful appearance</strong></p>
+  <SiteAppearanceGallery component="PageToc" axis="mode"/>
+  <p><strong>Nested, flat and empty outlines</strong></p>
+  <SiteAppearanceGallery component="PageToc" axis="features"/>
+  <p><strong>A standalone TOC with real targets</strong></p>
+  <PageTocPreview/>
+</details>
 
-<ComponentExample
-  label="All ten semantic tones"
-  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
->
-  <div data-site-gallery="tone">
-    <SiteAppearanceGallery component="PageToc" axis="tone"/>
-  </div>
-</ComponentExample>
+## Supply an explicit outline
 
-## All eighteen visual variants
+Custom templates and standalone examples can pass `outline` instead of using the page's discovered headings. Every ID must identify a real target in that document. The built-in doc template already adds its own PageToc.
 
-All supported values are visible together on the actual component, in an isolated document.
+```html
+<PageToc
+  title="In this example"
+  :outline="[
+    { id: 'overview', title: 'Overview', depth: 2, children: [
+      { id: 'requirements', title: 'Requirements', depth: 3 }
+    ] },
+    { id: 'next-steps', title: 'Next steps', depth: 2 }
+  ]"
+/>
+```
 
-<ComponentExample
-  label="All eighteen visual variants"
-  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
->
-  <div data-site-gallery="variant">
-    <SiteAppearanceGallery component="PageToc" axis="variant"/>
-  </div>
-</ComponentExample>
+SSG and a browser `refresh()` both preserve an explicitly supplied outline. Only `refresh(root)` with this TOC as `root` rebuilds it from the content container, replacing its current entries. For scroll tracking, use h1–h3 elements as targets.
 
-## Both variant modes
+## Browser API
 
-Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
+The standard runtime exposes `window.tsSsgPageToc`. Its TypeScript declaration is exported with `@purestack/ts-page-scripts`.
 
-<ComponentExample
-  label="Both variant modes"
-  caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services."
->
-  <div data-site-gallery="mode">
-    <SiteAppearanceGallery component="PageToc" axis="mode"/>
-  </div>
-</ComponentExample>
-
-## Feature comparisons
-
-<ComponentExample
-  label="Every configuration in view"
-  caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples."
->
-  <div data-site-gallery="features">
-    <SiteAppearanceGallery component="PageToc" axis="features"/>
-  </div>
-</ComponentExample>
-
-## Outline data and layout controls
-
-Nested, flat, and empty outlines appear together. Their links point to real targets inside the preview document. Use the isolated working example above for section navigation; the real table of contents at the side of this guide demonstrates collapse, restore, and mobile expansion. Appearance galleries omit layout docking controls so they remain contained.
-
-## Feature map
-
-| Feature | Where to explore it |
+| Method | Purpose |
 | --- | --- |
-| Nested and flat headings, empty state, and layout controls | Context preview, feature comparisons, and original copyable source examples. |
-| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
-| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+| `refresh(root?: Element \| null): void` | Read the current content and rebuild links and section tracking. This is the app-facing API. |
+| `hydrate(root?: Element \| null): void` | Bind behavior to an existing TOC. Component output calls this automatically; it does not rediscover headings. |
 
-## Behavior and accessibility
+Without `root`, `refresh` rebuilds every TOC without an explicit `outline`, and `hydrate` selects the first `.page-toc`. To target one instance, pass its nav element or a container around it. **The argument selects the TOC, not the heading container**; `data-page-content` selects the content.
 
-The default doc template already renders the page TOC; do not add a second copy to a normal guide. A sole h1 outline root is omitted so the list starts at its children. The template renders top-level entries and one nested level. Panel controls belong to the standard doc layout.
+```ts
+const panel = document.querySelector('#custom-toc')
+if (panel) window.tsSsgPageToc?.refresh(panel)
+```
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| A client-only page has no TOC | Set `layout.showToc: always` before building. `refresh()` updates an existing panel; it does not create a missing layout. |
+| The TOC shows old links | Refresh after the DOM update, including after unmounting an app. |
+| A heading does not appear | Check its level, text, content container, `data-toc-ignore` ancestors and conditional rendering. |
+| A hidden example appears in the TOC | CSS visibility does not remove headings from the DOM. Add `data-toc-ignore`. |
+| A link reaches the wrong element | Check for duplicate authored IDs. Generated IDs avoid collisions with IDs already on the page. |
+| A renamed heading keeps its old fragment | Existing IDs are preserved intentionally. Keep that ID for stable links, or choose a new explicit ID. |
+| A second TOC updates | Pass the intended panel to `refresh(root)`. The default target is the first `.page-toc`. |
 
 ## API reference
 
@@ -140,7 +358,7 @@ The default doc template already renders the page TOC; do not add a second copy 
 </div>
 
 <nav class="api-index" aria-label="PageToc properties">
-  <a href="#page-toc-prop-outline">items</a>
+  <a href="#page-toc-prop-outline">outline</a>
   <a href="#page-toc-prop-title">title</a>
   <a href="#page-toc-prop-tone">tone</a>
   <a href="#page-toc-prop-variant">variant</a>
@@ -150,12 +368,14 @@ The default doc template already renders the page TOC; do not add a second copy 
 <ApiProperty
   anchor="page-toc-prop-outline"
   name="outline"
-  valueType="PageOutlineItem[]"
-  defaultValue="context.outline"
+  valueType="PageOutlineItem[] | SRef&lt;PageOutlineItem[]&gt;"
+  defaultValue="Final page outline"
 >
   <p>
-    PageOutlineItem[] with id, title, optional depth and children. Links are
-    built as #id.
+    Entries contain id, title, optional depth and children. Links are built as
+    #id; children are rendered recursively. Omit this prop to use headings
+    discovered from the rendered page. An explicit empty array shows the empty
+    state.
   </p>
 </ApiProperty>
 
@@ -211,9 +431,9 @@ The default doc template already renders the page TOC; do not add a second copy 
 
 <div class="api-contract">
   <p>
-    No slots. Register definePageTocComponents with BtnLink and Icon. SSG
-    context supplies the outline when outline is omitted; the standard runtime
-    handles active-section and panel behavior.
+    No slots. Register definePageTocComponents with Icon. SSG context supplies
+    the outline when outline is omitted; the standard runtime handles
+    active-section and panel behavior.
   </p>
 </div>
 
@@ -222,3 +442,5 @@ The default doc template already renders the page TOC; do not add a second copy 
 - [NavMenu](/components/site/nav-menu/)
 - [PageLinks](/components/site/page-links/)
 - [SectionHeader](/components/layout/section-header/)
+- [PageScript](/components/runtime/page-script/)
+- [RegorApp](/components/runtime/regor-app/)

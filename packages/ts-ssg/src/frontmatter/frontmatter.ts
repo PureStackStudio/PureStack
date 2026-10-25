@@ -33,7 +33,6 @@ export function normalizeFrontmatter(
   const rawLayout = resolveObject(raw, 'layout') ?? {}
   const rawNav = resolveObject(raw, 'nav') ?? {}
   const showFooter = resolveKey(rawLayout, 'showFooter')
-  const showToc = resolveKey(rawLayout, 'showToc')
 
   return {
     ...raw,
@@ -62,10 +61,11 @@ export function normalizeFrontmatter(
         sourceLabel,
       ),
       fullWidth: resolveKey(rawLayout, 'fullWidth') === true,
-      showToc:
-        typeof showToc === 'boolean'
-          ? showToc
-          : options.defaultShowToc === true,
+      showToc: resolveShowToc(
+        resolveKey(rawLayout, 'showToc'),
+        options.defaultShowToc,
+        sourceLabel,
+      ),
       showNav: resolveKey(rawLayout, 'showNav') !== false,
       tocTone: pickSemanticTone(resolveKey(rawLayout, 'tocTone')),
       tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,
@@ -139,6 +139,21 @@ function resolvePositiveInteger(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isInteger(value) && value > 0
     ? value
     : undefined
+}
+
+function resolveShowToc(
+  value: unknown,
+  defaultShowToc: boolean | undefined,
+  sourceLabel?: string,
+): FrontmatterLayoutOptions['showToc'] {
+  if (value === undefined) return defaultShowToc === true
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'string' && value.trim().toLowerCase() === 'always')
+    return 'always'
+  const location = sourceLabel ? ` in ${sourceLabel}` : ''
+  throw new Error(
+    `Invalid frontmatter.layout.showToc${location}: expected true, false or "always", received ${formatValue(value)}.`,
+  )
 }
 
 function resolveLayoutNavMode(

@@ -76,6 +76,9 @@ function registerSectionLinkStyles(
       ':scope > :is(h2, h3):hover > .doc-heading-link, .doc-heading-link:focus-visible',
     )
     .opacity('1')
+  article
+    .select(':scope > :is(h2, h3) > .doc-heading-link::before')
+    .content('"#"')
 }
 
 function registerNavigationRailStyles(
