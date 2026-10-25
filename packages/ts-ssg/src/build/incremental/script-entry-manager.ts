@@ -178,7 +178,7 @@ export class ScriptEntrypointManager {
       if (nextEntries.has(entryRelPath)) continue
       const priorEntry = this.input.getAssets()[entryRelPath]
       if (priorEntry) {
-        await removeFile(priorEntry.outPath)
+        await removeFile(this.input.config.outDir, priorEntry.outPath)
         delete this.input.getAssets()[entryRelPath]
         result.deletedAssets += 1
       }
@@ -227,7 +227,7 @@ export class ScriptEntrypointManager {
     if (!signature) {
       const priorEntry = this.input.getAssets()[entryRelPath]
       if (priorEntry) {
-        await removeFile(priorEntry.outPath)
+        await removeFile(this.input.config.outDir, priorEntry.outPath)
         delete this.input.getAssets()[entryRelPath]
         result.deletedAssets += 1
       }
@@ -266,7 +266,7 @@ export class ScriptEntrypointManager {
     }
     const priorEntry = this.input.getAssets()[entryRelPath]
     if (priorEntry?.outPath && priorEntry.outPath !== assetCopy.outPath) {
-      await removeFile(priorEntry.outPath)
+      await removeFile(this.input.config.outDir, priorEntry.outPath)
     }
 
     this.input.getAssets()[entryRelPath] = {

@@ -7,6 +7,7 @@ import { isPlainObject } from '@purestack/ts-util'
 import type { GeneratedAssetReference, PageAssetReceipt } from './asset-receipt'
 import { resolveContentAsset } from './content-urls'
 import { resolveOutPath } from './out-path'
+import { isInside, lstatOutput, statOutputPath } from './output-guard'
 import type { BuildContext, PageRenderResult } from './page'
 import { elementSourceRelPath, visitSourceElements } from './page-urls'
 
@@ -222,7 +223,7 @@ export class PageAssetManager {
               const absPath = await fs.realpath(
                 path.resolve(root, resolved.relPath),
               )
-              if (!inside(root, absPath))
+              if (!isInside(root, absPath))
                 throw new Error(
                   `Asset "${resolved.relPath}" resolves outside the content root.`,
                 )
@@ -388,7 +389,7 @@ export class PageAssetManager {
         existing &&
         createHash('sha256').update(existing).digest('hex') === hash
       ) {
-        const after = await outputStat(output)
+        const after = await lstatOutput(output)
         if (after && sameFileState(stat, after)) {
           this.verifiedOutputs.set(key, { hash, stat: after })
           return
@@ -400,7 +401,7 @@ export class PageAssetManager {
     try {
       await fs.writeFile(temporary, data)
       await fs.rename(temporary, output)
-      const after = await outputStat(output)
+      const after = await lstatOutput(output)
       if (after?.isFile() && after.size === BigInt(data.byteLength))
         this.verifiedOutputs.set(key, { hash, stat: after })
     } finally {
@@ -409,21 +410,9 @@ export class PageAssetManager {
   }
 
   private async outputPath(relPath: string) {
-    const root = path.resolve(this.context.config.outDir)
-    const output = path.resolve(root, relativeFile(relPath))
-    if (!inside(root, output))
-      throw new Error('Generated asset escapes the output directory.')
-    // A source/manifest must not redirect generated writes or cleanup via symlinks.
-    let current = output
-    let outputState: BigIntStats | undefined
-    while (current !== root) {
-      const stat = await outputStat(current)
-      if (current === output) outputState = stat
-      if (stat?.isSymbolicLink())
-        throw new Error(`Generated asset path contains a symlink: ${current}`)
-      current = path.dirname(current)
-    }
-    return { output, stat: outputState }
+    const { outDir } = this.context.config
+    const output = path.resolve(outDir, relativeFile(relPath))
+    return { output, stat: await statOutputPath(outDir, output) }
   }
 
   private async prune(candidates: GeneratedAssetReference[]) {
@@ -447,13 +436,6 @@ export class PageAssetManager {
     this.work = task.catch(() => undefined)
     return task
   }
-}
-
-function outputStat(file: string) {
-  return fs.lstat(file, { bigint: true }).catch((error) => {
-    if (error.code !== 'ENOENT') throw error
-    return undefined
-  })
 }
 
 function sameFileState(before: BigIntStats, after: BigIntStats | undefined) {
@@ -508,14 +490,4 @@ function assetInputScope(namespace: string, input: PageAssetInput) {
       await Promise.allSettled([...pending])
     },
   }
-}
-
-function inside(root: string, candidate: string) {
-  const relative = path.relative(root, candidate)
-  return (
-    relative !== '' &&
-    relative !== '..' &&
-    !relative.startsWith(`..${path.sep}`) &&
-    !path.isAbsolute(relative)
-  )
 }

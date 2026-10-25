@@ -166,7 +166,10 @@ npx purestack@latest init my-site --title "My next idea"
 
   <p>
     Watches edits and reloads your browser. <code>--port</code> changes the
-    address; <code>--full-render</code> builds every page before browsing.
+    address; <code>--full-render</code> builds every page before browsing. To
+    run a second server for the same site, add <code>--out 2</code> and another
+    port: it builds into <code>outDir</code> with a <code>-2</code> suffix, such
+    as <code>dist/site-2</code>.
   </p>
 
   <h3 id="publish-prepare-a-release-folder">

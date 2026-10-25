@@ -100,6 +100,31 @@ describe('manifest', () => {
     })
   })
 
+  it.each(['content', 'assets'] as const)(
+    'ignores a manifest whose %s record an output outside its output directory',
+    async (section) => {
+      await withTempDir(async (base) => {
+        const outDir = path.join(base, 'out')
+        const config = resolveSiteConfig({ rootDir: base, outDir })
+        const manifest = createEmptyManifest(config)
+        const entry = { relPath: 'a.md', ext: '.md', mtimeMs: 1, size: 1 }
+        manifest[section]['a.md'] = {
+          ...entry,
+          outPath: path.join(outDir, 'a', 'index.html'),
+        }
+        await writeManifest(outDir, manifest)
+        await expect(readManifest(outDir)).resolves.not.toBeNull()
+
+        manifest[section]['a.md'] = {
+          ...entry,
+          outPath: path.join(base, 'victim.txt'),
+        }
+        await writeManifest(outDir, manifest)
+        await expect(readManifest(outDir)).resolves.toBeNull()
+      })
+    },
+  )
+
   it('compares signatures correctly', () => {
     expect(signatureEqual(undefined, null)).toBe(false)
     expect(signatureEqual({ mtimeMs: 1, size: 2 }, null)).toBe(false)

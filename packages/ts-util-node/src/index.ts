@@ -1,5 +1,12 @@
 export { ensureDir, replaceExt } from './fs'
-export { OutputDirectoryLocks } from './outputDirectoryLock'
+export {
+  OutputDirectoryInUseError,
+  OutputDirectoryLocks,
+} from './outputDirectoryLock'
+export {
+  claimOutputDirectory,
+  emptyOutputDirectory,
+} from './outputDirectoryOwnership'
 export {
   PersistentCache,
   type PersistentCacheCodec,

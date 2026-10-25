@@ -1,6 +1,6 @@
 # @purestack/ts-util-node
 
-Caching, output locking, and file path helpers for PureStack's Node.js build
+Caching, output directory ownership, and file path helpers for PureStack's Node.js build
 tools. `ensureDir(filePath)` creates the parent directory for a file, and
 `replaceExt(filePath, newExt)` returns the path with a different extension.
 
@@ -118,12 +118,27 @@ This cache stores independent values. Use specialized storage when a result
 requires publishing a group of files together, as image variants do. Browser
 components should use `Cache` from `@purestack/ts-util` instead.
 
+## Output directory ownership
+
+PureStack writes into and empties only directories it owns. Ownership is a
+`.purestack-output` marker file at the top of the directory.
+`claimOutputDirectory(directory)` creates a missing directory and marks it,
+marks an existing empty one, and accepts a marked one. It rejects a directory
+that holds other files and no marker, so a mistyped output path fails instead of
+overwriting or deleting someone else's files. Claiming is idempotent and needs
+no lock. `emptyOutputDirectory(directory)` claims the directory, then deletes
+everything in it except the marker.
+
+A directory created before ownership existed has no marker. Delete it once by
+hand; the next build creates and marks it again.
+
 ## Output directory locks
 
 `OutputDirectoryLocks` gives one owner exclusive use of output directories across
 processes on the same machine. `acquire(directory)` creates the directory, returns
-its canonical path, and fails immediately when another running owner holds it.
-`release(directory)` frees one held directory, and `release()` frees them all:
+its canonical path, and fails immediately with `OutputDirectoryInUseError` when
+another running owner holds it. `release(directory)` frees one held directory,
+and `release()` frees them all:
 
 ```ts
 import { OutputDirectoryLocks } from '@purestack/ts-util-node'

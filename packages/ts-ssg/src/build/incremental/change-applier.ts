@@ -144,7 +144,7 @@ export class IncrementalChangeApplier {
   private async removeStaticAssetManifestEntry(state: ChangeState) {
     if (!state.assetEntry) return
     const manifest = this.input.getManifest()
-    await removeFile(state.assetEntry.outPath)
+    await removeFile(this.input.config.outDir, state.assetEntry.outPath)
     delete manifest.assets[state.relPath]
     this.input.scriptEntrypoints.removeTrackedEntrypoint(state.relPath)
     state.result.deletedAssets += 1
@@ -209,7 +209,7 @@ export class IncrementalChangeApplier {
       await this.input.contentState.refreshContent()
     }
     if (assetEntry) {
-      await removeFile(assetEntry.outPath)
+      await removeFile(this.input.config.outDir, assetEntry.outPath)
       delete manifest.assets[relPath]
       this.input.scriptEntrypoints.removeTrackedEntrypoint(relPath)
       this.input.contentState.refreshAssets()

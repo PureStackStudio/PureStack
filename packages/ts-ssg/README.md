@@ -64,6 +64,7 @@ await startDevServer({
 
 Flags:
 - `--content ./content` or `--content=./content` (required; directory must contain `siteConfig.json`)
+- `--out 2` or `--out=2` (`build`, `serve`; use `<outDir>-2` instead of `outDir`, such as `dist/site-2`; the name takes lowercase letters, digits, and hyphens)
 - `--clean` (`build`, `serve`; empty the output directory and ignore its incremental manifest)
 - `--no-cache` (`build`, `serve`, `publish`; skip persistent plugin caches outside the output directory, such as highlighted code and optimized images)
 - `--port 4173` or `--port=4173` (`serve`)
@@ -74,7 +75,9 @@ Flags:
 
 When the content directory holds a `purestack.config.ts`, every command loads its plugins; `serve` reloads it when it or a local file it imports changes. See [Plugins](#plugins).
 
-`build`, `serve`, and `publish` lock their output directory (`publishDir` for `publish`) before building, so a second command targeting it fails immediately instead of cleaning it. Commands with different outputs run side by side, which is why `outDir` and `publishDir` must be the same directory or separate ones, never nested. `serve` keeps one output and its lock until it closes; restart it after changing `outDir`. Locks cover commands on the same machine. A killed command, including one stopped with Ctrl+C or restarted by a watcher, frees its output at once.
+`build`, `serve`, and `publish` lock their output directory (`publishDir` for `publish`) before building, so a second command targeting it fails immediately instead of cleaning it. Commands with different outputs run side by side, which is why `outDir` and `publishDir` must be the same directory or separate ones, never nested. `serve` keeps one output and its lock until it closes; restart it after changing `outDir`. Locks cover commands on the same machine. A killed command, including one stopped with Ctrl+C or restarted by a watcher, frees its output at once. To run a second server for the same site, give it its own output and port: `purestack serve --content ./content --out 2 --port 4174`.
+
+Commands write only into output directories PureStack owns, marked by a `.purestack-output` file. A new or empty directory is claimed and marked; a directory holding other files without the marker is refused, never written into or cleaned. `--clean` and `publish` empty an owned output but keep its marker. Neither `outDir` nor `publishDir` may be a filesystem root, or be or contain the content directory, `rootDir`, the working directory, or the home directory.
 
 Examples from this monorepo:
 
@@ -676,7 +679,8 @@ Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` h
 ## Build Options
 
 - `plugins`: plugins to apply, in order; see [Plugins](#plugins).
-- `cleanOutDir`: empty the output folder before building.
+- `cleanOutDir`: empty the output folder before building, keeping its `.purestack-output` marker.
+- `outName`: build into `<outDir>-<outName>` instead of `outDir`, so a second build or dev server can run beside the default output. Lowercase letters, digits, and hyphens; not available with publish.
 - `writeErrorPages`: when true, render failures write an HTML error page to the target output path and an archive copy under `<outDir>/.ts-ssg/errors/`. The dev server enables it.
 
 ## Incremental Build and Manifest
@@ -689,6 +693,8 @@ Tracked:
 - asset signatures
 - style signature
 - config compatibility signature
+
+Builds delete outputs the manifest records when their sources go away. A manifest that records an output outside `outDir` is ignored, and every deletion refuses a path outside `outDir` or through a symlinked folder.
 
 In dev/watch mode:
 - file changes apply incrementally when safe,

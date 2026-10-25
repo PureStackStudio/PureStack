@@ -136,6 +136,10 @@ Run these commands from the project root:
 
 `publish` prepares files for a static host; it does not upload them. Use
 `--clean` with `build` or `serve` to clear the output directory before a build.
+PureStack writes only into output directories it created, so a mistyped path
+cannot overwrite or clear other files. Use `--out <name>` with `build` or
+`serve` to use `<outDir>-<name>` instead, for example to run a second server
+with `--out 2 --port 4174`.
 Use `--no-cache` with any command to skip persistent caches, such as
 highlighted code and optimized images, for a fully cold build.
 Use `--host` and `--port` with `serve` to choose its address. Every command

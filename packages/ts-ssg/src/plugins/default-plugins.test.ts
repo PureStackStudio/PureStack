@@ -4,6 +4,7 @@ import type { SiteSearch } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { runInDom } from '@purestack/ts-minidom'
 import { styleBuilder, themes } from '@purestack/ts-style'
+import { claimOutputDirectory } from '@purestack/ts-util-node'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { defineComponent, html } from 'regor'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
@@ -540,7 +541,7 @@ describe('default plugins', () => {
 
   it('generates the theme favicon after clean output preparation, including lazy requests', async () => {
     const siteConfig = { ...(await project()), favicon: 'tabler:cloud-storm' }
-    await fs.mkdir(siteConfig.outDir, { recursive: true })
+    await claimOutputDirectory(siteConfig.outDir)
     await fs.writeFile(path.join(siteConfig.outDir, 'stale.txt'), 'old')
     const builder = await createIncrementalBuilder({
       siteConfig,

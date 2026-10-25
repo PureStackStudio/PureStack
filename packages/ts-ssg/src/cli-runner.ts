@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { logError } from '@purestack/ts-util'
+import { OutputDirectoryInUseError } from '@purestack/ts-util-node'
 import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
 import { SITE_CONFIG_FILENAME } from './config/config'
@@ -36,6 +37,12 @@ export async function runCli(args: string[]) {
     if (error instanceof CliUsageError) {
       console.error(error.message)
       process.exitCode = error.exitCode
+      return
+    }
+    const hint = SEPARATE_OUTPUT_HINTS[args[0]]
+    if (error instanceof OutputDirectoryInUseError && hint) {
+      console.error(`${error.message}\n${hint}`)
+      process.exitCode = 1
       return
     }
     logError(getLogger(), error, 'build failed')
@@ -78,16 +85,13 @@ export function parseCliArgs(args: string[], cwd = process.cwd()): CliState {
 
   const state: CliState = { command, input: {} }
 
+  // The last occurrence wins, so arguments appended to a script override it.
+  // assertKnownOptions already ensured every value option has a value.
   const readValue = (name: string) => {
-    const direct = options.find((arg) => arg.startsWith(`${name}=`))
-    if (direct) return direct.slice(name.length + 1)
-    const index = options.indexOf(name)
-    if (
-      index !== -1 &&
-      options[index + 1] &&
-      !options[index + 1].startsWith('--')
-    ) {
-      return options[index + 1]
+    for (let index = options.length - 1; index >= 0; index -= 1) {
+      const arg = options[index]
+      if (arg.startsWith(`${name}=`)) return arg.slice(name.length + 1)
+      if (arg === name) return options[index + 1]
     }
     return undefined
   }
@@ -121,16 +125,15 @@ export function parseCliArgs(args: string[], cwd = process.cwd()): CliState {
   if (options.includes('--full-render')) {
     state.input.fullRender = true
   }
-  if (options.includes('--clean')) {
+  const buildOptions = () => {
     state.input.build ??= {}
     state.input.build.options ??= {}
-    state.input.build.options.cleanOutDir = true
+    return state.input.build.options
   }
-  if (options.includes('--no-cache')) {
-    state.input.build ??= {}
-    state.input.build.options ??= {}
-    state.input.build.options.cache = false
-  }
+  const outName = readValue('--out')
+  if (outName) buildOptions().outName = outName
+  if (options.includes('--clean')) buildOptions().cleanOutDir = true
+  if (options.includes('--no-cache')) buildOptions().cache = false
   if (command === 'publish') {
     state.input.build ??= {}
     state.input.build.publish = { enabled: true }
@@ -159,11 +162,12 @@ function assertKnownOptions(
 
     const [name] = arg.split('=', 1)
     if (valueOptions.has(name)) {
-      if (!arg.includes('=')) {
-        index += 1
-        if (!args[index] || args[index].startsWith('--')) {
-          throw new CliUsageError(`${name} requires a value.\n\n${USAGE}`)
-        }
+      // An empty `--out=` must not fall back to the default output.
+      const value = arg.includes('=')
+        ? arg.slice(name.length + 1)
+        : args[++index]
+      if (!value || value.startsWith('--')) {
+        throw new CliUsageError(`${name} requires a value.\n\n${USAGE}`)
       }
       continue
     }
@@ -187,7 +191,8 @@ function resolveFlagOptions(command: Exclude<CliCommand, 'help'>) {
 }
 
 function resolveValueOptions(command: Exclude<CliCommand, 'help'>) {
-  if (command === 'serve') return ['--content', '--host', '--port']
+  if (command === 'build') return ['--content', '--out']
+  if (command === 'serve') return ['--content', '--out', '--host', '--port']
   return ['--content']
 }
 
@@ -216,10 +221,16 @@ class CliUsageError extends Error {
   }
 }
 
+const SEPARATE_OUTPUT_HINTS: Partial<Record<string, string>> = {
+  build: 'To build beside it, add --out <name>, such as --out 2.',
+  serve:
+    'To run a second server beside it, add --out <name> and a free --port, such as --out 2 --port 4174.',
+}
+
 const USAGE = `Usage:
   purestack --version
-  purestack build --content <dir> [--clean] [--no-cache]
-  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-cache] [--no-watch] [--no-reload] [--full-render]
+  purestack build --content <dir> [--out <name>] [--clean] [--no-cache]
+  purestack serve --content <dir> [--out <name>] [--host <host>] [--port <port>] [--clean] [--no-cache] [--no-watch] [--no-reload] [--full-render]
   purestack publish --content <dir> [--no-cache]
 
 Commands:
@@ -228,6 +239,7 @@ Commands:
   publish   Clean and build a publish artifact using the configured publishDir.
 
 Options:
+  --out <name>    Use <outDir>-<name> instead of outDir, such as dist/site-2 for a second server.
   --clean         Empty the output directory and ignore its incremental manifest.
   --no-cache      Skip persistent plugin caches outside the output directory.
   --help, -h      Print this usage summary.

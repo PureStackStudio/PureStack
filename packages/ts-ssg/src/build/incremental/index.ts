@@ -9,7 +9,10 @@ import {
   useStyleScope,
 } from '@purestack/ts-style'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
-import type { OutputDirectoryLocks } from '@purestack/ts-util-node'
+import {
+  claimOutputDirectory,
+  type OutputDirectoryLocks,
+} from '@purestack/ts-util-node'
 import { getLogger, type Logger } from 'logpot'
 import { resolveConfiguredPlugins } from '../../config/plugin-modules'
 import {
@@ -87,6 +90,8 @@ export async function createIncrementalBuildSession(
   return runWithStyleContext(styleContext, async () => {
     const { file, plugins } = await resolveConfiguredPlugins(input)
     const config = resolveBuildSiteConfig(input, plugins, file)
+    // Claiming is idempotent, so it needs no lock, and a refused output is never locked.
+    await claimOutputDirectory(config.outDir)
     if (outputLocks) config.outDir = await outputLocks.acquire(config.outDir)
     const runtime = await createIncrementalRuntime(
       input,
@@ -406,7 +411,8 @@ class IncrementalRuntime {
               throw error
             })
           // An extensionless source file can share its name with a page folder.
-          if (stats && !stats.isDirectory()) await removeFile(outPath)
+          if (stats && !stats.isDirectory())
+            await removeFile(this.config.outDir, outPath)
         }
         delete this.manifest.assets[asset.relPath]
       }
@@ -681,6 +687,7 @@ class IncrementalRuntime {
         (cachedAsset || knownAsset)
       ) {
         await removeFile(
+          this.config.outDir,
           cachedAsset?.outPath ??
             path.join(this.config.outDir, toOutputAssetRelPath(relPath)),
         )

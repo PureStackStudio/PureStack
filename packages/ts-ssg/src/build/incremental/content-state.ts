@@ -380,7 +380,7 @@ export class IncrementalContentState {
   ) {
     const contentEntry = this.input.getManifest().content[relPath]
     if (!contentEntry) return
-    await removeFile(contentEntry.outPath)
+    await removeFile(this.input.config.outDir, contentEntry.outPath)
     delete this.input.getManifest().content[relPath]
     this.contentIndex.remove(relPath)
     this.dirtyPages.delete(relPath)
@@ -444,7 +444,7 @@ export class IncrementalContentState {
     await this.input.assets.removePage(relPath)
     const entry = this.input.getManifest().content[relPath]
     if (entry) {
-      await removeFile(entry.outPath)
+      await removeFile(this.input.config.outDir, entry.outPath)
       delete this.input.getManifest().content[relPath]
       this.contentIndex.remove(relPath)
       this.input.onPageRemoved(relPath)

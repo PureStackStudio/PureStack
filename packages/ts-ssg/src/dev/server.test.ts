@@ -3,6 +3,7 @@ import http from 'node:http'
 import net from 'node:net'
 import path from 'node:path'
 import { themeSkins } from '@purestack/ts-style'
+import { claimOutputDirectory } from '@purestack/ts-util-node'
 import { disableLogger } from 'logpot'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { definePlugin } from '../plugins/plugin'
@@ -185,6 +186,7 @@ describe('dev server', () => {
         path.join(contentDir, 'assets', 'unused.txt'),
         'unused asset',
       )
+      await claimOutputDirectory(outDir)
       await writeFile(path.join(outDir, 'index.html'), 'stale page')
       const renders: string[] = []
       const port = await findFreePort()
@@ -501,6 +503,7 @@ describe('dev server', () => {
     )
     await writeFile(path.join(contentDir, 'café.mdx'), '# Encoded page')
     await writeFile(path.join(contentDir, 'guide.mdx'), '# Guide')
+    await claimOutputDirectory(outDir)
     await writeFile(
       path.join(outDir, 'removed', 'index.html'),
       'stale deleted page',

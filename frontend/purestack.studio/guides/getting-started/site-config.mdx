@@ -67,6 +67,8 @@ With the folder layout above, `index.mdx` renders at `/`, and `guides/getting-st
 
 For example, with `"outDir": "../dist/site"` in `content/siteConfig.json`, the build writes into `dist/site` beside `content`. `"basePath": "/docs"` makes the home page publicly available at `/docs/`, while its output file remains `dist/site/index.html`. Host that output at `/docs/`; changing the config alone cannot change a host's routing.
 
+PureStack writes only into output directories it owns. It marks each one it creates with a `.purestack-output` file, and refuses a directory that holds other files without that marker, so a mistyped path cannot overwrite or delete your files. An output may not be a drive root, or be or contain the content directory, the working directory, or your home directory.
+
 If you omit `outDir` or `publishDir`, the generator uses its package-level default output directories. Set them explicitly for a standalone content folder. `publish` writes to `publishDir`, forces HTML minification on, and disables CSS pretty printing regardless of the ordinary build settings.
 
 The `--content` CLI option chooses the content directory. A custom runner can set `rootDir` or `contentDir` in its TypeScript input; these are not fields to put in `siteConfig.json` because the file is found *after* the content directory has been chosen.

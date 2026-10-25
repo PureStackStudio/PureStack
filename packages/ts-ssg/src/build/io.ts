@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises'
-import { ensureDir } from '@purestack/ts-util-node'
+import { emptyOutputDirectory, ensureDir } from '@purestack/ts-util-node'
 import { minify } from 'html-minifier-next'
 
 export async function readSource(absPath: string) {
@@ -23,10 +23,8 @@ export async function prepareOutDir(
   outDir: string,
   options: { clean?: boolean } = {},
 ) {
-  if (options.clean) {
-    await fs.rm(outDir, { recursive: true, force: true })
-  }
-  await fs.mkdir(outDir, { recursive: true })
+  if (options.clean) await emptyOutputDirectory(outDir)
+  else await fs.mkdir(outDir, { recursive: true })
 }
 
 async function minifyHtml(input: string): Promise<string> {

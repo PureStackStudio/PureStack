@@ -1,3 +1,4 @@
+import type { PageOutlineItem } from '@purestack/ts-common'
 import { runInDom } from '@purestack/ts-minidom'
 import { describe, expect, it, vi } from 'vitest'
 import { collectPageOutline } from '../../ts-common/src/pageOutline'
@@ -192,6 +193,27 @@ describe('page toc refresh', () => {
       expect(document.querySelector('a')?.textContent).toBe(title)
       expect(document.querySelector('a')?.getAttribute('href')).toBe('#a"&b')
       expect(document.querySelectorAll('a')).toHaveLength(3)
+    })
+  })
+
+  it('renders only heading levels and tolerates malformed library input', () => {
+    runInDom('<html><body></body></html>', (document) => {
+      const outline = [
+        {
+          id: 1,
+          title: null,
+          depth: '2" onmouseover="alert(1)',
+          children: 'not a list',
+        },
+        { id: 'deep', title: 'Deep', depth: 9 },
+      ] as unknown as PageOutlineItem[]
+      document.body.innerHTML = renderPageTocContent(outline)
+      const items = document.querySelectorAll('li')
+      expect(items[0]?.getAttribute('onmouseover')).toBeNull()
+      expect(items[0]?.className).toBe('page-toc__item page-toc__item--h2')
+      expect(items[1]?.className).toBe('page-toc__item page-toc__item--h2')
+      expect(document.querySelector('a')?.getAttribute('href')).toBe('#1')
+      expect(document.querySelector('a')?.textContent).toBe('null')
     })
   })
 })

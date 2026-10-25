@@ -64,6 +64,11 @@ export interface BuildHooks {
 
 export interface BuildOptions {
   cleanOutDir?: boolean
+  /**
+   * Builds into `<outDir>-<outName>`, so a second build or dev server can run
+   * beside the default output. Lowercase letters, digits, and hyphens.
+   */
+  outName?: string
   /** `false` skips persistent plugin caches outside the output directory. Defaults to `true`. */
   cache?: boolean
   writeErrorPages?: boolean

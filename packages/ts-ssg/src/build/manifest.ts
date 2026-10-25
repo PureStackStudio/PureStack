@@ -7,6 +7,7 @@ import { ensureDir } from '@purestack/ts-util-node'
 import { getLogger } from 'logpot'
 import type { ContentFile } from '../discover/content'
 import type { PageAssetReceipt } from './asset-receipt'
+import { isInside } from './output-guard'
 
 export const MANIFEST_VERSION = 1
 export const MANIFEST_DIRNAME = '.ts-ssg'
@@ -113,7 +114,7 @@ export async function readManifest(
   const filePath = manifestPath(outDir)
   try {
     const raw = await fs.readFile(filePath, 'utf8')
-    return parseManifestJson(raw, filePath)
+    return parseManifestJson(raw, filePath, outDir)
   } catch (error) {
     if (isEnoent(error)) return null
     throw error
@@ -191,6 +192,7 @@ function createManifestConfigSignature(config: SiteConfig) {
 function parseManifestJson(
   raw: string,
   filePath: string,
+  outDir: string,
 ): BuildManifest | null {
   if (raw.trim().length === 0) {
     logIgnoredManifest(filePath, 'empty manifest')
@@ -205,9 +207,29 @@ function parseManifestJson(
     return null
   }
 
-  if (isBuildManifest(parsed)) return parsed
-  logIgnoredManifest(filePath, 'invalid manifest shape')
-  return null
+  if (!isBuildManifest(parsed)) {
+    logIgnoredManifest(filePath, 'invalid manifest shape')
+    return null
+  }
+  if (!recordsOutputsInside(parsed, outDir)) {
+    logIgnoredManifest(filePath, 'output path outside the output directory')
+    return null
+  }
+  return parsed
+}
+
+/** Builds delete recorded outputs, so each must lie inside `outDir`. */
+function recordsOutputsInside(manifest: BuildManifest, outDir: string) {
+  const entries: unknown[] = [
+    ...Object.values(manifest.content),
+    ...Object.values(manifest.assets),
+  ]
+  return entries.every(
+    (entry) =>
+      isPlainObject(entry) &&
+      typeof entry.outPath === 'string' &&
+      isInside(outDir, entry.outPath),
+  )
 }
 
 function isBuildManifest(value: unknown): value is BuildManifest {

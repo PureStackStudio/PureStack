@@ -35,6 +35,7 @@ import {
   type StylesManifestEntry,
 } from '../manifest'
 import { resolveOutPath } from '../out-path'
+import { statOutputPath } from '../output-guard'
 import type { BuildCountSummary } from '../site'
 
 export class ManifestContentIndex {
@@ -191,7 +192,9 @@ export function toAssetFile(
   }
 }
 
-export async function removeFile(filePath: string) {
+/** Deletes an output file, never outside `outDir` or through a symlink. */
+export async function removeFile(outDir: string, filePath: string) {
+  await statOutputPath(outDir, filePath)
   try {
     await fs.rm(filePath, { force: true })
   } catch (error) {

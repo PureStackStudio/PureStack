@@ -45,6 +45,15 @@ export class OutputDirectoryLocks {
   }
 }
 
+/** Another running PureStack command holds the output directory. */
+export class OutputDirectoryInUseError extends Error {
+  constructor(readonly directory: string) {
+    super(
+      `Output directory "${directory}" is already in use by another PureStack command. Stop that command or use a different output directory.`,
+    )
+  }
+}
+
 async function lockOutput(directory: string): Promise<Release> {
   const address = socketAddress(directory)
   const server = net.createServer((socket) => socket.destroy())
@@ -55,9 +64,7 @@ async function lockOutput(directory: string): Promise<Release> {
       (error as NodeJS.ErrnoException).code !== 'EADDRINUSE' ||
       (await isListening(address))
     ) {
-      throw new Error(
-        `Output directory "${directory}" is already in use by another PureStack command. Stop that command or use a different output directory.`,
-      )
+      throw new OutputDirectoryInUseError(directory)
     }
     // Only a socket file outlives its killed owner.
     if (address.startsWith(os.tmpdir())) await fs.rm(address, { force: true })

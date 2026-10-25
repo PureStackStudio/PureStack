@@ -1,6 +1,10 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { styleBuilder } from '@purestack/ts-style'
+import {
+  claimOutputDirectory,
+  OutputDirectoryLocks,
+} from '@purestack/ts-util-node'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
@@ -10,7 +14,10 @@ import type { PureStackPlugin } from '../../plugins/plugin'
 import { makeRepoTempDir } from '../../test/repoTempDir'
 import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
 import type { BuildHooks } from '../site'
-import { createIncrementalBuilder } from './index'
+import {
+  createIncrementalBuilder,
+  createIncrementalBuildSession,
+} from './index'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
   const base = await makeRepoTempDir('.tmp-ts-ssg-')
@@ -320,6 +327,34 @@ describe('incremental builder', () => {
     })
   })
 
+  it('refuses an output directory it does not own, leaving it unlocked and untouched', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir)
+      await fs.mkdir(outDir)
+      await fs.writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+      await fs.writeFile(path.join(outDir, 'notes.txt'), 'mine')
+      const locks = new OutputDirectoryLocks()
+      const other = new OutputDirectoryLocks()
+      try {
+        await expect(
+          createIncrementalBuildSession(
+            {
+              siteConfig: { rootDir: base, contentDir, outDir },
+              options: { cleanOutDir: true },
+            },
+            locks,
+          ),
+        ).rejects.toThrow('is not a PureStack output directory')
+        await expect(other.acquire(outDir)).resolves.toBeTypeOf('string')
+        expect(await fs.readdir(outDir)).toEqual(['notes.txt'])
+      } finally {
+        await Promise.all([locks.release(), other.release()])
+      }
+    })
+  })
+
   it('ignores directory notifications and refreshes removed subtrees without deleting directories as files', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')
@@ -328,7 +363,8 @@ describe('incremental builder', () => {
       const emptyDir = path.join(contentDir, 'empty')
       await fs.mkdir(assetsDir, { recursive: true })
       await fs.mkdir(emptyDir)
-      await fs.mkdir(path.join(outDir, 'empty'), { recursive: true })
+      await claimOutputDirectory(outDir)
+      await fs.mkdir(path.join(outDir, 'empty'))
       await fs.writeFile(path.join(assetsDir, 'example.txt'), 'asset content')
       await fs.writeFile(path.join(contentDir, 'index.mdx'), '# Home')
       const builder = await createIncrementalBuilder({
@@ -359,7 +395,7 @@ describe('incremental builder', () => {
       const contentDir = path.join(base, 'content')
       const outDir = path.join(base, 'out')
       await fs.mkdir(contentDir, { recursive: true })
-      await fs.mkdir(outDir, { recursive: true })
+      await claimOutputDirectory(outDir)
 
       const config = resolveSiteConfig({
         rootDir: base,
