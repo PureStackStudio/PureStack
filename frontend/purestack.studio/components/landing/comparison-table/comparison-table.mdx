@@ -17,7 +17,7 @@ nav:
   name="ComparisonTable"
   kind="Side-by-side choices"
   summary="Compare approaches in responsive columns, each with its own heading, summary and feature list."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/comparisonTable.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
@@ -35,73 +35,18 @@ A visual comparison uses cards, not a semantic HTML table. Use parallel headings
 >
   <TabPane id="comparison-table-sample-1-preview" label="Preview">
     <ComponentExample
-      label="ComparisonTable in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Two approaches, clearly explained"
+      caption="Parallel headings and readable lists make the differences easy to scan."
     >
-      <ComparisonTable
-        eyebrow="CHOOSE YOUR STARTING POINT"
-        title="Two ways to compose"
-        subtitle="Use the approach that fits the interaction."
-        columnsLg="2"
-      >
-        <ComparisonColumn
-          title="Content page"
-          summary="Mostly static information."
-          tone="neutral"
-        >
-          <ul class="pl-0">
-            <ComparisonFeature>MDX authoring</ComparisonFeature>
-            <ComparisonFeature>Server-rendered components</ComparisonFeature>
-          </ul>
-        </ComparisonColumn>
-        <ComparisonColumn
-          title="Interactive view"
-          summary="Local application state."
-          badge="Reactive"
-          tone="accent"
-        >
-          <ul class="pl-0">
-            <ComparisonFeature>Regor refs</ComparisonFeature>
-            <ComparisonFeature>Focused browser entry point</ComparisonFeature>
-          </ul>
-        </ComparisonColumn>
-      </ComparisonTable>
+      <import-content src="./_workflow-comparison.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane
     id="comparison-table-sample-1-source-0"
     label="workflow-comparison.mdx"
   >
-```html
-<ComparisonTable
-  eyebrow="CHOOSE YOUR STARTING POINT"
-  title="Two ways to compose"
-  subtitle="Use the approach that fits the interaction."
-  columnsLg="2"
->
-  <ComparisonColumn
-    title="Content page"
-    summary="Mostly static information."
-    tone="neutral"
-  >
-    <ul class="pl-0">
-      <ComparisonFeature>MDX authoring</ComparisonFeature>
-      <ComparisonFeature>Server-rendered components</ComparisonFeature>
-    </ul>
-  </ComparisonColumn>
-  <ComparisonColumn
-    title="Interactive view"
-    summary="Local application state."
-    badge="Reactive"
-    tone="accent"
-  >
-    <ul class="pl-0">
-      <ComparisonFeature>Regor refs</ComparisonFeature>
-      <ComparisonFeature>Focused browser entry point</ComparisonFeature>
-    </ul>
-  </ComparisonColumn>
-</ComparisonTable>
-```
+    <import-codeblock src="./_workflow-comparison.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -118,7 +63,7 @@ Use the same composition for a small pair of options.
   tabVariant="underline"
 >
   <TabPane id="comparison-table-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <ComparisonTable columns="1" columnsLg="2" variant="outline">
         <ComparisonColumn title="Fixed layout" summary="Known dimensions."/>
         <ComparisonColumn
@@ -150,6 +95,7 @@ Use the same composition for a small pair of options.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -163,6 +109,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -174,6 +121,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Choose the comparison width
 
 <ComponentExample
+  data-toc-ignore
   label="Two or three alternatives"
   caption="Despite its name, this is a responsive card grid, not a native data table. Use a table when values must be associated across rows."
 >
@@ -344,7 +292,7 @@ The component renders a section with a grid. If readers need row-by-row relation
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>Default slot:</strong> ComparisonColumn elements. Register
     defineComparisonTableComponent with Panel, Flex, Grid and SectionHeader,

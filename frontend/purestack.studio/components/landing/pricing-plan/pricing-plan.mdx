@@ -25,6 +25,10 @@ nav:
 
 The price and period are display text, so the application owns currency formatting and billing logic.
 
+PricingPlan puts the plan name, price, and features in a clear reading order.
+The action and note stay at the bottom so neighboring plans remain easy to
+compare. An icon or badge adds context without competing with the price.
+
 <Tabs
   group="pricing-plan-sample-1"
   selectedTab="pricing-plan-sample-1-preview"
@@ -35,44 +39,15 @@ The price and period are display text, so the application owns currency formatti
 >
   <TabPane id="pricing-plan-sample-1-preview" label="Preview">
     <ComponentExample
-      label="PricingPlan in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="A plan with room for every detail"
+      caption="A price, a readable feature list, and a clear next step, even with different amounts of content."
     >
-      <PricingPlan
-        title="Team workspace"
-        summary="An illustrative plan for a small team."
-        price="$24"
-        period="per month, billed monthly"
-        badge="Example"
-        note="Demo pricing only. No purchase is available."
-        icon="lucide:check"
-        ctaLabel="Explore the components"
-        ctaLink="/components/"
-        tone="accent"
-      >
-        <PricingFeature>Shared component library</PricingFeature>
-        <PricingFeature>Theme-aware documentation</PricingFeature>
-      </PricingPlan>
+      <import-content src="./_complete-plan.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="pricing-plan-sample-1-source-0" label="complete-plan.mdx">
-```html
-<PricingPlan
-  title="Team workspace"
-  summary="An illustrative plan for a small team."
-  price="$24"
-  period="per month, billed monthly"
-  badge="Example"
-  note="Demo pricing only. No purchase is available."
-  icon="lucide:check"
-  ctaLabel="Explore the components"
-  ctaLink="/components/"
-  tone="accent"
->
-  <PricingFeature>Shared component library</PricingFeature>
-  <PricingFeature>Theme-aware documentation</PricingFeature>
-</PricingPlan>
-```
+    <import-codeblock src="./_complete-plan.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -89,13 +64,13 @@ Omit either CTA prop to leave out the link. A note can explain how to proceed.
   tabVariant="underline"
 >
   <TabPane id="pricing-plan-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <PricingPlan
         title="Custom workspace"
         summary="A configuration you define."
         price="Custom"
         note="Use this layout with your own plan data."
-        variant="outline"
+        variant="surface"
       >
         <PricingFeature>Flexible composition</PricingFeature>
       </PricingPlan>
@@ -108,7 +83,7 @@ Omit either CTA prop to leave out the link. A note can explain how to proceed.
   summary="A configuration you define."
   price="Custom"
   note="Use this layout with your own plan data."
-  variant="outline"
+  variant="surface"
 >
   <PricingFeature>Flexible composition</PricingFeature>
 </PricingPlan>
@@ -121,6 +96,7 @@ Omit either CTA prop to leave out the link. A note can explain how to proceed.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -134,6 +110,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -147,6 +124,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
 
 <ComponentExample
+  data-toc-ignore
   label="Both variant modes"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -158,6 +136,7 @@ Hover these outlineFill examples to compare stateless and stateful treatments. S
 ## Price, decoration, and action conditions
 
 <ComponentExample
+  data-toc-ignore
   label="Make every part of the offer clear"
   caption="The component formats no money and performs no checkout. Each CTA requires both ctaLabel and ctaLink; features are native list items."
 >
@@ -180,7 +159,7 @@ Hover these outlineFill examples to compare stateless and stateful treatments. S
         title="Custom"
         price="Let’s talk"
         badge="Flexible"
-        variant="outline"
+        variant="surface"
         ><PricingFeature>Define your own scope</PricingFeature></PricingPlan>
     </div>
     <div class="component-appearance-cell">
@@ -381,7 +360,7 @@ Use clear billing text and disclose relevant limits alongside the price. A CTA i
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>Default slot:</strong> PricingFeature list items inside the
     generated ul. Register definePricingComponents and its layout, text, button

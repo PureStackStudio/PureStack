@@ -17,7 +17,7 @@ nav:
   name="ComparisonFeature"
   kind="Comparison detail"
   summary="A list item with a compact icon, designed for clear and consistent comparison details."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/comparisonFeature.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
@@ -35,27 +35,15 @@ Every feature is an li, so place it inside a list.
 >
   <TabPane id="comparison-feature-sample-1-preview" label="Preview">
     <ComponentExample
-      label="ComparisonFeature in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Details worth comparing"
+      caption="Icons align with the first line while longer explanations flow naturally beside them."
     >
-      <ul class="pl-0">
-        <ComparisonFeature tone="success"
-          >Keyboard-operable controls</ComparisonFeature>
-        <ComparisonFeature tone="info" icon="lucide:mail">
-          Email integration supplied by your application
-        </ComparisonFeature>
-      </ul>
+      <import-content src="./_feature-list.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="comparison-feature-sample-1-source-0" label="feature-list.mdx">
-```html
-<ul class="pl-0">
-  <ComparisonFeature tone="success">Keyboard-operable controls</ComparisonFeature>
-  <ComparisonFeature tone="info" icon="lucide:mail">
-    Email integration supplied by your application
-  </ComparisonFeature>
-</ul>
-```
+    <import-codeblock src="./_feature-list.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -72,7 +60,7 @@ The slot can contain more than a short string.
   tabVariant="underline"
 >
   <TabPane id="comparison-feature-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <ul class="pl-0">
         <ComparisonFeature>
           <div>
@@ -106,6 +94,7 @@ The slot can contain more than a short string.
 Every tone is visible on the icon frame. The row text keeps the surrounding text color.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -117,6 +106,7 @@ Every tone is visible on the icon frame. The row text keeps the surrounding text
 ## Defaults, custom icons, and rich text
 
 <ComponentExample
+  data-toc-ignore
   label="Explain the difference clearly"
   caption="ComparisonFeature creates an li. Keep it inside ul or ol; tone colors its icon rather than the entire row."
 >
@@ -203,10 +193,10 @@ Use explicit text for included, limited or unavailable features. An icon color a
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>Default slot:</strong> feature text or flow content. Root element is
-    li. Register defineComparisonFeatureComponent with Flex and Icon
+    li. Register defineComparisonFeatureComponent with Flex and IconFrame
     dependencies.
   </p>
 </div>

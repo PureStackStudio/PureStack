@@ -17,13 +17,18 @@ nav:
   name="CtaSection"
   kind="The next step"
   summary="Close a section with a clear next step, an optional secondary route and concise supporting context."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/ctaSection.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
 ## Primary and secondary destinations
 
 Both actions are real links. A button appears only when its label and destination are supplied.
+
+CtaSection brings a message and its next step together in one surface. The
+primary link leads; the secondary link offers a quieter alternative. Actions
+follow the copy in narrow containers and sit beside it when there is room.
+Use `meta` for a short reassurance below the description.
 
 <Tabs
   group="cta-section-sample-1"
@@ -35,35 +40,15 @@ Both actions are real links. A button appears only when its label and destinatio
 >
   <TabPane id="cta-section-sample-1-preview" label="Preview">
     <ComponentExample
-      label="CtaSection in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="An invitation to take the next step"
+      caption="A clear heading, one prominent action, and a quieter alternative."
     >
-      <CtaSection
-        eyebrow="KEEP EXPLORING"
-        title="Build your next interface"
-        subtitle="Start with a surface, then add the interaction."
-        primaryLabel="Explore Panel"
-        primaryHref="/components/layout/panel/"
-        secondaryLabel="Browse all components"
-        secondaryHref="/components/"
-        meta="Source included in every guide."
-        tone="accent"/>
+      <import-content src="./_two-destinations.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="cta-section-sample-1-source-0" label="two-destinations.mdx">
-```html
-<CtaSection
-  eyebrow="KEEP EXPLORING"
-  title="Build your next interface"
-  subtitle="Start with a surface, then add the interaction."
-  primaryLabel="Explore Panel"
-  primaryHref="/components/layout/panel/"
-  secondaryLabel="Browse all components"
-  secondaryHref="/components/"
-  meta="Source included in every guide."
-  tone="accent"
-/>
-```
+    <import-codeblock src="./_two-destinations.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -80,14 +65,14 @@ The actions slot follows the built-in links.
   tabVariant="underline"
 >
   <TabPane id="cta-section-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <CtaSection
         title="Choose a layout"
         subtitle="Match the structure to your content."
-        variant="outline"
+        variant="surface"
       >
         <template #actions>
-          <BtnLink href="/components/layout/flex/" variant="outline"
+          <BtnLink href="/components/layout/flex/" variant="surface"
             >One axis</BtnLink>
           <BtnLink href="/components/layout/grid/" tone="accent"
             >Two axes</BtnLink>
@@ -100,10 +85,10 @@ The actions slot follows the built-in links.
 <CtaSection
   title="Choose a layout"
   subtitle="Match the structure to your content."
-  variant="outline"
+  variant="surface"
 >
   <template #actions>
-    <BtnLink href="/components/layout/flex/" variant="outline">One axis</BtnLink>
+    <BtnLink href="/components/layout/flex/" variant="surface">One axis</BtnLink>
     <BtnLink href="/components/layout/grid/" tone="accent">Two axes</BtnLink>
   </template>
 </CtaSection>
@@ -116,6 +101,7 @@ The actions slot follows the built-in links.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -129,6 +115,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -140,6 +127,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Every action arrangement
 
 <ComponentExample
+  data-toc-ignore
   label="One destination, two choices, or a custom action"
   caption="Built-in links require both a label and href. The actions slot renders independently; meta supplies supporting copy."
 >
@@ -187,7 +175,7 @@ Every supported variant is shown in accent, including none. Variant controls the
       <code>Copy without navigation</code><CtaSection
         title="A clear invitation"
         subtitle="Add destinations when they are ready."
-        variant="outline"/>
+        variant="surface"/>
     </div>
   </div>
 </ComponentExample>
@@ -199,7 +187,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 | tone, variant | Complete galleries above, with all supported values visible together. |
 | eyebrow, title, subtitle, meta | Both destinations shows the full message; copy without navigation omits the optional actions. |
 | primaryLabel, primaryHref, primaryIcon | Primary only shows a real destination and an icon at the end. Both label and href are required. |
-| secondaryLabel, secondaryHref, secondaryIcon | Secondary only shows the outlined alternative with an icon. Both label and href are required. |
+| secondaryLabel, secondaryHref, secondaryIcon | Secondary only shows the quieter alternative with an icon. Both label and href are required. |
 | actions slot | Custom actions adds a guide link and status badge independently of built-in destinations. |
 | Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
@@ -354,7 +342,7 @@ The title is h2. Use specific action labels that describe the destination. Prima
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>actions slot:</strong> additional actions. There is no default
     content slot. Register defineCtaSectionComponent with Panel, Grid,

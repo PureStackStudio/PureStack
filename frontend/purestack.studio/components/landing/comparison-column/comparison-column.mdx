@@ -17,13 +17,15 @@ nav:
   name="ComparisonColumn"
   kind="One alternative"
   summary="One self-contained option in a comparison, with independent emphasis and freely composed details."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/comparisonColumn.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
 ## A highlighted option
 
-An icon and badge identify the option before its supporting details.
+ComparisonColumn gives each option a clear introduction, readable details,
+and room for a next step. Use the `actions` slot to keep links aligned at the
+bottom when neighboring columns contain different amounts of content.
 
 <Tabs
   group="comparison-column-sample-1"
@@ -35,47 +37,18 @@ An icon and badge identify the option before its supporting details.
 >
   <TabPane id="comparison-column-sample-1-preview" label="Preview">
     <ComponentExample
-      label="ComparisonColumn in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="One option, a clear story"
+      caption="Introduce the option, explain its strengths, and give the reader a next step."
     >
-      <ComparisonColumn
-        title="Component composition"
-        summary="Build a view from focused pieces."
-        badge="Recommended here"
-        icon="lucide:check"
-        tone="accent"
-      >
-        <ul class="pl-0">
-          <ComparisonFeature>Readable source</ComparisonFeature>
-          <ComparisonFeature>Shared theme tokens</ComparisonFeature>
-        </ul>
-        <BtnLink href="/components/landing/feature-card/" variant="link">
-          Explore card composition
-        </BtnLink>
-      </ComparisonColumn>
+      <import-content src="./_highlighted-option.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane
     id="comparison-column-sample-1-source-0"
     label="highlighted-option.mdx"
   >
-```html
-<ComparisonColumn
-  title="Component composition"
-  summary="Build a view from focused pieces."
-  badge="Recommended here"
-  icon="lucide:check"
-  tone="accent"
->
-  <ul class="pl-0">
-    <ComparisonFeature>Readable source</ComparisonFeature>
-    <ComparisonFeature>Shared theme tokens</ComparisonFeature>
-  </ul>
-  <BtnLink href="/components/landing/feature-card/" variant="link">
-    Explore card composition
-  </BtnLink>
-</ComparisonColumn>
-```
+    <import-codeblock src="./_highlighted-option.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -92,11 +65,11 @@ Use outline or neutral treatments when both options should have equal emphasis.
   tabVariant="underline"
 >
   <TabPane id="comparison-column-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <ComparisonColumn
         title="Plain content"
         summary="A good fit for a short explanation."
-        variant="outline"
+        variant="surface"
       >
         <p class="mb-0">
           Choose the simplest structure that communicates the information.
@@ -109,7 +82,7 @@ Use outline or neutral treatments when both options should have equal emphasis.
 <ComparisonColumn
   title="Plain content"
   summary="A good fit for a short explanation."
-  variant="outline"
+  variant="surface"
 >
   <p class="mb-0">Choose the simplest structure that communicates the information.</p>
 </ComparisonColumn>
@@ -122,6 +95,7 @@ Use outline or neutral treatments when both options should have equal emphasis.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -135,6 +109,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -146,6 +121,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Decoration and rich detail
 
 <ComponentExample
+  data-toc-ignore
   label="A quiet alternative and a highlighted choice"
   caption="A title, summary, badge, and icon are independently optional. Compose feature lists in the default slot."
 >
@@ -154,7 +130,7 @@ Every supported variant is shown in accent, including none. Variant controls the
       <code>Quiet</code><ComparisonColumn
         title="Start small"
         summary="A few reusable patterns."
-        variant="outline"
+        variant="surface"
         ><ul class="m-0 p-0">
           <ComparisonFeature>Basic composition</ComparisonFeature>
         </ul></ComparisonColumn>
@@ -185,6 +161,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 | title, summary | Quiet uses a title and summary without decoration. |
 | icon, badge | Icon-only and badge-only samples sit beside the fully decorated tone gallery. |
 | Default slot | Compose native feature lists or rich supporting paragraphs below the summary. |
+| actions slot | Place links or buttons here to keep the next step at the bottom of the column. |
 | Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 This component exposes tone and variant, but no variantMode. Style individual child components explicitly when their appearance should match.
@@ -281,10 +258,11 @@ Titles render as h3. A comparison column can contain links but is not itself cli
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
-    <strong>Default slot:</strong> details, feature lists and actions. Register
-    defineComparisonColumnComponent with Panel, Flex, Badge and Icon
+    <strong>Default slot:</strong> details and feature lists.
+    <strong>actions slot:</strong> links or buttons below the details. Register
+    defineComparisonColumnComponent with Panel, Flex, Badge and IconFrame
     dependencies.
   </p>
 </div>

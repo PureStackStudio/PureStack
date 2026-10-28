@@ -25,6 +25,10 @@ nav:
 
 These illustrative plans link to documentation; they do not represent PureStack pricing.
 
+PricingTable pairs a centered introduction with a responsive grid of plans.
+Cards fill their columns, and the footnote sits below the comparison. Set
+`columnsLg` and `columnsXl` to suit the number of plans you offer.
+
 <Tabs
   group="pricing-table-sample-1"
   selectedTab="pricing-table-sample-1-preview"
@@ -35,82 +39,15 @@ These illustrative plans link to documentation; they do not represent PureStack 
 >
   <TabPane id="pricing-table-sample-1-preview" label="Preview">
     <ComponentExample
-      label="PricingTable in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Three plans, one clear choice"
+      caption="Full-width cards, a clear price hierarchy, and actions aligned at the bottom."
     >
-      <PricingTable
-        eyebrow="ILLUSTRATIVE PLANS"
-        title="Choose a starting point"
-        subtitle="The same structure works for real product plans."
-        columnsLg="2"
-        columnsXl="2"
-        footnote="Example content only."
-      >
-        <PricingPlan
-          title="Explore"
-          summary="Learn the component model."
-          price="Free"
-          note="Documentation example"
-          ctaLabel="Browse guides"
-          ctaLink="/components/"
-          tone="neutral"
-        >
-          <PricingFeature>Complete examples</PricingFeature>
-          <PricingFeature>Copyable source</PricingFeature>
-        </PricingPlan>
-        <PricingPlan
-          title="Build"
-          summary="Compose your own interface."
-          price="Your choice"
-          badge="Start here"
-          note="Illustrative plan, not a product offer"
-          ctaLabel="Start with Panel"
-          ctaLink="/components/layout/panel/"
-          tone="accent"
-        >
-          <PricingFeature>Shared theme</PricingFeature>
-          <PricingFeature>Typed component props</PricingFeature>
-        </PricingPlan>
-      </PricingTable>
+      <import-content src="./_plan-comparison.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="pricing-table-sample-1-source-0" label="plan-comparison.mdx">
-```html
-<PricingTable
-  eyebrow="ILLUSTRATIVE PLANS"
-  title="Choose a starting point"
-  subtitle="The same structure works for real product plans."
-  columnsLg="2"
-  columnsXl="2"
-  footnote="Example content only."
->
-  <PricingPlan
-    title="Explore"
-    summary="Learn the component model."
-    price="Free"
-    note="Documentation example"
-    ctaLabel="Browse guides"
-    ctaLink="/components/"
-    tone="neutral"
-  >
-    <PricingFeature>Complete examples</PricingFeature>
-    <PricingFeature>Copyable source</PricingFeature>
-  </PricingPlan>
-  <PricingPlan
-    title="Build"
-    summary="Compose your own interface."
-    price="Your choice"
-    badge="Start here"
-    note="Illustrative plan, not a product offer"
-    ctaLabel="Start with Panel"
-    ctaLink="/components/layout/panel/"
-    tone="accent"
-  >
-    <PricingFeature>Shared theme</PricingFeature>
-    <PricingFeature>Typed component props</PricingFeature>
-  </PricingPlan>
-</PricingTable>
-```
+    <import-codeblock src="./_plan-comparison.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -127,7 +64,7 @@ Set each relevant breakpoint when the table should remain one column.
   tabVariant="underline"
 >
   <TabPane id="pricing-table-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <PricingTable columns="1" columnsLg="1" columnsXl="1" variant="outline">
         <PricingPlan
           title="Explore"
@@ -169,6 +106,7 @@ Set each relevant breakpoint when the table should remain one column.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -182,6 +120,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -195,6 +134,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
 
 <ComponentExample
+  data-toc-ignore
   label="Both variant modes"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -206,6 +146,7 @@ Hover these outlineFill examples to compare stateless and stateful treatments. S
 ## Responsive plan counts
 
 <ComponentExample
+  data-toc-ignore
   label="Two, three, and four plans"
   caption="columns is the base count; columnsLg and columnsXl replace it. Prices here are illustrative display text."
 >
@@ -401,7 +342,9 @@ Keep prices, billing periods and limitations explicit. Plan headings are h3 unde
   valueType="RefOrValue&lt;string&gt;"
   defaultValue="not set"
 >
-  <p>Supporting note below the section description.</p>
+  <p>
+    Supporting note below the plan grid, such as billing terms or shared limits.
+  </p>
 </ApiProperty>
 
 <ApiProperty
@@ -473,11 +416,11 @@ Keep prices, billing periods and limitations explicit. Plan headings are h3 unde
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>Default slot:</strong> PricingPlan cards. Register
     definePricingComponents with Panel, SectionHeader, Grid, Flex, Badge,
-    BtnLink and Icon dependencies.
+    BtnLink and IconFrame dependencies.
   </p>
 </div>
 

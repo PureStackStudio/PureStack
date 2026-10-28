@@ -35,26 +35,15 @@ Use the feature text to state the capability and its limit together.
 >
   <TabPane id="pricing-feature-sample-1-preview" label="Preview">
     <ComponentExample
-      label="PricingFeature in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Details that are easy to compare"
+      caption="Compact icons keep the emphasis on capabilities, limits, and supporting context."
     >
-      <ul class="pl-0">
-        <PricingFeature tone="success">Up to 5 example projects</PricingFeature>
-        <PricingFeature tone="info" icon="lucide:mail" variant="outline">
-          Email support during business hours
-        </PricingFeature>
-      </ul>
+      <import-content src="./_plan-features.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="pricing-feature-sample-1-source-0" label="plan-features.mdx">
-```html
-<ul class="pl-0">
-  <PricingFeature tone="success">Up to 5 example projects</PricingFeature>
-  <PricingFeature tone="info" icon="lucide:mail" variant="outline">
-    Email support during business hours
-  </PricingFeature>
-</ul>
-```
+    <import-codeblock src="./_plan-features.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -71,7 +60,7 @@ Keep the qualifier in text instead of relying on an icon.
   tabVariant="underline"
 >
   <TabPane id="pricing-feature-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
+    <div class="component-preview-stage" data-toc-ignore>
       <ul class="pl-0">
         <PricingFeature tone="warning">
           <span>
@@ -101,6 +90,7 @@ Keep the qualifier in text instead of relying on an icon.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -114,6 +104,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -125,6 +116,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Included items and supporting detail
 
 <ComponentExample
+  data-toc-ignore
   label="An icon and the full explanation"
   caption="PricingFeature creates an li and defaults to iconoir:check. tone and variant style the icon frame; they do not imply an entitlement."
 >
@@ -220,17 +212,18 @@ The root is an li. Use it inside a ul or inside PricingPlan’s default slot. To
   anchor="pricing-feature-prop-variant"
   name="variant"
   valueType="RefOrValue&lt;ComponentVariant&gt;"
-  defaultValue="surface"
+  defaultValue="none"
 >
   <p>Treatment of the small icon frame.</p>
 </ApiProperty>
 
 ### Composition
 
-<div class="api-contract">
+<div class="api-contract wrap-anywhere">
   <p>
     <strong>Default slot:</strong> feature content. Register
-    definePricingComponents with Flex and Icon dependencies.
+    definePricingComponents with Panel, SectionHeader, Grid, Flex, Badge,
+    IconFrame and BtnLink dependencies.
   </p>
 </div>
 
