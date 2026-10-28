@@ -2,21 +2,32 @@ import { defineComponent, html } from 'regor'
 import type { MetricItem } from './landingTypes'
 
 export function defineMetricItemComponent() {
-  const metricItemTemplate = html`<Flex align="start">
-  <IconFrame
-    r-if="icon"
-    :name="icon"
-    :tone="tone"
-    variant="surface"
-    size="sm"/>
-  <div>
-    <p class="prose-meta mb-1" r-if="label">{{ label }}</p>
-    <strong class="fs-body">{{ value }}</strong>
-    <p class="text-subtle fs-xs mb-0" r-if="detail">
-      {{ detail }}
+  const metricItemTemplate = html`<Flex direction="column" align="start" class="metric-item h-full min-w-0 gap-3">
+  <Flex r-if="label || icon" align="center" class="metric-item__header gap-2">
+    <IconFrame
+      r-if="icon"
+      :name="icon"
+      :tone="tone"
+      variant="surface"
+      size="sm"
+      aria-hidden="true"/>
+    <p
+      r-if="label"
+      class="metric-item__label fs-body fw-500 lh-4 m-0 wrap-anywhere"
+    >
+      {{ label }}
     </p>
-    <slot></slot>
-  </div>
+  </Flex>
+  <strong
+    r-if="value !== undefined && value !== null && value !== ''"
+    class="metric-item__value fs-h1 fw-600 lh-1 m-0 wrap-anywhere"
+  >
+    {{ value }}
+  </strong>
+  <p r-if="detail" class="metric-item__detail fs-sm lh-5 opacity-75 m-0">
+    {{ detail }}
+  </p>
+  <slot></slot>
 </Flex>`
 
   return {

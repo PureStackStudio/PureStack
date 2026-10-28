@@ -1,6 +1,6 @@
 ---
 title: MetricItem
-description: "A compact value with a label, explanation and optional semantic icon."
+description: "Make an important number stand out, with a clear label and the context readers need."
 template: doc
 layout:
   showNav: true
@@ -16,14 +16,19 @@ nav:
 <ComponentHeader
   name="MetricItem"
   kind="One useful number"
-  summary="A compact value with a label, explanation and optional semantic icon."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  summary="Make an important number stand out, with a clear label and the context readers need."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/metricItem.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
 ## A value with context
 
-Make the unit and time period part of the content.
+MetricItem puts the value first visually, with a label above it and supporting
+detail below. Use it for a product statistic, a project snapshot, or a short
+status. An optional icon helps readers recognize the subject at a glance.
+
+Include units, time periods, or the source of a measurement in the content.
+These illustrative examples show two different kinds of value inside Panel.
 
 <Tabs
   group="metric-item-sample-1"
@@ -35,33 +40,22 @@ Make the unit and time period part of the content.
 >
   <TabPane id="metric-item-sample-1-preview" label="Preview">
     <ComponentExample
-      label="MetricItem in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Numbers with a clear meaning"
+      caption="A prominent value, a readable label, and just enough context. These are illustrative measurements."
     >
-      <MetricItem
-        label="Example build time"
-        value="1.8 s"
-        detail="Local preview, illustrative measurement"
-        icon="lucide:check"
-        tone="success"/>
+      <import-content src="./_contextual-values.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="metric-item-sample-1-source-0" label="contextual-value.mdx">
-```html
-<MetricItem
-  label="Example build time"
-  value="1.8 s"
-  detail="Local preview, illustrative measurement"
-  icon="lucide:check"
-  tone="success"
-/>
-```
+    <import-codeblock src="./_contextual-values.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
 ## Supporting content
 
-Use the default slot for a qualifier or destination after the metric.
+Use the default slot to add a status badge, a short explanation, or a useful
+destination. MetricItem supplies the spacing; the content stays yours.
 
 <Tabs
   group="metric-item-sample-2"
@@ -72,35 +66,26 @@ Use the default slot for a qualifier or destination after the metric.
   tabVariant="underline"
 >
   <TabPane id="metric-item-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
-      <MetricItem
-        label="Documentation"
-        value="Ready"
-        detail="Review the components before release"
-      >
-        <BtnLink href="/components/" variant="link"
-          >Browse component guides</BtnLink>
-      </MetricItem>
-    </div>
+    <ComponentExample
+      data-toc-ignore
+      label="A status with a next step"
+      caption="The value can be a word. Supporting content adds the detail and destination."
+    >
+      <import-content src="./_metric-detail.mdx"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="metric-item-sample-2-source-0" label="metric-detail.mdx">
-```html
-<MetricItem
-  label="Documentation"
-  value="Ready"
-  detail="Review the components before release"
->
-  <BtnLink href="/components/" variant="link">Browse component guides</BtnLink>
-</MetricItem>
-```
+    <import-codeblock src="./_metric-detail.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
 ## All ten semantic tones
 
-Every tone is visible on the icon frame. The row text keeps the surrounding text color.
+Tone colors the optional icon frame. The label, value, and detail keep the
+surrounding text color, so they also work inside a colored MetricStrip.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -112,12 +97,13 @@ Every tone is visible on the icon frame. The row text keeps the surrounding text
 ## A number with the right context
 
 <ComponentExample
+  data-toc-ignore
   label="Display text, optional decoration, and supporting content"
   caption="value is display text; formatting, units, data fetching, and change calculations belong to your application."
 >
   <div class="component-appearance-grid">
     <div class="component-appearance-cell">
-      <code>Minimal</code><MetricItem value="48"/>
+      <code>Minimal, including zero</code><MetricItem value="0"/>
     </div>
     <div class="component-appearance-cell">
       <code>Label and detail</code><MetricItem label="Guides" value="13" detail="Updated this week"/>
@@ -155,7 +141,13 @@ This component exposes tone but no variant or variantMode. Its icon uses a fixed
 
 ## Behavior and accessibility
 
-The value is text, so units and formatted numbers remain under your control. Tone affects the optional icon frame; it does not imply a trend or change the value’s meaning.
+The value is text, so units and formatted numbers remain under your control.
+Labels and details explain what it means; the icon is decorative. Tone affects
+the optional icon frame and does not imply a trend or change the value's meaning.
+
+MetricItem uses existing typography and layout utilities and adds no custom
+stylesheet. It has no background of its own: use it directly, place it inside
+Panel, or group related items in MetricStrip.
 
 ## API reference
 
@@ -183,8 +175,8 @@ The value is text, so units and formatted numbers remain under your control. Ton
   defaultValue="not set"
 >
   <p>
-    Visible label. Use language that describes the control or value in its
-    surrounding context.
+    A short, readable label above the value. Name what is being measured or
+    described.
   </p>
 </ApiProperty>
 
@@ -235,7 +227,7 @@ The value is text, so units and formatted numbers remain under your control. Ton
 <div class="api-contract">
   <p>
     <strong>Default slot:</strong> content after the detail. Register
-    defineMetricItemComponent with Flex and Icon dependencies.
+    defineMetricItemComponent with Flex, IconFrame, and Icon dependencies.
   </p>
 </div>
 

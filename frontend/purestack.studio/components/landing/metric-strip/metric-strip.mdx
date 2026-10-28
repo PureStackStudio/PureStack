@@ -17,13 +17,18 @@ nav:
   name="MetricStrip"
   kind="Evidence at a glance"
   summary="Arrange related metrics in a responsive surface with a clear reading order."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/metricStrip.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
 ## A workspace snapshot
 
-These are illustrative values. Each metric includes enough context to interpret its number.
+MetricStrip brings related MetricItems together on one surface, with generous
+spacing and a consistent reading order. Use it to introduce a product's key
+numbers or give a quick view of a project's progress.
+
+The default layout moves from one column on narrow screens to two at `sm` and
+four at `lg`. These illustrative values show a complete workspace snapshot.
 
 <Tabs
   group="metric-strip-sample-1"
@@ -35,59 +40,22 @@ These are illustrative values. Each metric includes enough context to interpret 
 >
   <TabPane id="metric-strip-sample-1-preview" label="Preview">
     <ComponentExample
-      label="MetricStrip in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="A workspace at a glance"
+      caption="Four related signals, one shared surface. All values describe an example workspace."
     >
-      <MetricStrip tone="neutral">
-        <MetricItem
-          label="Components"
-          value="12"
-          detail="In this example workspace"
-          tone="accent"/>
-        <MetricItem label="Pages" value="24" detail="Published documentation"/>
-        <MetricItem
-          label="Build"
-          value="Passing"
-          detail="Latest local check"
-          tone="success"/>
-        <MetricItem
-          label="Review"
-          value="2"
-          detail="Changes awaiting review"
-          tone="warning"/>
-      </MetricStrip>
+      <import-content src="./_workspace-snapshot.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="metric-strip-sample-1-source-0" label="workspace-snapshot.mdx">
-```html
-<MetricStrip tone="neutral">
-  <MetricItem
-    label="Components"
-    value="12"
-    detail="In this example workspace"
-    tone="accent"
-  />
-  <MetricItem label="Pages" value="24" detail="Published documentation" />
-  <MetricItem
-    label="Build"
-    value="Passing"
-    detail="Latest local check"
-    tone="success"
-  />
-  <MetricItem
-    label="Review"
-    value="2"
-    detail="Changes awaiting review"
-    tone="warning"
-  />
-</MetricStrip>
-```
+    <import-codeblock src="./_workspace-snapshot.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
 ## A two-metric summary
 
-Override both responsive widths when the content only needs two tracks.
+Set `columnsLg="2"` to keep two columns on larger screens. A metric can include
+a short status instead of a number, and its default slot can provide a next step.
 
 <Tabs
   group="metric-strip-sample-2"
@@ -98,26 +66,16 @@ Override both responsive widths when the content only needs two tracks.
   tabVariant="underline"
 >
   <TabPane id="metric-strip-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
-      <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
-        <MetricItem
-          label="Completed"
-          value="8 of 10"
-          detail="Tasks in this example"/>
-        <MetricItem
-          label="Next step"
-          value="Review"
-          detail="Check the remaining changes"/>
-      </MetricStrip>
-    </div>
+    <ComponentExample
+      data-toc-ignore
+      label="Progress and the next milestone"
+      caption="A focused two-column summary, with supporting context and a useful destination."
+    >
+      <import-content src="./_compact-summary.mdx"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="metric-strip-sample-2-source-0" label="compact-summary.mdx">
-```html
-<MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
-  <MetricItem label="Completed" value="8 of 10" detail="Tasks in this example" />
-  <MetricItem label="Next step" value="Review" detail="Check the remaining changes" />
-</MetricStrip>
-```
+    <import-codeblock src="./_compact-summary.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -126,6 +84,7 @@ Override both responsive widths when the content only needs two tracks.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -139,6 +98,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -150,10 +110,11 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Responsive density
 
 <ComponentExample
+  data-toc-ignore
   label="Two, three, or four signals"
   caption="columns is the base count; columnsSm and columnsLg replace it at their breakpoints. Child MetricItem tones are explicit."
 >
-  <div class="component-appearance-grid">
+  <div class="d-grid gap-5">
     <div class="component-appearance-cell">
       <code>2 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="2" tone="info"
         ><MetricItem
@@ -218,7 +179,12 @@ This component exposes tone and variant, but no variantMode. Style individual ch
 
 ## Behavior and accessibility
 
-Use labels and details to communicate units, periods and provenance. MetricStrip does not calculate values; your data or application owns them.
+Use short labels and include units, time periods, and sources in the details.
+The label, value, and detail inherit the strip's text color; each MetricItem's
+tone colors its icon. MetricStrip groups content and does not calculate values.
+
+The strip uses Panel, Grid, and built-in spacing utilities, with no additional
+component stylesheet. Use its `metric-strip` class for any site-specific styling.
 
 ## API reference
 
