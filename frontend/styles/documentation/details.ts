@@ -91,15 +91,17 @@ function registerNavigationRailStyles(
 
   docs.select(':scope > .topbar').boxShadow(`0 1px 12px ${shadow}`)
 
-  // Docked rails recede; mobile drawers retain their opaque reading surface.
+  // Only docked rails recede; floating panels retain their opaque reading surface.
   docs
-    .select(':scope:not(.template-doc--nav-drawer) .doc-sidebar > .nav__menu')
+    .select(
+      ':scope:not(.template-doc--nav-drawer):not(.template-doc--nav-collapsed) .doc-sidebar > .nav__menu',
+    )
     .media(mediaMin(BREAKPOINTS.lg))
     .background('transparent')
     .borderColor('transparent')
 
   docs
-    .select('.doc-toc > .page-toc')
+    .select(':scope:not(.template-doc--toc-collapsed) .doc-toc > .page-toc')
     .media(mediaMin(BREAKPOINTS.toc))
     .background('transparent')
     .borderColor('transparent')

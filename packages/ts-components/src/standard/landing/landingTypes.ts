@@ -59,6 +59,8 @@ export interface LandingSection {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
+  layout?: RefOrValue<'stacked' | 'split'>
+  align?: RefOrValue<'start' | 'center'>
   columns?: RefOrValue<number | string>
   columnsLg?: RefOrValue<number | string>
   alignItems?: RefOrValue<GridAlignItems>

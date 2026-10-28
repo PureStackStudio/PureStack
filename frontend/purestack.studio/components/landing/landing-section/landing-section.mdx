@@ -1,6 +1,6 @@
 ---
 title: LandingSection
-description: "Introduce a section and arrange its content beside a clear heading at larger breakpoints."
+description: "Give your landing page a clear story with generous spacing, expressive headings, and responsive content."
 template: doc
 layout:
   showNav: true
@@ -16,60 +16,73 @@ nav:
 <ComponentHeader
   name="LandingSection"
   kind="Section rhythm"
-  summary="Introduce a section and arrange its content beside a clear heading at larger breakpoints."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  summary="Give your landing page a clear story with generous spacing, expressive headings, and responsive content."
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingSection.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
-## Heading and feature
+## A section that tells a story
 
-The heading counts as a grid item. At lg, it shares the row with the feature card.
+LandingSection brings a heading, supporting copy, and content together with
+consistent spacing. Use it for a product introduction, a feature collection, or
+the next chapter in your landing page. The heading sits above the content by
+default, so adding a card never changes where the heading belongs.
+
+The component uses built-in spacing and typography utilities. Add your own
+styles through the `landing-section` class when your site needs a different
+treatment. The examples below include styling from this site's design.
+
+This centered introduction leads into three features. `columnsLg="3"` gives the
+content three columns on large screens; smaller screens keep a single column.
 
 <Tabs
   group="landing-section-sample-1"
   selectedTab="landing-section-sample-1-preview"
-  ariaLabel="Heading and feature example"
+  ariaLabel="Feature collection example"
   tone="neutral"
   variant="surface"
   tabVariant="underline"
 >
   <TabPane id="landing-section-sample-1-preview" label="Preview">
     <ComponentExample
-      label="LandingSection in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="A centered feature collection"
+      caption="A clear introduction, room to breathe, and three supporting features."
     >
-      <LandingSection
-        eyebrow="WORKFLOW"
-        title="From source to interface"
-        subtitle="A focused way to build."
-        columnsLg="2"
-        alignItems="center"
-      >
-        <FeatureCard
-          title="Own every piece"
-          summary="Keep source, state and styles understandable."
-          tone="accent"
-          icon="lucide:check"/>
-      </LandingSection>
+      <import-content src="./_feature-grid.mdx"/>
     </ComponentExample>
   </TabPane>
-  <TabPane id="landing-section-sample-1-source-0" label="split-section.mdx">
-```html
-<LandingSection
-  eyebrow="WORKFLOW"
-  title="From source to interface"
-  subtitle="A focused way to build."
-  columnsLg="2"
-  alignItems="center"
+  <TabPane id="landing-section-sample-1-source-0" label="feature-grid.mdx">
+    <import-codeblock src="./_feature-grid.mdx" lang="html"/>
+  </TabPane>
+</Tabs>
+
+## Put the story beside the content
+
+Use `layout="split"` to place the introduction beside a visual, a product
+preview, or another composition. Put links in the `actions` slot to keep them
+with the heading. The section stacks when there is not enough space for both
+columns.
+
+<Tabs
+  group="landing-section-split"
+  selectedTab="landing-section-split-preview"
+  ariaLabel="Split section example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
 >
-  <FeatureCard
-    title="Own every piece"
-    summary="Keep source, state and styles understandable."
-    tone="accent"
-    icon="lucide:check"
-  />
-</LandingSection>
-```
+  <TabPane id="landing-section-split-preview" label="Preview">
+    <ComponentExample
+      data-toc-ignore
+      label="An introduction with a product preview"
+      caption="The heading and action stay together while the supporting content gets its own space."
+    >
+      <import-content src="./_split-section.mdx"/>
+    </ComponentExample>
+  </TabPane>
+  <TabPane id="landing-section-split-source" label="split-section.mdx">
+    <import-codeblock src="./_split-section.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -86,25 +99,12 @@ Omit the text props when the surrounding page already introduces the section.
   tabVariant="underline"
 >
   <TabPane id="landing-section-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
-      <LandingSection variant="surface" tone="neutral">
-        <Grid columns="1" columnsSm="2">
-          <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
-          <Panel variant="outline" bodyClass="p-3"
-            >Add interactivity where it helps.</Panel>
-        </Grid>
-      </LandingSection>
+    <div class="component-preview-stage" data-toc-ignore>
+      <import-content src="./_content-section.mdx"/>
     </div>
   </TabPane>
   <TabPane id="landing-section-sample-2-source-0" label="content-section.mdx">
-```html
-<LandingSection variant="surface" tone="neutral">
-  <Grid columns="1" columnsSm="2">
-    <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
-    <Panel variant="outline" bodyClass="p-3">Add interactivity where it helps.</Panel>
-  </Grid>
-</LandingSection>
-```
+    <import-codeblock src="./_content-section.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -113,6 +113,7 @@ Omit the text props when the surrounding page already introduces the section.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -126,6 +127,7 @@ The same composition in every semantic tone. Child tones are explicit where the 
 Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -139,6 +141,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
 
 <ComponentExample
+  data-toc-ignore
   label="Both variant modes"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -152,6 +155,7 @@ Hover these outlineFill examples to compare stateless and stateful treatments. S
 Choose the heading element to match the surrounding document. Every titleTag is rendered below with identical visual sizing; semantics and appearance are separate.
 
 <ComponentExample
+  data-toc-ignore
   label="All nine title tags"
   caption="Use h1 only for a page title. Non-heading tags do not create document headings."
 >
@@ -198,15 +202,16 @@ Choose the heading element to match the surrounding document. Every titleTag is 
 ## Grid alignment
 
 <ComponentExample
-  label="Place the heading beside the content"
-  caption="columnsLg takes a count or CSS track definition; narrow screens keep one column."
+  data-toc-ignore
+  label="Align a split composition"
+  caption="alignItems places the introduction at the start, center, or end of its supporting content, or stretches both columns."
 >
-  <div class="component-appearance-grid">
+  <div class="component-appearance-grid landing-section-alignment-gallery">
     <div class="component-appearance-cell">
       <code>start</code><LandingSection
+        layout="split"
         title="Build together"
         titleTag="h3"
-        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
         alignItems="start"
         ><Panel tone="info" class="p-3"
           ><p>More room for a supporting story.</p>
@@ -214,9 +219,9 @@ Choose the heading element to match the surrounding document. Every titleTag is 
     </div>
     <div class="component-appearance-cell">
       <code>center</code><LandingSection
+        layout="split"
         title="Build together"
         titleTag="h3"
-        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
         alignItems="center"
         ><Panel tone="info" class="p-3"
           ><p>More room for a supporting story.</p>
@@ -224,9 +229,9 @@ Choose the heading element to match the surrounding document. Every titleTag is 
     </div>
     <div class="component-appearance-cell">
       <code>end</code><LandingSection
+        layout="split"
         title="Build together"
         titleTag="h3"
-        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
         alignItems="end"
         ><Panel tone="info" class="p-3"
           ><p>More room for a supporting story.</p>
@@ -234,9 +239,9 @@ Choose the heading element to match the surrounding document. Every titleTag is 
     </div>
     <div class="component-appearance-cell">
       <code>stretch</code><LandingSection
+        layout="split"
         title="Build together"
         titleTag="h3"
-        columnsLg="minmax(0, 1fr) minmax(0, 1fr)"
         alignItems="stretch"
         ><Panel tone="info" class="p-3"
           ><p>More room for a supporting story.</p>
@@ -250,16 +255,19 @@ Choose the heading element to match the surrounding document. Every titleTag is 
 | Public feature | Visible example |
 | --- | --- |
 | tone, variant, variantMode | Complete galleries above, with all supported values visible together. |
-| eyebrow, title, subtitle | The context example and tone gallery show the complete heading; the original content-only example omits it. |
+| eyebrow, title, subtitle | Introduce the section with a short label, a heading, and supporting copy, or omit them for content alone. |
 | titleTag | All nine supported elements are rendered in the heading-semantics comparison. |
-| columns, columnsLg | The original heading-and-feature example uses a column count; the alignment comparison uses explicit CSS tracks. The heading occupies its own grid cell. |
+| layout, align | Stack or split the introduction and content; align the introduction to the start or center. |
+| columns, columnsLg | Set the content columns without changing the heading layout. |
 | alignItems | Start, center, end, and stretch are shown together. |
-| Default slot | Place cards, badges, or any supporting composition after the heading. |
+| Default slot, actions slot | Place your content in the default slot and heading links in actions. |
 | Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 ## Behavior and accessibility
 
-Use titleTag to fit the heading into the document. The base layout is always one column. Both columns and columnsLg configure the large-screen layout, with columnsLg taking precedence.
+Use titleTag to fit the heading into the document. Content stacks on smaller
+screens. Both columns and columnsLg configure the content grid on large
+screens, with columnsLg taking precedence. The heading stays outside that grid.
 
 ## API reference
 
@@ -280,6 +288,8 @@ Use titleTag to fit the heading into the document. The base layout is always one
   <a href="#landing-section-prop-tone">tone</a>
   <a href="#landing-section-prop-variant">variant</a>
   <a href="#landing-section-prop-variantMode">variantMode</a>
+  <a href="#landing-section-prop-layout">layout</a>
+  <a href="#landing-section-prop-align">align</a>
   <a href="#landing-section-prop-columns">columns</a>
   <a href="#landing-section-prop-columnsLg">columnsLg</a>
   <a href="#landing-section-prop-alignItems">alignItems</a>
@@ -364,12 +374,39 @@ Use titleTag to fit the heading into the document. The base layout is always one
 </ApiProperty>
 
 <ApiProperty
+  anchor="landing-section-prop-layout"
+  name="layout"
+  valueType="RefOrValue&lt;'stacked' | 'split'&gt;"
+  defaultValue="stacked"
+>
+  <p>
+    Keep the introduction above the content, or place them side by side when
+    space allows.
+  </p>
+</ApiProperty>
+
+<ApiProperty
+  anchor="landing-section-prop-align"
+  name="align"
+  valueType="RefOrValue&lt;'start' | 'center'&gt;"
+  defaultValue="start"
+>
+  <p>
+    Align the heading, supporting copy, and actions. Content keeps its own
+    alignment.
+  </p>
+</ApiProperty>
+
+<ApiProperty
   anchor="landing-section-prop-columns"
   name="columns"
   valueType="RefOrValue&lt;number | string&gt;"
   defaultValue="not set"
 >
-  <p>Fallback large-breakpoint column definition. Base columns remain 1.</p>
+  <p>
+    Content columns on large screens, as a count or CSS track definition.
+    Smaller screens use one column.
+  </p>
 </ApiProperty>
 
 <ApiProperty
@@ -379,8 +416,8 @@ Use titleTag to fit the heading into the document. The base layout is always one
   defaultValue="columns, then 1"
 >
   <p>
-    Large-breakpoint column definition. Includes the optional SectionHeader as a
-    grid item.
+    Content columns on large screens. Takes precedence over columns. The heading
+    has its own space and does not count as a content column.
   </p>
 </ApiProperty>
 
@@ -390,15 +427,19 @@ Use titleTag to fit the heading into the document. The base layout is always one
   valueType="RefOrValue&lt;GridAlignItems&gt;"
   defaultValue="start"
 >
-  <p>Grid alignment: stretch, start, center or end.</p>
+  <p>
+    Vertical alignment of the introduction and content, and items within the
+    content grid: stretch, start, center or end.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
   <p>
-    <strong>Default slot:</strong> section grid items after the optional header.
-    Register defineLandingSectionComponent plus Panel, Grid and SectionHeader.
+    <strong>Default slot:</strong> cards, imagery, or other section content.
+    <strong>actions slot:</strong> links or buttons beneath the introduction.
+    The root is a section. Its heading and content have separate layout areas.
   </p>
 </div>
 

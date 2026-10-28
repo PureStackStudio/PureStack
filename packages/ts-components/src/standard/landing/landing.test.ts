@@ -121,4 +121,77 @@ describe('Landing components rendering', () => {
     expect(html).toContain('tone-fill-surface-alt')
     expect(html).toContain('Deterministic execution')
   })
+
+  it.each(['stacked', 'split'])(
+    'keeps heading actions outside the content grid in the %s layout',
+    async (layout) => {
+      const cleanup = ensureDomGlobals()
+      try {
+        await renderApp(
+          `<LandingSection id="features" title="A clear introduction" titleTag="h3"
+            layout="${layout}" align="center" columns="2" columnsLg="3">
+            <template #actions><BtnLink href="/guides/">Explore the guides</BtnLink></template>
+            <p>First feature</p><p>Second feature</p><p>Third feature</p>
+          </LandingSection>`,
+          {
+            components: defineComponents(getSvgIcon),
+            context: createTestContext(),
+            onRendered(document) {
+              const section = document.querySelector('section#features')
+              const header = section?.querySelector('.landing-section__header')
+              const content = section?.querySelector(
+                '.landing-section__content',
+              )
+              const outer = section?.querySelector('.landing-section__layout')
+              expect(header?.classList.contains('text-center')).toBe(true)
+              expect(header?.querySelector('h3')?.textContent).toBe(
+                'A clear introduction',
+              )
+              expect(header?.querySelector('a')?.getAttribute('href')).toBe(
+                '/guides/',
+              )
+              expect(content?.children).toHaveLength(3)
+              expect(content?.querySelector('a, .section-header')).toBeNull()
+              expect(content?.getAttribute('style')).toContain(
+                'repeat(3, minmax(0, 1fr))',
+              )
+              expect(outer?.getAttribute('style')?.includes('auto-fit')).toBe(
+                layout === 'split',
+              )
+            },
+          },
+        )
+      } finally {
+        cleanup()
+      }
+    },
+  )
+
+  it('omits the introduction when no heading copy is provided', async () => {
+    const cleanup = ensureDomGlobals()
+    try {
+      await renderApp(
+        '<LandingSection layout="split" columnsLg="2"><p>First</p><p>Second</p></LandingSection>',
+        {
+          components: defineComponents(getSvgIcon),
+          context: createTestContext(),
+          onRendered(document) {
+            expect(
+              document.querySelector('.landing-section__header'),
+            ).toBeNull()
+            expect(
+              document.querySelector('.landing-section__content')?.children,
+            ).toHaveLength(2)
+            expect(
+              document
+                .querySelector('.landing-section__layout')
+                ?.getAttribute('style'),
+            ).not.toContain('auto-fit')
+          },
+        },
+      )
+    } finally {
+      cleanup()
+    }
+  })
 })
