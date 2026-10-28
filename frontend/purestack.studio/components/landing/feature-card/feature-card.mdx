@@ -17,13 +17,18 @@ nav:
   name="FeatureCard"
   kind="Feature story"
   summary="Present one capability with a recognizable icon, short explanation and an optional next step."
-  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts"
+  source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/featureCard.ts"
   section="Landing &amp; pricing"
   sectionHref="/components/landing/"/>
 
 ## A feature with a next step
 
-The actions slot gives readers a clear continuation.
+FeatureCard gives one capability a clear introduction: an icon and optional
+badge, a short heading, and a readable explanation. Content follows a consistent
+start alignment, with room between each part of the story.
+
+Use the `actions` slot for a next step. Cards stretch to fill their grid row,
+keeping actions aligned even when one card has more content than another.
 
 <Tabs
   group="feature-card-sample-1"
@@ -35,54 +40,23 @@ The actions slot gives readers a clear continuation.
 >
   <TabPane id="feature-card-sample-1-preview" label="Preview">
     <ComponentExample
-      label="FeatureCard in context"
-      caption="Compare the composition, then open its source tab to adapt it."
+      data-toc-ignore
+      label="Two features, one clear rhythm"
+      caption="An icon introduces each feature, a badge adds context, and the actions share a baseline."
     >
-      <FeatureCard
-        eyebrow="AUTHORING"
-        title="Readable by design"
-        summary="Keep content and components close together in MDX."
-        badge="Native"
-        icon="lucide:check"
-        tone="accent"
-      >
-        <p>Use the same primitives in documentation and product UI.</p>
-        <template #actions>
-          <BtnLink
-            href="/components/runtime/regor-app/"
-            tone="accent"
-            variant="outline"
-          >
-            Add browser state
-          </BtnLink>
-        </template>
-      </FeatureCard>
+      <import-content src="./_feature-action.mdx"/>
     </ComponentExample>
   </TabPane>
   <TabPane id="feature-card-sample-1-source-0" label="feature-action.mdx">
-```html
-<FeatureCard
-  eyebrow="AUTHORING"
-  title="Readable by design"
-  summary="Keep content and components close together in MDX."
-  badge="Native"
-  icon="lucide:check"
-  tone="accent"
->
-  <p>Use the same primitives in documentation and product UI.</p>
-  <template #actions>
-    <BtnLink href="/components/runtime/regor-app/" tone="accent" variant="outline">
-      Add browser state
-    </BtnLink>
-  </template>
-</FeatureCard>
-```
+    <import-codeblock src="./_feature-action.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
 ## A coherent feature set
 
-Cards share a theme but can express distinct intent.
+Use a consistent heading level and content structure across a set. The cards
+below share spacing and typography while their tones distinguish each step.
+The layout stacks on smaller screens.
 
 <Tabs
   group="feature-card-sample-2"
@@ -93,38 +67,16 @@ Cards share a theme but can express distinct intent.
   tabVariant="underline"
 >
   <TabPane id="feature-card-sample-2-preview" label="Preview">
-    <div class="component-preview-stage">
-      <Grid columns="1" columnsSm="2">
-        <FeatureCard
-          title="Content first"
-          summary="Ship readable pages with native HTML."
-          tone="info"
-          variant="outline"/>
-        <FeatureCard
-          title="State when needed"
-          summary="Mount focused browser apps for interaction."
-          tone="success"
-          variant="surface"/>
-      </Grid>
-    </div>
+    <ComponentExample
+      data-toc-ignore
+      label="A connected feature set"
+      caption="The same card structure works across different tones, copy lengths, and destinations."
+    >
+      <import-content src="./_feature-set.mdx"/>
+    </ComponentExample>
   </TabPane>
   <TabPane id="feature-card-sample-2-source-0" label="feature-set.mdx">
-```html
-<Grid columns="1" columnsSm="2">
-  <FeatureCard
-    title="Content first"
-    summary="Ship readable pages with native HTML."
-    tone="info"
-    variant="outline"
-  />
-  <FeatureCard
-    title="State when needed"
-    summary="Mount focused browser apps for interaction."
-    tone="success"
-    variant="surface"
-  />
-</Grid>
-```
+    <import-codeblock src="./_feature-set.mdx" lang="html"/>
   </TabPane>
 </Tabs>
 
@@ -133,6 +85,7 @@ Cards share a theme but can express distinct intent.
 The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
 
 <ComponentExample
+  data-toc-ignore
   label="All ten semantic tones"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -143,9 +96,12 @@ The same composition in every semantic tone. Child tones are explicit where the 
 
 ## All eighteen visual variants
 
-Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+Every supported variant is shown in accent, including none. The variant controls
+the card's outer treatment. The icon keeps its own surface treatment so it stays
+recognizable across the set.
 
 <ComponentExample
+  data-toc-ignore
   label="All eighteen visual variants"
   caption="Switch the site theme to compare the same samples in both palettes."
 >
@@ -157,6 +113,7 @@ Every supported variant is shown in accent, including none. Variant controls the
 ## Optional content and both slots
 
 <ComponentExample
+  data-toc-ignore
   label="A card can be brief or complete"
   caption="The default slot extends the story; actions holds navigation. Each optional text and decoration can be omitted independently."
 >
@@ -202,14 +159,20 @@ Every supported variant is shown in accent, including none. Variant controls the
 | eyebrow, title, summary | Compare the text-only card and the complete workflow card. |
 | icon, badge | Icon-only, badge-only, and combined decoration are visible together. |
 | Default slot | The complete workflow card adds rich supporting text below the summary. |
-| actions slot | Compare one destination in the original example with two destinations in Both slots. |
+| actions slot | Actions sit at the bottom of equal-height cards. Compare one destination with two destinations in Both slots. |
 | Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 This component exposes tone and variant, but no variantMode. Style individual child components explicitly when their appearance should match.
 
 ## Behavior and accessibility
 
-The generated title is h3. Place feature cards under an h2 section heading, and keep summaries comparable in length. An icon and a badge support the title; they should not carry the only explanation.
+The generated title is h3. Place feature cards under an h2 section heading. The
+icon is decorative; the heading and summary describe the feature. The card is
+a content container, and links or buttons in `actions` provide interaction.
+
+FeatureCard uses built-in layout, spacing, and typography utilities and adds no
+component-specific stylesheet. Use its `feature-card` class for any additional
+styling your site needs.
 
 ## API reference
 

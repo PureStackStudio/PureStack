@@ -1,0 +1,46 @@
+<Grid columns="1" columnsMd="2" alignItems="stretch" class="gap-5">
+  <FeatureCard
+    eyebrow="CONTENT, CONNECTED"
+    title="A good story starts here."
+    summary="Bring your words and components together. Write pages that are a pleasure to read and easy to make your own."
+    icon="lucide:file-code"
+    badge="Native MDX"
+    tone="accent"
+  >
+    <template #actions>
+      <BtnLink
+        href="/guides/"
+        tone="accent"
+        icon="lucide:arrow-right"
+        iconPosition="end"
+      >
+        Explore the guides
+      </BtnLink>
+    </template>
+  </FeatureCard>
+  <FeatureCard
+    eyebrow="MAKE ROOM FOR THE DETAILS"
+    title="Small pieces. A complete experience."
+    summary="Build on a shared set of components, then add the details that make your site feel like yours."
+    icon="lucide:layers"
+    badge="Made to compose"
+    tone="neutral"
+  >
+    <Flex align="start" class="gap-2 fs-body lh-6">
+      <Icon name="lucide:check" aria-hidden="true"/>
+      <span
+        >One design language, from the first heading to the final link.</span>
+    </Flex>
+    <template #actions>
+      <BtnLink
+        href="/components/"
+        tone="neutral"
+        variant="outline"
+        icon="lucide:arrow-right"
+        iconPosition="end"
+      >
+        Browse components
+      </BtnLink>
+    </template>
+  </FeatureCard>
+</Grid>

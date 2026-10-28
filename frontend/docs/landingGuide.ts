@@ -69,7 +69,12 @@ export function defineLandingAppearanceGallery() {
         icon="lucide:check"
         badge="Included"
         ><template #actions
-          ><BtnLink href="/components/" :tone="sample.tone" variant="outline"
+          ><BtnLink
+            href="/components/"
+            :tone="sample.tone"
+            variant="surface"
+            icon="lucide:arrow-up-right"
+            iconPosition="end"
             >Explore</BtnLink></template></FeatureCard>
     </div>
     <div class="landing-appearance-sample" r-if="component === 'MetricStrip'">
