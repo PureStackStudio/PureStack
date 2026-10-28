@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-images",
-  "version": "1.1.27",
+  "version": "1.1.28",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-images.mjs",
   "types": "./dist/ts-images.d.mts",

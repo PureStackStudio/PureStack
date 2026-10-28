@@ -38,3 +38,26 @@ analytics never bypasses it, including when the consent runtime plugin is omitte
 The auth, consent, and analytics plugins own their corresponding configuration defaults and validation. Automatic GA4 registration runs in `config.finalize`, after every plugin's `config.normalize` phase and before factories or config hooks initialize. `resolveSiteConfig()` includes these plugins by default; pass `{ defaultPlugins: false, plugins: [...] }` as its second argument to choose them explicitly. Omitting the analytics plugin omits automatic GA4 registration. Analytics still respects explicitly configured consent when the consent runtime plugin is omitted.
 
 For standalone `renderApp` calls, use `appendRuntimeScripts(document, runtimeEmbeds, frontmatter.embed)` from the renderer's `onRendered(document, runtimeEmbeds)` callback. The renderer itself has no knowledge of individual runtimes.
+
+With consent enabled, Consent is included automatically. Visitors can reopen
+preferences in two ways. Add `data-consent-action="open-panel"` to your own
+`Btn` or `BtnLink`:
+
+```html
+<Btn variant="outline" data-consent-action="open-panel">
+  Manage privacy settings
+</Btn>
+
+<BtnLink href="/legal/privacy/" variant="link" data-consent-action="open-panel">
+  Privacy settings
+</BtnLink>
+```
+
+Or place the default teleport area where you want the built-in settings button:
+
+```html
+<span class="consent-settings-teleport-area"></span>
+```
+
+SiteFooter already provides this area. If it is absent, no built-in settings
+button is added. Custom buttons and links work without a teleport area.

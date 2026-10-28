@@ -1,6 +1,6 @@
 ---
 title: Consent
-description: "A consent banner and preference panel driven by the site’s categories, policy version and service configuration."
+description: "Let visitors choose which optional cookies and services your site may use, and change their preferences later."
 template: doc
 layout:
   showNav: true
@@ -16,10 +16,65 @@ nav:
 <ComponentHeader
   name="Consent"
   kind="Privacy preferences"
-  summary="A consent banner and preference panel driven by the site’s categories, policy version and service configuration."
+  summary="Let visitors choose which optional cookies and services your site may use, and change their preferences later."
   source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/consent/consent.ts"
   section="Site navigation &amp; services"
   sectionHref="/components/site/"/>
+
+Consent gives visitors control over optional cookies and services, such as
+analytics or marketing. Its banner offers **Accept all**, **Reject non-essential**,
+and **Manage preferences**. The preferences panel lets visitors choose individual
+categories while required categories stay enabled.
+
+Consent remembers the saved choice and loads configured optional services only
+after permission is granted. Visitors can reopen preferences using either option
+above, change their choices, and save again.
+
+## Open privacy preferences
+
+With consent enabled in your site configuration, Consent is included
+automatically. Choose either of these two ways to let visitors reopen their
+preferences after making a choice.
+
+### 1. Use your own button or link
+
+Add `data-consent-action="open-panel"` to a `Btn` or `BtnLink` in your footer,
+navigation, or page content. Clicking it opens the privacy preferences panel.
+
+For a button:
+
+```html
+<Btn tone="neutral" variant="outline" data-consent-action="open-panel">
+  Manage privacy settings
+</Btn>
+```
+
+For a link:
+
+```html
+<BtnLink
+  href="/legal/privacy/"
+  tone="neutral"
+  variant="link"
+  data-consent-action="open-panel"
+>
+  Privacy settings
+</BtnLink>
+```
+
+### 2. Use the default teleport area
+
+Place this empty element where you want the default **Privacy settings** button
+to appear:
+
+```html
+<span class="consent-settings-teleport-area"></span>
+```
+
+Consent automatically places its settings button inside that element.
+SiteFooter already provides this area. If the area is absent, Consent does not
+add a settings button.
+
 
 ## Make and revise a choice
 
@@ -124,40 +179,27 @@ Use the working example to open, save, close, and reopen this site's real privac
   </div>
 </ComponentExample>
 
-## Configuration and service activation
+## Configuration
 
 | Configuration | Visible role |
 | --- | --- |
 | enabled | Determines whether the component renders. |
-| storageKey, policyVersion | Keep the example separate and invalidate outdated choices. |
+| storageKey, policyVersion | Set where choices are saved and when visitors must make a fresh choice. |
 | categories | Give each category an ID, label, description, and required flag. |
-| services | Associate a service with its consent category; optional services wait for permission. The example uses no tracking services. |
+| services | Associate each optional service with the category that gives it permission to load. |
 | Banner, action, and settings labels | Customize the language of the banner, buttons, and preferences. |
 | privacyPolicyUrl, privacyPolicyLabel | Add the policy destination beside the banner copy. |
-| Footer settings target | The settings control teleports to .consent-settings-teleport-area. |
 
-Appearance galleries show the actual banner markup with every treatment. They are static comparisons; the isolated example above runs the full consent flow.
-
-## Feature map
-
-| Feature | Where to explore it |
-| --- | --- |
-| Banner choices, required and optional categories, saved settings, and services | Context preview, feature comparisons, and original copyable source examples. |
-| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
-| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
-
-## Behavior and accessibility
-
-Consent renders only when site.consent.enabled is true. The runtime opens the banner when no current saved choice exists, persists choices under storageKey and uses policyVersion to identify the policy. Necessary categories remain selected. Keep labels and descriptions specific to the services your site actually runs.
+Keep category labels and descriptions specific to the services your site uses.
 
 ## API reference
 
 <div class="api-overview">
   <p class="text-eyebrow">Consent contract</p>
   <p>
-    The three public props style the component. Banner copy, categories,
-    storage, policy version and services come from site.consent, not markup
-    props.
+    Appearance props style the component; settingsTeleport places its settings
+    button. Banner copy, categories, storage, policy version and services come
+    from site.consent, not markup props.
   </p>
 </div>
 
@@ -165,6 +207,7 @@ Consent renders only when site.consent.enabled is true. The runtime opens the ba
   <a href="#consent-prop-tone">tone</a>
   <a href="#consent-prop-variant">variant</a>
   <a href="#consent-prop-variantMode">variantMode</a>
+  <a href="#consent-prop-settingsTeleport">settingsTeleport</a>
 </nav>
 
 <ApiProperty
@@ -204,27 +247,29 @@ Consent renders only when site.consent.enabled is true. The runtime opens the ba
   </p>
 </ApiProperty>
 
+<ApiProperty
+  anchor="consent-prop-settingsTeleport"
+  name="settingsTeleport"
+  valueType="string"
+  defaultValue=".consent-settings-teleport-area"
+>
+  <p>
+    CSS selector for the built-in settings button's destination. Provide the
+    target before Consent renders. An empty selector or a missing target omits
+    the button; the banner and preference panel remain available.
+  </p>
+</ApiProperty>
+
 ### Composition
 
 <div class="api-contract">
   <p>
-    No public slots. The settings button teleports to
-    .consent-settings-teleport-area, provided by SiteFooter or by your own
-    template. Register defineConsentComponents with Panel, Flex, Btn, BtnLink
-    and FormCheck. Include the standard consent runtime with the same resolved
-    configuration.
+    Consent is included automatically when enabled. Use a Btn or BtnLink with
+    data-consent-action="open-panel" to open preferences, or provide
+    .consent-settings-teleport-area for the default settings button. No public
+    slots.
   </p>
 </div>
-
-### Configuration responsibilities
-
-- `enabled` controls whether the component exists.
-- `storageKey` isolates saved choices; `policyVersion` identifies the current policy.
-- `categories` define IDs, visible labels, descriptions and required state.
-- `services` describe the services controlled by those categories.
-- Banner, button and policy-link copy belong in the consent configuration.
-
-The preview source shows the complete scoped override used by the working example.
 
 ## Related components
 

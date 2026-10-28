@@ -16,6 +16,7 @@ export interface ConsentCategoryState extends ConsentCategory {
 }
 
 export interface Consent extends Partial<ConsentConfig> {
+  /** Settings button target selector. Empty or unmatched selectors omit the button. */
   settingsTeleport?: string
   categories: ConsentCategoryState[]
   tone?: RefOrValue<SemanticTone>
@@ -130,6 +131,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
   </section>
 
   <Btn
+    r-if="settingsTeleport && hasSettingsTarget()"
     tone="ghost"
     size="sm"
     data-consent-settings
@@ -143,7 +145,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
 
 function defineConsentComponent() {
   return defineComponent<Consent>(consentTemplate, {
-    props: ['tone', 'variant', 'variantMode'],
+    props: ['tone', 'variant', 'variantMode', 'settingsTeleport'],
     context: (head) => resolveConsent(resolvePageContext(head), head.props),
   })
 }
@@ -151,8 +153,10 @@ function defineConsentComponent() {
 function resolveConsent(
   context: PageContext,
   props: Partial<Consent>,
-): Consent {
+): Consent & { hasSettingsTarget: () => boolean } {
   const consent = context.site.consent
+  const settingsTeleport =
+    props.settingsTeleport ?? '.consent-settings-teleport-area'
   const categories = (consent?.categories ?? []).map((category) => ({
     id: category.id,
     label: category.label,
@@ -165,7 +169,8 @@ function resolveConsent(
     tone: props.tone,
     variant: props.variant,
     variantMode: props.variantMode,
-    settingsTeleport: '.consent-settings-teleport-area',
+    settingsTeleport,
+    hasSettingsTarget: () => !!document.querySelector(settingsTeleport),
     categories,
   }
 }
