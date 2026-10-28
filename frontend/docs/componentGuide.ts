@@ -76,7 +76,7 @@ export function registerComponentGuideStyles() {
     registerComponentDirectoryStyles(root, palette)
     registerLandingGalleryStyles(root)
     registerLandingIntroductionStyles(root)
-    registerLandingFeatureStyles(root, palette)
+    registerLandingFeatureStyles(root)
     registerLandingWorkflowStyles(root, palette)
   })
 }
@@ -589,84 +589,42 @@ function registerLandingIntroductionStyles(root: Style) {
     .flexShrink('0')
 }
 
-function registerLandingFeatureStyles(root: Style, palette: ThemePalette) {
-  const neutral = palette.semanticTone.neutral
-
-  root
-    .select('.landing-section-demo__feature')
-    .height('100%')
-    .padding('1.25rem')
-    .boxShadow('none')
+function registerLandingFeatureStyles(root: Style) {
+  root.select('.landing-section-demo__feature').padding('1.25rem')
 
   root
     .select('.landing-section-alignment-gallery')
     .gridTemplateColumns('minmax(0, 1fr)')
 
   root
-    .select('.landing-section-demo__feature > .panel__body')
-    .display('flex')
-    .flexDirection('column')
-    .alignItems('flex-start')
-    .gap('0.875rem')
-
-  root
     .select('.landing-section-demo__feature h3')
     .margin('0.25rem 0 0')
-    .fontSize('1.0625rem')
     .fontWeight('650')
     .lineHeight('1.35')
 
   root
     .select('.landing-section-demo__feature p')
-    .margin('0')
     .fontSize('0.9375rem')
     .lineHeight('1.65')
-    .color(neutral.text.subtle)
 }
 
 function registerLandingWorkflowStyles(root: Style, palette: ThemePalette) {
-  const neutral = palette.semanticTone.neutral
+  root.select('.landing-section-demo__workflow').padding('1.5rem')
 
-  root
-    .select('.landing-section-demo__workflow')
-    .padding('1.5rem')
-    .boxShadow(palette.effect.softShadow)
+  root.select('.landing-section-demo__workflow > .panel__body').gap('1.25rem')
 
-  root
-    .select('.landing-section-demo__workflow > .panel__body')
-    .display('grid')
-    .gap('1.25rem')
+  root.select('.landing-section-demo__step > div').gap('0.25rem')
 
-  root
-    .select('.landing-section-demo__workflow .text-eyebrow')
-    .margin('0')
-    .fontSize('0.625rem')
-
-  root
-    .select('.landing-section-demo__step')
-    .display('flex')
-    .alignItems('center')
-    .gap('0.875rem')
-
-  root
-    .select('.landing-section-demo__step > div')
-    .display('grid')
-    .gap('0.25rem')
-
-  root
-    .select('.landing-section-demo__step strong')
-    .fontSize('0.9375rem')
-    .fontWeight('600')
+  root.select('.landing-section-demo__step strong').fontSize('0.9375rem')
 
   root
     .select('.landing-section-demo__step span, .landing-section-demo__note')
-    .margin('0')
     .fontSize('0.8125rem')
-    .lineHeight('1.5')
-    .color(neutral.text.subtle)
 
   root
-    .select('.landing-section-demo__note')
-    .paddingTop('1rem')
-    .borderTop(`1px solid ${neutral.border.subtle}`)
+    .select('.landing-section-demo__step span')
+    .lineHeight('1.5')
+    .color(palette.semanticTone.neutral.text.subtle)
+
+  root.select('.landing-section-demo__note').paddingTop('1rem')
 }

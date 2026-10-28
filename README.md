@@ -12,6 +12,7 @@ Markdown for your content. TypeScript for your components, styles, and behavior.
 [![CI](https://github.com/PureStackStudio/PureStack/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PureStackStudio/PureStack/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-a855f7?style=flat-square)](LICENSE)
+[![Join Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/xvPDTc27VD)
 
 **[Explore the docs](https://purestack.studio/guides/)** ·
 **[Browse components](https://purestack.studio/components/)** ·
