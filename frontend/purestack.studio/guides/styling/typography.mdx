@@ -123,6 +123,13 @@ Use utility classes when a single element needs a particular look, for example a
 - `fw-100` through `fw-900` set the weight.
 - `lh-0` through `lh-7` set the line height from `1.0` to `1.7`.
 
+For deliberate adjustments, use `tracking-normal`, `tracking-tight`, or
+`tracking-wide`. Use `text-balance` for headings and `text-pretty` for supporting
+copy, with `max-w-heading` or `max-w-prose` to limit line length. `tabular-nums`
+keeps digits equally wide when the font supports it, which helps metrics and
+changing counters. `text-inherit` keeps a text role's color aligned with its
+parent surface.
+
 `fs-*` classes change the **size only**. They do not apply the derived line height, so large text keeps the line height of its surroundings. For multiline text at a large size, add a matching `lh-*` class, as the specimen above does:
 
 ```mdx

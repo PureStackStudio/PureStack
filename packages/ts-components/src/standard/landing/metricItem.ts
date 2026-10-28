@@ -20,7 +20,7 @@ export function defineMetricItemComponent() {
   </Flex>
   <strong
     r-if="value !== undefined && value !== null && value !== ''"
-    class="metric-item__value fs-h1 fw-600 lh-1 m-0 wrap-anywhere"
+    class="metric-item__value fs-h1 fw-600 lh-1 m-0 wrap-anywhere tabular-nums"
   >
     {{ value }}
   </strong>

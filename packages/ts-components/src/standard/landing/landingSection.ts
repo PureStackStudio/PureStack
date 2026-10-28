@@ -18,13 +18,13 @@ export function defineLandingSectionComponent() {
       :title="title"
       :subtitle="subtitle"
       :titleTag="titleTag || 'h2'"
-      eyebrowClass="landing-section__eyebrow m-0 fs-xxs opacity-75"
-      titleClass="landing-section__title m-0 fw-600 wrap-anywhere"
-      subtitleClass="landing-section__subtitle m-0 fs-body lh-6"
+      eyebrowClass="landing-section__eyebrow d-inline-flex align-center gap-3 m-0 fs-xxs opacity-75 tracking-wide text-inherit"
+      titleClass="landing-section__title m-0 fw-600 wrap-anywhere max-w-heading tracking-tight text-balance"
+      subtitleClass="landing-section__subtitle m-0 fs-body lh-6 max-w-prose tracking-normal text-inherit text-pretty opacity-75"
     >
-      <div class="landing-section__actions d-flex flex-wrap align-center gap-3">
-        <slot name="actions"></slot>
-      </div>
+      <span
+        class="landing-section__actions flex flex-wrap align-center gap-3 hidden-empty"
+        ><slot name="actions"></slot></span>
     </SectionHeader>
     <Grid
       class="landing-section__content gap-5"

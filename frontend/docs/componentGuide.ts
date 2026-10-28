@@ -28,7 +28,7 @@ export function defineComponentGuideComponents() {
       html`<header class="component-header">
   <div class="component-header__top">
     <div class="component-header__identity">
-      <code>{{ name }}</code><span>{{ kind }}</span>
+      <code>{{ name }}</code><span class="tracking-wide">{{ kind }}</span>
     </div>
     <nav class="component-header__links" aria-label="Component resources">
       <a href="#api-reference">API <span aria-hidden="true">↗</span></a>
@@ -52,7 +52,7 @@ export function defineComponentGuideComponents() {
     ComponentExample: defineComponent<ComponentExample>(
       html`<section class="component-example" :aria-label="label">
   <header class="component-example__heading">
-    <span class="component-example__dot" aria-hidden="true"></span><strong>{{ label }}</strong><span class="component-example__tag">COMPOSITION</span>
+    <span class="component-example__dot" aria-hidden="true"></span><strong>{{ label }}</strong><span class="component-example__tag tracking-wide">COMPOSITION</span>
   </header>
   <div class="component-example__stage"><slot></slot></div>
   <p class="component-example__caption">{{ caption }}</p>
@@ -256,7 +256,6 @@ function registerComponentHeaderStyles(root: Style, palette: ThemePalette) {
   root
     .select('.component-header__identity span, .component-example__tag')
     .fontSize('0.65rem')
-    .letterSpacing('0.1em')
     .textTransform('uppercase')
     .color(neutral.text.subtle)
 
@@ -579,25 +578,7 @@ function registerLandingIntroductionStyles(root: Style) {
 
   root
     .select('.landing-section-demo .landing-section__title')
-    .maxWidth('20ch')
     .fontSize('clamp(1.75rem, 5cqi, 3.25rem)')
-    .letterSpacing('-0.04em')
-    .textWrap('balance')
-
-  root
-    .select('.landing-section-demo .landing-section__subtitle')
-    .maxWidth('52ch')
-    .letterSpacing('normal')
-    .color('inherit')
-    .opacity('0.78')
-    .textWrap('pretty')
-
-  root
-    .select('.landing-section-demo .landing-section__eyebrow')
-    .display('inline-flex')
-    .alignItems('center')
-    .gap('0.75rem')
-    .color('inherit')
 
   root
     .select('.landing-section-demo .landing-section__eyebrow::before')
@@ -606,10 +587,6 @@ function registerLandingIntroductionStyles(root: Style) {
     .height('2px')
     .background('currentColor')
     .flexShrink('0')
-
-  root
-    .select('.landing-section-demo .landing-section__actions:empty')
-    .display('none')
 }
 
 function registerLandingFeatureStyles(root: Style, palette: ThemePalette) {
@@ -638,7 +615,6 @@ function registerLandingFeatureStyles(root: Style, palette: ThemePalette) {
     .fontSize('1.0625rem')
     .fontWeight('650')
     .lineHeight('1.35')
-    .letterSpacing('-0.02em')
 
   root
     .select('.landing-section-demo__feature p')
@@ -665,7 +641,6 @@ function registerLandingWorkflowStyles(root: Style, palette: ThemePalette) {
     .select('.landing-section-demo__workflow .text-eyebrow')
     .margin('0')
     .fontSize('0.625rem')
-    .letterSpacing('0.1em')
 
   root
     .select('.landing-section-demo__step')

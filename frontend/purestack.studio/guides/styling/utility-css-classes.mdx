@@ -16,20 +16,24 @@ nav:
 PureStack generates a small vocabulary of reusable CSS classes alongside its component styles. Use them in MDX markup, in a component's `class` or `bodyClass` prop, or in a TypeScript `html` template. They are generated for each configured theme, so classes that use palette colors or font sizes follow the active skin.
 
 <Panel tone="info" bodyClass="p-3" class="mb-5">
-  <p class="text-eyebrow mt-0">Release note</p>
-  <h2 class="mt-0 mb-2">A clearer way to build</h2>
-  <p class="mb-0">Spacing and type follow the site's theme.</p>
+  <p class="text-eyebrow text-inherit tracking-wide mt-0">Release note</p>
+  <h2 class="max-w-heading text-balance tracking-tight mt-0 mb-2">
+    A clearer way to build
+  </h2>
+  <p class="max-w-prose text-pretty tracking-normal mb-0">
+    Spacing and type follow the site's theme.
+  </p>
 </Panel>
 
 ```mdx
 <Panel tone="info" bodyClass="p-3" class="mb-5">
-  <p class="text-eyebrow mt-0">Release note</p>
-  <h2 class="mt-0 mb-2">A clearer way to build</h2>
-  <p class="mb-0">Spacing and type follow the site's theme.</p>
+  <p class="text-eyebrow text-inherit tracking-wide mt-0">Release note</p>
+  <h2 class="max-w-heading text-balance tracking-tight mt-0 mb-2">A clearer way to build</h2>
+  <p class="max-w-prose text-pretty tracking-normal mb-0">Spacing and type follow the site's theme.</p>
 </Panel>
 ```
 
-Here `bodyClass` styles the Panel's body, while `class` styles the elements inside it. This distinction matters for components with their own wrapper and internal content. The [component catalog](/components/) shows which props each component exposes.
+Here `bodyClass` styles the Panel's inner body, while `class` styles its root. This distinction matters for components with their own wrapper and internal content. The [component catalog](/components/) shows which props each component exposes.
 
 The class names below come from PureStack's utility and component style generators. They are not Tailwind-style arbitrary values: a class works when the generator defines it. For a repeated design pattern, add a named style in your site's TypeScript styles; use utilities for local composition and small adjustments.
 
@@ -86,9 +90,28 @@ The other numeric type controls are `fw-100` through `fw-900`, in steps of 100, 
 | --- | --- |
 | `text-left`, `text-center`, `text-right` | Physical text alignment. |
 | `text-start`, `text-end`, `text-justify` | Logical start/end alignment or justified text. |
+| `text-balance` | Balances line lengths in short text, such as a heading, using `text-wrap: balance`. |
+| `text-pretty` | Improves paragraph line breaks using `text-wrap: pretty`. |
+| `text-inherit` | Inherits the parent's text color, including on a colored surface. |
+| `tracking-normal`, `tracking-tight`, `tracking-wide` | Set letter spacing to `normal`, `-0.025em`, or `0.1em`. |
+| `tabular-nums` | Requests equal-width digits from the font with `font-variant-numeric: tabular-nums`. Useful for metrics, prices, tables, and counters. |
 | `uppercase`, `lowercase` | Text transform. |
 | `underline-hover`, `underline-active` | Underline on hover or on active interaction; `underline-active` also recognizes an `.active` class. |
 | `text-ellipsis` | Sets `text-overflow: ellipsis` only. Combine it with a constrained width, `overflow-hidden`, and `ws-nowrap` for a single-line ellipsis. |
+
+Wrapping, tracking, inherited color, and numeric utilities override the
+corresponding declaration from a text role. They leave its other properties
+alone. `tracking-normal`, for example, resets a label's letter spacing without
+changing its size or weight. Tabular digits depend on support in the selected
+font.
+
+Combine wrapping with a line-length limit when introducing a section:
+
+```mdx
+<h2 class="max-w-heading text-balance tracking-tight">A thoughtful foundation for your next idea</h2>
+<p class="max-w-prose text-pretty tracking-normal">Keep supporting copy readable without forcing the rest of the layout to use the same width.</p>
+<strong class="fs-h1 tabular-nums">1,248</strong>
+```
 
 PureStack also has editorial role classes. They set a combination of font size, weight, color, transform, line height, and/or margin, depending on the role:
 
@@ -140,6 +163,18 @@ For any name in this table, `hidden-{name}` hides at widths **up to and includin
 <p class="hidden-lg-up">Shown below 1024px</p>
 ```
 
+`hidden-empty` hides an element only while it matches `:empty`. Use it for
+optional action rows or footer containers:
+
+```html
+<span class="flex gap-3 hidden-empty"><slot name="actions"></slot></span>
+```
+
+An empty container is hidden; adding content restores its normal display.
+Comments do not count as content, but literal whitespace text does, so keep an
+unused wrapper free of spaces or newlines inside it. The utility does not hide
+text-only content. It can be combined with `d-flex` or `d-grid`.
+
 There is no general `md:p-3` or `md:d-flex` syntax in this utility set. Responsive Flex classes and the `Grid` component have their own explicit APIs, described next.
 
 ## Flex and Grid composition
@@ -183,6 +218,8 @@ For grid children, `justify-self-start`, `justify-self-center`, `justify-self-en
 | --- | --- |
 | `w-full`, `h-full` | `width: 100%` or `height: 100%`. |
 | `max-w-full` | Caps width at `100%`; combine with a fixed width to fit a smaller container. |
+| `max-w-heading` | Limits line length to `20ch`, useful for short headings. |
+| `max-w-prose` | Limits line length to `65ch`, useful for paragraphs and introductions. |
 | `min-w-0` | Allows a flex or grid child to shrink below its content's preferred width. |
 | `max-h-inspector` | Limits height to `24rem`. |
 | `overflow-visible`, `overflow-auto`, `overflow-hidden` | Set overflow on both axes. |
@@ -196,6 +233,11 @@ For grid children, `justify-self-start`, `justify-self-center`, `justify-self-en
 | `bg-none` | Remove a background. |
 
 `auto-fit` is a specialized width utility that sets `width: 1%`; it is not a CSS Grid `auto-fit` track rule. Use it only when that width behavior is intended.
+
+The text-width utilities set only `max-width`, not `width`. The `ch` unit is
+based on the font's zero glyph, so the resulting width follows the type size.
+They add no padding, centering, or responsive variants; use `mx-auto` when a
+block should be centered.
 
 ## Borders, radius, and opacity
 

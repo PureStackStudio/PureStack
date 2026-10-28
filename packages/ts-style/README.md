@@ -8,6 +8,13 @@ Use `themes` and `registerSkin` to configure a site's palette, or
 `styleBuilder` to collect and render CSS for a theme. PureStack's component
 library and site generator use these same exports.
 
+Text utilities include `text-balance`, `text-pretty`, `text-inherit`, and
+`tabular-nums`. Letter spacing uses `tracking-normal` (`normal`),
+`tracking-tight` (`-0.025em`), or `tracking-wide` (`0.1em`). Use `max-w-heading`
+(`20ch`) and `max-w-prose` (`65ch`) to limit line length. `hidden-empty` hides
+containers matching `:empty`; comments are allowed, but whitespace text counts
+as content. These utilities have no generated responsive or hover variants.
+
 Every SSG builder owns an independent style context. The generator propagates
 that context across asynchronous factories, hooks, page rendering, and asset
 writing, so concurrent sites cannot overwrite each other's palettes or CSS.

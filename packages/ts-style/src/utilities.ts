@@ -29,6 +29,11 @@ const OPACITY_UTILITIES = {
   75: '0.75',
   1: '1',
 } as const
+const TRACKING_UTILITIES = {
+  normal: 'normal',
+  tight: '-0.025em',
+  wide: '0.1em',
+} as const
 const DISPLAY_UTILITIES = {
   none: 'none',
   block: 'block',
@@ -66,6 +71,7 @@ export function registerUtilityStyles() {
     applyOpacityUtilities(theme)
     applyToneInsetSizeUtilities(theme)
     applyTextUtilities(theme, palette)
+    applyTextLayoutUtilities(theme)
     applyFontSizeUtilities(theme, palette)
     applyFontWeightUtilities(theme)
     applyLineHeightUtilities(theme)
@@ -171,6 +177,8 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.w-full', theme).width(force('100%'))
   styleBuilder.select('.h-full', theme).height(force('100%'))
   styleBuilder.select('.max-w-full', theme).maxWidth(force('100%'))
+  styleBuilder.select('.max-w-heading', theme).maxWidth(force('20ch'))
+  styleBuilder.select('.max-w-prose', theme).maxWidth(force('65ch'))
   styleBuilder.select('.list-none', theme).set('list-style', force('none'))
   styleBuilder.select('.max-h-inspector', theme).maxHeight(force('24rem'))
   styleBuilder.select('.auto-fit', theme).width(force('1%'))
@@ -197,6 +205,7 @@ function applyLayoutUtilities(theme: string) {
 
 function applyVisibilityUtilities(theme: string) {
   styleBuilder.select('.hidden', theme).display(force('none'))
+  styleBuilder.select('.hidden-empty:empty', theme).display(force('none'))
 
   for (const name of getBreakpointNames()) {
     const breakpoint = BREAKPOINTS[name]
@@ -673,6 +682,21 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
     palette.font.size.xxs,
     palette.font.weight.w600,
   )
+}
+
+function applyTextLayoutUtilities(theme: string) {
+  styleBuilder.select('.text-balance', theme).textWrap(force('balance'))
+  styleBuilder.select('.text-pretty', theme).textWrap(force('pretty'))
+  styleBuilder.select('.text-inherit', theme).color(force('inherit'))
+  styleBuilder
+    .select('.tabular-nums', theme)
+    .fontVariantNumeric(force('tabular-nums'))
+
+  for (const [name, spacing] of Object.entries(TRACKING_UTILITIES)) {
+    styleBuilder
+      .select(`.tracking-${name}`, theme)
+      .letterSpacing(force(spacing))
+  }
 }
 
 function applyScaledTextFontUtility(

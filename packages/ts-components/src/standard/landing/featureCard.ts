@@ -28,24 +28,27 @@ export function defineFeatureCardComponent() {
   <Flex direction="column" align="start" class="feature-card__content gap-3">
     <p
       r-if="eyebrow"
-      class="feature-card__eyebrow fs-xxs fw-700 uppercase opacity-75 m-0"
+      class="feature-card__eyebrow fs-xxs fw-700 uppercase tracking-wide opacity-75 m-0"
     >
       {{ eyebrow }}
     </p>
     <h3
       r-if="title"
-      class="feature-card__title fs-h4 fw-600 lh-2 m-0 wrap-anywhere"
+      class="feature-card__title fs-h4 fw-600 lh-2 m-0 wrap-anywhere tracking-tight text-balance"
     >
       {{ title }}
     </h3>
-    <p r-if="summary" class="feature-card__summary fs-body lh-6 opacity-75 m-0">
+    <p
+      r-if="summary"
+      class="feature-card__summary fs-body lh-6 tracking-normal text-pretty opacity-75 m-0"
+    >
       {{ summary }}
     </p>
     <slot></slot>
   </Flex>
-  <Flex wrap="true" align="center" class="feature-card__actions mt-auto gap-3">
-    <slot name="actions"></slot>
-  </Flex>
+  <span
+    class="feature-card__actions flex flex-wrap align-center mt-auto gap-3 hidden-empty"
+    ><slot name="actions"></slot></span>
 </Panel>`
 
   return {
