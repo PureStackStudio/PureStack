@@ -890,7 +890,7 @@ Functions:
 - `normalizeFrontmatter`, `parseFrontmatterSource`
 - `buildNavigation`, `resolveNavigationConfig`, `resolvePageNavigation`
 - `highlightPlugin`, `pagefindPlugin`; backend helpers such as `createMdxHighlighter` are exported by `@purestack/ts-highlight`
-- `defaultTemplates`, `resolvePageTemplate`
+- `defaultTemplates`
 
 Types:
 - Build: `BuildInput`, `BuildOptions`, `BuildResult`, `BuildCountSummary`, `PublishOptions`

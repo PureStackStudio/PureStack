@@ -89,4 +89,3 @@ export {
   type PureStackMarkdown,
   type PureStackPlugin,
 } from './plugins/plugin'
-export { resolvePageTemplate } from './templates/page-templates'
