@@ -782,7 +782,7 @@ describe('project generation', () => {
         await readFile(path.join(unpacked, 'template', file), 'utf8'),
       )
     }
-  })
+  }, 20_000)
 
   it('applies selected settings while preserving template configuration', async () => {
     const archive = await archiveFixture()

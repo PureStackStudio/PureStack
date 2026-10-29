@@ -69,10 +69,7 @@ const topBarTemplate = html`<input
 <header class="topbar" :class="classes" r-inherit>
   <Flex align="center">
     <div :is="resolvedLogoComponent" class="flex-none" :config="siteLogo"></div>
-    <SearchBox
-      r-if="searchEnabled"
-      class="topbar__search flex-auto rounded-md tone-text-surface"
-      variant="none"/>
+    <SearchBox r-if="searchEnabled" class="topbar__search flex-auto"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <div class="topbar__actions">
         <slot name="before-actions"></slot>

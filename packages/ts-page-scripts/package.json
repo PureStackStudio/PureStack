@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-page-scripts",
-  "version": "1.1.29",
+  "version": "1.1.30",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-page-scripts.mjs",
   "types": "./dist/ts-page-scripts.d.mts",
@@ -40,7 +40,8 @@
   },
   "dependencies": {
     "@purestack/ts-common": "workspace:^",
-    "@purestack/ts-html": "workspace:^"
+    "@purestack/ts-html": "workspace:^",
+    "@purestack/ts-svg-icons": "workspace:^"
   },
   "devDependencies": {
     "@purestack/ts-minidom": "workspace:^",

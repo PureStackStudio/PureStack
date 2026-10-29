@@ -86,8 +86,8 @@ The live field above searches the real documentation index. Try a matching term,
     <div class="component-appearance-cell">
       <code>Empty query</code>
       <p class="m-0">
-        The search field is visible; the results region stays hidden until a
-        query is entered.
+        Focus the search field to see a search prompt. Enter at least two
+        characters to search the site.
       </p>
     </div>
     <div class="component-appearance-cell">
@@ -114,7 +114,7 @@ The live field above searches the real documentation index. Try a matching term,
   </div>
 </ComponentExample>
 
-The current implementation derives its placeholder from site.siteTitle, even when a placeholder prop is supplied. Use the site title to configure the visible default; the API below describes the accepted prop separately.
+The default placeholder uses site.siteTitle. Supply a placeholder prop to customize the field for its context.
 
 ## Feature map
 
@@ -129,6 +129,8 @@ This component exposes tone and variant, but no variantMode.
 ## Behavior and accessibility
 
 Pagefind indexes the built HTML, so new content appears after a successful indexed build. SearchBox does not fetch application records or replace autocomplete. Keyboard behavior and results are provided by the standard Pagefind search runtime.
+
+Press `/` outside an editable field to focus the first visible search box. Use the up and down arrow keys to move between results, Enter to open the focused link, and Escape to dismiss the panel. Tab follows the normal link order. Result counts and search errors are announced to screen readers.
 
 ## API reference
 
@@ -179,8 +181,8 @@ Pagefind indexes the built HTML, so new content appears after a successful index
   defaultValue="Search + site title"
 >
   <p>
-    The current component derives its placeholder from site.siteTitle. The
-    registered placeholder prop is not read by the resolver.
+    Custom field placeholder. When omitted, the component uses site.siteTitle,
+    or simply Search when the site has no title.
   </p>
 </ApiProperty>
 

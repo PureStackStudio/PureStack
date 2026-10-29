@@ -1118,6 +1118,7 @@ __metadata:
     "@purestack/ts-html": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-render": "workspace:^"
+    "@purestack/ts-svg-icons": "workspace:^"
   languageName: unknown
   linkType: soft
 

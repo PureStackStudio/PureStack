@@ -1,3 +1,9 @@
+import {
+  renderSearchMessage,
+  renderSearchResults,
+  type SearchRecord,
+} from './pagefindSearchResults'
+
 const PAGEFIND_ROOT = '[data-pagefind-search]'
 const MIN_QUERY_LENGTH = 2
 const RESULT_LIMIT = 8
@@ -33,7 +39,7 @@ function isPagefindApi(value: unknown): value is PagefindApi {
     typeof value === 'object' &&
     value !== null &&
     'search' in value &&
-    typeof (value as { search?: unknown }).search === 'function'
+    typeof value.search === 'function'
   )
 }
 
@@ -45,110 +51,22 @@ function ready(fn: () => void) {
   fn()
 }
 
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (char) => {
-    if (char === '&') return '&amp;'
-    if (char === '<') return '&lt;'
-    if (char === '>') return '&gt;'
-    if (char === '"') return '&quot;'
-    return '&#39;'
-  })
-}
-
-function escapeRegex(value: string) {
-  const chars = '\\^$.*+?()[]{}|'
-  let out = ''
-  for (let i = 0; i < value.length; i += 1) {
-    const ch = value.charAt(i)
-    out += chars.indexOf(ch) !== -1 ? `\\${ch}` : ch
-  }
-  return out
-}
-
-function decodeHtml(value: string) {
-  if (!value) return ''
-  const text = document.createElement('textarea')
-  text.innerHTML = value
-  return text.value
-}
-
-function stripHtml(value: string) {
-  return value
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-function extractTerms(query: string) {
-  const parts = query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter((part) => part.length >= 2)
-  const unique: string[] = []
-  for (const part of parts) {
-    if (!unique.includes(part)) unique.push(part)
-  }
-  unique.sort((a, b) => b.length - a.length)
-  return unique
-}
-
-function highlightText(text: string, terms: string[]) {
-  if (!text) return ''
-  if (!terms.length) return escapeHtml(text)
-  const pattern = terms.map(escapeRegex).join('|')
-  if (!pattern) return escapeHtml(text)
-  const regex = new RegExp(`(${pattern})`, 'gi')
-  let out = ''
-  let lastIndex = 0
-  text.replace(regex, (match, _group, offset) => {
-    out += escapeHtml(text.slice(lastIndex, offset))
-    out += `<mark class="site-search__highlight">${escapeHtml(match)}</mark>`
-    lastIndex = offset + match.length
-    return match
-  })
-  out += escapeHtml(text.slice(lastIndex))
-  return out
-}
-
-function renderMessage(
-  container: HTMLElement,
-  message: string,
-  modifier: string,
-) {
-  container.innerHTML = `<p class="site-search__message ${modifier}">${escapeHtml(message)}</p>`
-  container.hidden = false
-}
-
-type SearchRecord = { url: string; title: string; excerpt: string }
-
-function renderResults(
-  container: HTMLElement,
-  results: SearchRecord[],
-  query: string,
-) {
-  if (!results.length) {
-    renderMessage(container, 'No results found.', 'site-search__message--empty')
-    return
-  }
-  const terms = extractTerms(query)
-  let html = '<ul class="site-search__list">'
-  for (const result of results) {
-    const titleRaw = result.title?.trim() ? result.title.trim() : 'Untitled'
-    const title = decodeHtml(titleRaw)
-    const excerptRaw = result.excerpt ? stripHtml(result.excerpt) : ''
-    const excerpt = decodeHtml(excerptRaw)
-    html += `<li class="site-search__item"><a class="site-search__link" href="${escapeHtml(result.url)}"><span class="site-search__title">${highlightText(title, terms)}</span>${excerpt ? `<span class="site-search__excerpt">${highlightText(excerpt, terms)}</span>` : ''}</a></li>`
-  }
-  html += '</ul>'
-  container.innerHTML = html
-  container.hidden = false
-}
-
 function resolveSearchInput(root: HTMLElement): HTMLInputElement | null {
   const target = root.querySelector('[data-pagefind-input]')
   if (target instanceof HTMLInputElement) return target
   if (!(target instanceof HTMLElement)) return null
   return target.querySelector('input')
+}
+
+function isSearchVisible(input: HTMLElement) {
+  const rect = input.getBoundingClientRect()
+  return (
+    rect.width > 0 &&
+    rect.height > 0 &&
+    rect.left < window.innerWidth &&
+    rect.right > 0 &&
+    !input.closest('[inert]')
+  )
 }
 
 function resolveBasePath() {
@@ -167,7 +85,7 @@ function withBasePath(basePath: string, url: string) {
   return `${basePath}${url}`
 }
 
-async function setupSearch(root: HTMLElement) {
+function setupSearch(root: HTMLElement, index: number) {
   const input = resolveSearchInput(root)
   const output = root.querySelector<HTMLElement>('[data-pagefind-results]')
   if (
@@ -178,7 +96,10 @@ async function setupSearch(root: HTMLElement) {
   }
   const searchInput = input
   const searchOutput = output
+  const status = root.querySelector('[data-pagefind-status]')
   const basePath = resolveBasePath()
+  searchOutput.id = `site-search-results-${index}`
+  searchInput.setAttribute('aria-controls', searchOutput.id)
 
   let loadPromise: Promise<PagefindApi> | undefined
   function loadPagefind(): Promise<PagefindApi> {
@@ -188,10 +109,7 @@ async function setupSearch(root: HTMLElement) {
         const pagefindPath = `${basePath}/pagefind/pagefind.js`
         const dynamicImport = new Function(
           `return import(${JSON.stringify(pagefindPath)})`,
-        ) as () => Promise<{
-          default?: PagefindApi
-          search?: PagefindApi['search']
-        }>
+        ) as () => Promise<{ default?: unknown; search?: unknown }>
         const next = dynamicImport().then((mod) => {
           const candidate = mod.default ?? mod
           if (!isPagefindApi(candidate)) {
@@ -199,8 +117,11 @@ async function setupSearch(root: HTMLElement) {
           }
           return candidate
         })
-        loadPromise = next
-        return next
+        loadPromise = next.catch((error: unknown) => {
+          loadPromise = undefined
+          throw error
+        })
+        return loadPromise
       })()
     return promise
   }
@@ -208,95 +129,195 @@ async function setupSearch(root: HTMLElement) {
   let debounceTimer: ReturnType<typeof globalThis.setTimeout> | 0 = 0
   let requestId = 0
 
-  function hideResults() {
-    searchOutput.hidden = true
-    searchOutput.innerHTML = ''
+  function announce(message: string) {
+    if (status) status.textContent = message
   }
 
-  async function performSearch() {
-    const query = searchInput.value.trim()
-    if (query.length < MIN_QUERY_LENGTH) {
-      hideResults()
-      return
-    }
+  function cancelSearch() {
+    requestId += 1
+    if (debounceTimer) globalThis.clearTimeout(debounceTimer)
+    searchOutput.removeAttribute('aria-busy')
+  }
 
-    const currentRequest = ++requestId
+  function hideResults() {
+    cancelSearch()
+    searchOutput.hidden = true
+    searchOutput.innerHTML = ''
+    announce('')
+  }
+
+  async function performSearch(query: string, currentRequest: number) {
+    searchOutput.setAttribute('aria-busy', 'true')
+    renderSearchMessage(
+      searchOutput,
+      'Searching…',
+      'Finding the best matches across this site.',
+      'loading',
+    )
+    announce('Searching')
     let pagefind: PagefindApi
     try {
       pagefind = await loadPagefind()
     } catch {
-      renderMessage(
+      if (currentRequest !== requestId) return
+      searchOutput.removeAttribute('aria-busy')
+      renderSearchMessage(
         searchOutput,
-        'Search index is unavailable. Build the site to enable search.',
-        'site-search__message--error',
+        'Search is unavailable',
+        'The search index is unavailable. Please try again later.',
+        'error',
       )
+      announce('Search is unavailable')
       return
     }
 
-    let response: PagefindSearchResponse
+    if (currentRequest !== requestId) return
     try {
-      response = await pagefind.search(query)
-    } catch {
-      renderMessage(
+      const response = await pagefind.search(query)
+      if (currentRequest !== requestId) return
+      const allMatches = response?.results ?? []
+      const matches = allMatches.slice(0, RESULT_LIMIT)
+      const records = await Promise.all(matches.map((match) => match.data()))
+      if (currentRequest !== requestId) return
+      const mapped = records.map((record): SearchRecord => {
+        const meta = record?.meta ?? {}
+        return {
+          url: withBasePath(basePath, record?.url || '/'),
+          title: typeof meta.title === 'string' ? meta.title : '',
+          excerpt: record?.excerpt || '',
+        }
+      })
+      renderSearchResults(
         searchOutput,
-        'Search failed. Please try again.',
-        'site-search__message--error',
+        mapped,
+        query,
+        allMatches.length,
+        basePath,
       )
-      return
+      announce(
+        `${allMatches.length} ${allMatches.length === 1 ? 'result' : 'results'} for ${query}`,
+      )
+    } catch {
+      if (currentRequest !== requestId) return
+      renderSearchMessage(
+        searchOutput,
+        'We couldn’t finish that search',
+        'Please try your search again in a moment.',
+        'error',
+      )
+      announce('Search failed. Please try again.')
+    } finally {
+      if (currentRequest === requestId)
+        searchOutput.removeAttribute('aria-busy')
     }
-
-    if (currentRequest !== requestId) return
-
-    const matches = response?.results
-      ? response.results.slice(0, RESULT_LIMIT)
-      : []
-    if (!matches.length) {
-      renderResults(searchOutput, [], query)
-      return
-    }
-
-    const records = await Promise.all(matches.map((match) => match.data()))
-    if (currentRequest !== requestId) return
-
-    const mapped = records.map((record): SearchRecord => {
-      const meta = record?.meta ?? {}
-      return {
-        url: withBasePath(basePath, record?.url || '/'),
-        title: typeof meta.title === 'string' ? meta.title : '',
-        excerpt: record?.excerpt || '',
-      }
-    })
-    renderResults(searchOutput, mapped, query)
   }
 
-  searchInput.addEventListener('input', () => {
-    if (debounceTimer) globalThis.clearTimeout(debounceTimer)
+  function scheduleSearch() {
+    cancelSearch()
+    const query = searchInput.value.trim()
+    if (query.length < MIN_QUERY_LENGTH) {
+      renderSearchMessage(
+        searchOutput,
+        query ? 'Keep typing…' : 'What are you looking for?',
+        `Search this site with at least ${MIN_QUERY_LENGTH} characters.`,
+        'idle',
+      )
+      announce('')
+      return
+    }
+    // Remove old links immediately so Enter cannot open a stale result.
+    searchOutput.hidden = true
+    searchOutput.innerHTML = ''
+    const currentRequest = requestId
     debounceTimer = globalThis.setTimeout(() => {
-      void performSearch()
+      void performSearch(query, currentRequest)
     }, 120)
-  })
+  }
+
+  searchInput.addEventListener('input', scheduleSearch)
   searchInput.addEventListener('focus', () => {
-    if (searchInput.value.trim().length >= MIN_QUERY_LENGTH)
-      void performSearch()
+    if (searchOutput.hidden) scheduleSearch()
   })
   root.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      event.preventDefault()
+      searchInput.focus()
       hideResults()
       searchInput.blur()
+      return
     }
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
+    if (
+      searchOutput.hidden ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.isComposing
+    )
+      return
+    const links = Array.from(
+      searchOutput.querySelectorAll<HTMLAnchorElement>('.site-search__link'),
+    )
+    if (!links.length) return
+    event.preventDefault()
+    const activeElement = document.activeElement
+    const current =
+      activeElement instanceof HTMLAnchorElement
+        ? links.indexOf(activeElement)
+        : -1
+    const next =
+      event.key === 'ArrowDown'
+        ? current + 1
+        : current < 0
+          ? links.length - 1
+          : current - 1
+    if (next < 0 || next >= links.length) searchInput.focus()
+    else links[next].focus()
+  })
+  root.addEventListener('focusout', (event) => {
+    if (
+      !(event.relatedTarget instanceof Node) ||
+      !root.contains(event.relatedTarget)
+    )
+      hideResults()
   })
   document.addEventListener('click', (event) => {
-    if (!root.contains(event.target as Node | null)) hideResults()
+    if (!(event.target instanceof Node) || !root.contains(event.target))
+      hideResults()
+  })
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key !== '/' ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.isComposing ||
+      event.defaultPrevented
+    )
+      return
+    const target = event.target
+    if (
+      target instanceof HTMLElement &&
+      target.closest(
+        'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]',
+      )
+    )
+      return
+    // Only the first visible SearchBox handles the global shortcut.
+    const first = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-pagefind-input]'),
+    ).find(isSearchVisible)
+    if (first !== searchInput) return
+    event.preventDefault()
+    searchInput.focus()
   })
 }
 
 function init() {
   const roots = Array.from(document.querySelectorAll(PAGEFIND_ROOT))
-  for (const root of roots) {
-    if (root instanceof HTMLElement) void setupSearch(root)
-  }
+  roots.forEach((root, index) => {
+    if (root instanceof HTMLElement) setupSearch(root, index)
+  })
 }
 
 ready(init)
-
-export {}

@@ -12,20 +12,26 @@ export interface SearchBox {
 }
 
 const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
-  <FormInputField
-    icon="tabler:search"
-    :tone="tone"
-    :variant="variant"
-    type="search"
-    name="q"
-    :placeholder="placeholder"
-    autocomplete="off"
-    spellcheck="false"
-    data-pagefind-input
-    aria-label="Search site content"/>
+  <div class="site-search__control">
+    <FormInputField
+      icon="tabler:search"
+      :tone="tone"
+      :variant="variant"
+      type="search"
+      name="q"
+      :placeholder="placeholder"
+      autocomplete="off"
+      spellcheck="false"
+      data-pagefind-input
+      aria-label="Search site content"/>
+    <kbd class="site-search__shortcut" aria-hidden="true">/</kbd>
+  </div>
+  <span class="site-search__sr-only" data-pagefind-status role="status"></span>
   <div
-    class="site-search__results doc-content"
+    class="site-search__results"
     data-pagefind-results
+    role="region"
+    aria-label="Site search"
     hidden
   ></div>
 </div>`
@@ -36,7 +42,9 @@ function defineSearchBoxComponent() {
     context: (head) => ({
       tone: head.props.tone,
       variant: head.props.variant,
-      placeholder: resolveSearchPlaceholder(resolvePageContext(head)),
+      placeholder:
+        head.props.placeholder ??
+        resolveSearchPlaceholder(resolvePageContext(head)),
     }),
   })
 }

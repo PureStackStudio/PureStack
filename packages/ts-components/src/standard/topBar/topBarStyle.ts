@@ -1,6 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
   BREAKPOINTS,
+  mediaAbove,
   mediaBelow,
   mediaMax,
   mediaMin,
@@ -167,6 +168,16 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
 }
 
 function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.topbar > .flex:has(> .topbar__search)', theme)
+    .media(mediaAbove(BREAKPOINTS.md))
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) min(32vw, 28rem) minmax(0, 1fr)')
+  styleBuilder
+    .select('.topbar .topbar__search', theme)
+    .media(mediaAbove(BREAKPOINTS.md))
+    .width('100%')
+    .justifySelf('center')
   styleBuilder
     .select('.topbar__search', theme)
     .media(mediaMax(BREAKPOINTS.sm))
