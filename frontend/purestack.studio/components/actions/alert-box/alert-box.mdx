@@ -27,31 +27,45 @@ nav:
 >
   <div class="component-recipe">
     <AlertBox
-      tone="info"
+      tone="success"
       variant="spotlight"
       eyebrow="DESIGN SYSTEM"
       title="Make feedback useful"
       badge="Tip"
       icon="lucide:check"
       meta="Semantic tones adapt to light and dark themes."
-      ><p>
+      ><p class="m-0">
         Explain what happened, why it matters, and what the reader can do next.
       </p>
       <template #actions
         ><BtnLink
+          class="max-w-full ws-normal"
           href="/guides/styling/semantic-tones/"
-          tone="info"
-          variant="outline"
+          tone="success"
+          variant="outlineFill"
           >Explore semantic tones</BtnLink></template></AlertBox>
   </div>
 </ComponentExample>
 
 ```html
-<AlertBox tone="info" variant="spotlight" eyebrow="DESIGN SYSTEM" title="Make feedback useful" badge="Tip" icon="lucide:check" meta="Semantic tones adapt to light and dark themes.">
-<p>Explain what happened, why it matters, and what the reader can do next.</p>
-<template #actions>
-<BtnLink href="/guides/styling/semantic-tones/" tone="info" variant="outline">Explore semantic tones</BtnLink>
-</template>
+<AlertBox
+      tone="success"
+      variant="spotlight"
+      eyebrow="DESIGN SYSTEM"
+      title="Make feedback useful"
+      badge="Tip"
+      icon="lucide:check"
+      meta="Semantic tones adapt to light and dark themes."
+      ><p class="m-0">
+        Explain what happened, why it matters, and what the reader can do next.
+      </p>
+      <template #actions
+        ><BtnLink
+          class="max-w-full ws-normal"
+          href="/guides/styling/semantic-tones/"
+          tone="success"
+          variant="outlineFill"
+          >Explore semantic tones</BtnLink></template>
 </AlertBox>
 ```
 
@@ -70,19 +84,21 @@ Make the next step part of the message. The actions slot keeps it alongside the 
   <TabPane id="alert-box-sample-1-preview" label="Preview">
     <div class="component-preview-stage">
       <AlertBox
-        tone="info"
+        tone="danger"
         title="A shared design language"
         eyebrow="COMPONENT GUIDANCE"
         badge="Tip"
         icon="lucide:check"
         meta="Applies to both light and dark themes."
       >
-        <p>Use semantic tones to communicate intent across your interface.</p>
+        <p class="m-0">
+          Use semantic tones to communicate intent across your interface.
+        </p>
         <template #actions>
           <BtnLink
+            class="max-w-full ws-normal"
             href="/components/layout/panel/"
-            tone="info"
-            variant="outline"
+            variant="outlineFill"
           >
             Explore surfaces
           </BtnLink>
@@ -93,19 +109,25 @@ Make the next step part of the message. The actions slot keeps it alongside the 
   <TabPane id="alert-box-sample-1-source-0" label="actionable-notice.mdx">
 ```html
 <AlertBox
-  tone="info"
-  title="A shared design language"
-  eyebrow="COMPONENT GUIDANCE"
-  badge="Tip"
-  icon="lucide:check"
-  meta="Applies to both light and dark themes."
->
-  <p>Use semantic tones to communicate intent across your interface.</p>
-  <template #actions>
-    <BtnLink href="/components/layout/panel/" tone="info" variant="outline">
-      Explore surfaces
-    </BtnLink>
-  </template>
+        tone="danger"
+        title="A shared design language"
+        eyebrow="COMPONENT GUIDANCE"
+        badge="Tip"
+        icon="lucide:check"
+        meta="Applies to both light and dark themes."
+      >
+        <p class="m-0">
+          Use semantic tones to communicate intent across your interface.
+        </p>
+        <template #actions>
+          <BtnLink
+            class="max-w-full ws-normal"
+            href="/components/layout/panel/"
+            variant="outlineFill"
+          >
+            Explore surfaces
+          </BtnLink>
+         </template>
 </AlertBox>
 ```
   </TabPane>
@@ -126,13 +148,26 @@ Keep the message explicit so color is never the only signal.
   <TabPane id="alert-box-sample-2-preview" label="Preview">
     <div class="component-preview-stage">
       <Flex direction="column">
-        <AlertBox tone="success" title="All checks passed">
+        <AlertBox
+          tone="success"
+          title="All checks passed"
+          icon="tabler:circle-check"
+        >
           The preview is ready for review.
         </AlertBox>
-        <AlertBox tone="warning" title="Review required">
+        <AlertBox
+          tone="warning"
+          title="Review required"
+          icon="tabler:alert-triangle"
+        >
           Check the content before publishing.
         </AlertBox>
-        <AlertBox tone="danger" title="Build failed" variant="outline">
+        <AlertBox
+          tone="danger"
+          title="Build failed"
+          variant="outline"
+          icon="tabler:alert-circle"
+        >
           Correct the source error and build again.
         </AlertBox>
       </Flex>
@@ -141,13 +176,13 @@ Keep the message explicit so color is never the only signal.
   <TabPane id="alert-box-sample-2-source-0" label="message-tones.mdx">
 ```html
 <Flex direction="column">
-  <AlertBox tone="success" title="All checks passed">
+  <AlertBox tone="success" title="All checks passed" icon="tabler:circle-check">
     The preview is ready for review.
   </AlertBox>
-  <AlertBox tone="warning" title="Review required">
+  <AlertBox tone="warning" title="Review required" icon="tabler:alert-triangle">
     Check the content before publishing.
   </AlertBox>
-  <AlertBox tone="danger" title="Build failed" variant="outline">
+  <AlertBox tone="danger" title="Build failed" variant="outline" icon="tabler:alert-circle">
     Correct the source error and build again.
   </AlertBox>
 </Flex>
@@ -322,6 +357,8 @@ Stateless is the default. Stateful enables hover, focus, and active styling; it 
 </ComponentExample>
 
 ## Behavior and accessibility
+
+The eyebrow sits above the title, the badge stays beside the title, and metadata follows the actions. Empty actions take no space. The optional icon uses a solid frame in the selected tone; variant controls the surrounding Panel. This layout uses existing spacing, typography, wrapping, and visibility utilities.
 
 AlertBox is a visual content component and does not automatically announce messages. For newly inserted urgent messages use an appropriate live region; for routine form feedback use FormStatus. Static notices should not interrupt screen-reader users.
 

@@ -83,8 +83,8 @@ function registerBelowMediumStyles(root: Style, palette: ThemePalette) {
   root
     .media(mediaBelow(BREAKPOINTS.md))
     .select('.landing-page .header-inner')
-    .height('68px')
-    .gap('20px')
+    .gridTemplateRows('68px auto')
+    .columnGap('0.5rem')
   root
     .media(mediaBelow(BREAKPOINTS.md))
     .select('.landing-page .hero h1')
@@ -215,8 +215,8 @@ function registerMobileFrameStyles(root: Style) {
   root
     .media(mediaBelow(BREAKPOINTS.sm))
     .select('.landing-page .header-inner')
-    .height('65px')
-    .gap('20px')
+    .gridTemplateRows('65px auto')
+    .columnGap('0.5rem')
 }
 
 function registerCompactNavigationStyles(root: Style, palette: ThemePalette) {
@@ -224,12 +224,63 @@ function registerCompactNavigationStyles(root: Style, palette: ThemePalette) {
 
   root
     .media(mediaBelow(BREAKPOINTS.lg))
+    .select('.landing-page .header-inner')
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) auto')
+    .gridTemplateRows('78px auto')
+    .height('auto')
+    .gap('0 0.75rem')
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.landing-page .desktop-nav')
+    .display('flex')
+    .gridColumn('1 / -1')
+    .gridRow('2')
+    .width('100%')
+    .margin('0')
+    .padding('0')
+    .gap('0')
+    .borderTop(`1px solid ${tone.neutral.border.subtle}`)
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .select('.landing-page .desktop-nav a:not(.header-docs)')
     .display('none')
   root
     .media(mediaBelow(BREAKPOINTS.lg))
+    .select('.landing-page .desktop-nav .header-docs')
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .flex('1 1 0')
+    .gap('0.5rem')
+    .minHeight('44px')
+    .padding('0.5rem 0.75rem')
+    .fontWeight('600')
+    .color(tone.accent.text.default)
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .select('.landing-page .desktop-nav .header-docs + .header-docs')
+    .borderInlineStart(`1px solid ${tone.neutral.border.subtle}`)
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .select('.landing-page .desktop-nav .header-docs-icon')
+    .display('inline-flex')
+    .width('16px')
+    .height('16px')
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.landing-page .header-actions')
+    .gridColumn('2')
+    .gridRow('1')
     .marginLeft('auto')
+  root
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .select(':scope:has(> body.landing-page)')
+    .scrollPaddingTop('140px')
+  root
+    .media(mediaBelow(BREAKPOINTS.sm))
+    .select('.landing-page .header-actions .topbar__actions > a')
+    .display('none')
   root
     .media(mediaBelow(BREAKPOINTS.sm))
     .select('.landing-page .header-source > span')
@@ -249,8 +300,8 @@ function registerCompactNavigationStyles(root: Style, palette: ThemePalette) {
     .display('flex')
     .alignItems('center')
     .justifyContent('center')
-    .width('34px')
-    .height('38px')
+    .width('44px')
+    .height('44px')
     .listStyle('none')
     .cursor('pointer')
     .color(tone.neutral.surfaceAlt.rest.text)
@@ -268,6 +319,9 @@ function registerCompactNavigationStyles(root: Style, palette: ThemePalette) {
     .display('flex')
     .flexDirection('column')
     .padding('13px 20px 20px')
+    .maxHeight('calc(100dvh - 8rem)')
+    .overflowY('auto')
+    .overscrollBehavior('contain')
     .background(tone.accent.canvas)
     .borderBottom(`1px solid ${tone.accent.surface.rest.border}`)
     .boxShadow(palette.effect.floatingShadow)

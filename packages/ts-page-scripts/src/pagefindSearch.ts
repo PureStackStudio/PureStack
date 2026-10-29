@@ -3,6 +3,7 @@ import {
   renderSearchResults,
   type SearchRecord,
 } from './pagefindSearchResults'
+import { createSearchViewport } from './pagefindSearchViewport'
 
 const PAGEFIND_ROOT = '[data-pagefind-search]'
 const MIN_QUERY_LENGTH = 2
@@ -100,6 +101,16 @@ function setupSearch(root: HTMLElement, index: number) {
   const basePath = resolveBasePath()
   searchOutput.id = `site-search-results-${index}`
   searchInput.setAttribute('aria-controls', searchOutput.id)
+  const viewport = createSearchViewport(root, searchOutput)
+
+  function showMessage(
+    title: string,
+    detail: string,
+    state: 'idle' | 'loading' | 'empty' | 'error',
+  ) {
+    renderSearchMessage(searchOutput, title, detail, state)
+    viewport.update()
+  }
 
   let loadPromise: Promise<PagefindApi> | undefined
   function loadPagefind(): Promise<PagefindApi> {
@@ -141,6 +152,7 @@ function setupSearch(root: HTMLElement, index: number) {
 
   function hideResults() {
     cancelSearch()
+    viewport.hide()
     searchOutput.hidden = true
     searchOutput.innerHTML = ''
     announce('')
@@ -148,8 +160,7 @@ function setupSearch(root: HTMLElement, index: number) {
 
   async function performSearch(query: string, currentRequest: number) {
     searchOutput.setAttribute('aria-busy', 'true')
-    renderSearchMessage(
-      searchOutput,
+    showMessage(
       'Searching…',
       'Finding the best matches across this site.',
       'loading',
@@ -161,8 +172,7 @@ function setupSearch(root: HTMLElement, index: number) {
     } catch {
       if (currentRequest !== requestId) return
       searchOutput.removeAttribute('aria-busy')
-      renderSearchMessage(
-        searchOutput,
+      showMessage(
         'Search is unavailable',
         'The search index is unavailable. Please try again later.',
         'error',
@@ -194,13 +204,13 @@ function setupSearch(root: HTMLElement, index: number) {
         allMatches.length,
         basePath,
       )
+      viewport.update()
       announce(
         `${allMatches.length} ${allMatches.length === 1 ? 'result' : 'results'} for ${query}`,
       )
     } catch {
       if (currentRequest !== requestId) return
-      renderSearchMessage(
-        searchOutput,
+      showMessage(
         'We couldn’t finish that search',
         'Please try your search again in a moment.',
         'error',
@@ -216,8 +226,7 @@ function setupSearch(root: HTMLElement, index: number) {
     cancelSearch()
     const query = searchInput.value.trim()
     if (query.length < MIN_QUERY_LENGTH) {
-      renderSearchMessage(
-        searchOutput,
+      showMessage(
         query ? 'Keep typing…' : 'What are you looking for?',
         `Search this site with at least ${MIN_QUERY_LENGTH} characters.`,
         'idle',
@@ -228,6 +237,7 @@ function setupSearch(root: HTMLElement, index: number) {
     // Remove old links immediately so Enter cannot open a stale result.
     searchOutput.hidden = true
     searchOutput.innerHTML = ''
+    viewport.update()
     const currentRequest = requestId
     debounceTimer = globalThis.setTimeout(() => {
       void performSearch(query, currentRequest)
@@ -235,6 +245,10 @@ function setupSearch(root: HTMLElement, index: number) {
   }
 
   searchInput.addEventListener('input', scheduleSearch)
+  root.querySelector('[data-pagefind-close]')?.addEventListener('click', () => {
+    hideResults()
+    searchInput.blur()
+  })
   searchInput.addEventListener('focus', () => {
     if (searchOutput.hidden) scheduleSearch()
   })

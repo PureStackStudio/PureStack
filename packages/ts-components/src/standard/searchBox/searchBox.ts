@@ -25,6 +25,14 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
       data-pagefind-input
       aria-label="Search site content"/>
     <kbd class="site-search__shortcut" aria-hidden="true">/</kbd>
+    <button
+      class="site-search__close"
+      type="button"
+      data-pagefind-close
+      aria-label="Close search"
+    >
+      <Icon name="tabler:x"/>
+    </button>
   </div>
   <span class="site-search__sr-only" data-pagefind-status role="status"></span>
   <div

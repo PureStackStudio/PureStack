@@ -51,4 +51,5 @@ export function registerNavigationStyles(root: Style, palette: ThemePalette) {
     .marginLeft('3px')
   root.select('.landing-page .header-source .icon').width('17px').height('17px')
   root.select('.landing-page .mobile-menu').display('none')
+  root.select('.landing-page .desktop-nav .header-docs-icon').display('none')
 }

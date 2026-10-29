@@ -4,6 +4,7 @@ import {
   docLayoutDefaults,
   docLayoutVars,
   mediaBelow,
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   themes,
@@ -14,6 +15,7 @@ export function registerSearchBoxStyles() {
     registerSearchBoxShellStyles(theme)
     registerSearchBoxControlStyles(theme, palette)
     registerSearchBoxResultStyles(theme, palette)
+    registerSearchBoxCompactStyles(theme, palette)
   })
 }
 
@@ -24,6 +26,7 @@ export function registerSearchBoxShellStyles(theme: ThemeMode) {
     .minWidth('0')
     .maxWidth('100%')
   styleBuilder.select('.site-search__control', theme).position('relative')
+  styleBuilder.select('.site-search__close', theme).display('none')
   styleBuilder
     .select('.site-search__sr-only', theme)
     .position('absolute')
@@ -50,6 +53,10 @@ function registerSearchBoxControlStyles(
     .select('.site-search__control .form-block__input', theme)
     .minWidth('0')
     .paddingRight('3rem')
+  styleBuilder
+    .select('.site-search__control .form-block__input', theme)
+    .media(mediaMax(BREAKPOINTS.sm))
+    .fontSize('1rem')
   styleBuilder
     .select('.site-search__control .form-block__input-icon', theme)
     .color(palette.current.text.subtle)
@@ -426,4 +433,132 @@ function registerSearchBoxMessageStyles(
   styleBuilder
     .select('.site-search__message--loading .site-search__message-icon', theme)
     .opacity('0.6')
+}
+
+function registerSearchBoxCompactStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
+  const compact = '.site-search[data-search-compact]'
+  styleBuilder
+    .select(`${compact}:popover-open`, theme)
+    .position('fixed')
+    .top('var(--ps-search-results-top)')
+    .left(
+      'calc(var(--ps-search-results-left) + var(--ps-search-results-width) / 2)',
+    )
+    .right('auto')
+    .bottom('auto')
+    .width('var(--ps-search-results-width)')
+    .maxWidth('42rem')
+    .maxHeight('min(38rem, var(--ps-search-results-height))')
+    .boxSizing('border-box')
+    .display('flex')
+    .flexDirection('column')
+    .gap('0.5rem')
+    .padding('0.5rem')
+    .overflow('hidden')
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .borderRadius(palette.radii.lg)
+    .background(palette.semanticTone.neutral.surface.rest.background)
+    .boxShadow(palette.effect.strongShadow)
+    .margin('0')
+    .transform('translateX(-50%)')
+  styleBuilder.select(`${compact} .site-search__control`, theme).flexShrink('0')
+  styleBuilder
+    .select(`${compact} .site-search__shortcut`, theme)
+    .display('none')
+  styleBuilder
+    .select(`${compact} .site-search__control .form-block__input`, theme)
+    .fontSize('1rem')
+  styleBuilder
+    .select(`${compact} .site-search__close`, theme)
+    .display('grid')
+    .placeItems('center')
+    .position('absolute')
+    .right('0')
+    .top('50%')
+    .transform('translateY(-50%)')
+    .width('2.75rem')
+    .height('2.75rem')
+    .padding('0')
+    .border('0')
+    .borderRadius(palette.radii.md)
+    .background('transparent')
+    .color(palette.semanticTone.neutral.text.subtle)
+    .cursor('pointer')
+  styleBuilder
+    .select(`${compact} .site-search__close:hover`, theme)
+    .background(palette.semanticTone.neutral.surfaceAlt.hover.background)
+  styleBuilder
+    .select(`${compact} .site-search__close:focus-visible`, theme)
+    .outline(`2px solid ${palette.semanticTone.accent.border.focus}`)
+    .outlineOffset('-3px')
+  styleBuilder
+    .select(`${compact} .site-search__close .icon`, theme)
+    .width('1.125rem')
+    .height('1.125rem')
+  styleBuilder
+    .select(`${compact} .site-search__results`, theme)
+    .position('static')
+    .width('100%')
+    .maxWidth('none')
+    .minHeight('0')
+    .maxHeight('none')
+    .margin('0')
+    .transform('none')
+    .boxShadow('none')
+  styleBuilder
+    .select(`${compact} .site-search__header`, theme)
+    .gridTemplateColumns('1.75rem minmax(0, 1fr) auto')
+    .gap('0.625rem')
+    .padding('0.5rem 0.75rem')
+  styleBuilder
+    .select(`${compact} .site-search__header-icon`, theme)
+    .width('1.75rem')
+    .height('1.75rem')
+  styleBuilder
+    .select(`${compact} .site-search__header-icon svg`, theme)
+    .width('1rem')
+    .height('1rem')
+  styleBuilder
+    .select(`${compact} .site-search__heading`, theme)
+    .fontSize('0.8125rem')
+  styleBuilder
+    .select(
+      `${compact} .site-search__eyebrow, ${compact} .site-search__footer`,
+      theme,
+    )
+    .display('none')
+  styleBuilder.select(`${compact} .site-search__body`, theme).padding('0.25rem')
+  styleBuilder
+    .select(`${compact} .site-search__link`, theme)
+    .gridTemplateColumns('1.75rem minmax(0, 1fr) 1rem')
+    .gap('0.5rem')
+    .padding('0.625rem 0.5rem')
+    .minHeight('2.75rem')
+  styleBuilder
+    .select(`${compact} .site-search__result-icon`, theme)
+    .width('1.75rem')
+    .height('2rem')
+  styleBuilder
+    .select(`${compact} .site-search__result-copy`, theme)
+    .gap('0.125rem')
+  styleBuilder
+    .select(`${compact} .site-search__title`, theme)
+    .fontSize('0.875rem')
+    .maxHeight('2.9em')
+    .overflow('hidden')
+  styleBuilder
+    .select(`${compact} .site-search__excerpt`, theme)
+    .fontSize('0.75rem')
+    .lineClamp('1')
+    .maxHeight('1.65em')
+  styleBuilder.select(`${compact} .site-search__message`, theme).padding('1rem')
+  styleBuilder
+    .select(`${compact} .site-search__message-icon`, theme)
+    .display('none')
+  styleBuilder
+    .select(`${compact} .site-search__message-title`, theme)
+    .fontSize('0.875rem')
 }
