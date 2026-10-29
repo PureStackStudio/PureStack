@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-pagefind",
-  "version": "1.1.31",
+  "version": "1.1.32",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-pagefind.mjs",
   "types": "./dist/ts-pagefind.d.mts",

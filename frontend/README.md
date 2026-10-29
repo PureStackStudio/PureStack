@@ -33,6 +33,26 @@ Imprint and Privacy Policy content lives in Git-ignored MDX files. Missing files
 are created automatically with placeholders; fill them before publishing.
 See [Private legal content](legal-content.md) for paths and setup.
 
+## Error pages
+
+Preview the missing-page design at `/error/404/` and the general-error design at
+`/error/`. Their MDX files and compact shared header/footer live in
+`purestack.studio/error/`; `components/recovery/` supplies their shared content and
+two decorative SVG illustrations. Layout and presentation use native `Flex`,
+`Grid`, buttons, icon frames, and generated utilities. `styles/recovery.ts` only
+adds viewport layout, a content width limit, and fluid heading sizing.
+
+Both pages use `index: false`, which keeps them out of navigation, Pagefind, and
+the sitemap, and emits `noindex`. The general-error page enables a retry button through
+`modules/recovery.ts`; it reloads the current URL, including when a host serves
+the page for a different failing URL.
+
+The development server automatically serves `error/404/index.html` for missing
+pages and falls back to `error/index.html` for other errors without a specific
+status page. It preserves the requested URL and HTTP error status, with
+`Cache-Control: no-store`. Direct preview requests return 200. Configure the
+production static host to use the same error-page convention.
+
 ## Source map
 
 | Location                                                    | Responsibility                                                                 |

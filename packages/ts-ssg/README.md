@@ -620,6 +620,15 @@ Embedded callers can set `startDevServer({ failOnInitialBuildError: true })` to
 reject startup and close the server instead. PurStack Forge previews use this option to
 report startup failures.
 
+For an HTTP error, the server tries `<outDir>/error/<statusCode>/index.html`, then
+`<outDir>/error/index.html`, then a plain-text message. It renders matching MDX
+pages or copies static HTML on demand, so opening an error page first is not
+required. Only these exact output locations are used; the site's base path still
+applies to links and assets. The response keeps the failing URL and original
+error status, sends `Cache-Control: no-store`, and omits the body for HEAD
+requests. HTML error pages retain live reload when enabled. Static production
+hosts must configure their own error-page handling.
+
 ## Templates
 
 Built-in templates:

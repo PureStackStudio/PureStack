@@ -13,6 +13,7 @@ import { ensureLogger } from '../build/logger'
 import type { BuildInput } from '../build/site'
 import { loadProjectConfig, withProjectConfig } from '../config/project-config'
 import { composeDevMiddleware } from '../plugins/plugin'
+import { writeErrorResponse } from './error-response'
 import {
   broadcastJson,
   injectLiveReload,
@@ -502,9 +503,47 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
   } = input
 
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
+    let requestBuilder: IncrementalBuilder | undefined
+    const prepareRequest = async () => {
+      if (requestBuilder) return requestBuilder
+      const finishRequest = await beginSiteRequest()
+      if (res.destroyed) {
+        finishRequest()
+        return undefined
+      }
+      res.once('finish', finishRequest)
+      res.once('close', finishRequest)
+      res.setTimeout(REQUEST_TIMEOUT_MS, () => res.destroy())
+      requestBuilder = getIncremental()
+      return requestBuilder
+    }
+    const respondWithError = async (
+      statusCode: number,
+      fallbackText: string,
+    ) => {
+      if (!res.headersSent && !res.destroyed && !res.writableEnded) {
+        try {
+          await prepareRequest()
+        } catch (error) {
+          logError(log, error, 'error response preparation failed')
+        }
+      }
+      await writeErrorResponse({
+        req,
+        res,
+        statusCode,
+        fallbackText,
+        outDir,
+        incremental: requestBuilder,
+        liveReload,
+        liveReloadPath: withBasePath(basePath, LIVE_RELOAD_PATH),
+        liveReloadVersion: getLiveReloadVersion(),
+        log,
+      })
+    }
+
     if (!req.url) {
-      res.writeHead(400)
-      res.end()
+      await respondWithError(400, 'Bad request')
       return
     }
 
@@ -520,14 +559,12 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       if (await handlePluginRequest(req, res)) return
     } catch (error) {
       logError(log, error, 'dev middleware failed')
-      if (!res.headersSent) res.writeHead(500)
-      res.end()
+      await respondWithError(500, 'Internal server error')
       return
     }
 
     if (!isRequestUnderBasePath(basePath, pathname)) {
-      res.writeHead(404)
-      res.end('Not found')
+      await respondWithError(404, 'Not found')
       return
     }
 
@@ -535,51 +572,36 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     const localePreference = resolveRequestLocale(req, i18n)
     persistQueryLocalePreference(res, i18n, localePreference)
 
-    let fileResult: Awaited<ReturnType<typeof resolveRequestFile>>
-    let incremental: IncrementalBuilder
     try {
-      const finishRequest = await beginSiteRequest()
-      if (res.destroyed) {
-        finishRequest()
-        return
-      }
-      res.once('finish', finishRequest)
-      res.once('close', finishRequest)
-      incremental = getIncremental()
-      res.setTimeout(REQUEST_TIMEOUT_MS, () => {
-        res.destroy()
-      })
-      fileResult = await resolveRequestFile({
+      const incremental = await prepareRequest()
+      if (!incremental) return
+      const fileResult = await resolveRequestFile({
         outDir,
         pathname: internalPathname,
         locale: localePreference.locale,
         i18n,
         incremental,
       })
-    } catch (error) {
-      logError(log, error, 'request preparation failed')
-      if (!res.headersSent) res.writeHead(500)
-      res.end('Internal server error')
-      return
-    }
-    if (!fileResult) {
-      res.writeHead(404)
-      res.end('Not found')
-      return
-    }
+      if (!fileResult) {
+        await respondWithError(404, 'Not found')
+        return
+      }
 
-    const liveReloadVersion = getLiveReloadVersion()
-    await serveResolvedFile({
-      req,
-      res,
-      filePath: fileResult.filePath,
-      ext: fileResult.ext,
-      liveReloadPath,
-      liveReload,
-      liveReloadVersion,
-      incremental,
-      log,
-    })
+      await serveResolvedFile({
+        req,
+        res,
+        filePath: fileResult.filePath,
+        ext: fileResult.ext,
+        liveReloadPath,
+        liveReload,
+        liveReloadVersion: getLiveReloadVersion(),
+        incremental,
+        log,
+      })
+    } catch (error) {
+      logError(log, error, 'site request failed')
+      await respondWithError(500, 'Internal server error')
+    }
   }
 }
 
@@ -663,24 +685,18 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     incremental,
     log,
   } = input
-  try {
-    if (ext === '.html') {
-      // A page marked dirty renders before it is served, so the response
-      // always reflects the latest change.
-      await incremental.renderIfDirtyByOutPath(filePath)
-      await incremental.preparePageAssets()
-      const html = await fsPromises.readFile(filePath, 'utf8')
-      const injected = liveReload
-        ? injectLiveReload(html, liveReloadPath, liveReloadVersion)
-        : html
-      writeHtmlResponse(res, 200, injected)
-      return
-    }
-
-    serveStaticStream(req, res, filePath, ext, log)
-  } catch (error) {
-    res.writeHead(500)
-    res.end('Internal server error')
-    logError(log, error, 'serve failed')
+  if (ext === '.html') {
+    // A page marked dirty renders before it is served, so the response
+    // always reflects the latest change.
+    await incremental.renderIfDirtyByOutPath(filePath)
+    await incremental.preparePageAssets()
+    const html = await fsPromises.readFile(filePath, 'utf8')
+    const injected = liveReload
+      ? injectLiveReload(html, liveReloadPath, liveReloadVersion)
+      : html
+    writeHtmlResponse(res, 200, injected)
+    return
   }
+
+  serveStaticStream(req, res, filePath, ext, log)
 }

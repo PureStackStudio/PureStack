@@ -10,6 +10,7 @@ import { sitePreviewPages } from './docs/sitePreviews'
 import { ensureLegalContent } from './ensureLegalContent'
 import { registerDocumentationStyles } from './styles/documentation/index'
 import { registerLandingStyles } from './styles/landing/index'
+import { registerRecoveryStyles } from './styles/recovery'
 import { registerPalettePickerStyles } from './styles/shell/palette-picker'
 import { landingTemplate } from './templates/landing'
 import { registerPaletteStyles } from './theme/colors'
@@ -37,6 +38,7 @@ export const frontendPlugin = definePlugin({
     async onConfigResolved({ config }) {
       await ensureLegalContent(config.contentDir)
       registerLandingStyles()
+      registerRecoveryStyles()
       registerApiReferenceStyles()
       registerComponentGuideStyles()
       registerTocPlaygroundStyles()
