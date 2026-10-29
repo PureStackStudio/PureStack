@@ -238,6 +238,11 @@ function init(menu: HTMLElement) {
 
   const isOnResizeEdge = (event: MouseEvent) => {
     if (!supportsDesktopCollapse()) return false
+    if (
+      document.body.classList.contains(NAV_COLLAPSED_CLASS) &&
+      !sidebar?.classList.contains(NAV_OPEN_CLASS)
+    )
+      return false
     const rect = menu.getBoundingClientRect()
     return Math.abs(event.clientX - rect.right) <= NAV_RESIZE_EDGE_TOLERANCE_PX
   }

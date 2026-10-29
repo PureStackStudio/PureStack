@@ -282,6 +282,7 @@ function registerPageTocMobileOverlayStyles(
   styleBuilder
     .select('.template-doc--has-toc .page-toc__panel-toggle', theme)
     .media(mediaMax(BREAKPOINTS.toc))
+    .display('flex')
     .position('absolute')
     .left('0')
     .right('auto')
@@ -301,7 +302,6 @@ function registerPageTocMobileOverlayStyles(
     .zIndex(2)
     .userSelect('none')
     .cursor('pointer')
-    .display('flex')
     .alignItems('center')
     .justifyContent('center')
     .textTransform('uppercase')
@@ -323,6 +323,13 @@ function registerPageTocMobileOverlayStyles(
 }
 
 function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__panel-toggle',
+      theme,
+    )
+    .media(mediaAbove(BREAKPOINTS.toc))
+    .display('flex')
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)
     .media(mediaAbove(BREAKPOINTS.toc))

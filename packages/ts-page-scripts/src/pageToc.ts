@@ -156,6 +156,7 @@ function init(toc: HTMLElement) {
 
   const isOnResizeEdge = (event: MouseEvent) => {
     if (!supportsDesktopResize()) return false
+    if (!tocShell?.classList.contains(TOC_OPEN_CLASS)) return false
     const rect = toc.getBoundingClientRect()
     return Math.abs(event.clientX - rect.left) <= TOC_RESIZE_EDGE_TOLERANCE_PX
   }
@@ -269,6 +270,8 @@ function init(toc: HTMLElement) {
     window.addEventListener('keydown', (event) => {
       if (
         event.key === 'Escape' &&
+        !event.defaultPrevented &&
+        isCollapsible() &&
         tocShell.classList.contains(TOC_OPEN_CLASS)
       ) {
         setTocOpen(false)

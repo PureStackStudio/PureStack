@@ -218,6 +218,171 @@ describe('page toc refresh', () => {
   })
 })
 
+describe('page toc Escape handling', () => {
+  it.each([
+    {
+      layout: 'docked',
+      narrow: false,
+      collapsed: false,
+      prevented: false,
+      staysOpen: true,
+    },
+    {
+      layout: 'mobile drawer',
+      narrow: true,
+      collapsed: false,
+      prevented: false,
+      staysOpen: false,
+    },
+    {
+      layout: 'collapsed desktop drawer',
+      narrow: false,
+      collapsed: true,
+      prevented: false,
+      staysOpen: false,
+    },
+    {
+      layout: 'mobile drawer with Escape handled by search',
+      narrow: true,
+      collapsed: false,
+      prevented: true,
+      staysOpen: true,
+    },
+    {
+      layout: 'collapsed desktop drawer with Escape handled by search',
+      narrow: false,
+      collapsed: true,
+      prevented: true,
+      staysOpen: true,
+    },
+  ])('$layout', async ({ narrow, collapsed, prevented, staysOpen }) => {
+    vi.resetModules()
+    await runInDom(
+      '<html><body class="template-doc--has-toc"><main class="doc-main"><article class="doc-content"></article></main><aside class="doc-toc"><nav class="page-toc"><button class="page-toc__panel-toggle"><span class="page-toc__panel-toggle-label"></span></button><div class="page-toc__content"></div></nav></aside></body></html>',
+      async (document) => {
+        document.body.classList.toggle('template-doc--toc-collapsed', collapsed)
+        const listeners = new Map<string, EventListener>()
+        Object.assign(window, {
+          matchMedia: (query: string) => ({
+            matches: narrow && query === '(max-width: 1320px)',
+            addEventListener: vi.fn(),
+          }),
+          location: { hash: '' },
+          addEventListener: (name: string, listener: EventListener) => {
+            listeners.set(name, listener)
+          },
+        })
+        await import('./pageToc')
+        window.tsSsgPageToc?.hydrate()
+        const shell = requireElement('.doc-toc')
+        const toggle = requireElement('.page-toc__panel-toggle')
+        if (narrow || collapsed) toggle.dispatchEvent(new Event('click'))
+        expect(shell.classList.contains('doc-toc--open')).toBe(true)
+        const event = Object.assign(
+          new Event('keydown', { cancelable: true }),
+          { key: 'Escape' },
+        )
+        if (prevented) event.preventDefault()
+        const onKeydown = listeners.get('keydown')
+        expect(onKeydown).toBeDefined()
+        onKeydown?.(event)
+        expect(shell.classList.contains('doc-toc--open')).toBe(staysOpen)
+        expect(toggle.getAttribute('aria-expanded')).toBe(String(staysOpen))
+        expect(document.body.classList.contains('doc-toc-open')).toBe(
+          staysOpen && (narrow || collapsed),
+        )
+      },
+    )
+  })
+})
+
+describe('page toc drawer resizing', () => {
+  it.each([
+    { layout: 'responsive drawer', narrow: true, collapsed: false },
+    { layout: 'collapsed desktop drawer', narrow: false, collapsed: true },
+  ])(
+    'preserves the resized width when reopening the $layout',
+    async ({ narrow, collapsed }) => {
+      vi.resetModules()
+      await runInDom(
+        '<html><body class="template-doc--has-toc"><main class="doc-main"><article class="doc-content"></article></main><aside class="doc-toc"><nav class="page-toc"><button class="page-toc__panel-toggle"><span class="page-toc__panel-toggle-label"></span></button><div class="page-toc__content"></div></nav></aside></body></html>',
+        async (document) => {
+          document.body.classList.toggle(
+            'template-doc--toc-collapsed',
+            collapsed,
+          )
+          const listeners = new Map<string, EventListener>()
+          Object.assign(window, {
+            matchMedia: (query: string) => ({
+              matches: narrow && query === '(max-width: 1320px)',
+              addEventListener: vi.fn(),
+            }),
+            location: { hash: '' },
+            addEventListener: (name: string, listener: EventListener) =>
+              listeners.set(name, listener),
+            removeEventListener: (name: string) => listeners.delete(name),
+          })
+          vi.stubGlobal('getComputedStyle', () => ({
+            getPropertyValue: () => '',
+            marginInlineStart: '0px',
+          }))
+          try {
+            await import('./pageToc')
+            window.tsSsgPageToc?.hydrate()
+            const shell = requireElement('.doc-toc')
+            const toc = requireElement('.page-toc')
+            const toggle = requireElement('.page-toc__panel-toggle')
+            let left = 960
+            Object.assign(shell, {
+              getBoundingClientRect: () => ({ right: 1200 }),
+            })
+            Object.assign(toc, { getBoundingClientRect: () => ({ left }) })
+            const mouse = (type: string, clientX: number) =>
+              Object.assign(
+                new MouseEvent(type, {
+                  button: 0,
+                  bubbles: true,
+                  cancelable: true,
+                }),
+                { clientX },
+              )
+            toggle.dispatchEvent(new Event('click'))
+            toc.dispatchEvent(mouse('mousedown', left))
+            expect(document.body.classList.contains('resizing')).toBe(true)
+            listeners.get('mousemove')?.(mouse('mousemove', 780))
+            listeners.get('mouseup')?.(mouse('mouseup', 780))
+            const widthProperty = '--ps-doc-layout-user-toc-width'
+            const widthStorage = 'ts-ssg:doc-layout:toc-width'
+            expect(document.body.style.getPropertyValue(widthProperty)).toBe(
+              '420px',
+            )
+            expect(localStorage.getItem(widthStorage)).toBe('420')
+            listeners.get('keydown')?.(
+              Object.assign(new Event('keydown'), { key: 'Escape' }),
+            )
+            expect(shell.classList.contains('doc-toc--open')).toBe(false)
+            left = 1174
+            // A real button click includes down/up events within the old resize hit area.
+            toggle.dispatchEvent(mouse('mousemove', 1187))
+            expect(document.body.classList.contains('col-resize')).toBe(false)
+            toggle.dispatchEvent(mouse('mousedown', 1187))
+            listeners.get('mouseup')?.(mouse('mouseup', 1187))
+            toggle.dispatchEvent(new Event('click'))
+            expect(shell.classList.contains('doc-toc--open')).toBe(true)
+            expect(document.body.classList.contains('resizing')).toBe(false)
+            expect(document.body.style.getPropertyValue(widthProperty)).toBe(
+              '420px',
+            )
+            expect(localStorage.getItem(widthStorage)).toBe('420')
+          } finally {
+            vi.unstubAllGlobals()
+          }
+        },
+      )
+    },
+  )
+})
+
 function requireElement(selector: string, root: ParentNode = document) {
   const element = root.querySelector(selector)
   if (!element) throw new Error(`Missing fixture element ${selector}`)
