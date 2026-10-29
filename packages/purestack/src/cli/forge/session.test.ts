@@ -17,6 +17,7 @@ import { describe, expect, it, vi } from 'vitest'
 import type {
   SessionCommand,
   SessionEvent,
+  SessionSnapshot,
 } from '../../../forge/modules/shared/protocol'
 import { createSite } from '../../init/create-site'
 import * as managers from '../../init/package-manager'
@@ -29,9 +30,26 @@ class BrowserPeer implements DevWebSocketConnection {
   readonly events: SessionEvent[] = []
   private readonly listeners = new Set<(message: DevWebSocketMessage) => void>()
   private readonly closed = new Set<() => void>()
+  private readonly snapshots = new Set<(snapshot: SessionSnapshot) => void>()
   send(message: DevWebSocketMessage) {
-    this.events.push(JSON.parse(String(message)))
+    const event: SessionEvent = JSON.parse(String(message))
+    this.events.push(event)
+    if (event.type === 'snapshot')
+      for (const listener of this.snapshots) listener(event.snapshot)
     return true
+  }
+  // Creation touches real files; await its event under the normal test timeout.
+  waitForCreation() {
+    const completion = Promise.withResolvers<SessionSnapshot>()
+    const inspect = (snapshot: SessionSnapshot) => {
+      if (snapshot.status !== 'ready' && snapshot.status !== 'failed') return
+      this.snapshots.delete(inspect)
+      completion.resolve(snapshot)
+    }
+    this.snapshots.add(inspect)
+    const latest = this.events.findLast((event) => event.type === 'snapshot')
+    if (latest?.type === 'snapshot') inspect(latest.snapshot)
+    return completion.promise
   }
   request(command: SessionCommand) {
     for (const listener of this.listeners) listener(JSON.stringify(command))
@@ -138,7 +156,9 @@ describe('Forge session', () => {
           install: true,
         },
       })
-      await expect.poll(() => test.session.snapshot.status).toBe('ready')
+      expect(await test.peer.waitForCreation()).toMatchObject({
+        status: 'ready',
+      })
       const tasks = test.session.snapshot.tasks
       const labels = tasks.map((task) => task.label)
       expect(labels.indexOf('Format project files')).toBeGreaterThan(
@@ -181,7 +201,9 @@ describe('Forge session', () => {
       test.session.connect(reconnected)
       expect(reconnected.events[0].type).toBe('snapshot')
       test.gate.resolve()
-      await expect.poll(() => test.session.snapshot.status).toBe('ready')
+      expect(await reconnected.waitForCreation()).toMatchObject({
+        status: 'ready',
+      })
       const directory = path.join(test.cwd, 'my-site')
       const config = JSON.parse(
         await readFile(path.join(directory, 'content/siteConfig.json'), 'utf8'),
@@ -220,7 +242,9 @@ describe('Forge session', () => {
         type: 'create',
         configuration: structuredClone(test.session.snapshot.configuration),
       })
-      await expect.poll(() => test.session.snapshot.status).toBe('failed')
+      expect(await test.peer.waitForCreation()).toMatchObject({
+        status: 'failed',
+      })
       expect(test.session.snapshot.error).toContain('empty directory')
       expect(
         await readFile(path.join(test.cwd, 'my-site/keep.txt'), 'utf8'),
@@ -233,7 +257,9 @@ describe('Forge session', () => {
           directory: 'another-site',
         },
       })
-      await expect.poll(() => test.session.snapshot.status).toBe('ready')
+      expect(await test.peer.waitForCreation()).toMatchObject({
+        status: 'ready',
+      })
       expect(test.session.snapshot.result?.directory).toBe(
         path.join(test.cwd, 'another-site'),
       )
@@ -250,7 +276,9 @@ describe('Forge session', () => {
         type: 'create',
         configuration: structuredClone(test.session.snapshot.configuration),
       })
-      await expect.poll(() => test.session.snapshot.status).toBe('ready')
+      expect(await test.peer.waitForCreation()).toMatchObject({
+        status: 'ready',
+      })
       expect(test.session.snapshot.result?.previewError).toContain(
         'Missing a site dependency',
       )
