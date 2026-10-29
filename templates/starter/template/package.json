@@ -23,10 +23,10 @@
     "regor": "latest"
   },
   "devDependencies": {
-    "@types/node": "^26.6.5",
-    "@biomejs/biome": "^2.6.2",
+    "@types/node": "26.6.5",
+    "@biomejs/biome": "2.6.2",
     "@purestack/ts-minidom": "latest",
-    "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vite": "8.3.5",
+    "vitest": "5.0.3"
   }
 }

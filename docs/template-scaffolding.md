@@ -66,6 +66,26 @@ version using plain `major.minor.patch`, such as `yarn@4.18.1`.
 CLI installation, retry instructions, and next-step commands follow
 this choice. The starter uses Yarn with the `node-modules` linker, Vitest app
 tests outside `content/`, and a standalone `biome.json`.
+
+Pin the starter's third-party development tools (`@biomejs/biome`, `@types/node`,
+`vite`, and `vitest`) to exact versions validated by template verification.
+Template verification installs a fresh project without the repository lockfile,
+so ranges can silently select newer tools. The repository root can keep its
+dependency ranges: its committed lockfile and CI checks control upgrades there.
+Upgrade template tools deliberately when needed, rather than for every release:
+update the template manifest, review the resulting changes, and run
+`yarn verify-templates` against freshly bundled packages before merging. These
+direct pins do not freeze transitive dependencies; preserve the generated
+project's lockfile for repeatable installs. PureStack dependencies continue to
+use `latest` as described above.
+
+For Biome, keep the template's `biome.json` schema URL aligned with its pinned CLI
+version and migrate that configuration with the selected CLI
+(`biome migrate --write`) during upgrades. Manage the root configuration against
+the repository's locked CLI version. Even patch releases can change formatting
+or lint results;
+[Biome recommends exact version pins](https://biomejs.dev/internals/versioning/).
+
 For Yarn projects without a template-supplied lockfile, the CLI creates an empty
 `yarn.lock` before installation to establish a separate project inside parent
 workspaces. Existing template lockfiles are preserved.
