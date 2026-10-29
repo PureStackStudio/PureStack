@@ -141,13 +141,35 @@ export function injectLiveReload(
     `const parseJSON = (value) => {` +
     `try { return JSON.parse(value); } catch { return null; }` +
     `};` +
-    `const source = new EventSource('${endpoint}');` +
+    `let source;` +
+    `let navigating = false;` +
+    `const connect = () => {` +
+    `source = new EventSource('${endpoint}');` +
     `source.addEventListener('state', (event) => {` +
+    `if (navigating) return;` +
     `const payload = parseJSON(event.data);` +
     `const next = Number(payload?.version);` +
     `if (!Number.isFinite(next)) return;` +
-    `if (next > pageVersion) location.reload();` +
+    `if (next > pageVersion) {` +
+    `navigating = true;` +
+    `source.close();` +
+    `location.reload();` +
+    `}` +
     `});` +
+    `};` +
+    // beforeunload runs when navigation starts; pagehide is too late when the
+    // destination still needs to render. A reload here would cancel that request.
+    `window.addEventListener('beforeunload', () => {` +
+    `navigating = true;` +
+    `source.close();` +
+    `});` +
+    // A document restored from the back/forward cache needs a fresh stream.
+    `window.addEventListener('pageshow', (event) => {` +
+    `if (!event.persisted) return;` +
+    `navigating = false;` +
+    `connect();` +
+    `});` +
+    `connect();` +
     `})();` +
     `</script>`
   const withVersion = snippet.replace('__PAGE_VERSION__', String(version))
