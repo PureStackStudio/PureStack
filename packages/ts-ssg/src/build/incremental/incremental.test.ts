@@ -813,6 +813,45 @@ describe('incremental builder', () => {
     })
   })
 
+  it.each([false, true])(
+    'refreshes nested page script URLs after consecutive dependency edits (on demand %s)',
+    async (onDemand) => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'index.mdx': '<PageScript src="./app.ts"/>',
+          'schema/schema.mdx': '<PageScript src="./schema.ts"/>',
+          'app.ts': "import { message } from './shared'; console.log(message)",
+          'schema/schema.ts':
+            "import { message } from '../shared'; console.log(message)",
+          'shared.ts': "export const message = 'before'",
+        })
+        const outDir = path.join(base, 'out')
+        let before = await readScriptBundle(outDir, 'schema/index.html')
+        if (onDemand) await site.builder.prepareForRequests()
+
+        for (const message of ['after', 'again']) {
+          await site.change('shared.ts', `export const message = '${message}'`)
+          if (onDemand) {
+            await site.builder.renderByUrlPath('/')
+            await site.builder.preparePageAssets()
+            expect(await site.renderIfDirty('/schema/')).toBe(true)
+            await site.builder.preparePageAssets()
+          }
+          const after = await readScriptBundle(outDir, 'schema/index.html')
+          expect(after.path).not.toBe(before.path)
+          expect(after.content).toContain(message)
+          const root = await readScriptBundle(outDir, 'index.html')
+          expect(root.content).toContain(message)
+          const manifest = await readManifest(outDir)
+          expect(Object.keys(manifest?.content ?? {}).sort()).toEqual(
+            ['index.mdx', path.join('schema', 'schema.mdx')].sort(),
+          )
+          before = after
+        }
+      })
+    },
+  )
+
   it('uses stable script filenames when script cache busting is disabled', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

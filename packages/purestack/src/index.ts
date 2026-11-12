@@ -1,3 +1,3 @@
-export const version: string = '1.1.32'
+export const version: string = '1.1.33'
 
 export * from '@purestack/ts-ssg'

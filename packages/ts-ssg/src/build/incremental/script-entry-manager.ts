@@ -53,13 +53,13 @@ export class ScriptEntrypointManager {
 
   setPageEntrypoints(pageRelPath: string, scriptEntrypoints: string[]) {
     this.pageEntrypoints.set(
-      this.normalizeRelPath(pageRelPath),
+      pageRelPath,
       new Set(scriptEntrypoints.map((entry) => this.normalizeRelPath(entry))),
     )
   }
 
   removePage(pageRelPath: string) {
-    this.pageEntrypoints.delete(this.normalizeRelPath(pageRelPath))
+    this.pageEntrypoints.delete(pageRelPath)
   }
 
   removeTrackedEntrypoint(entryRelPath: string) {
