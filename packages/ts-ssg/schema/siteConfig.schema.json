@@ -272,6 +272,11 @@
       "description": "Stylesheet generation and theme settings.",
       "additionalProperties": false,
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Generate theme stylesheets and inject theme CSS, stylesheet links, theme metadata, and theme startup. Set to false when the site supplies its own CSS. Custom stylesheet links and CSS imports remain available.",
+          "default": true
+        },
         "fileName": {
           "type": "string",
           "description": "CSS file name written to the output directory.",
@@ -514,12 +519,27 @@
     },
     "scripts": {
       "type": "object",
-      "description": "Script asset output settings.",
+      "description": "Script asset output and page runtime settings.",
       "additionalProperties": false,
       "properties": {
         "cacheBusting": {
           "type": "boolean",
           "description": "When true, emitted local TypeScript script filenames include a build cache key so browsers fetch fresh bundles after rebuilds.",
+          "default": true
+        },
+        "codeCopy": {
+          "type": "boolean",
+          "description": "Include the page runtime that adds copy buttons to code blocks. Set to false to omit it.",
+          "default": true
+        },
+        "menuRuntime": {
+          "type": "boolean",
+          "description": "Include the dropdown menu runtime for positioning and dismissal. Independent of sidebar navigation mode. Set to false to omit it.",
+          "default": true
+        },
+        "themeSwitch": {
+          "type": "boolean",
+          "description": "Include theme startup and its CSS visibility gate. Set to false when custom templates handle theme selection. Theme stylesheets are still emitted.",
           "default": true
         },
         "sharedLibraries": {

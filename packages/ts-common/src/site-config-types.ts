@@ -73,11 +73,19 @@ export interface AuthConfig {
 
 export interface SiteScriptsConfig {
   cacheBusting: boolean
+  /** Include the runtime that adds copy buttons to code blocks. */
+  codeCopy: boolean
+  /** Include the runtime for dropdown menu positioning and dismissal. */
+  menuRuntime: boolean
+  /** Include theme startup and its CSS visibility gate. */
+  themeSwitch: boolean
   /** Package import specifiers emitted as shared browser modules. Regor is always included. */
   sharedLibraries: string[]
 }
 
 export interface SiteStyleConfig {
+  /** Generate and inject theme CSS and initialize theme switching. */
+  enabled: boolean
   fileName: string
   href: string
   themes: string[]

@@ -134,6 +134,9 @@ function resolveScriptsConfig(
   }
   return {
     cacheBusting: pickBoolean(input?.cacheBusting, file?.cacheBusting, true),
+    codeCopy: pickBoolean(input?.codeCopy, file?.codeCopy, true),
+    menuRuntime: pickBoolean(input?.menuRuntime, file?.menuRuntime, true),
+    themeSwitch: pickBoolean(input?.themeSwitch, file?.themeSwitch, true),
     sharedLibraries: [...new Set(['regor', ...sharedLibraries])],
   }
 }

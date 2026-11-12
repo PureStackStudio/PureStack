@@ -120,6 +120,207 @@ describe('default plugins', () => {
     },
   )
 
+  it.each([
+    {
+      mode: 'auto',
+      showNav: true,
+      codeCopy: undefined,
+      menuRuntime: undefined,
+    },
+    {
+      mode: 'none',
+      showNav: true,
+      codeCopy: undefined,
+      menuRuntime: undefined,
+    },
+    { mode: 'none', showNav: true, codeCopy: false, menuRuntime: undefined },
+    { mode: 'auto', showNav: false, codeCopy: false, menuRuntime: undefined },
+    { mode: 'auto', showNav: true, codeCopy: false, menuRuntime: undefined },
+    { mode: 'auto', showNav: true, codeCopy: undefined, menuRuntime: false },
+    { mode: 'none', showNav: true, codeCopy: false, menuRuntime: false },
+  ] as const)(
+    'respects runtime settings (navigation=$mode, showNav=$showNav, codeCopy=$codeCopy, menuRuntime=$menuRuntime)',
+    async ({ mode, showNav, codeCopy, menuRuntime }) => {
+      const siteConfig = await project(
+        `---\nlayout:\n  showNav: ${showNav}\n---\n# Home\n\n\`\`\`js\nconst value = 1\n\`\`\``,
+      )
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          navigation: { mode },
+          scripts: { codeCopy, menuRuntime },
+        }),
+      )
+      await buildSite({ siteConfig })
+      const output = await fs.readFile(
+        path.join(siteConfig.outDir, 'index.html'),
+        'utf8',
+      )
+      expect(output.includes('tsSsgNavMenu')).toBe(mode !== 'none' && showNav)
+      expect(output.includes('code-copy-button')).toBe(codeCopy !== false)
+      expect(output.includes('tsSsgMenus')).toBe(menuRuntime !== false)
+      expect(output).toContain('const value = 1')
+    },
+  )
+
+  it.each([undefined, true, false])(
+    'respects scripts.themeSwitch=%s in custom templates without hiding the page',
+    async (themeSwitch) => {
+      const siteConfig = await project('# Custom theme')
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'siteConfig.json'),
+        JSON.stringify({ scripts: { themeSwitch } }),
+      )
+      await buildSite({
+        siteConfig,
+        options: {
+          plugins: [
+            definePlugin({
+              name: 'custom-template',
+              templates: {
+                doc: ({ head, bodyHtml }) =>
+                  h('html')
+                    .attr({ 'data-theme': 'light' })
+                    .push(head, h('body').raw(bodyHtml)),
+              },
+            }),
+          ],
+        },
+      })
+      const output = await fs.readFile(
+        path.join(siteConfig.outDir, 'index.html'),
+        'utf8',
+      )
+      expect(output.includes('tsSsgTheme')).toBe(themeSwitch !== false)
+      expect(
+        output.includes(
+          'html:not([data-theme-ready]) body{visibility:hidden;}',
+        ),
+      ).toBe(themeSwitch !== false)
+      await runInDom(output, (document) => {
+        expect(document.head.querySelectorAll('link[data-theme]')).toHaveLength(
+          2,
+        )
+        expect(document.head.querySelector('style')?.textContent).toContain(
+          'color-scheme:light dark',
+        )
+        expect(document.documentElement.getAttribute('data-theme')).toBe(
+          'light',
+        )
+        expect(document.body.textContent).toContain('Custom theme')
+      })
+    },
+  )
+
+  it.each(['full', 'lazy'])(
+    'skips generated styles with style.enabled=false in %s builds and preserves custom CSS',
+    async (mode) => {
+      const siteConfig = await project()
+      const customCss = '@import "./colors.css"; .custom { color: red; }'
+      const importedCss = ':root { --custom-accent: blue; }'
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          style: { enabled: false },
+          scripts: { themeSwitch: true },
+          pagefind: { enabled: false },
+        }),
+      )
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'custom.css'),
+        customCss,
+      )
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'colors.css'),
+        importedCss,
+      )
+      const builder = await createIncrementalBuilder({
+        siteConfig,
+        options: {
+          plugins: [
+            definePlugin({
+              name: 'custom-css',
+              templates: {
+                doc: ({ head, bodyHtml }) => {
+                  head.push(
+                    h('link').attr({ rel: 'stylesheet', href: '/custom.css' }),
+                    h('style').raw('.custom { margin: 0; }'),
+                  )
+                  return h('html').push(head, h('body').raw(bodyHtml))
+                },
+              },
+              hooks: {
+                onConfigResolved(context) {
+                  expect(context.styles).toBeUndefined()
+                },
+              },
+            }),
+          ],
+        },
+      })
+      if (mode === 'full') await builder.buildAll('custom CSS only')
+      else {
+        await builder.prepareForRequests()
+        await builder.renderByUrlPath('/')
+        await builder.preparePageAssets()
+        expect(await builder.prepareAssetByUrlPath('/custom.css')).toBe(true)
+        expect(await builder.prepareAssetByUrlPath('/colors.css')).toBe(true)
+      }
+      async function assertCustomStyles() {
+        const output = await fs.readFile(
+          path.join(siteConfig.outDir, 'index.html'),
+          'utf8',
+        )
+        await runInDom(output, (document) => {
+          expect(
+            document.head.querySelectorAll('link[rel="stylesheet"]'),
+          ).toHaveLength(1)
+          expect(
+            document.head
+              .querySelector('link[rel="stylesheet"]')
+              ?.getAttribute('href'),
+          ).toBe('/docs/custom.css')
+          expect(document.head.querySelectorAll('style')).toHaveLength(1)
+          expect(document.head.querySelector('style')?.textContent).toBe(
+            '.custom { margin: 0; }',
+          )
+          expect(
+            document.head.querySelector('meta[name="color-scheme"]'),
+          ).toBeNull()
+          expect(
+            document.head.querySelector('meta[name="theme-color"]'),
+          ).toBeNull()
+        })
+        expect(output).not.toContain('tsSsgTheme')
+        expect(output).not.toContain('data-theme-ready')
+        expect((await readManifest(siteConfig.outDir))?.styles.outputs).toEqual(
+          [],
+        )
+        expect(
+          await fs.readFile(path.join(siteConfig.outDir, 'custom.css'), 'utf8'),
+        ).toBe(customCss)
+        expect(
+          await fs.readFile(path.join(siteConfig.outDir, 'colors.css'), 'utf8'),
+        ).toBe(importedCss)
+        expect(
+          (await fs.readdir(siteConfig.outDir, { recursive: true })).some(
+            (file) => /site(?:\.dark)?(?:\.[^.]+)?\.css$/.test(file),
+          ),
+        ).toBe(false)
+        return output
+      }
+      expect(await assertCustomStyles()).toContain('<button')
+      await fs.writeFile(
+        path.join(siteConfig.contentDir, 'index.mdx'),
+        '# Changed\n\n<Badge>Updated</Badge>',
+      )
+      await builder.applyChange(path.join(siteConfig.contentDir, 'index.mdx'))
+      await builder.renderByUrlPath('/')
+      await builder.preparePageAssets()
+      expect(await assertCustomStyles()).toContain('Updated')
+    },
+  )
+
   it('lets config hooks override standard components within their build', async () => {
     const siteConfig = await project()
     await buildSite({

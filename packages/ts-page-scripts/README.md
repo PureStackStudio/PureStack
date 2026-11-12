@@ -20,6 +20,19 @@ It preserves site configuration, page layout gates,
 and the site's base path. Theme startup belongs to `@purestack/ts-theme`;
 the plugin adds component-specific Tabs/Modal embeds through `onPageDocument`. Recorded component placement overrides frontmatter, and Tabs remains before Modal when both target the same parent.
 
+Set `scripts.codeCopy` to `false` in `siteConfig.json` to omit the copy-code
+runtime while keeping the other page runtimes. Navigation's runtime is omitted
+when `navigation.mode` is `"none"` or the page's `layout.showNav` is `false`.
+The dropdown menu runtime is separate from sidebar navigation and supports
+components such as `BtnGroup` and `SignIn`. Set `scripts.menuRuntime` to `false`
+to omit its positioning and dismissal behavior; it defaults to `true`.
+
+For custom templates that handle their own theme selection, set
+`scripts.themeSwitch` to `false`. The theme plugin then omits both the theme
+startup script and the CSS rule that hides the body until `data-theme-ready`
+is set. Generated theme stylesheets remain available; the custom template is
+responsible for selecting the theme. The setting defaults to `true`.
+
 To omit the page runtimes, set `defaultPlugins: false` in `purestack.config.ts`
 or build options and list the other plugins you need.
 

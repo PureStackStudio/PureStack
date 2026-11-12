@@ -132,6 +132,7 @@ describe('resolveSiteConfig sitemap', () => {
       queryParam: 'lang',
       cookieName: 'ts-ssg.lang',
     })
+    expect(config.style.enabled).toBe(true)
     expect(config.style.fileName).toBe('site.css')
     expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])
@@ -171,6 +172,25 @@ describe('resolveSiteConfig sitemap', () => {
       },
     })
     expect(config.style.pretty).toBe(true)
+  })
+
+  it('resolves style.enabled from file with input taking precedence', () => {
+    const tempDir = path.join(process.cwd(), '.tmp')
+    fs.mkdirSync(tempDir, { recursive: true })
+    const contentDir = fs.mkdtempSync(path.join(tempDir, 'style-enabled-'))
+    try {
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({ style: { enabled: false } }),
+      )
+      expect(resolveSiteConfig({ contentDir }).style.enabled).toBe(false)
+      expect(
+        resolveSiteConfig({ contentDir, style: { enabled: true } }).style
+          .enabled,
+      ).toBe(true)
+    } finally {
+      fs.rmSync(contentDir, { recursive: true, force: true })
+    }
   })
 
   it('provides html defaults', () => {
@@ -236,6 +256,9 @@ describe('resolveSiteConfig sitemap', () => {
   it('enables script cache busting by default and accepts overrides', () => {
     expect(resolveSiteConfig({ rootDir: process.cwd() }).scripts).toEqual({
       cacheBusting: true,
+      codeCopy: true,
+      menuRuntime: true,
+      themeSwitch: true,
       sharedLibraries: ['regor'],
     })
 
@@ -243,10 +266,38 @@ describe('resolveSiteConfig sitemap', () => {
       rootDir: process.cwd(),
       scripts: {
         cacheBusting: false,
+        codeCopy: false,
+        menuRuntime: false,
+        themeSwitch: false,
       },
     })
     expect(config.scripts.cacheBusting).toBe(false)
+    expect(config.scripts.codeCopy).toBe(false)
+    expect(config.scripts.menuRuntime).toBe(false)
+    expect(config.scripts.themeSwitch).toBe(false)
   })
+
+  it.each(['codeCopy', 'menuRuntime', 'themeSwitch'] as const)(
+    'resolves scripts.%s from file with input taking precedence',
+    (setting) => {
+      const tempDir = path.join(process.cwd(), '.tmp')
+      fs.mkdirSync(tempDir, { recursive: true })
+      const contentDir = fs.mkdtempSync(path.join(tempDir, 'page-runtime-'))
+      try {
+        fs.writeFileSync(
+          path.join(contentDir, 'siteConfig.json'),
+          JSON.stringify({ scripts: { [setting]: false } }),
+        )
+        expect(resolveSiteConfig({ contentDir }).scripts[setting]).toBe(false)
+        expect(
+          resolveSiteConfig({ contentDir, scripts: { [setting]: true } })
+            .scripts[setting],
+        ).toBe(true)
+      } finally {
+        fs.rmSync(contentDir, { recursive: true, force: true })
+      }
+    },
+  )
 
   it('resolves shared libraries from file and input while always including Regor', () => {
     const contentDir = fs.mkdtempSync(

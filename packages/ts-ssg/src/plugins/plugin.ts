@@ -111,6 +111,7 @@ export function resolvePluginStyles(
     callPlugin(provider.name, 'styles', () => provider.styles?.(config))
   if (
     provider &&
+    styles !== undefined &&
     (!styles ||
       typeof styles.revision !== 'number' ||
       typeof styles.links !== 'function' ||

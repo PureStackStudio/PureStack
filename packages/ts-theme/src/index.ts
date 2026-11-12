@@ -84,13 +84,14 @@ export function themePlugin() {
   }
 }
 
-function createSiteStyles(config: SiteConfig): SiteStyles {
+function createSiteStyles(config: SiteConfig): SiteStyles | undefined {
   const style = config.style
   if (!style) throw new Error('Theme styles require resolved style settings.')
   const context = getStyleContext()
   themes.setOptions(style.theme)
   style.theme = themes.getOptions()
   styleBuilder.reset()
+  if (!style.enabled) return undefined
   registerNormalizeStyles()
   registerDocLayoutStyles()
   registerMarkdownStyles({
@@ -118,7 +119,8 @@ function createSiteStyles(config: SiteConfig): SiteStyles {
   }
 }
 
-function renderThemeHead({ head, styleLinks = [] }: PageTemplateInput) {
+function renderThemeHead({ head, site, styleLinks = [] }: PageTemplateInput) {
+  if (site.style?.enabled === false) return head
   const options = themes.getOptions()
   head.push(h('meta').attr({ name: 'color-scheme', content: 'dark light' }))
   for (const mode of ['light', 'dark'] as const) {
@@ -133,7 +135,11 @@ function renderThemeHead({ head, styleLinks = [] }: PageTemplateInput) {
   const names = styleLinks.flatMap((link) =>
     link.dataTheme ? [link.dataTheme] : [],
   )
-  head.push(h('style').raw(buildCriticalThemeStyle(options, names.length > 0)))
+  const includeThemeSwitch =
+    site.scripts.themeSwitch !== false && names.length > 0
+  head.push(
+    h('style').raw(buildCriticalThemeStyle(options, includeThemeSwitch)),
+  )
   for (const link of styleLinks) {
     head.push(
       h('link').attr({
@@ -144,7 +150,7 @@ function renderThemeHead({ head, styleLinks = [] }: PageTemplateInput) {
       }),
     )
   }
-  if (names.length > 0)
+  if (includeThemeSwitch)
     head.push(h('script').raw(buildThemeSwitchScript(names)))
   return head
 }

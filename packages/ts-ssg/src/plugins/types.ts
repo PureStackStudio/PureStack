@@ -38,8 +38,8 @@ export interface PureStackPlugin {
   head?: PageHeadTemplate
   /** Head defaults, composed before explicit page overrides and head templates. */
   headConfig?: PageHeadConfigTemplate
-  /** The site's stylesheet provider, initialized before component factories. */
-  styles?: (config: SiteConfig) => SiteStyles
+  /** The site's stylesheet provider, initialized before component factories. Return undefined to disable it. */
+  styles?: (config: SiteConfig) => SiteStyles | undefined
   /** Search output, used for full builds and lazy development asset requests. */
   search?: (config: SiteConfig) => SiteSearch
   /** Per-site document asset processors; core owns their outputs and dependencies. */

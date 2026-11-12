@@ -10,6 +10,14 @@ const plugin = themePlugin()
 
 Enabled automatically by `@purestack/ts-ssg`. Supplies default page templates, a head template, and a stylesheet provider. The provider initializes before component factories, regardless of plugin name or position. The head template runs before the selected page template so custom layouts can modify its markup. It honors `style`, `docLayout`, and highlighting settings; the build engine invokes its writer for full builds and lazy development assets. `defaultTemplates` is also exported for custom layouts.
 
+Set `"style": { "enabled": false }` in `siteConfig.json` when your site owns its CSS.
+This skips generated theme CSS files, automatic stylesheet links, injected theme
+CSS and metadata, and theme startup with its visibility gate, in both full builds
+and lazy development sessions. Custom stylesheet links and CSS imports still work.
+Components, templates, and favicon generation remain available; the site supplies
+their styling. The setting defaults to `true`. To keep generated CSS while
+handling theme selection yourself, use `scripts.themeSwitch: false` instead.
+
 To choose plugins explicitly, set `defaultPlugins: false` in `purestack.config.ts` or build options. Without this plugin, provide page templates and any desired CSS through your own plugin.
 
 Favicon generation runs through `onContentDiscovered`, after output-directory preparation, in both full builds and lazy development sessions. It uses the configured icon and theme accent color.

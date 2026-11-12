@@ -63,6 +63,9 @@ With the folder layout above, `index.mdx` renders at `/`, and `guides/getting-st
 | `basePath` | Public mount path, such as `/docs`, used in generated URLs and the dev server. It does not add a `docs` folder inside the output directory. |
 | `html.minify` | Minifies generated HTML during a normal build; defaults to `false`. |
 | `scripts.cacheBusting` | Adds a build cache key to emitted local TypeScript script filenames; defaults to `true`. |
+| `scripts.codeCopy` | Adds copy buttons to code blocks; defaults to `true`. Set to `false` to omit the copy-code runtime. |
+| `scripts.menuRuntime` | Positions and dismisses dropdown menus such as `BtnGroup` and `SignIn`; defaults to `true`. Set to `false` to omit this runtime. Independent of sidebar navigation mode. |
+| `scripts.themeSwitch` | Initializes and switches themes; defaults to `true`. Set to `false` when custom templates handle theme selection. Omits the runtime and its CSS visibility gate while keeping generated stylesheets. |
 | `scripts.sharedLibraries` | Package import specifiers shared across page scripts. Regor is always included. List subpaths explicitly; generated modules use content-hashed filenames under `assets/runtime/`. |
 
 For example, with `"outDir": "../dist/site"` in `content/siteConfig.json`, the build writes into `dist/site` beside `content`. `"basePath": "/docs"` makes the home page publicly available at `/docs/`, while its output file remains `dist/site/index.html`. Host that output at `/docs/`; changing the config alone cannot change a host's routing.
@@ -103,6 +106,8 @@ Relative paths in `siteConfig.json`, such as `imageSrc`, `style.href`, or `priva
 ## Styles and themes
 
 PureStack generates a stylesheet for each configured theme. `light` and `dark` are required, and are the defaults. With the default filename, the generated files are `assets/site.css` and `assets/site.dark.css`.
+
+Set `"style": { "enabled": false }` when your site supplies its own CSS. This skips generated theme stylesheets, automatic stylesheet links, injected theme CSS and metadata, and theme startup, including the CSS visibility gate. Custom stylesheet links and CSS imports still work. Components and templates remain available and use the CSS you supply. `style.enabled` defaults to `true`.
 
 ```json
 {

@@ -45,10 +45,15 @@ function renderScriptsHead({
   site: config,
   pageInfo,
 }: PageTemplateInput) {
-  head.push(h('script').raw(buildMenuRuntimeScript()))
-  if (pageInfo.frontmatter.layout.showNav !== false)
+  if (config.scripts.menuRuntime !== false)
+    head.push(h('script').raw(buildMenuRuntimeScript()))
+  if (
+    config.navigation.mode !== 'none' &&
+    pageInfo.frontmatter.layout.showNav !== false
+  )
     head.push(h('script').raw(buildNavMenuScript()))
-  head.push(h('script').raw(buildCodeCopyScript()))
+  if (config.scripts.codeCopy !== false)
+    head.push(h('script').raw(buildCodeCopyScript()))
   if (config.pagefind?.enabled) {
     if (config.basePath)
       head.push(

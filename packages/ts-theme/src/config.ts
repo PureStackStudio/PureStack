@@ -36,6 +36,7 @@ export function resolveStyleConfig(
   const pretty = pickBoolean(styleInput?.pretty, styleFile?.pretty, false)
   const theme = themes.resolve(styleInput?.theme, styleFile?.theme)
   return {
+    enabled: pickBoolean(styleInput?.enabled, styleFile?.enabled, true),
     fileName,
     href,
     themes: themeNames,
