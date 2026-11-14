@@ -1,8 +1,8 @@
-import { LANGUAGE_BY_EXTENSION } from '@purestack/ts-common'
 import {
   createHljsHighlighter,
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,
+  LANGUAGE_BY_EXTENSION,
   type MdxShikiFactory,
 } from '@purestack/ts-highlight'
 import hljs from 'highlight.js'

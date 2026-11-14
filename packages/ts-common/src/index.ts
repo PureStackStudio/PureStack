@@ -1,9 +1,4 @@
 export type { MdxCodeHighlighter } from './code-highlighter'
-export {
-  DEFAULT_CODE_LANGUAGES,
-  LANGUAGE_BY_EXTENSION,
-  normalizeCodeLanguage,
-} from './codeLanguages'
 export type {
   ConsentCategory,
   ConsentConfig,

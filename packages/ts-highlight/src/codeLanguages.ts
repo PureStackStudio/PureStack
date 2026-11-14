@@ -3,7 +3,7 @@ interface CodeLanguage {
   extensions?: string[]
 }
 
-// Use Shiki names (including its aliases) as the common language identifiers.
+// Use Shiki names (including its aliases) as the canonical language identifiers.
 const codeLanguages: Record<string, CodeLanguage> = {
   bash: {
     aliases: ['sh', 'shell', 'shellscript', 'zsh'],

@@ -1,9 +1,6 @@
-import {
-  DEFAULT_CODE_LANGUAGES,
-  type MdxCodeHighlighter,
-  normalizeCodeLanguage,
-} from '@purestack/ts-common'
+import type { MdxCodeHighlighter } from '@purestack/ts-common'
 import { createHighlighter, type Highlighter } from 'shiki'
+import { DEFAULT_CODE_LANGUAGES, normalizeCodeLanguage } from './codeLanguages'
 import { openShikiCache } from './shikiCache'
 
 export type MdxShikiFactory = (

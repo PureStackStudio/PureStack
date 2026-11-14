@@ -3,6 +3,11 @@ import type { HLJSApi } from 'highlight.js'
 import { createHljsHighlighter } from './highlightjs'
 import { createMdxHighlighter, type MdxShikiFactory } from './shiki'
 
+export {
+  DEFAULT_CODE_LANGUAGES,
+  LANGUAGE_BY_EXTENSION,
+  normalizeCodeLanguage,
+} from './codeLanguages'
 export { createHljsHighlighter } from './highlightjs'
 export {
   createMdxHighlighter,

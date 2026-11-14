@@ -46,6 +46,9 @@ namespace, version, and input keys.
 `DEFAULT_MDX_CODE_THEMES` are exported for standalone use. The shared
 `MdxCodeHighlighter` contract is exported by `ts-common` and `ts-ssg`.
 
+This package also owns `DEFAULT_CODE_LANGUAGES`, `LANGUAGE_BY_EXTENSION`, and
+`normalizeCodeLanguage` for language defaults, extension inference, and aliases.
+
 To replace the backend entirely, supply `markdown.createHighlighter(config)`
 from an ordinary plugin. It takes precedence over the default provider, which
 is not initialized. Per-language `markdown.resolveHighlighter` callbacks take

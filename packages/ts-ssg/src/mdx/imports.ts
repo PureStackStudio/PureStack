@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { LANGUAGE_BY_EXTENSION } from '@purestack/ts-common'
+import { LANGUAGE_BY_EXTENSION } from '@purestack/ts-highlight'
 import { parseFragment } from '@purestack/ts-minidom'
 import { toPosixPath } from '@purestack/ts-util'
 import remarkGfm from 'remark-gfm'

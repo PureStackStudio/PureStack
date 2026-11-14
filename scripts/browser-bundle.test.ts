@@ -6,6 +6,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const packageEntries = {
+  '@purestack/ts-common': 'packages/ts-common/src/index.ts',
   '@purestack/ts-style': 'packages/ts-style/src/index.ts',
   '@purestack/ts-style/runtime': 'packages/ts-style/src/runtime.ts',
   '@purestack/ts-components': 'packages/ts-components/src/index.ts',
@@ -62,7 +63,10 @@ const publishedPackages: Plugin = {
   name: 'published-packages',
   setup(builder) {
     builder.onResolve(
-      { filter: /^@purestack\/(ts-style(?:\/runtime)?|ts-components)$/ },
+      {
+        filter:
+          /^@purestack\/(ts-common|ts-style(?:\/runtime)?|ts-components)$/,
+      },
       ({ path }) => ({ path, namespace: 'published', sideEffects: false }),
     )
     builder.onLoad({ filter: /.*/, namespace: 'published' }, ({ path }) => ({
@@ -77,13 +81,14 @@ describe.each(['source', 'published'] as const)(
   (mode) => {
     it.each([
       ['tone helper', '@purestack/ts-style/runtime', 'getSemanticToneClass'],
+      ['page context helper', '@purestack/ts-common', 'tryResolvePageContext'],
       [
         'sign-in controls',
         '@purestack/ts-components',
         'defineButtonComponents, defineFormComponents, defineFormInputField, defineIconComponents, defineSignInComponents',
       ],
       ['all components', '@purestack/ts-components', 'defineComponents'],
-    ])('keeps style generation out of %s', async (name, entry, exports) => {
+    ])('keeps build tools out of %s', async (name, entry, exports) => {
       const result = await build({
         absWorkingDir: root,
         stdin: {
@@ -108,13 +113,17 @@ describe.each(['source', 'published'] as const)(
       )
       expect(retained).not.toContain('published:@purestack/ts-style')
       expect(
+        result.outputFiles[0].text.includes('shellscript'),
+        'language aliases must stay outside browser component bundles',
+      ).toBe(false)
+      expect(
         retained.filter((file) =>
-          /packages\/ts-(?:css\/|style\/src\/(?:skins\/|styles\.|styleContext\.|themeOptions\.|semanticPresets\.|semanticTone\.))/.test(
+          /packages\/ts-(?:highlight\/|css\/|style\/src\/(?:skins\/|styles\.|styleContext\.|themeOptions\.|semanticPresets\.|semanticTone\.))/.test(
             file,
           ),
         ),
       ).toEqual([])
-      if (name === 'tone helper') {
+      if (name.endsWith('helper')) {
         expect(result.outputFiles[0].contents.length).toBeLessThan(1024)
       }
     })
