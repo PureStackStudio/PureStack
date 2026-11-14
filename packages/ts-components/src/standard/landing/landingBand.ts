@@ -1,5 +1,5 @@
 import type { CSSProps } from '@purestack/ts-css'
-import { docLayoutVar } from '@purestack/ts-style'
+import { docLayoutVar } from '@purestack/ts-style/runtime'
 import { computed, defineComponent, html, type RefOrValue, unref } from 'regor'
 import type {
   ComponentVariant,

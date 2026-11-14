@@ -54,35 +54,43 @@ type InteractivePathTree<TStates extends readonly string[]> = {
   readonly [K in TStates[number]]: PropertyPathTree<typeof INTERACTIVE_PROPS>
 }
 
-const CURRENT_THEME_PALETTE_PATHS = {
-  tone: ['tone'],
-  canvas: ['canvas'],
-  spotlight: createPropertyPathTree('spotlight', SPOTLIGHT_PROPS),
-  canvascolor: ['canvascolor'],
-  overlay: ['overlay'],
-  surface: createInteractiveGroupPathTree(
-    'surface',
-    CURRENT_INTERACTIVE_STATES,
-  ),
-  surfaceAlt: createInteractiveGroupPathTree(
-    'surfaceAlt',
-    CURRENT_INTERACTIVE_STATES,
-  ),
-  text: createPropertyPathTree('text', TEXT_PROPS),
-  border: createPropertyPathTree('border', BORDER_PROPS),
-  button: createInteractiveGroupPathTree('button', CURRENT_INTERACTIVE_STATES),
-  icon: createPropertyPathTree('icon', ICON_PROPS),
-} as const satisfies PathTree
+function createCurrentThemePalettePaths() {
+  return {
+    tone: ['tone'],
+    canvas: ['canvas'],
+    spotlight: createPropertyPathTree('spotlight', SPOTLIGHT_PROPS),
+    canvascolor: ['canvascolor'],
+    overlay: ['overlay'],
+    surface: createInteractiveGroupPathTree(
+      'surface',
+      CURRENT_INTERACTIVE_STATES,
+    ),
+    surfaceAlt: createInteractiveGroupPathTree(
+      'surfaceAlt',
+      CURRENT_INTERACTIVE_STATES,
+    ),
+    text: createPropertyPathTree('text', TEXT_PROPS),
+    border: createPropertyPathTree('border', BORDER_PROPS),
+    button: createInteractiveGroupPathTree(
+      'button',
+      CURRENT_INTERACTIVE_STATES,
+    ),
+    icon: createPropertyPathTree('icon', ICON_PROPS),
+  } as const satisfies PathTree
+}
 
-const THEME_PALETTE_VAR_PATHS = buildThemePaletteVarPaths()
-const THEME_PALETTE_VAR_PATH_ENTRIES = THEME_PALETTE_VAR_PATHS.map(
-  (path) => [buildReadableThemeVariableName('theme', path), path] as const,
-)
-const CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES = flattenPathTree(
-  CURRENT_THEME_PALETTE_PATHS,
-).map(
-  (path) => [buildReadableThemeVariableName('current', path), path] as const,
-)
+let currentThemePalettePaths:
+  | ReturnType<typeof createCurrentThemePalettePaths>
+  | undefined
+let themePaletteVarPathEntries: Array<readonly [string, string[]]> | undefined
+let currentThemePaletteVarPathEntries:
+  | Array<readonly [string, string[]]>
+  | undefined
+
+function getCurrentThemePalettePaths() {
+  currentThemePalettePaths ??= createCurrentThemePalettePaths()
+  return currentThemePalettePaths
+}
 
 /**
  * Utilities for turning a semantic {@link ThemePalette} into a CSS custom-property contract.
@@ -149,6 +157,7 @@ export function getCurrentThemePaletteVarName(
 }
 
 export function normalizeThemeVariableReference(value: string) {
+  if (!MINIFY_THEME_VARIABLE_NAMES) return value
   return value.replace(
     /var\((--ps-[A-Za-z0-9-]+)\)/g,
     (match, variableName: string) => {
@@ -256,7 +265,7 @@ function mapThemePaletteLeaves(
 }
 
 export function getCurrentThemePalette(): ThemePaletteCurrent {
-  return mapPathTreeLeaves(CURRENT_THEME_PALETTE_PATHS, (path) =>
+  return mapPathTreeLeaves(getCurrentThemePalettePaths(), (path) =>
     getCurrentThemePaletteVar(path),
   )
 }
@@ -318,7 +327,12 @@ function buildThemeVariableName(scope: 'theme' | 'current', parts: string[]) {
 }
 
 function normalizeReadableCurrentVariableName(variableName: string) {
-  for (const [readableName, path] of CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES) {
+  currentThemePaletteVarPathEntries ??= flattenPathTree(
+    getCurrentThemePalettePaths(),
+  ).map(
+    (path) => [buildReadableThemeVariableName('current', path), path] as const,
+  )
+  for (const [readableName, path] of currentThemePaletteVarPathEntries) {
     if (variableName === readableName) {
       return getCurrentThemePaletteVarName(path)
     }
@@ -327,7 +341,10 @@ function normalizeReadableCurrentVariableName(variableName: string) {
 }
 
 function normalizeReadableThemeVariableName(variableName: string) {
-  for (const [readableName, path] of THEME_PALETTE_VAR_PATH_ENTRIES) {
+  themePaletteVarPathEntries ??= buildThemePaletteVarPaths().map(
+    (path) => [buildReadableThemeVariableName('theme', path), path] as const,
+  )
+  for (const [readableName, path] of themePaletteVarPathEntries) {
     if (variableName === readableName) {
       return getThemePaletteVarName(path)
     }

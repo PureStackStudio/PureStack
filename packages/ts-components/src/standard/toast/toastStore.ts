@@ -1,4 +1,4 @@
-import type { SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style/runtime'
 import { sref } from 'regor'
 
 export interface ToastItem {

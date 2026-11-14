@@ -3,6 +3,9 @@
   "compilerOptions": {
     "composite": false,
     "paths": {
+      "@purestack/ts-style/runtime": [
+        "../../../packages/ts-style/src/runtime.ts"
+      ],
       "@purestack/*": ["../../../packages/*/src"]
     }
   },

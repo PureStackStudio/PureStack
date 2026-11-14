@@ -15,6 +15,7 @@
     "types": [],
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
+      "@purestack/ts-style/runtime": ["../../packages/ts-style/src/runtime.ts"],
       "@purestack/*": ["../../packages/*/src"]
     }
   },

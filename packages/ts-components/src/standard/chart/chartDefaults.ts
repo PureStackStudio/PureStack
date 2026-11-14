@@ -1,4 +1,4 @@
-import { getThemePaletteVar } from '@purestack/ts-style'
+import { getThemePaletteVar } from '@purestack/ts-style/runtime'
 
 export const DEFAULT_CHART_SIZE = '100%'
 export const DEFAULT_CARTESIAN_CHART_WIDTH = '100%'

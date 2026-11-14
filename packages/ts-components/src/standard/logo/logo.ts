@@ -6,7 +6,7 @@ import {
 import {
   getSemanticToneClass,
   normalizeThemeVariableReference,
-} from '@purestack/ts-style'
+} from '@purestack/ts-style/runtime'
 import {
   type ComputedRef,
   computed,

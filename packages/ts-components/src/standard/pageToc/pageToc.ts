@@ -1,6 +1,6 @@
 import type { PageOutlineItem } from '@purestack/ts-common'
 import { renderPageTocContent } from '@purestack/ts-page-scripts'
-import type { SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style/runtime'
 import {
   type ComputedRef,
   computed,

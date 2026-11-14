@@ -1,5 +1,5 @@
 import { tryResolvePageContext } from '@purestack/ts-common'
-import type { SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style/runtime'
 import {
   type ComputedRef,
   computed,

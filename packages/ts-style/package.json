@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-style",
-  "version": "1.1.33",
+  "version": "1.1.34",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-style.mjs",
   "types": "./dist/ts-style.d.mts",
@@ -22,6 +22,10 @@
     ".": {
       "types": "./dist/ts-style.d.mts",
       "import": "./dist/ts-style.mjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.mts",
+      "import": "./dist/runtime.mjs"
     }
   },
   "license": "MIT",

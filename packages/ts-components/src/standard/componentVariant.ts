@@ -1,4 +1,7 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import {
+  getSemanticToneClass,
+  type SemanticTone,
+} from '@purestack/ts-style/runtime'
 import { type RefOrValue, unref } from 'regor'
 
 export type ComponentVariant =

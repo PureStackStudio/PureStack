@@ -1,5 +1,5 @@
 import type { CSSProps } from '@purestack/ts-css'
-import type { SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style/runtime'
 import type { ComputedRef, RefOrValue } from 'regor'
 import type {
   ComponentVariant,

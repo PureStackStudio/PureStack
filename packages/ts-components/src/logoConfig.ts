@@ -1,5 +1,5 @@
 import type { SiteLogoConfig } from '@purestack/ts-common'
-import { pickSemanticTone } from '@purestack/ts-style'
+import { pickSemanticTone } from '@purestack/ts-style/runtime'
 import type { DeepPartial } from '@purestack/ts-util'
 import {
   resolveConfigUrl,

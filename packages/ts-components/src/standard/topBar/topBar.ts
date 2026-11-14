@@ -1,7 +1,7 @@
 import type { PageContext, SiteLogoConfig } from '@purestack/ts-common'
 
 import { resolvePageContext } from '@purestack/ts-common'
-import type { SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style/runtime'
 import {
   type ComputedRef,
   computed,

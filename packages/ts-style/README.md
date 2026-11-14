@@ -8,6 +8,23 @@ Use `themes` and `registerSkin` to configure a site's palette, or
 `styleBuilder` to collect and render CSS for a theme. PureStack's component
 library and site generator use these same exports.
 
+Browser components should import lightweight helpers from
+`@purestack/ts-style/runtime`. This entry provides semantic tone classes, CSS
+variable references, breakpoints, and layout tokens without initializing skins,
+palettes, style contexts, or `@purestack/ts-css`.
+
+```ts
+import {
+  getSemanticToneClass,
+  getThemePaletteVar,
+} from '@purestack/ts-style/runtime'
+
+const className = getSemanticToneClass('accent')
+const color = getThemePaletteVar('semanticTone.accent.button.rest.text')
+```
+
+Keep CSS generation and theme configuration imports on `@purestack/ts-style`.
+
 Text utilities include `text-balance`, `text-pretty`, `text-inherit`, and
 `tabular-nums`. Letter spacing uses `tracking-normal` (`normal`),
 `tracking-tight` (`-0.025em`), or `tracking-wide` (`0.1em`). Use `max-w-heading`
